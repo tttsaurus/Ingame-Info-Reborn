@@ -1,4 +1,4 @@
-package com.tttsaurus.ingameinfo.common.api.element;
+package com.tttsaurus.ingameinfo.common.api.gui.element;
 
 import com.tttsaurus.ingameinfo.common.api.animation.text.ITextAnimDef;
 import com.tttsaurus.ingameinfo.common.api.render.renderer.AnimTextRenderer;

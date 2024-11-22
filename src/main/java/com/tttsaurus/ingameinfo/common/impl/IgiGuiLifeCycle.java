@@ -1,5 +1,6 @@
 package com.tttsaurus.ingameinfo.common.impl;
 
+import com.tttsaurus.ingameinfo.common.api.gui.IPlaceholderDrawScreen;
 import com.tttsaurus.ingameinfo.common.api.gui.IgiGuiContainer;
 import com.tttsaurus.ingameinfo.common.api.gui.PlaceholderMcGui;
 import com.tttsaurus.ingameinfo.common.api.render.RenderUtils;
@@ -44,13 +45,10 @@ public final class IgiGuiLifeCycle
     }
     private static void onRenderUpdate()
     {
-        RenderUtils.renderGradientRect(0, 0, resolution.getScaledWidth(), resolution.getScaledHeight(), (new Color(100, 100, 100, 160)).getRGB(), (new Color(100, 100, 100, 160)).getRGB());
-
-        URLImageRenderer.SHARED.setX(10);
-        URLImageRenderer.SHARED.setY(10);
-        URLImageRenderer.SHARED.setWidth(50);
-        URLImageRenderer.SHARED.setHeight(50);
-        URLImageRenderer.SHARED.render();
+        for (IgiGuiContainer container: openedGuiQueue)
+        {
+            container.onRenderUpdate();
+        }
     }
 
     @SubscribeEvent
@@ -133,25 +131,44 @@ public final class IgiGuiLifeCycle
         if (FMLCommonHandler.instance().getSide().isClient())
         {
             // close placeholder
-            if (isPlaceholderGuiOn && openedGuiQueue.isEmpty())
+            if (isPlaceholderGuiOn)
             {
-                placeholderGui = null;
-                Minecraft.getMinecraft().displayGuiScreen(null);
-                isPlaceholderGuiOn = false;
+                if (openedGuiQueue.isEmpty())
+                {
+                    placeholderGui = null;
+                    Minecraft.getMinecraft().displayGuiScreen(null);
+                    isPlaceholderGuiOn = false;
+                }
+                else
+                {
+                    AtomicBoolean focus = new AtomicBoolean(false);
+                    openedGuiQueue.forEach(guiContainer -> focus.set(focus.get() || guiContainer.getFocused()));
+
+                    if (!focus.get())
+                    {
+                        placeholderGui = null;
+                        Minecraft.getMinecraft().displayGuiScreen(null);
+                        isPlaceholderGuiOn = false;
+                    }
+                }
             }
             // open placeholder
             else if (!isPlaceholderGuiOn && !openedGuiQueue.isEmpty() && Minecraft.getMinecraft().currentScreen == null)
             {
                 AtomicBoolean focus = new AtomicBoolean(false);
-                openedGuiQueue.forEach(guiContainer -> focus.set(focus.get() || guiContainer.isFocused()));
+                openedGuiQueue.forEach(guiContainer -> focus.set(focus.get() || guiContainer.getFocused()));
 
                 if (focus.get())
                 {
                     placeholderGui = new PlaceholderMcGui();
-                    placeholderGui.runnable = () ->
+                    placeholderGui.setDrawAction(new IPlaceholderDrawScreen()
                     {
-                        onRenderUpdate();
-                    };
+                        @Override
+                        public void draw()
+                        {
+                            onRenderUpdate();
+                        }
+                    });
                     Minecraft.getMinecraft().displayGuiScreen(placeholderGui);
                     isPlaceholderGuiOn = true;
                 }

@@ -10,7 +10,6 @@ import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import org.lwjgl.BufferUtils;
 import org.lwjgl.opengl.GL11;
-import java.awt.*;
 import java.nio.ByteBuffer;
 
 public final class RenderUtils
@@ -18,7 +17,7 @@ public final class RenderUtils
     public static FontRenderer fontRenderer = Minecraft.getMinecraft().fontRenderer;
     public static float zLevel = 0;
 
-    // for all render methods, pivot is in the upper-left corner
+    // for all render methods, pivot is in the top-left corner
     // all methods use minecraft scaled resolution's coordinate
 
     public static void renderText(String text, float x, float y, float scale, int color, boolean shadow)
@@ -40,6 +39,7 @@ public final class RenderUtils
         GlStateManager.popMatrix();
     }
 
+    // this method is modified from Minecraft
     public static void renderGradientRect(float x, float y, float width, float height, int startColor, int endColor)
     {
         float f = (float)(startColor >> 24 & 255) / 255.0F;

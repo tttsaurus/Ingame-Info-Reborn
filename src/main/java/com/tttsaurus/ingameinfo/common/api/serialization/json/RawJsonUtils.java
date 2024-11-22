@@ -1,4 +1,4 @@
-package com.tttsaurus.ingameinfo.common.api.json;
+package com.tttsaurus.ingameinfo.common.api.serialization.json;
 
 import java.util.ArrayList;
 import java.util.List;

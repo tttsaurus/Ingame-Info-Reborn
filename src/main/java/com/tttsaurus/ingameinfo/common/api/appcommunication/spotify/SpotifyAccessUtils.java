@@ -1,6 +1,6 @@
 package com.tttsaurus.ingameinfo.common.api.appcommunication.spotify;
 
-import com.tttsaurus.ingameinfo.common.api.json.RawJsonUtils;
+import com.tttsaurus.ingameinfo.common.api.serialization.json.RawJsonUtils;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;

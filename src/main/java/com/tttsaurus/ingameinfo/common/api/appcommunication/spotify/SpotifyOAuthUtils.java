@@ -3,7 +3,7 @@ package com.tttsaurus.ingameinfo.common.api.appcommunication.spotify;
 import com.sun.net.httpserver.HttpServer;
 import com.sun.net.httpserver.HttpHandler;
 import com.sun.net.httpserver.HttpExchange;
-import com.tttsaurus.ingameinfo.common.api.json.RawJsonUtils;
+import com.tttsaurus.ingameinfo.common.api.serialization.json.RawJsonUtils;
 import java.io.*;
 import java.net.*;
 import java.nio.charset.StandardCharsets;
@@ -82,13 +82,15 @@ public final class SpotifyOAuthUtils
 
     public static final String CLIENT_ID = "";
     public static final String CLIENT_SECRET = "";
-    private static final String REDIRECT_URI = "http://localhost:8888";  // Make sure this matches the redirect URI registered in your Spotify app
+
+    // make sure this matches the redirect uri registered in your Spotify app
+    private static final String REDIRECT_URI = "http://localhost:8888";
     private static final String AUTHORIZATION_URL = "https://accounts.spotify.com/authorize";
     private static final String TOKEN_URL = "https://accounts.spotify.com/api/token";
 
     public static String generateAuthURL()
     {
-        String scope = "user-read-private user-read-email user-read-playback-state user-read-currently-playing";  // Define the scope of access you want
+        String scope = "user-read-private user-read-email user-read-playback-state user-read-currently-playing";
         try
         {
             return AUTHORIZATION_URL + "?client_id=" + CLIENT_ID

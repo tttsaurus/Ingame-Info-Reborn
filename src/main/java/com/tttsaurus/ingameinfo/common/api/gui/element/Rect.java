@@ -1,4 +1,4 @@
-package com.tttsaurus.ingameinfo.common.api.element;
+package com.tttsaurus.ingameinfo.common.api.gui.element;
 
 public class Rect
 {
