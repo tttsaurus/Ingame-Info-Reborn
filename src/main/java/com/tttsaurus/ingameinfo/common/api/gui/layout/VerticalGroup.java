@@ -7,7 +7,7 @@ public class VerticalGroup extends ElementGroup
     {
         super.calcRenderPos(contextRect);
         if (elements.isEmpty()) return;
-        if (selfPivot.horizontal == 0)
+        if (pivot.horizontal == 0)
         {
             Element first = elements.get(0);
             first.rect.y += rect.y + first.padding.top;
@@ -18,7 +18,7 @@ public class VerticalGroup extends ElementGroup
                 element.rect.y += prevElement.rect.y + prevElement.rect.height + prevElement.padding.bottom + element.padding.top;
             }
         }
-        if (selfPivot.horizontal == 1)
+        if (pivot.horizontal == 1)
         {
             Element first = elements.get(elements.size() - 1);
             first.rect.y += rect.y + rect.height - first.padding.bottom - first.rect.height;
@@ -29,10 +29,10 @@ public class VerticalGroup extends ElementGroup
                 nextElement.rect.y = element.rect.y - element.padding.top - nextElement.padding.bottom - nextElement.rect.height;
             }
         }
-        if (selfPivot.vertical == 0)
+        if (pivot.vertical == 0)
             for (Element element: elements)
                 element.rect.x += rect.x + element.padding.left;
-        if (selfPivot.vertical == 1)
+        if (pivot.vertical == 1)
             for (Element element: elements)
                 element.rect.x += rect.x + rect.width - element.padding.right - element.rect.width;
 

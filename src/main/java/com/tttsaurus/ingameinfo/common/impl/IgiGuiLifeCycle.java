@@ -184,12 +184,14 @@ public final class IgiGuiLifeCycle
         }
         //</editor-fold>
 
+        // testing
         if (flag)
         {
             flag = false;
             IgiGuiContainer container = new IgiGuiContainer();
             container.getMainGroup()
             .add(
+                    /*
                     (new HorizontalGroup())
                             .add(
                                     (new HorizontalGroup())
@@ -203,9 +205,29 @@ public final class IgiGuiLifeCycle
                     .add(
                             (new TextElement("elem 3", 1, Color.GRAY.getRGB())).setPadding(new Padding(10, 10, 5, 5))
                     )
+                    */
+                    (new HorizontalGroup())
+                            .add(
+                                    (new HorizontalGroup())
+                                            .add(
+                                                    (new TextElement("elem 1", 1, Color.GRAY.getRGB())).setPadding(new Padding(3, 3, 3, 3))
+                                            )
+                                            .add(
+                                                    (new TextElement("elem 2", 1, Color.GRAY.getRGB())).setPadding(new Padding(3, 3, 3, 3))
+                                            ).setPadding(new Padding(5, 5, 5, 5))
+                            )
+                            .add(
+                                    (new VerticalGroup())
+                                            .add(
+                                                    (new TextElement("elem 3", 1, Color.GRAY.getRGB())).setPadding(new Padding(3, 3, 3, 3))
+                                            )
+                                            .add(
+                                                    (new TextElement("elem 4", 1, Color.GRAY.getRGB())).setPadding(new Padding(3, 3, 3, 3))
+                                            ).setPadding(new Padding(5, 5, 5, 5))
+                            )
                     .setPadding(new Padding(0, 0, 0, 20))
-                    .setAlignmentPivot(Pivot.TOP_MIDDLE)
-                    .setSelfPivot(Pivot.TOP_RIGHT)
+                    .setAlignment(Alignment.MIDDLE)
+                    .setPivot(Pivot.TOP_RIGHT)
             );
             openIgiGui(container);
         }

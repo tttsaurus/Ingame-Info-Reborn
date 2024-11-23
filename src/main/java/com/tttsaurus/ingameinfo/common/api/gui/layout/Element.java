@@ -6,16 +6,16 @@ import java.awt.*;
 public abstract class Element
 {
     // we only apply the alignment pivot if this element is the outmost element
-    protected Pivot alignmentPivot = Pivot.TOP_LEFT;
+    protected Alignment alignment = Alignment.TOP_LEFT;
     // outmost represents the whole in-game screen
     protected boolean outmost;
-    protected Pivot selfPivot = Pivot.TOP_LEFT;
+    protected Pivot pivot = Pivot.TOP_LEFT;
     protected Padding padding = new Padding(0, 0, 0, 0);
     protected Rect rect = new Rect(0, 0, 0, 0);
 
     //<editor-fold desc="setters">
-    public Element setAlignmentPivot(Pivot alignmentPivot) { this.alignmentPivot = alignmentPivot; return this; }
-    public Element setSelfPivot(Pivot selfPivot) { this.selfPivot = selfPivot; return this; }
+    public Element setAlignment(Alignment alignment) { this.alignment = alignment; return this; }
+    public Element setPivot(Pivot pivot) { this.pivot = pivot; return this; }
     public Element setPadding(Padding padding) { this.padding = padding; return this; }
     //</editor-fold>
 
@@ -27,21 +27,21 @@ public abstract class Element
         float x = 0;
         if (outmost)
         {
-            if (selfPivot.vertical == 0) x = padding.left;
-            if (selfPivot.vertical == 1) x = -padding.right;
-            x += contextRect.width * alignmentPivot.vertical;
+            if (pivot.vertical == 0) x = padding.left;
+            if (pivot.vertical == 1) x = -padding.right;
+            x += contextRect.width * alignment.vertical;
         }
-        x -= rect.width * selfPivot.vertical;
+        x -= rect.width * pivot.vertical;
         rect.x += x;
 
         float y = 0;
         if (outmost)
         {
-            if (selfPivot.horizontal == 0) y = padding.top;
-            if (selfPivot.horizontal == 1) y = -padding.bottom;
-            y += contextRect.height * alignmentPivot.horizontal;
+            if (pivot.horizontal == 0) y = padding.top;
+            if (pivot.horizontal == 1) y = -padding.bottom;
+            y += contextRect.height * alignment.horizontal;
         }
-        y -= rect.height * selfPivot.horizontal;
+        y -= rect.height * pivot.horizontal;
         rect.y += y;
     }
 

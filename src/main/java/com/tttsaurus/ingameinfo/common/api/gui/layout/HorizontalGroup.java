@@ -7,7 +7,7 @@ public class HorizontalGroup extends ElementGroup
     {
         super.calcRenderPos(contextRect);
         if (elements.isEmpty()) return;
-        if (selfPivot.vertical == 0)
+        if (pivot.vertical == 0)
         {
             Element first = elements.get(0);
             first.rect.x += rect.x + first.padding.left;
@@ -18,7 +18,7 @@ public class HorizontalGroup extends ElementGroup
                 element.rect.x = prevElement.rect.x + prevElement.rect.width + prevElement.padding.right + element.padding.left;
             }
         }
-        if (selfPivot.vertical == 1)
+        if (pivot.vertical == 1)
         {
             Element first = elements.get(elements.size() - 1);
             first.rect.x += rect.x + rect.width - first.padding.right - first.rect.width;
@@ -29,10 +29,10 @@ public class HorizontalGroup extends ElementGroup
                 nextElement.rect.x = element.rect.x - element.padding.left - nextElement.padding.right - nextElement.rect.width;
             }
         }
-        if (selfPivot.horizontal == 0)
+        if (pivot.horizontal == 0)
             for (Element element: elements)
                 element.rect.y += rect.y + element.padding.top;
-        if (selfPivot.horizontal == 1)
+        if (pivot.horizontal == 1)
             for (Element element: elements)
                 element.rect.y += rect.y + rect.height - element.padding.bottom - element.rect.height;
 
