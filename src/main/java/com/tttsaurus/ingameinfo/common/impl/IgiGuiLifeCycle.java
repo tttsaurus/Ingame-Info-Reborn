@@ -214,7 +214,7 @@ public final class IgiGuiLifeCycle
                                             )
                                             .add(
                                                     (new TextElement("elem 2", 1, Color.GRAY.getRGB())).setPadding(new Padding(3, 3, 3, 3))
-                                            ).setPadding(new Padding(5, 5, 5, 5))
+                                            ).setPadding(new Padding(5, 5, 5, 5)).setPivot(Pivot.TOP_RIGHT)
                             )
                             .add(
                                     (new VerticalGroup())

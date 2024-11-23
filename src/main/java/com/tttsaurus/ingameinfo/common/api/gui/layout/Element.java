@@ -11,7 +11,11 @@ public abstract class Element
     protected boolean outmost;
     protected Pivot pivot = Pivot.TOP_LEFT;
     protected Padding padding = new Padding(0, 0, 0, 0);
+
+    // stores the actual render pos and size
     protected Rect rect = new Rect(0, 0, 0, 0);
+    // stores the actual render pos before applying the pivot
+    protected float pivotPosX, pivotPosY;
 
     //<editor-fold desc="setters">
     public Element setAlignment(Alignment alignment) { this.alignment = alignment; return this; }
@@ -19,9 +23,18 @@ public abstract class Element
     public Element setPadding(Padding padding) { this.padding = padding; return this; }
     //</editor-fold>
 
+    protected void resetRenderInfo()
+    {
+        rect.x = 0;
+        rect.y = 0;
+        rect.width = 0;
+        rect.height = 0;
+        pivotPosX = 0;
+        pivotPosY = 0;
+    }
+
     // this requires calcWidthHeight() to be called first
-    // take the pivot and do the normalization
-    // also handles the outmost layout
+    // uses pivot and alignment to calculate the actual render pos
     protected void calcRenderPos(Rect contextRect)
     {
         float x = 0;
@@ -31,8 +44,9 @@ public abstract class Element
             if (pivot.vertical == 1) x = -padding.right;
             x += contextRect.width * alignment.vertical;
         }
-        x -= rect.width * pivot.vertical;
-        rect.x += x;
+        float pivotOffsetX = rect.width * pivot.vertical;
+        rect.x += x - pivotOffsetX;
+        pivotPosX = rect.x + pivotOffsetX;
 
         float y = 0;
         if (outmost)
@@ -41,8 +55,9 @@ public abstract class Element
             if (pivot.horizontal == 1) y = -padding.bottom;
             y += contextRect.height * alignment.horizontal;
         }
-        y -= rect.height * pivot.horizontal;
-        rect.y += y;
+        float pivotOffsetY = rect.height * pivot.horizontal;
+        rect.y += y - pivotOffsetY;
+        pivotPosY = rect.y + pivotOffsetY;
     }
 
     // update rect here
@@ -53,5 +68,9 @@ public abstract class Element
     protected abstract void onFixedUpdate(double deltaTime);
     protected abstract void onRenderUpdate();
 
-    protected void renderDebugRect() { RenderUtils.renderRectOutline(rect.x, rect.y, rect.width, rect.height, 1.0f, Color.RED.getRGB()); }
+    protected void renderDebugRect()
+    {
+        RenderUtils.renderRectOutline(rect.x, rect.y, rect.width, rect.height, 1.0f, Color.RED.getRGB());
+        RenderUtils.renderRect(pivotPosX - 1, pivotPosY - 1, 3, 3, Color.GREEN.getRGB());
+    }
 }

@@ -22,6 +22,14 @@ public abstract class ElementGroup extends Element
     }
 
     @Override
+    protected void resetRenderInfo()
+    {
+        super.resetRenderInfo();
+        for (Element element: elements)
+            element.resetRenderInfo();
+    }
+
+    @Override
     protected void calcWidthHeight()
     {
         for (Element element: elements)
@@ -45,6 +53,7 @@ public abstract class ElementGroup extends Element
     protected void renderDebugRect()
     {
         RenderUtils.renderRectOutline(rect.x, rect.y, rect.width, rect.height, 1.0f, Color.ORANGE.getRGB());
+        RenderUtils.renderRect(pivotPosX - 1, pivotPosY - 1, 3, 3, Color.GREEN.getRGB());
         for (Element element: elements)
             element.renderDebugRect();
     }

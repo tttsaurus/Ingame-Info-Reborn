@@ -37,15 +37,17 @@ public class HorizontalGroup extends ElementGroup
                 element.rect.y += rect.y + rect.height - element.padding.bottom - element.rect.height;
 
         for (Element element: elements)
+        {
+            element.rect.x += element.rect.width * element.pivot.vertical;
+            element.rect.y += element.rect.height * element.pivot.horizontal;
             element.calcRenderPos(rect);
+        }
     }
 
     @Override
     protected void calcWidthHeight()
     {
         super.calcWidthHeight();
-        rect.width = 0;
-        rect.height = 0;
         for (Element element: elements)
         {
             rect.width += element.rect.width + element.padding.left + element.padding.right;
