@@ -5,8 +5,8 @@ Currently WIP
 ## Todo List / Features
 - Introduce a custom gui container
 - Maintain a queue for custom gui containers
-- A gui container can be overlaid/focused
-- Introduce feature-rich alignment
+- A gui container can be ingame-overlaid/focused
+- Introduce feature-rich layout
 - Introduce modular animation
 - Add custom button, input field, etc. control
 - Add crt support (runtime gui setup)

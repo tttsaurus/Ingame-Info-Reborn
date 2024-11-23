@@ -1,10 +1,8 @@
 package com.tttsaurus.ingameinfo.common.impl;
 
 import com.tttsaurus.ingameinfo.common.api.gui.IPlaceholderDrawScreen;
-import com.tttsaurus.ingameinfo.common.api.gui.IgiGuiContainer;
+import com.tttsaurus.ingameinfo.common.api.gui.layout.*;
 import com.tttsaurus.ingameinfo.common.api.gui.PlaceholderMcGui;
-import com.tttsaurus.ingameinfo.common.api.render.RenderUtils;
-import com.tttsaurus.ingameinfo.common.api.render.renderer.URLImageRenderer;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.renderer.GlStateManager;
@@ -41,19 +39,28 @@ public final class IgiGuiLifeCycle
 
     private static void onFixedUpdate()
     {
-
+        //<editor-fold desc="gui container fixed update">
+        for (IgiGuiContainer container: openedGuiQueue)
+            container.onFixedUpdate(deltaTime);
+        //</editor-fold>
     }
     private static void onRenderUpdate()
     {
+        //<editor-fold desc="gui container render update">
         for (IgiGuiContainer container: openedGuiQueue)
-        {
             container.onRenderUpdate();
-        }
+        //</editor-fold>
     }
 
     @SubscribeEvent
     public static void onRenderGameOverlay(RenderGameOverlayEvent event)
     {
+        //<editor-fold desc="gui container init">
+        for (IgiGuiContainer container: openedGuiQueue)
+            if (!container.getInitFlag())
+                container.onInit();
+        //</editor-fold>
+
         //<editor-fold desc="store gl states">
         GL11.glGetInteger(GL11.GL_TEXTURE_BINDING_2D, intBuffer);
         int textureID = intBuffer.get(0);
@@ -71,11 +78,12 @@ public final class IgiGuiLifeCycle
         boolean depthTest = GL11.glIsEnabled(GL11.GL_DEPTH_TEST);
         //</editor-fold>
 
-        //<editor-fold desc="detect resize event">
+        //<editor-fold desc="gui container resize">
         if (resolution.getScaleFactor() != event.getResolution().getScaleFactor())
         {
             resolution = event.getResolution();
-            // resize event
+            for (IgiGuiContainer container: openedGuiQueue)
+                container.onScaledResolutionResize();
         }
         //</editor-fold>
 
@@ -179,7 +187,27 @@ public final class IgiGuiLifeCycle
         if (flag)
         {
             flag = false;
-            openIgiGui(new IgiGuiContainer());
+            IgiGuiContainer container = new IgiGuiContainer();
+            container.getMainGroup()
+            .add(
+                    (new HorizontalGroup())
+                            .add(
+                                    (new HorizontalGroup())
+                                            .add(
+                                                    (new TextElement("elem 1", 1, Color.GRAY.getRGB())).setPadding(new Padding(3, 3, 3, 3))
+                                            )
+                                            .add(
+                                                    (new TextElement("elem 2", 1, Color.GRAY.getRGB())).setPadding(new Padding(3, 3, 3, 3))
+                                            )
+                            )
+                    .add(
+                            (new TextElement("elem 3", 1, Color.GRAY.getRGB())).setPadding(new Padding(10, 10, 5, 5))
+                    )
+                    .setPadding(new Padding(0, 0, 0, 20))
+                    .setAlignmentPivot(Pivot.TOP_MIDDLE)
+                    .setSelfPivot(Pivot.TOP_RIGHT)
+            );
+            openIgiGui(container);
         }
     }
 

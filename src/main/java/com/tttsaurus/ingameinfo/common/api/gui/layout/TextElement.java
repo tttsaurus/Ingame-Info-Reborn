@@ -1,4 +1,4 @@
-package com.tttsaurus.ingameinfo.common.api.gui.element;
+package com.tttsaurus.ingameinfo.common.api.gui.layout;
 
 import com.tttsaurus.ingameinfo.common.api.render.renderer.TextRenderer;
 
@@ -11,12 +11,22 @@ public class TextElement extends Element
         simpleTextRenderer.setText(text);
         simpleTextRenderer.setScale(scale);
         simpleTextRenderer.setColor(color);
+    }
+
+    @Override
+    protected void calcWidthHeight()
+    {
         rect.width = simpleTextRenderer.simulateWidth();
         rect.height = simpleTextRenderer.simulateHeight();
     }
 
     @Override
-    public void onRenderUpdate()
+    protected void onFixedUpdate(double deltaTime)
+    {
+
+    }
+    @Override
+    protected void onRenderUpdate()
     {
         simpleTextRenderer.setX(rect.x);
         simpleTextRenderer.setY(rect.y);
