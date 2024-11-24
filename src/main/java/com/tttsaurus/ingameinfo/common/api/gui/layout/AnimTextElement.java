@@ -17,6 +17,14 @@ public class AnimTextElement extends Element
     }
 
     @Override
+    protected void calcRenderPos(Rect contextRect)
+    {
+        super.calcRenderPos(contextRect);
+        animTextRenderer.setX(rect.x);
+        animTextRenderer.setY(rect.y);
+    }
+
+    @Override
     protected void calcWidthHeight()
     {
         rect.width = animTextRenderer.simulateWidth();
@@ -32,8 +40,6 @@ public class AnimTextElement extends Element
     @Override
     protected void onRenderUpdate()
     {
-        animTextRenderer.setX(rect.x);
-        animTextRenderer.setY(rect.y);
         animTextRenderer.render();
     }
 }

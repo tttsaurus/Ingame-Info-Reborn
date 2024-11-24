@@ -10,6 +10,7 @@ import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import org.lwjgl.BufferUtils;
 import org.lwjgl.opengl.GL11;
+
 import java.nio.ByteBuffer;
 
 public final class RenderUtils
@@ -18,16 +19,78 @@ public final class RenderUtils
     public static float zLevel = 0;
 
     // for all render methods, pivot is in the top-left corner
-    // all methods use minecraft scaled resolution's coordinate
+    // all methods use Minecraft scaled resolution's coordinate
 
     public static void renderText(String text, float x, float y, float scale, int color, boolean shadow)
     {
+        GlStateManager.enableTexture2D();
+        GlStateManager.enableAlpha();
         GlStateManager.disableBlend();
+
         GlStateManager.pushMatrix();
         GlStateManager.translate(x, y, zLevel);
         GlStateManager.scale(scale, scale, 0);
         fontRenderer.drawString(text, 0, 0, color, shadow);
         GlStateManager.popMatrix();
+    }
+
+    public static void renderRoundedRectOutline(float x, float y, float width, float height, float radius, float thickness, int color)
+    {
+        int segments = Math.max(3, (int)(radius / 2f));
+        float a = (float)(color >> 24 & 255) / 255.0F;
+        float r = (float)(color >> 16 & 255) / 255.0F;
+        float g = (float)(color >> 8 & 255) / 255.0F;
+        float b = (float)(color & 255) / 255.0F;
+
+        GlStateManager.disableTexture2D();
+        GlStateManager.enableBlend();
+        GlStateManager.disableAlpha();
+        GlStateManager.tryBlendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO);
+        GlStateManager.shadeModel(GL11.GL_SMOOTH);
+        GlStateManager.glLineWidth(thickness * (float)(new ScaledResolution(Minecraft.getMinecraft())).getScaleFactor());
+        GlStateManager.color(r, g, b, a);
+
+        GL11.glEnable(GL11.GL_LINE_SMOOTH);
+        GL11.glHint(GL11.GL_LINE_SMOOTH_HINT, GL11.GL_NICEST);
+
+        GlStateManager.pushMatrix();
+        GlStateManager.translate(0, 0, zLevel);
+
+        GL11.glBegin(GL11.GL_LINE_STRIP);
+
+        renderArc(x + width - radius, y + radius, radius, 0, 90, segments);
+        GL11.glVertex2f(x + width, y + radius);
+        GL11.glVertex2f(x + width, y + height - radius);
+        renderArc(x + width - radius, y + height - radius, radius, 90, 180, segments);
+        GL11.glVertex2f(x + width - radius, y + height);
+        GL11.glVertex2f(x + radius, y + height);
+        renderArc(x + radius, y + height - radius, radius, 180, 270, segments);
+        GL11.glVertex2f(x, y + height - radius);
+        GL11.glVertex2f(x, y + radius);
+        renderArc(x + radius, y + radius, radius, 270, 360, segments);
+        GL11.glVertex2f(x + radius, y);
+        GL11.glVertex2f(x + width - radius, y);
+
+        GL11.glEnd();
+
+        GlStateManager.popMatrix();
+    }
+    private static void renderArc(float cx, float cy, float radius, float startAngle, float endAngle, int segments)
+    {
+        startAngle -= 90;
+        endAngle -= 90;
+        float x = (float)(cx + Math.cos(Math.toRadians(startAngle)) * radius);
+        float y = (float)(cy + Math.sin(Math.toRadians(startAngle)) * radius);
+        for (int i = 1; i <= segments; i++)
+        {
+            float angle = (float)Math.toRadians(startAngle + (endAngle - startAngle) * i / segments);
+            float dx = (float)(cx + Math.cos(angle) * radius);
+            float dy = (float)(cy + Math.sin(angle) * radius);
+            GL11.glVertex2f(x, y);
+            GL11.glVertex2f(dx, dy);
+            x = dx;
+            y = dy;
+        }
     }
 
     public static void renderRect(float x, float y, float width, float height, int color)
@@ -39,7 +102,7 @@ public final class RenderUtils
         GlStateManager.popMatrix();
     }
 
-    // this method is modified from Minecraft
+    // this method is modified from Minecraft's Gui.drawGradientRect
     public static void renderGradientRect(float x, float y, float width, float height, int startColor, int endColor)
     {
         float f = (float)(startColor >> 24 & 255) / 255.0F;
@@ -50,14 +113,16 @@ public final class RenderUtils
         float f5 = (float)(endColor >> 16 & 255) / 255.0F;
         float f6 = (float)(endColor >> 8 & 255) / 255.0F;
         float f7 = (float)(endColor & 255) / 255.0F;
+
         GlStateManager.disableTexture2D();
         GlStateManager.enableBlend();
         GlStateManager.disableAlpha();
         GlStateManager.tryBlendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO);
         GlStateManager.shadeModel(GL11.GL_SMOOTH);
+
         Tessellator tessellator = Tessellator.getInstance();
         BufferBuilder bufferbuilder = tessellator.getBuffer();
-        bufferbuilder.begin(7, DefaultVertexFormats.POSITION_COLOR);
+        bufferbuilder.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_COLOR);
         bufferbuilder.pos(1, 0, 0).color(f1, f2, f3, f).endVertex();
         bufferbuilder.pos(0, 0, 0).color(f1, f2, f3, f).endVertex();
         bufferbuilder.pos(0, 1, 0).color(f5, f6, f7, f4).endVertex();
@@ -108,10 +173,11 @@ public final class RenderUtils
         GlStateManager.disableDepth();
         GlStateManager.blendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
         GlStateManager.color(1.0f, 1.0f, 1.0f, 1.0f);
+
         GlStateManager.pushMatrix();
         GlStateManager.translate(x, y, zLevel);
-        GlStateManager.scale(width, height, 0);
-        Gui.drawScaledCustomSizeModalRect(0, 0, 0, 0, textureWidth, textureHeight, 1, 1, textureWidth, textureHeight);
+        GlStateManager.scale(width/(float)((int)(width)), height/(float)((int)(height)), 0);
+        Gui.drawScaledCustomSizeModalRect(0, 0, 0, 0, textureWidth, textureHeight, (int)width, (int)height, textureWidth, textureHeight);
         GlStateManager.popMatrix();
     }
 

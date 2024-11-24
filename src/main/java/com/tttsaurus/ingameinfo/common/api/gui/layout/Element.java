@@ -12,10 +12,12 @@ public abstract class Element
     protected Pivot pivot = Pivot.TOP_LEFT;
     protected Padding padding = new Padding(0, 0, 0, 0);
 
-    // stores the actual render pos and size
+    // stores the actual render pos (top-left) and size
     protected Rect rect = new Rect(0, 0, 0, 0);
     // stores the actual render pos before applying the pivot
-    protected float pivotPosX, pivotPosY;
+    protected float pivotPosX = 0, pivotPosY = 0;
+    // stores the rect of the parent group
+    protected Rect contextRect = new Rect(0, 0, 0, 0);
 
     //<editor-fold desc="setters">
     public Element setAlignment(Alignment alignment) { this.alignment = alignment; return this; }
@@ -25,10 +27,8 @@ public abstract class Element
 
     protected void resetRenderInfo()
     {
-        rect.x = 0;
-        rect.y = 0;
-        rect.width = 0;
-        rect.height = 0;
+        rect.set(0, 0, 0, 0);
+        contextRect.set(0, 0, 0, 0);
         pivotPosX = 0;
         pivotPosY = 0;
     }
@@ -37,6 +37,8 @@ public abstract class Element
     // uses pivot and alignment to calculate the actual render pos
     protected void calcRenderPos(Rect contextRect)
     {
+        this.contextRect.set(contextRect.x, contextRect.y, contextRect.width, contextRect.height);
+
         float x = 0;
         if (outmost)
         {

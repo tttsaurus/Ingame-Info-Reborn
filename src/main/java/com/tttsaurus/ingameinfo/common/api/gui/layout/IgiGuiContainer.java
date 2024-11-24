@@ -54,6 +54,6 @@ public class IgiGuiContainer
         }
         mainGroup.onRenderUpdate();
 
-        mainGroup.renderDebugRect();
+        //mainGroup.renderDebugRect();
     }
 }

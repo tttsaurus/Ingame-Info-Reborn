@@ -4,20 +4,28 @@ import com.tttsaurus.ingameinfo.common.api.render.renderer.TextRenderer;
 
 public class TextElement extends Element
 {
-    private final TextRenderer simpleTextRenderer = new TextRenderer();
+    private final TextRenderer textRenderer = new TextRenderer();
 
     public TextElement(String text, float scale, int color)
     {
-        simpleTextRenderer.setText(text);
-        simpleTextRenderer.setScale(scale);
-        simpleTextRenderer.setColor(color);
+        textRenderer.setText(text);
+        textRenderer.setScale(scale);
+        textRenderer.setColor(color);
+    }
+
+    @Override
+    protected void calcRenderPos(Rect contextRect)
+    {
+        super.calcRenderPos(contextRect);
+        textRenderer.setX(rect.x);
+        textRenderer.setY(rect.y);
     }
 
     @Override
     protected void calcWidthHeight()
     {
-        rect.width = simpleTextRenderer.simulateWidth();
-        rect.height = simpleTextRenderer.simulateHeight();
+        rect.width = textRenderer.simulateWidth();
+        rect.height = textRenderer.simulateHeight();
     }
 
     @Override
@@ -28,8 +36,6 @@ public class TextElement extends Element
     @Override
     protected void onRenderUpdate()
     {
-        simpleTextRenderer.setX(rect.x);
-        simpleTextRenderer.setY(rect.y);
-        simpleTextRenderer.render();
+        textRenderer.render();
     }
 }

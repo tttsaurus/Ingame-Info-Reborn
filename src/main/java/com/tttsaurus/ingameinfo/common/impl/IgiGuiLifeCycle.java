@@ -3,6 +3,7 @@ package com.tttsaurus.ingameinfo.common.impl;
 import com.tttsaurus.ingameinfo.common.api.gui.IPlaceholderDrawScreen;
 import com.tttsaurus.ingameinfo.common.api.gui.layout.*;
 import com.tttsaurus.ingameinfo.common.api.gui.PlaceholderMcGui;
+import com.tttsaurus.ingameinfo.common.api.render.renderer.URLImageRenderer;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.renderer.GlStateManager;
@@ -24,9 +25,6 @@ import java.util.concurrent.atomic.AtomicBoolean;
 @SuppressWarnings("all")
 public final class IgiGuiLifeCycle
 {
-    private static final IntBuffer intBuffer = ByteBuffer.allocateDirect(16 << 2).order(ByteOrder.nativeOrder()).asIntBuffer();
-    private static final FloatBuffer floatBuffer = ByteBuffer.allocateDirect(16 << 2).order(ByteOrder.nativeOrder()).asFloatBuffer();
-
     private static final int maxFPS = 60;
     private static final double timePerFrame = 1d / maxFPS;
     private static final StopWatch stopwatch = new StopWatch();
@@ -52,31 +50,74 @@ public final class IgiGuiLifeCycle
         //</editor-fold>
     }
 
+    //<editor-fold desc="gl states">
+    private static int textureID = 0;
+    private static float r = 0, g = 0, b = 0, a = 0;
+    private static boolean blend = false;
+    private static boolean lighting = false;
+    private static boolean texture2D = false;
+    private static boolean alphaTest = false;
+    private static int shadeModel = 0;
+    private static boolean depthTest = false;
+
+    private static final IntBuffer intBuffer = ByteBuffer.allocateDirect(16 << 2).order(ByteOrder.nativeOrder()).asIntBuffer();
+    private static final FloatBuffer floatBuffer = ByteBuffer.allocateDirect(16 << 2).order(ByteOrder.nativeOrder()).asFloatBuffer();
+    //</editor-fold>
+
+    private static void storeCommonGlStates()
+    {
+        GL11.glGetInteger(GL11.GL_TEXTURE_BINDING_2D, intBuffer);
+        textureID = intBuffer.get(0);
+        GL11.glGetFloat(GL11.GL_CURRENT_COLOR, floatBuffer);
+        r = floatBuffer.get(0);
+        g = floatBuffer.get(1);
+        b = floatBuffer.get(2);
+        a = floatBuffer.get(3);
+        blend = GL11.glIsEnabled(GL11.GL_BLEND);
+        lighting = GL11.glIsEnabled(GL11.GL_LIGHTING);
+        texture2D = GL11.glIsEnabled(GL11.GL_TEXTURE_2D);
+        alphaTest = GL11.glIsEnabled(GL11.GL_ALPHA_TEST);
+        GL11.glGetInteger(GL11.GL_SHADE_MODEL, intBuffer);
+        shadeModel = intBuffer.get(0);
+        depthTest = GL11.glIsEnabled(GL11.GL_DEPTH_TEST);
+    }
+    private static void restoreCommonGlStates()
+    {
+        if (depthTest)
+            GlStateManager.enableDepth();
+        else
+            GlStateManager.disableDepth();
+        GlStateManager.shadeModel(shadeModel);
+        if (alphaTest)
+            GlStateManager.enableAlpha();
+        else
+            GlStateManager.disableAlpha();
+        if (texture2D)
+            GlStateManager.enableTexture2D();
+        else
+            GlStateManager.disableTexture2D();
+        if (lighting)
+            GlStateManager.enableLighting();
+        else
+            GlStateManager.disableLighting();
+        if (blend)
+            GlStateManager.enableBlend();
+        else
+            GlStateManager.disableBlend();
+        GlStateManager.color(r, g, b, a);
+        GlStateManager.bindTexture(textureID);
+    }
+
     @SubscribeEvent
     public static void onRenderGameOverlay(RenderGameOverlayEvent event)
     {
         //<editor-fold desc="gui container init">
-        for (IgiGuiContainer container: openedGuiQueue)
+        for (IgiGuiContainer container : openedGuiQueue)
             if (!container.getInitFlag())
                 container.onInit();
         //</editor-fold>
 
-        //<editor-fold desc="store gl states">
-        GL11.glGetInteger(GL11.GL_TEXTURE_BINDING_2D, intBuffer);
-        int textureID = intBuffer.get(0);
-        GL11.glGetFloat(GL11.GL_CURRENT_COLOR, floatBuffer);
-        float r = floatBuffer.get(0);
-        float g = floatBuffer.get(1);
-        float b = floatBuffer.get(2);
-        float a = floatBuffer.get(3);
-        boolean blend = GL11.glIsEnabled(GL11.GL_BLEND);
-        boolean lighting = GL11.glIsEnabled(GL11.GL_LIGHTING);
-        boolean texture2D = GL11.glIsEnabled(GL11.GL_TEXTURE_2D);
-        boolean alphaTest = GL11.glIsEnabled(GL11.GL_ALPHA_TEST);
-        GL11.glGetInteger(GL11.GL_SHADE_MODEL, intBuffer);
-        int shadeModel = intBuffer.get(0);
-        boolean depthTest = GL11.glIsEnabled(GL11.GL_DEPTH_TEST);
-        //</editor-fold>
+        if (!isPlaceholderGuiOn) storeCommonGlStates();
 
         //<editor-fold desc="gui container resize">
         if (resolution.getScaleFactor() != event.getResolution().getScaleFactor())
@@ -107,33 +148,10 @@ public final class IgiGuiLifeCycle
         }
 
         if (!isPlaceholderGuiOn)
+        {
             onRenderUpdate();
-
-        //<editor-fold desc="release gl states">
-        if (depthTest)
-            GlStateManager.enableDepth();
-        else
-            GlStateManager.disableDepth();
-        GlStateManager.shadeModel(shadeModel);
-        if (alphaTest)
-            GlStateManager.enableAlpha();
-        else
-            GlStateManager.disableAlpha();
-        if (texture2D)
-            GlStateManager.enableTexture2D();
-        else
-            GlStateManager.disableTexture2D();
-        if (lighting)
-            GlStateManager.enableLighting();
-        else
-            GlStateManager.disableLighting();
-        if (blend)
-            GlStateManager.enableBlend();
-        else
-            GlStateManager.disableBlend();
-        GlStateManager.color(r, g, b, a);
-        GlStateManager.bindTexture(textureID);
-        //</editor-fold>
+            restoreCommonGlStates();
+        }
 
         //<editor-fold desc="placeholder gui">
         if (FMLCommonHandler.instance().getSide().isClient())
@@ -174,7 +192,9 @@ public final class IgiGuiLifeCycle
                         @Override
                         public void draw()
                         {
+                            storeCommonGlStates();
                             onRenderUpdate();
+                            restoreCommonGlStates();
                         }
                     });
                     Minecraft.getMinecraft().displayGuiScreen(placeholderGui);
@@ -189,6 +209,7 @@ public final class IgiGuiLifeCycle
         {
             flag = false;
             IgiGuiContainer container = new IgiGuiContainer();
+            container.setFocused(true);
             container.getMainGroup()
             .add(
                     /*
@@ -222,8 +243,8 @@ public final class IgiGuiLifeCycle
                                                     (new TextElement("elem 3", 1, Color.GRAY.getRGB())).setPadding(new Padding(3, 3, 3, 3))
                                             )
                                             .add(
-                                                    (new TextElement("elem 4", 1, Color.GRAY.getRGB())).setPadding(new Padding(3, 3, 3, 3))
-                                            ).setPadding(new Padding(5, 5, 5, 5))
+                                                    (new PureColorButtonElement("Test Button")).setPadding(new Padding(3, 3, 3, 3))
+                                            ).setPadding(new Padding(5, 5, 5, 5)).setPivot(Pivot.BOTTOM_LEFT)
                             )
                     .setPadding(new Padding(0, 0, 0, 20))
                     .setAlignment(Alignment.MIDDLE)
