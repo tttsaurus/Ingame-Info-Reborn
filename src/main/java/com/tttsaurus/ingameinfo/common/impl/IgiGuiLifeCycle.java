@@ -1,9 +1,9 @@
 package com.tttsaurus.ingameinfo.common.impl;
 
-import com.tttsaurus.ingameinfo.common.api.gui.IPlaceholderDrawScreen;
+import com.tttsaurus.ingameinfo.common.api.gui.delegate.placeholder.IPlaceholderDrawScreen;
+import com.tttsaurus.ingameinfo.common.api.gui.delegate.placeholder.IPlaceholderKeyTyped;
 import com.tttsaurus.ingameinfo.common.api.gui.layout.*;
 import com.tttsaurus.ingameinfo.common.api.gui.PlaceholderMcGui;
-import com.tttsaurus.ingameinfo.common.api.render.renderer.URLImageRenderer;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.renderer.GlStateManager;
@@ -17,8 +17,8 @@ import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
-import java.util.PriorityQueue;
-import java.util.Queue;
+import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
 
@@ -38,14 +38,14 @@ public final class IgiGuiLifeCycle
     private static void onFixedUpdate()
     {
         //<editor-fold desc="gui container fixed update">
-        for (IgiGuiContainer container: openedGuiQueue)
+        for (IgiGuiContainer container: openedGuiList)
             container.onFixedUpdate(deltaTime);
         //</editor-fold>
     }
     private static void onRenderUpdate()
     {
         //<editor-fold desc="gui container render update">
-        for (IgiGuiContainer container: openedGuiQueue)
+        for (IgiGuiContainer container: openedGuiList)
             container.onRenderUpdate();
         //</editor-fold>
     }
@@ -112,7 +112,7 @@ public final class IgiGuiLifeCycle
     public static void onRenderGameOverlay(RenderGameOverlayEvent event)
     {
         //<editor-fold desc="gui container init">
-        for (IgiGuiContainer container : openedGuiQueue)
+        for (IgiGuiContainer container : openedGuiList)
             if (!container.getInitFlag())
                 container.onInit();
         //</editor-fold>
@@ -123,7 +123,7 @@ public final class IgiGuiLifeCycle
         if (resolution.getScaleFactor() != event.getResolution().getScaleFactor())
         {
             resolution = event.getResolution();
-            for (IgiGuiContainer container: openedGuiQueue)
+            for (IgiGuiContainer container: openedGuiList)
                 container.onScaledResolutionResize();
         }
         //</editor-fold>
@@ -159,30 +159,30 @@ public final class IgiGuiLifeCycle
             // close placeholder
             if (isPlaceholderGuiOn)
             {
-                if (openedGuiQueue.isEmpty())
+                if (openedGuiList.isEmpty())
                 {
+                    isPlaceholderGuiOn = false;
                     placeholderGui = null;
                     Minecraft.getMinecraft().displayGuiScreen(null);
-                    isPlaceholderGuiOn = false;
                 }
                 else
                 {
                     AtomicBoolean focus = new AtomicBoolean(false);
-                    openedGuiQueue.forEach(guiContainer -> focus.set(focus.get() || guiContainer.getFocused()));
+                    openedGuiList.forEach(guiContainer -> focus.set(focus.get() || guiContainer.getFocused()));
 
                     if (!focus.get())
                     {
+                        isPlaceholderGuiOn = false;
                         placeholderGui = null;
                         Minecraft.getMinecraft().displayGuiScreen(null);
-                        isPlaceholderGuiOn = false;
                     }
                 }
             }
             // open placeholder
-            else if (!isPlaceholderGuiOn && !openedGuiQueue.isEmpty() && Minecraft.getMinecraft().currentScreen == null)
+            else if (!isPlaceholderGuiOn && !openedGuiList.isEmpty() && Minecraft.getMinecraft().currentScreen == null)
             {
                 AtomicBoolean focus = new AtomicBoolean(false);
-                openedGuiQueue.forEach(guiContainer -> focus.set(focus.get() || guiContainer.getFocused()));
+                openedGuiList.forEach(guiContainer -> focus.set(focus.get() || guiContainer.getFocused()));
 
                 if (focus.get())
                 {
@@ -197,6 +197,25 @@ public final class IgiGuiLifeCycle
                             restoreCommonGlStates();
                         }
                     });
+                    placeholderGui.setTypeAction(new IPlaceholderKeyTyped()
+                    {
+                        @Override
+                        public void type(int keycode)
+                        {
+                            int index = -1;
+                            for (int i = openedGuiList.size() - 1; i >= 0; i--)
+                            {
+                                IgiGuiContainer container = openedGuiList.get(i);
+                                if (container.getFocused())
+                                    if (keycode == container.getExitKeyForFocusedGui())
+                                    {
+                                        index = i;
+                                        break;
+                                    }
+                            }
+                            if (index >= 0) openedGuiList.remove(index);
+                        }
+                    });
                     Minecraft.getMinecraft().displayGuiScreen(placeholderGui);
                     isPlaceholderGuiOn = true;
                 }
@@ -204,7 +223,7 @@ public final class IgiGuiLifeCycle
         }
         //</editor-fold>
 
-        // testing
+        //<editor-fold desc="testing">
         if (flag)
         {
             flag = false;
@@ -212,21 +231,6 @@ public final class IgiGuiLifeCycle
             container.setFocused(true);
             container.getMainGroup()
             .add(
-                    /*
-                    (new HorizontalGroup())
-                            .add(
-                                    (new HorizontalGroup())
-                                            .add(
-                                                    (new TextElement("elem 1", 1, Color.GRAY.getRGB())).setPadding(new Padding(3, 3, 3, 3))
-                                            )
-                                            .add(
-                                                    (new TextElement("elem 2", 1, Color.GRAY.getRGB())).setPadding(new Padding(3, 3, 3, 3))
-                                            )
-                            )
-                    .add(
-                            (new TextElement("elem 3", 1, Color.GRAY.getRGB())).setPadding(new Padding(10, 10, 5, 5))
-                    )
-                    */
                     (new HorizontalGroup())
                             .add(
                                     (new HorizontalGroup())
@@ -251,17 +255,37 @@ public final class IgiGuiLifeCycle
                     .setPivot(Pivot.TOP_RIGHT)
             );
             openIgiGui(container);
+            IgiGuiContainer container2 = new IgiGuiContainer();
+            container2.setFocused(true);
+            container2.getMainGroup()
+                    .add(
+                        (new VerticalGroup())
+                                .add(
+                                        (new TextElement("elem 3", 1, Color.GRAY.getRGB())).setPadding(new Padding(3, 3, 3, 3))
+                                )
+                                .add(
+                                        (new PureColorButtonElement("Test Button")).setPadding(new Padding(3, 3, 3, 3))
+                                ).setPadding(new Padding(5, 5, 5, 5)).setPivot(Pivot.TOP_RIGHT).setAlignment(Alignment.TOP_RIGHT)
+                    );
+            openIgiGui(container2);
         }
+        //</editor-fold>
     }
 
     static boolean flag = true;
 
+    // placeholder related
     private static boolean isPlaceholderGuiOn = false;
     private static PlaceholderMcGui placeholderGui;
-    private static Queue<IgiGuiContainer> openedGuiQueue = new PriorityQueue<>();
+
+    private static List<IgiGuiContainer> openedGuiList = new CopyOnWriteArrayList<>();
 
     public static void openIgiGui(IgiGuiContainer guiContainer)
     {
-        openedGuiQueue.add(guiContainer);
+        openedGuiList.add(guiContainer);
+    }
+    public static void closeIgiGui(IgiGuiContainer guiContainer)
+    {
+        openedGuiList.remove(guiContainer);
     }
 }

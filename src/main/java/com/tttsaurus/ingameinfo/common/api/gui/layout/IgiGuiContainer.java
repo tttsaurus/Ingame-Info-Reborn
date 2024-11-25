@@ -3,18 +3,25 @@ package com.tttsaurus.ingameinfo.common.api.gui.layout;
 import com.tttsaurus.ingameinfo.common.api.render.RenderUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.ScaledResolution;
-import java.awt.*;
+import org.lwjgl.input.Keyboard;
 
 public class IgiGuiContainer
 {
+    protected boolean debug = false;
+    protected int exitKeyForFocusedGui = Keyboard.KEY_ESCAPE;
     protected MainGroup mainGroup = new MainGroup();
     protected boolean isFocused = false;
     protected boolean hasFocusBackground = true;
-    protected int backgroundColor = (new Color(80, 80, 80, 160)).getRGB();
+    protected int backgroundColor = -1072689136;
 
     private boolean initFlag = false;
 
     //<editor-fold desc="getters & setters">
+    public void setDebug(boolean debug) { this.debug = debug; }
+
+    public int getExitKeyForFocusedGui() { return exitKeyForFocusedGui; }
+    public void setExitKeyForFocusedGui(int keycode) { exitKeyForFocusedGui = keycode; }
+
     public MainGroup getMainGroup() { return mainGroup; }
 
     public boolean getFocused() { return isFocused; }
@@ -54,6 +61,6 @@ public class IgiGuiContainer
         }
         mainGroup.onRenderUpdate();
 
-        //mainGroup.renderDebugRect();
+        if (debug) mainGroup.renderDebugRect();
     }
 }
