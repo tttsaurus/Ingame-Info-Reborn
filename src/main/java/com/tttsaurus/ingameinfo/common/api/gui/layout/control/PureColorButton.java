@@ -1,14 +1,15 @@
-package com.tttsaurus.ingameinfo.common.api.gui.layout;
+package com.tttsaurus.ingameinfo.common.api.gui.layout.control;
 
 import com.tttsaurus.ingameinfo.common.api.gui.delegate.button.IMouseEnterButton;
 import com.tttsaurus.ingameinfo.common.api.gui.delegate.button.IMouseLeaveButton;
 import com.tttsaurus.ingameinfo.common.api.gui.delegate.button.IMousePressButton;
 import com.tttsaurus.ingameinfo.common.api.gui.delegate.button.IMouseReleaseButton;
+import com.tttsaurus.ingameinfo.common.api.gui.layout.Rect;
 import com.tttsaurus.ingameinfo.common.api.render.RenderUtils;
 import com.tttsaurus.ingameinfo.common.api.render.renderer.TextRenderer;
 import java.awt.*;
 
-public class PureColorButtonElement extends ButtonElement
+public class PureColorButton extends Button
 {
     private final TextRenderer textRenderer = new TextRenderer();
 
@@ -18,7 +19,7 @@ public class PureColorButtonElement extends ButtonElement
     protected int holdColor;
     protected String text;
 
-    public PureColorButtonElement(String text)
+    public PureColorButton(String text)
     {
         super(0, 0);
 

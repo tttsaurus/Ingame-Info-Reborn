@@ -1,14 +1,16 @@
-package com.tttsaurus.ingameinfo.common.api.gui.layout;
+package com.tttsaurus.ingameinfo.common.api.gui.layout.control;
 
 import com.tttsaurus.ingameinfo.common.api.animation.text.ITextAnimDef;
+import com.tttsaurus.ingameinfo.common.api.gui.layout.Element;
+import com.tttsaurus.ingameinfo.common.api.gui.layout.Rect;
 import com.tttsaurus.ingameinfo.common.api.render.renderer.AnimTextRenderer;
 
-public class AnimTextElement extends Element
+public class AnimText extends Element
 {
     private final AnimTextRenderer animTextRenderer = new AnimTextRenderer();
     private final ITextAnimDef animDef;
 
-    public AnimTextElement(String text, float scale, int color, ITextAnimDef animDef)
+    public AnimText(String text, float scale, int color, ITextAnimDef animDef)
     {
         animTextRenderer.setText(text);
         animTextRenderer.setScale(scale);

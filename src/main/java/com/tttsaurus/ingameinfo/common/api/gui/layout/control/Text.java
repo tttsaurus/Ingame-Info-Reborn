@@ -1,12 +1,14 @@
-package com.tttsaurus.ingameinfo.common.api.gui.layout;
+package com.tttsaurus.ingameinfo.common.api.gui.layout.control;
 
+import com.tttsaurus.ingameinfo.common.api.gui.layout.Element;
+import com.tttsaurus.ingameinfo.common.api.gui.layout.Rect;
 import com.tttsaurus.ingameinfo.common.api.render.renderer.TextRenderer;
 
-public class TextElement extends Element
+public class Text extends Element
 {
     private final TextRenderer textRenderer = new TextRenderer();
 
-    public TextElement(String text, float scale, int color)
+    public Text(String text, float scale, int color)
     {
         textRenderer.setText(text);
         textRenderer.setScale(scale);

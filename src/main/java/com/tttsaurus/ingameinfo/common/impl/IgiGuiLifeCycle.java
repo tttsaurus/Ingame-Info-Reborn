@@ -4,6 +4,8 @@ import com.tttsaurus.ingameinfo.common.api.gui.delegate.placeholder.IPlaceholder
 import com.tttsaurus.ingameinfo.common.api.gui.delegate.placeholder.IPlaceholderKeyTyped;
 import com.tttsaurus.ingameinfo.common.api.gui.layout.*;
 import com.tttsaurus.ingameinfo.common.api.gui.PlaceholderMcGui;
+import com.tttsaurus.ingameinfo.common.api.gui.layout.control.PureColorButton;
+import com.tttsaurus.ingameinfo.common.api.gui.layout.control.Text;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.renderer.GlStateManager;
@@ -235,19 +237,19 @@ public final class IgiGuiLifeCycle
                             .add(
                                     (new HorizontalGroup())
                                             .add(
-                                                    (new TextElement("elem 1", 1, Color.GRAY.getRGB())).setPadding(new Padding(3, 3, 3, 3))
+                                                    (new Text("elem 1", 1, Color.GRAY.getRGB())).setPadding(new Padding(3, 3, 3, 3))
                                             )
                                             .add(
-                                                    (new TextElement("elem 2", 1, Color.GRAY.getRGB())).setPadding(new Padding(3, 3, 3, 3))
+                                                    (new Text("elem 2", 1, Color.GRAY.getRGB())).setPadding(new Padding(3, 3, 3, 3))
                                             ).setPadding(new Padding(5, 5, 5, 5)).setPivot(Pivot.TOP_RIGHT)
                             )
                             .add(
                                     (new VerticalGroup())
                                             .add(
-                                                    (new TextElement("elem 3", 1, Color.GRAY.getRGB())).setPadding(new Padding(3, 3, 3, 3))
+                                                    (new Text("elem 3", 1, Color.GRAY.getRGB())).setPadding(new Padding(3, 3, 3, 3))
                                             )
                                             .add(
-                                                    (new PureColorButtonElement("Test Button")).setPadding(new Padding(3, 3, 3, 3))
+                                                    (new PureColorButton("Test Button")).setPadding(new Padding(3, 3, 3, 3))
                                             ).setPadding(new Padding(5, 5, 5, 5)).setPivot(Pivot.BOTTOM_LEFT)
                             )
                     .setPadding(new Padding(0, 0, 0, 20))
@@ -261,10 +263,10 @@ public final class IgiGuiLifeCycle
                     .add(
                         (new VerticalGroup())
                                 .add(
-                                        (new TextElement("elem 3", 1, Color.GRAY.getRGB())).setPadding(new Padding(3, 3, 3, 3))
+                                        (new Text("elem 3", 1, Color.GRAY.getRGB())).setPadding(new Padding(3, 3, 3, 3))
                                 )
                                 .add(
-                                        (new PureColorButtonElement("Test Button")).setPadding(new Padding(3, 3, 3, 3))
+                                        (new PureColorButton("Test Button")).setPadding(new Padding(3, 3, 3, 3))
                                 ).setPadding(new Padding(5, 5, 5, 5)).setPivot(Pivot.TOP_RIGHT).setAlignment(Alignment.TOP_RIGHT)
                     );
             openIgiGui(container2);

@@ -1,11 +1,11 @@
-package com.tttsaurus.ingameinfo.common.api.gui.layout;
+package com.tttsaurus.ingameinfo.common.api.gui.layout.control;
 
 import com.tttsaurus.ingameinfo.common.api.gui.delegate.button.*;
 import com.tttsaurus.ingameinfo.common.api.input.MouseUtils;
 import java.util.ArrayList;
 import java.util.List;
 
-public abstract class ButtonElement extends SizedElement
+public abstract class Button extends Sized
 {
     protected boolean hover = false;
     protected boolean hold = false;
@@ -16,13 +16,13 @@ public abstract class ButtonElement extends SizedElement
     private final List<IMouseReleaseButton> release = new ArrayList<>();
     private final List<IMouseClickButton> click = new ArrayList<>();
 
-    public ButtonElement addListener(IMouseEnterButton action) { enter.add(action); return this; }
-    public ButtonElement addListener(IMouseLeaveButton action) { leave.add(action); return this; }
-    public ButtonElement addListener(IMousePressButton action) { press.add(action); return this; }
-    public ButtonElement addListener(IMouseReleaseButton action) { release.add(action); return this; }
-    public ButtonElement addListener(IMouseClickButton action) { click.add(action); return this; }
+    public Button addListener(IMouseEnterButton action) { enter.add(action); return this; }
+    public Button addListener(IMouseLeaveButton action) { leave.add(action); return this; }
+    public Button addListener(IMousePressButton action) { press.add(action); return this; }
+    public Button addListener(IMouseReleaseButton action) { release.add(action); return this; }
+    public Button addListener(IMouseClickButton action) { click.add(action); return this; }
 
-    public ButtonElement(float width, float height)
+    public Button(float width, float height)
     {
         super(width, height);
     }

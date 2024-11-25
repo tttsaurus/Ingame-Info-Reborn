@@ -1,11 +1,13 @@
-package com.tttsaurus.ingameinfo.common.api.gui.layout;
+package com.tttsaurus.ingameinfo.common.api.gui.layout.control;
 
-public abstract class SizedElement extends Element
+import com.tttsaurus.ingameinfo.common.api.gui.layout.Element;
+
+public abstract class Sized extends Element
 {
     protected float width;
     protected float height;
 
-    public SizedElement(float width, float height)
+    public Sized(float width, float height)
     {
         this.width = width;
         this.height = height;
