@@ -1,5 +1,7 @@
 package com.tttsaurus.ingameinfo.common.api.gui.layout;
 
+import com.tttsaurus.ingameinfo.common.api.gui.Element;
+
 public class HorizontalGroup extends ElementGroup
 {
     @Override
@@ -45,7 +47,7 @@ public class HorizontalGroup extends ElementGroup
     }
 
     @Override
-    protected void calcWidthHeight()
+    public void calcWidthHeight()
     {
         super.calcWidthHeight();
         for (Element element: elements)

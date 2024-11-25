@@ -1,5 +1,6 @@
 package com.tttsaurus.ingameinfo.common.api.gui.layout;
 
+import com.tttsaurus.ingameinfo.common.api.gui.Element;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.ScaledResolution;
 
@@ -14,14 +15,14 @@ public class MainGroup extends ElementGroup
     }
 
     @Override
-    protected void calcRenderPos(Rect contextRect)
+    public void calcRenderPos(Rect contextRect)
     {
         for (Element element: elements)
             element.calcRenderPos(rect);
     }
 
     @Override
-    protected void calcWidthHeight()
+    public void calcWidthHeight()
     {
         ScaledResolution resolution = new ScaledResolution(Minecraft.getMinecraft());
         rect.width = resolution.getScaledWidth();
@@ -30,7 +31,7 @@ public class MainGroup extends ElementGroup
     }
 
     @Override
-    protected void renderDebugRect()
+    public void renderDebugRect()
     {
         for (Element element: elements)
             element.renderDebugRect();

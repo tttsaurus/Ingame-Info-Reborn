@@ -1,4 +1,4 @@
-package com.tttsaurus.ingameinfo.common.api.gui.layout.control;
+package com.tttsaurus.ingameinfo.common.api.gui.control;
 
 import com.tttsaurus.ingameinfo.common.api.gui.delegate.button.IMouseEnterButton;
 import com.tttsaurus.ingameinfo.common.api.gui.delegate.button.IMouseLeaveButton;
@@ -66,7 +66,7 @@ public class PureColorButton extends Button
     }
 
     @Override
-    protected void calcRenderPos(Rect contextRect)
+    public void calcRenderPos(Rect contextRect)
     {
         super.calcRenderPos(contextRect);
         textRenderer.setX(rect.x + 2);
@@ -74,7 +74,7 @@ public class PureColorButton extends Button
     }
 
     @Override
-    protected void onRenderUpdate()
+    public void onRenderUpdate()
     {
         super.onRenderUpdate();
         textRenderer.setColor(currentColor);

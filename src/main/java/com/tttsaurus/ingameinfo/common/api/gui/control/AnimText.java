@@ -1,7 +1,7 @@
-package com.tttsaurus.ingameinfo.common.api.gui.layout.control;
+package com.tttsaurus.ingameinfo.common.api.gui.control;
 
 import com.tttsaurus.ingameinfo.common.api.animation.text.ITextAnimDef;
-import com.tttsaurus.ingameinfo.common.api.gui.layout.Element;
+import com.tttsaurus.ingameinfo.common.api.gui.Element;
 import com.tttsaurus.ingameinfo.common.api.gui.layout.Rect;
 import com.tttsaurus.ingameinfo.common.api.render.renderer.AnimTextRenderer;
 
@@ -19,7 +19,7 @@ public class AnimText extends Element
     }
 
     @Override
-    protected void calcRenderPos(Rect contextRect)
+    public void calcRenderPos(Rect contextRect)
     {
         super.calcRenderPos(contextRect);
         animTextRenderer.setX(rect.x);
@@ -27,20 +27,20 @@ public class AnimText extends Element
     }
 
     @Override
-    protected void calcWidthHeight()
+    public void calcWidthHeight()
     {
         rect.width = animTextRenderer.simulateWidth();
         rect.height = animTextRenderer.simulateHeight();
     }
 
     @Override
-    protected void onFixedUpdate(double deltaTime)
+    public void onFixedUpdate(double deltaTime)
     {
         animDef.calcAnim(animTextRenderer.getCharacterInfos(), 0, deltaTime);
     }
 
     @Override
-    protected void onRenderUpdate()
+    public void onRenderUpdate()
     {
         animTextRenderer.render();
     }

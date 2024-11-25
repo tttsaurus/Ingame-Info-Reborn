@@ -1,6 +1,6 @@
-package com.tttsaurus.ingameinfo.common.api.gui.layout.control;
+package com.tttsaurus.ingameinfo.common.api.gui.control;
 
-import com.tttsaurus.ingameinfo.common.api.gui.layout.Element;
+import com.tttsaurus.ingameinfo.common.api.gui.Element;
 
 public abstract class Sized extends Element
 {
@@ -14,7 +14,7 @@ public abstract class Sized extends Element
     }
 
     @Override
-    protected void calcWidthHeight()
+    public void calcWidthHeight()
     {
         this.rect.width = width;
         this.rect.height = height;

@@ -1,11 +1,12 @@
 package com.tttsaurus.ingameinfo.common.impl;
 
+import com.tttsaurus.ingameinfo.common.api.gui.IgiGuiContainer;
 import com.tttsaurus.ingameinfo.common.api.gui.delegate.placeholder.IPlaceholderDrawScreen;
 import com.tttsaurus.ingameinfo.common.api.gui.delegate.placeholder.IPlaceholderKeyTyped;
 import com.tttsaurus.ingameinfo.common.api.gui.layout.*;
 import com.tttsaurus.ingameinfo.common.api.gui.PlaceholderMcGui;
-import com.tttsaurus.ingameinfo.common.api.gui.layout.control.PureColorButton;
-import com.tttsaurus.ingameinfo.common.api.gui.layout.control.Text;
+import com.tttsaurus.ingameinfo.common.api.gui.control.PureColorButton;
+import com.tttsaurus.ingameinfo.common.api.gui.control.Text;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.renderer.GlStateManager;

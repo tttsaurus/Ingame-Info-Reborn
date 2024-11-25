@@ -1,5 +1,6 @@
 package com.tttsaurus.ingameinfo.common.api.gui.layout;
 
+import com.tttsaurus.ingameinfo.common.api.gui.Element;
 import com.tttsaurus.ingameinfo.common.api.render.RenderUtils;
 import java.awt.*;
 import java.util.ArrayList;
@@ -22,7 +23,7 @@ public abstract class ElementGroup extends Element
     }
 
     @Override
-    protected void resetRenderInfo()
+    public void resetRenderInfo()
     {
         super.resetRenderInfo();
         for (Element element: elements)
@@ -30,27 +31,27 @@ public abstract class ElementGroup extends Element
     }
 
     @Override
-    protected void calcWidthHeight()
+    public void calcWidthHeight()
     {
         for (Element element: elements)
             element.calcWidthHeight();
     }
 
     @Override
-    protected void onFixedUpdate(double deltaTime)
+    public void onFixedUpdate(double deltaTime)
     {
         for (Element element: elements)
             element.onFixedUpdate(deltaTime);
     }
     @Override
-    protected void onRenderUpdate()
+    public void onRenderUpdate()
     {
         for (Element element: elements)
             element.onRenderUpdate();
     }
 
     @Override
-    protected void renderDebugRect()
+    public void renderDebugRect()
     {
         RenderUtils.renderRectOutline(rect.x, rect.y, rect.width, rect.height, 1.0f, Color.ORANGE.getRGB());
         RenderUtils.renderRect(pivotPosX - 1, pivotPosY - 1, 3, 3, Color.GREEN.getRGB());

@@ -1,4 +1,4 @@
-package com.tttsaurus.ingameinfo.common.api.gui.layout.control;
+package com.tttsaurus.ingameinfo.common.api.gui.control;
 
 import com.tttsaurus.ingameinfo.common.api.gui.delegate.button.*;
 import com.tttsaurus.ingameinfo.common.api.input.MouseUtils;
@@ -7,8 +7,8 @@ import java.util.List;
 
 public abstract class Button extends Sized
 {
-    protected boolean hover = false;
-    protected boolean hold = false;
+    private boolean hover = false;
+    private boolean hold = false;
 
     private final List<IMouseEnterButton> enter = new ArrayList<>();
     private final List<IMouseLeaveButton> leave = new ArrayList<>();
@@ -28,12 +28,12 @@ public abstract class Button extends Sized
     }
 
     @Override
-    protected void onFixedUpdate(double deltaTime)
+    public void onFixedUpdate(double deltaTime)
     {
 
     }
     @Override
-    protected void onRenderUpdate()
+    public void onRenderUpdate()
     {
         int x = MouseUtils.getMouseX();
         int y = MouseUtils.getMouseY();
