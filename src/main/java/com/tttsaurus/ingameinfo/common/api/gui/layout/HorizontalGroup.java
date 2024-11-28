@@ -4,12 +4,20 @@ import com.tttsaurus.ingameinfo.common.api.gui.Element;
 
 public class HorizontalGroup extends ElementGroup
 {
+    // stack elements horizontally
+
+    // pivot does change how the layout is calculated when skewness is null
+    // skewness determines the layout when it's set
+    // elements' alignment overrides the skewness
+    protected Skewness skewness = Skewness.NULL;
+    public HorizontalGroup setSkewness(Skewness skewness) { this.skewness = skewness; return this; }
+
     @Override
     public void calcRenderPos(Rect contextRect)
     {
         super.calcRenderPos(contextRect);
         if (elements.isEmpty()) return;
-        if (pivot.vertical == 0)
+        if (pivot.vertical == 0 || pivot.vertical == 0.5f)
         {
             Element first = elements.get(0);
             first.rect.x += rect.x + first.padding.left;
@@ -31,17 +39,32 @@ public class HorizontalGroup extends ElementGroup
                 nextElement.rect.x = element.rect.x - element.padding.left - nextElement.padding.right - nextElement.rect.width;
             }
         }
-        if (pivot.horizontal == 0)
+
+        if ((pivot.horizontal == 0 && skewness == Skewness.NULL) || (pivot.horizontal == 0.5f && skewness == Skewness.NULL) || skewness == Skewness.LEFT)
             for (Element element: elements)
-                element.rect.y += rect.y + element.padding.top;
-        if (pivot.horizontal == 1)
+                if (element.alignment == Alignment.NULL)
+                    element.rect.y += rect.y + element.padding.top;
+                else
+                {
+                    element.rect.y = rect.y + rect.height * element.alignment.horizontal;
+                    if (element.pivot.horizontal == 0 || element.pivot.horizontal == 0.5f) element.rect.y += element.padding.top;
+                    if (element.pivot.horizontal == 1 || element.pivot.horizontal == 0.5f) element.rect.y -= element.padding.bottom;
+                }
+        if ((pivot.horizontal == 1 && skewness == Skewness.NULL) || skewness == Skewness.RIGHT)
             for (Element element: elements)
-                element.rect.y += rect.y + rect.height - element.padding.bottom - element.rect.height;
+                if (element.alignment == Alignment.NULL)
+                    element.rect.y += rect.y + rect.height - element.padding.bottom - element.rect.height;
+                else
+                {
+                    element.rect.y = rect.y + rect.height * element.alignment.horizontal;
+                    if (element.pivot.horizontal == 0 || element.pivot.horizontal == 0.5f) element.rect.y += element.padding.top;
+                    if (element.pivot.horizontal == 1 || element.pivot.horizontal == 0.5f) element.rect.y -= element.padding.bottom;
+                }
 
         for (Element element: elements)
         {
             element.rect.x += element.rect.width * element.pivot.vertical;
-            element.rect.y += element.rect.height * element.pivot.horizontal;
+            if (!(element.pivot.horizontal == 0.5f && element.alignment.horizontal == 0.5f)) element.rect.y += element.rect.height * element.pivot.horizontal;
             element.calcRenderPos(rect);
         }
     }

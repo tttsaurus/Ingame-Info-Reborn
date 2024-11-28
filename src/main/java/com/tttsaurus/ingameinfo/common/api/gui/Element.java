@@ -9,10 +9,7 @@ import java.awt.*;
 
 public abstract class Element
 {
-    // we only apply the alignment pivot if this element is the outmost element
-    public Alignment alignment = Alignment.TOP_LEFT;
-    // outmost represents the whole in-game screen
-    public boolean outmost;
+    public Alignment alignment = Alignment.NULL;
     public Pivot pivot = Pivot.TOP_LEFT;
     public Padding padding = new Padding(0, 0, 0, 0);
 
@@ -38,35 +35,19 @@ public abstract class Element
     }
 
     // this requires calcWidthHeight() to be called first
-    // uses pivot and alignment to calculate the actual render pos
+    // uses pivot to calculate the actual render pos
     public void calcRenderPos(Rect contextRect)
     {
         this.contextRect.set(contextRect.x, contextRect.y, contextRect.width, contextRect.height);
 
-        float x = 0;
-        if (outmost)
-        {
-            if (pivot.vertical == 0) x = padding.left;
-            if (pivot.vertical == 1) x = -padding.right;
-            x += contextRect.width * alignment.vertical;
-        }
-        float pivotOffsetX = rect.width * pivot.vertical;
-        rect.x += x - pivotOffsetX;
-        pivotPosX = rect.x + pivotOffsetX;
+        pivotPosX = rect.x;
+        rect.x -= rect.width * pivot.vertical;
 
-        float y = 0;
-        if (outmost)
-        {
-            if (pivot.horizontal == 0) y = padding.top;
-            if (pivot.horizontal == 1) y = -padding.bottom;
-            y += contextRect.height * alignment.horizontal;
-        }
-        float pivotOffsetY = rect.height * pivot.horizontal;
-        rect.y += y - pivotOffsetY;
-        pivotPosY = rect.y + pivotOffsetY;
+        pivotPosY = rect.y;
+        rect.y -= rect.height * pivot.horizontal;
     }
 
-    // update rect here
+    // update rect.width and rect.height here
     // don't touch rect.x and rect.y
     // they are handled in calcRenderPos()
     public abstract void calcWidthHeight();

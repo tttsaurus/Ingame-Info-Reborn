@@ -16,7 +16,7 @@ public abstract class Sized extends Element
     @Override
     public void calcWidthHeight()
     {
-        this.rect.width = width;
-        this.rect.height = height;
+        rect.width = width;
+        rect.height = height;
     }
 }

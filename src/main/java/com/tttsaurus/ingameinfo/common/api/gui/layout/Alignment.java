@@ -2,6 +2,8 @@ package com.tttsaurus.ingameinfo.common.api.gui.layout;
 
 public enum Alignment
 {
+    NULL(0, 0),
+
     TOP_LEFT(0,0),
     TOP_MIDDLE(0, 0.5f),
     TOP_RIGHT(0, 1),

@@ -12,7 +12,6 @@ public abstract class ElementGroup extends Element
 
     public ElementGroup add(Element element)
     {
-        element.outmost = false;
         elements.add(element);
         return this;
     }
@@ -29,6 +28,8 @@ public abstract class ElementGroup extends Element
         for (Element element: elements)
             element.resetRenderInfo();
     }
+
+    // how calcRenderPos() is implemented depends on my specific group type
 
     @Override
     public void calcWidthHeight()

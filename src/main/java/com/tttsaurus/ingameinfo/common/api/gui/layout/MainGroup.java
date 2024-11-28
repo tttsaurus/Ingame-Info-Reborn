@@ -4,29 +4,23 @@ import com.tttsaurus.ingameinfo.common.api.gui.Element;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.ScaledResolution;
 
-public class MainGroup extends ElementGroup
+public class MainGroup extends SizedFreeGroup
 {
-    @Override
-    public ElementGroup add(Element element)
+    public MainGroup()
     {
-        element.outmost = true;
-        elements.add(element);
-        return this;
-    }
-
-    @Override
-    public void calcRenderPos(Rect contextRect)
-    {
-        for (Element element: elements)
-            element.calcRenderPos(rect);
+        ScaledResolution resolution = new ScaledResolution(Minecraft.getMinecraft());
+        width = resolution.getScaledWidth();
+        height = resolution.getScaledHeight();
     }
 
     @Override
     public void calcWidthHeight()
     {
         ScaledResolution resolution = new ScaledResolution(Minecraft.getMinecraft());
-        rect.width = resolution.getScaledWidth();
-        rect.height = resolution.getScaledHeight();
+        width = resolution.getScaledWidth();
+        height = resolution.getScaledHeight();
+        rect.width = width;
+        rect.height = height;
         super.calcWidthHeight();
     }
 

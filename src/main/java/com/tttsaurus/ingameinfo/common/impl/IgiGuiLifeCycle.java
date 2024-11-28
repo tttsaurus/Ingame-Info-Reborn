@@ -232,30 +232,31 @@ public final class IgiGuiLifeCycle
             flag = false;
             IgiGuiContainer container = new IgiGuiContainer();
             container.setFocused(true);
+            container.setDebug(true);
             container.getMainGroup()
             .add(
                     (new HorizontalGroup())
                             .add(
                                     (new HorizontalGroup())
                                             .add(
-                                                    (new Text("elem 1", 1, Color.GRAY.getRGB())).setPadding(new Padding(3, 3, 3, 3))
+                                                    (new Text("elem 1", 1, Color.GRAY.getRGB())).setPadding(new Padding(20, 3, 3, 3))
                                             )
                                             .add(
-                                                    (new Text("elem 2", 1, Color.GRAY.getRGB())).setPadding(new Padding(3, 3, 3, 3))
-                                            ).setPadding(new Padding(5, 5, 5, 5)).setPivot(Pivot.TOP_RIGHT)
+                                                    (new Text("elem 2", 1, Color.GRAY.getRGB())).setAlignment(Alignment.MIDDLE).setPivot(Pivot.CENTER).setPadding(new Padding(3, 0, 0, 0))
+                                            ).setPadding(new Padding(5, 5, 5, 5)).setPivot(Pivot.CENTER)
                             )
                             .add(
                                     (new VerticalGroup())
                                             .add(
-                                                    (new Text("elem 3", 1, Color.GRAY.getRGB())).setPadding(new Padding(3, 3, 3, 3))
+                                                    (new Text("elem 3", 1, Color.GRAY.getRGB())).setPadding(new Padding(3, 3, 15, 3))
                                             )
                                             .add(
-                                                    (new PureColorButton("Test Button")).setPadding(new Padding(3, 3, 3, 3))
+                                                    (new PureColorButton("Test Button")).setAlignment(Alignment.MIDDLE).setPivot(Pivot.CENTER)
                                             ).setPadding(new Padding(5, 5, 5, 5)).setPivot(Pivot.BOTTOM_LEFT)
                             )
                     .setPadding(new Padding(0, 0, 0, 20))
                     .setAlignment(Alignment.MIDDLE)
-                    .setPivot(Pivot.TOP_RIGHT)
+                    .setPivot(Pivot.CENTER)
             );
             openIgiGui(container);
             IgiGuiContainer container2 = new IgiGuiContainer();
@@ -268,7 +269,7 @@ public final class IgiGuiLifeCycle
                                 )
                                 .add(
                                         (new PureColorButton("Test Button")).setPadding(new Padding(3, 3, 3, 3))
-                                ).setPadding(new Padding(5, 5, 5, 5)).setPivot(Pivot.TOP_RIGHT).setAlignment(Alignment.TOP_RIGHT)
+                                ).setPadding(new Padding(20, 5, 5, 20)).setPivot(Pivot.TOP_RIGHT).setAlignment(Alignment.TOP_RIGHT)
                     );
             openIgiGui(container2);
         }
