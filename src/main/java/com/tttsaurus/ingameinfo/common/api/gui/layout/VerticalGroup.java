@@ -46,7 +46,7 @@ public class VerticalGroup extends ElementGroup
                     element.rect.x += rect.x + element.padding.left;
                 else
                 {
-                    element.rect.x = rect.x + rect.width * element.alignment.vertical;
+                    element.rect.x += rect.x + rect.width * element.alignment.vertical;
                     if (element.pivot.vertical == 0 || element.pivot.vertical == 0.5f) element.rect.x += element.padding.left;
                     if (element.pivot.vertical == 1 || element.pivot.vertical == 0.5f) element.rect.x -= element.padding.right;
                 }
@@ -56,14 +56,14 @@ public class VerticalGroup extends ElementGroup
                     element.rect.x += rect.x + rect.width - element.padding.right - element.rect.width;
                 else
                 {
-                    element.rect.x = rect.x + rect.width * element.alignment.vertical;
+                    element.rect.x += rect.x + rect.width * element.alignment.vertical;
                     if (element.pivot.vertical == 0 || element.pivot.vertical == 0.5f) element.rect.x += element.padding.left;
                     if (element.pivot.vertical == 1 || element.pivot.vertical == 0.5f) element.rect.x -= element.padding.right;
                 }
 
         for (Element element: elements)
         {
-            if (!(element.pivot.vertical == 0.5f && element.alignment.vertical == 0.5f)) element.rect.x += element.rect.width * element.pivot.vertical;
+            if (element.alignment == Alignment.NULL) element.rect.x += element.rect.width * element.pivot.vertical;
             element.rect.y += element.rect.height * element.pivot.horizontal;
             element.calcRenderPos(rect);
         }
@@ -75,7 +75,7 @@ public class VerticalGroup extends ElementGroup
         super.calcWidthHeight();
         for (Element element: elements)
         {
-            rect.width = Math.max(rect.width, element.rect.width + element.padding.left + element.padding.right);
+            rect.width = Math.max(rect.width, element.rect.width);
             rect.height += element.rect.height + element.padding.top + element.padding.bottom;
         }
     }

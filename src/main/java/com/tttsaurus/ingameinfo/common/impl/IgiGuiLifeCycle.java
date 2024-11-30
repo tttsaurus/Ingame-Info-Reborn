@@ -239,11 +239,11 @@ public final class IgiGuiLifeCycle
                             .add(
                                     (new HorizontalGroup())
                                             .add(
-                                                    (new Text("elem 1", 1, Color.GRAY.getRGB())).setPadding(new Padding(20, 3, 3, 3))
+                                                    (new Text("elem 1", 2, Color.GRAY.getRGB())).setPivot(Pivot.BOTTOM_RIGHT).setPadding(new Padding(0, 5, 0, 0))
                                             )
                                             .add(
-                                                    (new Text("elem 2", 1, Color.GRAY.getRGB())).setAlignment(Alignment.MIDDLE).setPivot(Pivot.CENTER).setPadding(new Padding(3, 0, 0, 0))
-                                            ).setPadding(new Padding(5, 5, 5, 5)).setPivot(Pivot.CENTER)
+                                                    (new Text("elem 2", 1, Color.GRAY.getRGB())).setAlignment(Alignment.MIDDLE).setPivot(Pivot.BOTTOM_RIGHT)
+                                            ).setPadding(new Padding(5, 5, 5, 5)).setPivot(Pivot.BOTTOM_LEFT)
                             )
                             .add(
                                     (new VerticalGroup())
@@ -256,7 +256,7 @@ public final class IgiGuiLifeCycle
                             )
                     .setPadding(new Padding(0, 0, 0, 20))
                     .setAlignment(Alignment.MIDDLE)
-                    .setPivot(Pivot.CENTER)
+                    .setPivot(Pivot.TOP_RIGHT)
             );
             openIgiGui(container);
             IgiGuiContainer container2 = new IgiGuiContainer();

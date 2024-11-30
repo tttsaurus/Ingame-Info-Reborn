@@ -46,7 +46,7 @@ public class HorizontalGroup extends ElementGroup
                     element.rect.y += rect.y + element.padding.top;
                 else
                 {
-                    element.rect.y = rect.y + rect.height * element.alignment.horizontal;
+                    element.rect.y += rect.y + rect.height * element.alignment.horizontal;
                     if (element.pivot.horizontal == 0 || element.pivot.horizontal == 0.5f) element.rect.y += element.padding.top;
                     if (element.pivot.horizontal == 1 || element.pivot.horizontal == 0.5f) element.rect.y -= element.padding.bottom;
                 }
@@ -56,7 +56,7 @@ public class HorizontalGroup extends ElementGroup
                     element.rect.y += rect.y + rect.height - element.padding.bottom - element.rect.height;
                 else
                 {
-                    element.rect.y = rect.y + rect.height * element.alignment.horizontal;
+                    element.rect.y += rect.y + rect.height * element.alignment.horizontal;
                     if (element.pivot.horizontal == 0 || element.pivot.horizontal == 0.5f) element.rect.y += element.padding.top;
                     if (element.pivot.horizontal == 1 || element.pivot.horizontal == 0.5f) element.rect.y -= element.padding.bottom;
                 }
@@ -64,7 +64,7 @@ public class HorizontalGroup extends ElementGroup
         for (Element element: elements)
         {
             element.rect.x += element.rect.width * element.pivot.vertical;
-            if (!(element.pivot.horizontal == 0.5f && element.alignment.horizontal == 0.5f)) element.rect.y += element.rect.height * element.pivot.horizontal;
+            if (element.alignment == Alignment.NULL) element.rect.y += element.rect.height * element.pivot.horizontal;
             element.calcRenderPos(rect);
         }
     }
@@ -76,7 +76,7 @@ public class HorizontalGroup extends ElementGroup
         for (Element element: elements)
         {
             rect.width += element.rect.width + element.padding.left + element.padding.right;
-            rect.height = Math.max(rect.height, element.rect.height + element.padding.top + element.padding.bottom);
+            rect.height = Math.max(rect.height, element.rect.height);
         }
     }
 }
