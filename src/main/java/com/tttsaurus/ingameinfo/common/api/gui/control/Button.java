@@ -33,8 +33,10 @@ public abstract class Button extends Sized
 
     }
     @Override
-    public void onRenderUpdate()
+    public void onRenderUpdate(boolean focused)
     {
+        if (!focused) return;
+
         int x = MouseUtils.getMouseX();
         int y = MouseUtils.getMouseY();
 

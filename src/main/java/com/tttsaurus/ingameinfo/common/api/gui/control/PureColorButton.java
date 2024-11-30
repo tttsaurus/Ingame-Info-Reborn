@@ -74,9 +74,9 @@ public class PureColorButton extends Button
     }
 
     @Override
-    public void onRenderUpdate()
+    public void onRenderUpdate(boolean focused)
     {
-        super.onRenderUpdate();
+        super.onRenderUpdate(focused);
         textRenderer.setColor(currentColor);
         textRenderer.render();
         RenderUtils.renderRoundedRectOutline(rect.x, rect.y, rect.width, rect.height, 5f, 1f, currentColor);

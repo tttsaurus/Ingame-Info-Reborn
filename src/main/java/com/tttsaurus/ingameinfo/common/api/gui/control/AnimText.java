@@ -40,7 +40,7 @@ public class AnimText extends Element
     }
 
     @Override
-    public void onRenderUpdate()
+    public void onRenderUpdate(boolean focused)
     {
         animTextRenderer.render();
     }

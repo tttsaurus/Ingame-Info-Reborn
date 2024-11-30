@@ -45,10 +45,10 @@ public abstract class ElementGroup extends Element
             element.onFixedUpdate(deltaTime);
     }
     @Override
-    public void onRenderUpdate()
+    public void onRenderUpdate(boolean focused)
     {
         for (Element element: elements)
-            element.onRenderUpdate();
+            element.onRenderUpdate(focused);
     }
 
     @Override

@@ -53,7 +53,7 @@ public abstract class Element
     public abstract void calcWidthHeight();
 
     public abstract void onFixedUpdate(double deltaTime);
-    public abstract void onRenderUpdate();
+    public abstract void onRenderUpdate(boolean focused);
 
     public void renderDebugRect()
     {

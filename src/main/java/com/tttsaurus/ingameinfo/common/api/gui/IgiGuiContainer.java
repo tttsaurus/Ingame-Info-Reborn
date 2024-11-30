@@ -53,14 +53,14 @@ public class IgiGuiContainer
     {
         mainGroup.onFixedUpdate(deltaTime);
     }
-    public void onRenderUpdate()
+    public void onRenderUpdate(boolean focused)
     {
         if (isFocused && hasFocusBackground)
         {
             ScaledResolution resolution = new ScaledResolution(Minecraft.getMinecraft());
             RenderUtils.renderGradientRect(0, 0, resolution.getScaledWidth(), resolution.getScaledHeight(), backgroundColor, backgroundColor);
         }
-        mainGroup.onRenderUpdate();
+        mainGroup.onRenderUpdate(focused);
 
         if (debug) mainGroup.renderDebugRect();
     }

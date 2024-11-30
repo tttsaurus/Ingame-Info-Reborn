@@ -48,8 +48,24 @@ public final class IgiGuiLifeCycle
     private static void onRenderUpdate()
     {
         //<editor-fold desc="gui container render update">
-        for (IgiGuiContainer container: openedGuiList)
-            container.onRenderUpdate();
+        int firstFocused = -1;
+        for (int i = openedGuiList.size() - 1; i >= 0; i--)
+        {
+            IgiGuiContainer container = openedGuiList.get(i);
+            if (container.getFocused())
+            {
+                firstFocused = i;
+                break;
+            }
+        }
+        for (int i = 0; i < openedGuiList.size(); i++)
+        {
+            IgiGuiContainer container = openedGuiList.get(i);
+            if (i == firstFocused)
+                container.onRenderUpdate(true);
+            else
+                container.onRenderUpdate(false);
+        }
         //</editor-fold>
     }
 

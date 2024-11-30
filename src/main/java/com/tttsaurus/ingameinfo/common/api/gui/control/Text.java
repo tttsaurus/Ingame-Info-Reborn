@@ -36,7 +36,7 @@ public class Text extends Element
 
     }
     @Override
-    public void onRenderUpdate()
+    public void onRenderUpdate(boolean focused)
     {
         textRenderer.render();
     }
