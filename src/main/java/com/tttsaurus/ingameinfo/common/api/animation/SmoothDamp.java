@@ -1,6 +1,6 @@
 package com.tttsaurus.ingameinfo.common.api.animation;
 
-import com.cleanroommc.modularui.utils.MathUtils;
+import net.minecraft.util.math.MathHelper;
 
 public class SmoothDamp
 {
@@ -53,7 +53,7 @@ public class SmoothDamp
         float exp = 1f / (1f + x + 0.48f * x * x + 0.235f * x * x * x);
         float change = to - from;
         float maxChange = maxSpeed * smoothTime;
-        change = MathUtils.clamp(change, -maxChange, maxChange);
+        change = MathHelper.clamp(change, -maxChange, maxChange);
         float temp = (vel - omega * change) * deltaTime;
         vel = (vel - omega * temp) * exp;
         from = from + change + (temp - change) * exp;

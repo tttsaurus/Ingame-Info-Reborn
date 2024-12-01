@@ -44,8 +44,8 @@ dependencies {
     //compileOnly "mezz.jei:jei_1.12.2:${jei_version}:api"
     //runtimeOnly "mezz.jei:jei_1.12.2:${jei_version}:api"
 
-    compileOnly "com.cleanroommc:modularui:2.5.0-rc2"
-    runtimeOnly "com.cleanroommc:modularui:2.5.0-rc2"
+    //compileOnly "com.cleanroommc:modularui:2.5.0-rc2"
+    //runtimeOnly "com.cleanroommc:modularui:2.5.0-rc2"
 
     // zenutils-1.12.8
     //compileOnly "curse.maven:zenutils-401178:4394263"
