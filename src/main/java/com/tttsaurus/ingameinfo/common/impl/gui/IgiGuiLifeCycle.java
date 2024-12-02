@@ -1,12 +1,9 @@
-package com.tttsaurus.ingameinfo.common.impl;
+package com.tttsaurus.ingameinfo.common.impl.gui;
 
 import com.tttsaurus.ingameinfo.common.api.gui.IgiGuiContainer;
 import com.tttsaurus.ingameinfo.common.api.gui.delegate.placeholder.IPlaceholderDrawScreen;
 import com.tttsaurus.ingameinfo.common.api.gui.delegate.placeholder.IPlaceholderKeyTyped;
-import com.tttsaurus.ingameinfo.common.api.gui.layout.*;
 import com.tttsaurus.ingameinfo.common.api.gui.PlaceholderMcGui;
-import com.tttsaurus.ingameinfo.common.api.gui.control.PureColorButton;
-import com.tttsaurus.ingameinfo.common.api.gui.control.Text;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.renderer.GlStateManager;
@@ -15,7 +12,6 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import org.apache.commons.lang3.time.StopWatch;
 import org.lwjgl.opengl.GL11;
-import java.awt.*;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.FloatBuffer;
@@ -241,58 +237,7 @@ public final class IgiGuiLifeCycle
             }
         }
         //</editor-fold>
-
-        //<editor-fold desc="testing">
-        if (flag)
-        {
-            flag = false;
-            IgiGuiContainer container = new IgiGuiContainer();
-            container.setFocused(true);
-            container.setDebug(true);
-            container.getMainGroup()
-            .add(
-                    (new HorizontalGroup())
-                            .add(
-                                    (new HorizontalGroup())
-                                            .add(
-                                                    (new Text("elem 1", 2, Color.GRAY.getRGB())).setPivot(Pivot.BOTTOM_RIGHT).setPadding(new Padding(0, 5, 0, 0))
-                                            )
-                                            .add(
-                                                    (new Text("elem 2", 1, Color.GRAY.getRGB())).setAlignment(Alignment.MIDDLE).setPivot(Pivot.MIDDLE_LEFT)
-                                            ).setPadding(new Padding(5, 5, 5, 5)).setPivot(Pivot.BOTTOM_LEFT)
-                            )
-                            .add(
-                                    (new VerticalGroup())
-                                            .add(
-                                                    (new Text("elem 3", 1, Color.GRAY.getRGB())).setPivot(Pivot.MIDDLE).setPadding(new Padding(3, 3, 0, 0))
-                                            )
-                                            .add(
-                                                    (new PureColorButton("Test Button")).setPadding(new Padding(3, 3, 0, 0))
-                                            ).setPadding(new Padding(5, 5, 5, 5)).setPivot(Pivot.BOTTOM_LEFT)
-                            )
-                    .setPadding(new Padding(0, 0, 0, 20))
-                    .setAlignment(Alignment.TOP_MIDDLE)
-                    .setPivot(Pivot.TOP_MIDDLE)
-            );
-            openIgiGui(container);
-            IgiGuiContainer container2 = new IgiGuiContainer();
-            container2.setFocused(true);
-            container2.getMainGroup()
-                    .add(
-                        (new VerticalGroup())
-                                .add(
-                                        (new Text("elem 3", 1, Color.GRAY.getRGB())).setPadding(new Padding(3, 3, 3, 3))
-                                )
-                                .add(
-                                        (new PureColorButton("Test Button")).setPadding(new Padding(3, 3, 3, 3))
-                                ).setPadding(new Padding(20, 5, 5, 20)).setPivot(Pivot.TOP_RIGHT).setAlignment(Alignment.TOP_RIGHT)
-                    );
-            openIgiGui(container2);
-        }
-        //</editor-fold>
     }
-
-    static boolean flag = true;
 
     // placeholder related
     private static boolean isPlaceholderGuiOn = false;

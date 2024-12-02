@@ -23,8 +23,6 @@ public class IgiGuiContainer
     public int getExitKeyForFocusedGui() { return exitKeyForFocusedGui; }
     public void setExitKeyForFocusedGui(int keycode) { exitKeyForFocusedGui = keycode; }
 
-    public MainGroup getMainGroup() { return mainGroup; }
-
     public boolean getFocused() { return isFocused; }
     public void setFocused(boolean focused) { isFocused = focused; }
 
@@ -34,6 +32,11 @@ public class IgiGuiContainer
 
     public boolean getInitFlag() { return initFlag; }
     //</editor-fold>
+
+    protected IgiGuiContainer()
+    {
+
+    }
 
     public void onInit()
     {

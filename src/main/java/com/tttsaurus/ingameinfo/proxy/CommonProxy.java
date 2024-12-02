@@ -1,6 +1,6 @@
 package com.tttsaurus.ingameinfo.proxy;
 
-import com.tttsaurus.ingameinfo.common.impl.IgiGuiLifeCycle;
+import com.tttsaurus.ingameinfo.common.impl.gui.IgiGuiLifeCycle;
 import com.tttsaurus.ingameinfo.common.impl.appcommunication.spotify.InGameCommandHandler;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
@@ -16,7 +16,7 @@ public class CommonProxy
 
     public void init(FMLInitializationEvent event, Logger logger)
     {
-        logger.info("In-Game Info starts initializing.");
+        logger.info("In-Game Info Reborn starts initializing.");
 
         MinecraftForge.EVENT_BUS.register(IgiGuiLifeCycle.class);
         MinecraftForge.EVENT_BUS.register(InGameCommandHandler.class);

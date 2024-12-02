@@ -2,8 +2,10 @@ If you like this project, don't forget to give it a star⭐!
 
 Currently WIP
 
+Suggestions/PRs are welcome
+
 ## Overview
-This is a library mod that helps you to create in-game overlaid or focused gui with ease.
+This is a library mod that helps you to create in-game overlaid (or focused) gui with ease.
 
 ## Todo List / Features
 - Introduce a custom gui container (✔)
@@ -39,10 +41,12 @@ This is a library mod that helps you to create in-game overlaid or focused gui w
 ## How to use
 API is WIP but should look like
 ```java
-GUILayout.startVertical();
-GUILayout.text("Hello World");
-GUILayout.text("FPS: {0}", fpsDelegate);
-GUILayout.endVertical();
+GuiLayoutBuilder builder = IgiGui.getBuilder();
+builder.startVertical()
+       .text("Hello World")
+       .text("FPS: {0}", fpsDelegate)
+       .endVertical();
+IgiGui.openGui(builder);
 ```
 Crt API is also WIP but should look similar to java code.
 

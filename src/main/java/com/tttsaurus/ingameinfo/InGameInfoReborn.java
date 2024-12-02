@@ -12,26 +12,26 @@ import com.tttsaurus.ingameinfo.proxy.CommonProxy;
      name = Tags.MODNAME,
      version = Tags.VERSION,
      dependencies = "")
-public final class InGameInfo
+public final class InGameInfoReborn
 {
     @SidedProxy(
             clientSide = "com.tttsaurus.ingameinfo.proxy.ClientProxy",
             serverSide = "com.tttsaurus.ingameinfo.proxy.ServerProxy")
     private static CommonProxy proxy;
 
-    public static Logger logger;
+    public static Logger LOGGER;
 
     @EventHandler
     public void preInit(FMLPreInitializationEvent event)
     {
-        logger = event.getModLog();
-        proxy.preInit(event, logger);
+        LOGGER = event.getModLog();
+        proxy.preInit(event, LOGGER);
     }
 
     @EventHandler
     public void init(FMLInitializationEvent event)
     {
-        proxy.init(event, logger);
-        logger.info("In-Game Info initialized.");
+        proxy.init(event, LOGGER);
+        LOGGER.info("In-Game Info Reborn initialized.");
     }
 }
