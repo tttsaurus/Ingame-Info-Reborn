@@ -1,6 +1,6 @@
 package com.tttsaurus.ingameinfo.common.api.gui;
 
-import com.tttsaurus.ingameinfo.common.api.gui.layout.MainGroup;
+import com.tttsaurus.ingameinfo.common.impl.gui.layout.MainGroup;
 import com.tttsaurus.ingameinfo.common.api.render.RenderUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.ScaledResolution;

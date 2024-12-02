@@ -1,6 +1,10 @@
-package com.tttsaurus.ingameinfo.common.api.gui.layout;
+package com.tttsaurus.ingameinfo.common.impl.gui.layout;
 
 import com.tttsaurus.ingameinfo.common.api.gui.Element;
+import com.tttsaurus.ingameinfo.common.api.gui.layout.Alignment;
+import com.tttsaurus.ingameinfo.common.api.gui.layout.ElementGroup;
+import com.tttsaurus.ingameinfo.common.api.gui.layout.Rect;
+import com.tttsaurus.ingameinfo.common.api.gui.layout.Skewness;
 
 public class VerticalGroup extends ElementGroup
 {

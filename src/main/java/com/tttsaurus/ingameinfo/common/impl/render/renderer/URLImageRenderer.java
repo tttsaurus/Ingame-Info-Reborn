@@ -1,4 +1,4 @@
-package com.tttsaurus.ingameinfo.common.api.render.renderer;
+package com.tttsaurus.ingameinfo.common.impl.render.renderer;
 
 import com.tttsaurus.ingameinfo.common.api.render.Texture2D;
 import org.lwjgl.BufferUtils;

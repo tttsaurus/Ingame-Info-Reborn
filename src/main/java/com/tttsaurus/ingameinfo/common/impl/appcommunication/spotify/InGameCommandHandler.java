@@ -4,7 +4,7 @@ import com.tttsaurus.ingameinfo.common.api.appcommunication.spotify.SpotifyAcces
 import com.tttsaurus.ingameinfo.common.api.appcommunication.spotify.SpotifyOAuthUtils;
 import com.tttsaurus.ingameinfo.common.api.appcommunication.spotify.TrackPlaying;
 import com.tttsaurus.ingameinfo.common.api.appcommunication.spotify.SpotifyUserInfo;
-import com.tttsaurus.ingameinfo.common.api.render.renderer.URLImageRenderer;
+import com.tttsaurus.ingameinfo.common.impl.render.renderer.URLImageRenderer;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.util.text.Style;

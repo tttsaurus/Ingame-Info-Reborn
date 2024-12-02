@@ -1,4 +1,4 @@
-package com.tttsaurus.ingameinfo.common.api.gui.control;
+package com.tttsaurus.ingameinfo.common.impl.gui.control;
 
 import com.tttsaurus.ingameinfo.common.api.gui.delegate.button.*;
 import com.tttsaurus.ingameinfo.common.api.input.MouseUtils;

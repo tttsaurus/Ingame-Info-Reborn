@@ -1,6 +1,6 @@
 package com.tttsaurus.ingameinfo.common.api.animation.text;
 
-import com.tttsaurus.ingameinfo.common.api.render.renderer.AnimTextRenderer;
+import com.tttsaurus.ingameinfo.common.impl.render.renderer.AnimTextRenderer;
 
 public interface ITextAnimDef
 {

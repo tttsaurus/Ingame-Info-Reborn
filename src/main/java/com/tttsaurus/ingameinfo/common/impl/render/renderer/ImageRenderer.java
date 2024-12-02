@@ -1,9 +1,9 @@
-package com.tttsaurus.ingameinfo.common.api.render.renderer;
+package com.tttsaurus.ingameinfo.common.impl.render.renderer;
 
 import com.tttsaurus.ingameinfo.common.api.render.RenderUtils;
 import com.tttsaurus.ingameinfo.common.api.render.Texture2D;
+import com.tttsaurus.ingameinfo.common.api.render.renderer.IRenderer;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.resources.IResource;
 import net.minecraft.util.ResourceLocation;
 import org.lwjgl.opengl.GL11;
@@ -12,11 +12,8 @@ import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.ByteBuffer;
-import java.nio.ByteOrder;
-import java.nio.FloatBuffer;
-import java.nio.IntBuffer;
 
-public class ImageRenderer
+public class ImageRenderer implements IRenderer
 {
     protected Texture2D texture = null;
     protected float x = 0;

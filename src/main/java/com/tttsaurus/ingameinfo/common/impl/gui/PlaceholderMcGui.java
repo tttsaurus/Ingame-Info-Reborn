@@ -1,4 +1,4 @@
-package com.tttsaurus.ingameinfo.common.api.gui;
+package com.tttsaurus.ingameinfo.common.impl.gui;
 
 import com.tttsaurus.ingameinfo.common.api.gui.delegate.placeholder.IPlaceholderDrawScreen;
 import com.tttsaurus.ingameinfo.common.api.gui.delegate.placeholder.IPlaceholderKeyTyped;

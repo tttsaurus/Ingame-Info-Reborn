@@ -1,4 +1,4 @@
-package com.tttsaurus.ingameinfo.common.api.gui.control;
+package com.tttsaurus.ingameinfo.common.impl.gui.control;
 
 import com.tttsaurus.ingameinfo.common.api.gui.delegate.button.IMouseEnterButton;
 import com.tttsaurus.ingameinfo.common.api.gui.delegate.button.IMouseLeaveButton;
@@ -6,7 +6,7 @@ import com.tttsaurus.ingameinfo.common.api.gui.delegate.button.IMousePressButton
 import com.tttsaurus.ingameinfo.common.api.gui.delegate.button.IMouseReleaseButton;
 import com.tttsaurus.ingameinfo.common.api.gui.layout.Rect;
 import com.tttsaurus.ingameinfo.common.api.render.RenderUtils;
-import com.tttsaurus.ingameinfo.common.api.render.renderer.TextRenderer;
+import com.tttsaurus.ingameinfo.common.impl.render.renderer.TextRenderer;
 import java.awt.*;
 
 public class PureColorButton extends Button

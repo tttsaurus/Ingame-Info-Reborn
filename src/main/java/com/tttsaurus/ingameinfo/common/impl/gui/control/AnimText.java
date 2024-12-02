@@ -1,9 +1,9 @@
-package com.tttsaurus.ingameinfo.common.api.gui.control;
+package com.tttsaurus.ingameinfo.common.impl.gui.control;
 
 import com.tttsaurus.ingameinfo.common.api.animation.text.ITextAnimDef;
 import com.tttsaurus.ingameinfo.common.api.gui.Element;
 import com.tttsaurus.ingameinfo.common.api.gui.layout.Rect;
-import com.tttsaurus.ingameinfo.common.api.render.renderer.AnimTextRenderer;
+import com.tttsaurus.ingameinfo.common.impl.render.renderer.AnimTextRenderer;
 
 public class AnimText extends Element
 {

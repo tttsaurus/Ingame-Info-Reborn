@@ -1,4 +1,4 @@
-package com.tttsaurus.ingameinfo.common.api.animation;
+package com.tttsaurus.ingameinfo.common.impl.animation;
 
 import net.minecraft.util.math.MathHelper;
 

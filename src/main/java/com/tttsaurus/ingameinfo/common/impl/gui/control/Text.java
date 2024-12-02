@@ -1,8 +1,8 @@
-package com.tttsaurus.ingameinfo.common.api.gui.control;
+package com.tttsaurus.ingameinfo.common.impl.gui.control;
 
 import com.tttsaurus.ingameinfo.common.api.gui.Element;
 import com.tttsaurus.ingameinfo.common.api.gui.layout.Rect;
-import com.tttsaurus.ingameinfo.common.api.render.renderer.TextRenderer;
+import com.tttsaurus.ingameinfo.common.impl.render.renderer.TextRenderer;
 
 public class Text extends Element
 {
