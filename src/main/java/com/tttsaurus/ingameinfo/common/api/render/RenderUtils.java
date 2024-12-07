@@ -10,7 +10,6 @@ import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import org.lwjgl.BufferUtils;
 import org.lwjgl.opengl.GL11;
-
 import java.nio.ByteBuffer;
 
 public final class RenderUtils
@@ -34,6 +33,49 @@ public final class RenderUtils
         GlStateManager.popMatrix();
     }
 
+    public static void renderRoundedRect(float x, float y, float width, float height, float radius, int color)
+    {
+        int segments = Math.max(3, (int)(radius / 2f));
+        float a = (float)(color >> 24 & 255) / 255.0F;
+        float r = (float)(color >> 16 & 255) / 255.0F;
+        float g = (float)(color >> 8 & 255) / 255.0F;
+        float b = (float)(color & 255) / 255.0F;
+
+        GlStateManager.disableTexture2D();
+        GlStateManager.enableBlend();
+        GlStateManager.disableAlpha();
+        GlStateManager.tryBlendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO);
+        GlStateManager.disableCull();
+        GlStateManager.color(r, g, b, a);
+
+        GL11.glEnable(GL11.GL_POLYGON_SMOOTH);
+        GL11.glHint(GL11.GL_POLYGON_SMOOTH_HINT, GL11.GL_NICEST);
+
+        GlStateManager.pushMatrix();
+        GlStateManager.translate(0, 0, zLevel);
+
+        GL11.glBegin(GL11.GL_POLYGON);
+
+        addGlVerticesArc(x + width - radius, y + radius, radius, 0, 90, segments);
+        GL11.glVertex2f(x + width, y + radius);
+        GL11.glVertex2f(x + width, y + height - radius);
+        addGlVerticesArc(x + width - radius, y + height - radius, radius, 90, 180, segments);
+        GL11.glVertex2f(x + width - radius, y + height);
+        GL11.glVertex2f(x + radius, y + height);
+        addGlVerticesArc(x + radius, y + height - radius, radius, 180, 270, segments);
+        GL11.glVertex2f(x, y + height - radius);
+        GL11.glVertex2f(x, y + radius);
+        addGlVerticesArc(x + radius, y + radius, radius, 270, 360, segments);
+        GL11.glVertex2f(x + radius, y);
+        GL11.glVertex2f(x + width - radius, y);
+
+        GL11.glEnd();
+
+        GlStateManager.popMatrix();
+
+        GL11.glDisable(GL11.GL_POLYGON_SMOOTH);
+    }
+
     public static void renderRoundedRectOutline(float x, float y, float width, float height, float radius, float thickness, int color)
     {
         int segments = Math.max(3, (int)(radius / 2f));
@@ -46,7 +88,6 @@ public final class RenderUtils
         GlStateManager.enableBlend();
         GlStateManager.disableAlpha();
         GlStateManager.tryBlendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO);
-        GlStateManager.shadeModel(GL11.GL_SMOOTH);
         GlStateManager.glLineWidth(thickness * (float)(new ScaledResolution(Minecraft.getMinecraft())).getScaleFactor());
         GlStateManager.color(r, g, b, a);
 
@@ -58,16 +99,16 @@ public final class RenderUtils
 
         GL11.glBegin(GL11.GL_LINE_STRIP);
 
-        renderArc(x + width - radius, y + radius, radius, 0, 90, segments);
+        addGlVerticesArc(x + width - radius, y + radius, radius, 0, 90, segments);
         GL11.glVertex2f(x + width, y + radius);
         GL11.glVertex2f(x + width, y + height - radius);
-        renderArc(x + width - radius, y + height - radius, radius, 90, 180, segments);
+        addGlVerticesArc(x + width - radius, y + height - radius, radius, 90, 180, segments);
         GL11.glVertex2f(x + width - radius, y + height);
         GL11.glVertex2f(x + radius, y + height);
-        renderArc(x + radius, y + height - radius, radius, 180, 270, segments);
+        addGlVerticesArc(x + radius, y + height - radius, radius, 180, 270, segments);
         GL11.glVertex2f(x, y + height - radius);
         GL11.glVertex2f(x, y + radius);
-        renderArc(x + radius, y + radius, radius, 270, 360, segments);
+        addGlVerticesArc(x + radius, y + radius, radius, 270, 360, segments);
         GL11.glVertex2f(x + radius, y);
         GL11.glVertex2f(x + width - radius, y);
 
@@ -75,7 +116,8 @@ public final class RenderUtils
 
         GlStateManager.popMatrix();
     }
-    private static void renderArc(float cx, float cy, float radius, float startAngle, float endAngle, int segments)
+
+    private static void addGlVerticesArc(float cx, float cy, float radius, float startAngle, float endAngle, int segments)
     {
         startAngle -= 90;
         endAngle -= 90;

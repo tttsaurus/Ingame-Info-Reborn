@@ -1,8 +1,5 @@
 // Add any additional repositories for your dependencies here
 
 repositories {
-    maven {
-        name = "Cleanroom Maven"
-        url = "https://maven.cleanroommc.com"
-    }
+
 }

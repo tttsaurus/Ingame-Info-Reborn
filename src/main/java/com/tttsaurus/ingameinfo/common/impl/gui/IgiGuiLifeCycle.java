@@ -3,6 +3,7 @@ package com.tttsaurus.ingameinfo.common.impl.gui;
 import com.tttsaurus.ingameinfo.common.api.gui.IgiGuiContainer;
 import com.tttsaurus.ingameinfo.common.api.gui.delegate.placeholder.IPlaceholderDrawScreen;
 import com.tttsaurus.ingameinfo.common.api.gui.delegate.placeholder.IPlaceholderKeyTyped;
+import com.tttsaurus.ingameinfo.common.api.render.RenderUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.renderer.GlStateManager;
@@ -11,6 +12,7 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import org.apache.commons.lang3.time.StopWatch;
 import org.lwjgl.opengl.GL11;
+import java.awt.*;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.FloatBuffer;
@@ -23,7 +25,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 @SuppressWarnings("all")
 public final class IgiGuiLifeCycle
 {
-    private static final int maxFPS = 60;
+    private static final int maxFPS = 75;
     private static final double timePerFrame = 1d / maxFPS;
     private static final StopWatch stopwatch = new StopWatch();
     private static double deltaTime = 0d;
@@ -33,12 +35,25 @@ public final class IgiGuiLifeCycle
 
     public static int getEstimatedFPS() { return estimatedFPS; }
 
+    private static boolean displayFPS = true;
+    private static int tempFPS = 0;
+    private static double timer = 0.5f;
+
+    public static int getTempFPS() { return tempFPS; }
+
     private static void onFixedUpdate()
     {
         //<editor-fold desc="gui container fixed update">
         for (IgiGuiContainer container: openedGuiList)
             container.onFixedUpdate(deltaTime);
         //</editor-fold>
+
+        timer += deltaTime;
+        if (timer >= 0.5d)
+        {
+            timer -= 0.5d;
+            tempFPS = estimatedFPS;
+        }
     }
     private static void onRenderUpdate()
     {
@@ -62,6 +77,15 @@ public final class IgiGuiLifeCycle
                 container.onRenderUpdate(false);
         }
         //</editor-fold>
+
+        if (displayFPS)
+        {
+            String str = "FPS: " + tempFPS;
+            int width = RenderUtils.fontRenderer.getStringWidth(str) + 4;
+            RenderUtils.renderRoundedRect(10, 10, width, 15, 5, Color.DARK_GRAY.getRGB());
+            RenderUtils.renderRoundedRectOutline(10, 10, width, 15, 5, 1, Color.LIGHT_GRAY.getRGB());
+            RenderUtils.renderText(str, 12, 13, 1, Color.LIGHT_GRAY.getRGB(), true);
+        }
     }
 
     //<editor-fold desc="gl states">
@@ -73,6 +97,7 @@ public final class IgiGuiLifeCycle
     private static boolean alphaTest = false;
     private static int shadeModel = 0;
     private static boolean depthTest = false;
+    private static boolean cullFace = false;
 
     private static final IntBuffer intBuffer = ByteBuffer.allocateDirect(16 << 2).order(ByteOrder.nativeOrder()).asIntBuffer();
     private static final FloatBuffer floatBuffer = ByteBuffer.allocateDirect(16 << 2).order(ByteOrder.nativeOrder()).asFloatBuffer();
@@ -94,9 +119,14 @@ public final class IgiGuiLifeCycle
         GL11.glGetInteger(GL11.GL_SHADE_MODEL, intBuffer);
         shadeModel = intBuffer.get(0);
         depthTest = GL11.glIsEnabled(GL11.GL_DEPTH_TEST);
+        cullFace = GL11.glIsEnabled(GL11.GL_CULL_FACE);
     }
     private static void restoreCommonGlStates()
     {
+        if (cullFace)
+            GlStateManager.enableCull();
+        else
+            GlStateManager.disableCull();
         if (depthTest)
             GlStateManager.enableDepth();
         else

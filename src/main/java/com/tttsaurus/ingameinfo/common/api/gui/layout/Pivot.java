@@ -7,7 +7,7 @@ public enum Pivot
     TOP_RIGHT(0, 1),
 
     MIDDLE_LEFT(0.5f, 0),
-    MIDDLE(0.5f, 0.5f),
+    CENTER(0.5f, 0.5f),
     MIDDLE_RIGHT(0.5f, 1),
 
     BOTTOM_LEFT(1, 0),
