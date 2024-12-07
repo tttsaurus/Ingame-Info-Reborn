@@ -54,22 +54,24 @@ public final class RenderUtils
         GlStateManager.pushMatrix();
         GlStateManager.translate(0, 0, zLevel);
 
-        GL11.glBegin(GL11.GL_POLYGON);
+        Tessellator tessellator = Tessellator.getInstance();
+        BufferBuilder bufferbuilder = tessellator.getBuffer();
+        bufferbuilder.begin(GL11.GL_POLYGON, DefaultVertexFormats.POSITION);
 
-        addGlVerticesArc(x + width - radius, y + radius, radius, 0, 90, segments);
-        GL11.glVertex2f(x + width, y + radius);
-        GL11.glVertex2f(x + width, y + height - radius);
-        addGlVerticesArc(x + width - radius, y + height - radius, radius, 90, 180, segments);
-        GL11.glVertex2f(x + width - radius, y + height);
-        GL11.glVertex2f(x + radius, y + height);
-        addGlVerticesArc(x + radius, y + height - radius, radius, 180, 270, segments);
-        GL11.glVertex2f(x, y + height - radius);
-        GL11.glVertex2f(x, y + radius);
-        addGlVerticesArc(x + radius, y + radius, radius, 270, 360, segments);
-        GL11.glVertex2f(x + radius, y);
-        GL11.glVertex2f(x + width - radius, y);
+        addArcVertices(bufferbuilder, x + width - radius, y + radius, radius, 0, 90, segments);
+        bufferbuilder.pos(x + width, y + radius, 0).endVertex();
+        bufferbuilder.pos(x + width, y + height - radius, 0).endVertex();
+        addArcVertices(bufferbuilder, x + width - radius, y + height - radius, radius, 90, 180, segments);
+        bufferbuilder.pos(x + width - radius, y + height, 0).endVertex();
+        bufferbuilder.pos(x + radius, y + height, 0).endVertex();
+        addArcVertices(bufferbuilder, x + radius, y + height - radius, radius, 180, 270, segments);
+        bufferbuilder.pos(x, y + height - radius, 0).endVertex();
+        bufferbuilder.pos(x, y + radius, 0).endVertex();
+        addArcVertices(bufferbuilder, x + radius, y + radius, radius, 270, 360, segments);
+        bufferbuilder.pos(x + radius, y, 0).endVertex();
+        bufferbuilder.pos(x + width - radius, y, 0).endVertex();
 
-        GL11.glEnd();
+        tessellator.draw();
 
         GlStateManager.popMatrix();
 
@@ -97,27 +99,29 @@ public final class RenderUtils
         GlStateManager.pushMatrix();
         GlStateManager.translate(0, 0, zLevel);
 
-        GL11.glBegin(GL11.GL_LINE_STRIP);
+        Tessellator tessellator = Tessellator.getInstance();
+        BufferBuilder bufferbuilder = tessellator.getBuffer();
+        bufferbuilder.begin(GL11.GL_LINE_STRIP, DefaultVertexFormats.POSITION);
 
-        addGlVerticesArc(x + width - radius, y + radius, radius, 0, 90, segments);
-        GL11.glVertex2f(x + width, y + radius);
-        GL11.glVertex2f(x + width, y + height - radius);
-        addGlVerticesArc(x + width - radius, y + height - radius, radius, 90, 180, segments);
-        GL11.glVertex2f(x + width - radius, y + height);
-        GL11.glVertex2f(x + radius, y + height);
-        addGlVerticesArc(x + radius, y + height - radius, radius, 180, 270, segments);
-        GL11.glVertex2f(x, y + height - radius);
-        GL11.glVertex2f(x, y + radius);
-        addGlVerticesArc(x + radius, y + radius, radius, 270, 360, segments);
-        GL11.glVertex2f(x + radius, y);
-        GL11.glVertex2f(x + width - radius, y);
+        addArcVertices(bufferbuilder, x + width - radius, y + radius, radius, 0, 90, segments);
+        bufferbuilder.pos(x + width, y + radius, 0).endVertex();
+        bufferbuilder.pos(x + width, y + height - radius, 0).endVertex();
+        addArcVertices(bufferbuilder, x + width - radius, y + height - radius, radius, 90, 180, segments);
+        bufferbuilder.pos(x + width - radius, y + height, 0).endVertex();
+        bufferbuilder.pos(x + radius, y + height, 0).endVertex();
+        addArcVertices(bufferbuilder, x + radius, y + height - radius, radius, 180, 270, segments);
+        bufferbuilder.pos(x, y + height - radius, 0).endVertex();
+        bufferbuilder.pos(x, y + radius, 0).endVertex();
+        addArcVertices(bufferbuilder, x + radius, y + radius, radius, 270, 360, segments);
+        bufferbuilder.pos(x + radius, y, 0).endVertex();
+        bufferbuilder.pos(x + width - radius, y, 0).endVertex();
 
-        GL11.glEnd();
+        tessellator.draw();
 
         GlStateManager.popMatrix();
     }
 
-    private static void addGlVerticesArc(float cx, float cy, float radius, float startAngle, float endAngle, int segments)
+    private static void addArcVertices(BufferBuilder bufferbuilder, float cx, float cy, float radius, float startAngle, float endAngle, int segments)
     {
         startAngle -= 90;
         endAngle -= 90;
@@ -128,8 +132,8 @@ public final class RenderUtils
             float angle = (float)Math.toRadians(startAngle + (endAngle - startAngle) * i / segments);
             float dx = (float)(cx + Math.cos(angle) * radius);
             float dy = (float)(cy + Math.sin(angle) * radius);
-            GL11.glVertex2f(x, y);
-            GL11.glVertex2f(dx, dy);
+            bufferbuilder.pos(x, y, 0).endVertex();
+            bufferbuilder.pos(dx, dy, 0).endVertex();
             x = dx;
             y = dy;
         }

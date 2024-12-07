@@ -84,7 +84,7 @@ public final class IgiGuiLifeCycle
             int width = RenderUtils.fontRenderer.getStringWidth(str) + 4;
             RenderUtils.renderRoundedRect(10, 10, width, 15, 5, Color.DARK_GRAY.getRGB());
             RenderUtils.renderRoundedRectOutline(10, 10, width, 15, 5, 1, Color.LIGHT_GRAY.getRGB());
-            RenderUtils.renderText(str, 12, 13, 1, Color.LIGHT_GRAY.getRGB(), true);
+            RenderUtils.renderText(str, 12, 13.5f, 1, Color.LIGHT_GRAY.getRGB(), true);
         }
     }
 
