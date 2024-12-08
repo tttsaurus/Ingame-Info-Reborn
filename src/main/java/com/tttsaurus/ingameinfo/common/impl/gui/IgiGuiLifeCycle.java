@@ -35,11 +35,12 @@ public final class IgiGuiLifeCycle
 
     public static int getEstimatedFPS() { return estimatedFPS; }
 
-    private static boolean displayFPS = true;
-    private static int tempFPS = 0;
+    // fixed update fps debug
+    private static boolean displayDelayedFPS = true;
+    private static int delayedFPS = 0;
     private static double timer = 0.5f;
 
-    public static int getTempFPS() { return tempFPS; }
+    public static int getDelayedFPS() { return delayedFPS; }
 
     private static void onFixedUpdate()
     {
@@ -52,7 +53,7 @@ public final class IgiGuiLifeCycle
         if (timer >= 0.5d)
         {
             timer -= 0.5d;
-            tempFPS = estimatedFPS;
+            delayedFPS = estimatedFPS;
         }
     }
     private static void onRenderUpdate()
@@ -78,9 +79,9 @@ public final class IgiGuiLifeCycle
         }
         //</editor-fold>
 
-        if (displayFPS)
+        if (displayDelayedFPS)
         {
-            String str = "FPS: " + tempFPS;
+            String str = "FPS: " + delayedFPS;
             int width = RenderUtils.fontRenderer.getStringWidth(str) + 4;
             RenderUtils.renderRoundedRect(10, 10, width, 15, 5, Color.DARK_GRAY.getRGB());
             RenderUtils.renderRoundedRectOutline(10, 10, width, 15, 5, 1, Color.LIGHT_GRAY.getRGB());

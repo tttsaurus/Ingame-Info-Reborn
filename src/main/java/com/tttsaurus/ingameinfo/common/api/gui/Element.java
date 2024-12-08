@@ -20,10 +20,14 @@ public abstract class Element
     // stores the rect of the parent group
     public Rect contextRect = new Rect(0, 0, 0, 0);
 
+    // determines how the background is drawn (optional)
+    public String backgroundStyle;
+
     //<editor-fold desc="setters">
     public Element setAlignment(Alignment alignment) { this.alignment = alignment; return this; }
     public Element setPivot(Pivot pivot) { this.pivot = pivot; return this; }
     public Element setPadding(Padding padding) { this.padding = padding; return this; }
+    public Element setBackgroundStyle(String style) { backgroundStyle = style; return this; }
     //</editor-fold>
 
     public void resetRenderInfo()
@@ -54,6 +58,31 @@ public abstract class Element
 
     public abstract void onFixedUpdate(double deltaTime);
     public abstract void onRenderUpdate(boolean focused);
+
+    public void renderBackground()
+    {
+        if (backgroundStyle == null) return;
+        if (backgroundStyle.isEmpty()) return;
+
+        if (backgroundStyle.equals("Box"))
+        {
+            RenderUtils.renderRect(rect.x, rect.y, rect.width, rect.height, 0x383838FF);
+        }
+        else if (backgroundStyle.equals("OutlineBox"))
+        {
+            RenderUtils.renderRect(rect.x, rect.y, rect.width, rect.height, 0x383838FF);
+            RenderUtils.renderRectOutline(rect.x, rect.y, rect.width, rect.height, 1.0f, 0x232323FF);
+        }
+        else if (backgroundStyle.equals("RoundedBox"))
+        {
+            RenderUtils.renderRoundedRect(rect.x, rect.y, rect.width, rect.height, 3f, 0x383838FF);
+        }
+        else if (backgroundStyle.equals("RoundedOutlineBox"))
+        {
+            RenderUtils.renderRoundedRect(rect.x, rect.y, rect.width, rect.height, 3f, 0x383838FF);
+            RenderUtils.renderRoundedRectOutline(rect.x, rect.y, rect.width, rect.height, 3f, 1.0f, 0x232323FF);
+        }
+    }
 
     public void renderDebugRect()
     {
