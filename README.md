@@ -11,13 +11,16 @@ This is a library mod that helps you to create in-game overlaid (or focused) gui
 - Introduce a custom gui container (✔)
 - Maintain a list of custom gui containers (✔)
 - A gui container can be ingame-overlaid/focused (✔)
-- Introduce feature-rich gui layout (✔)
+- Introduce feature-rich gui layout
   - Pivot (✔)
   - Alignment (✔)
   - Padding (✔)
-  - Horizontal Group (✔)
-  - Vertical Group (✔)
-  - Nesting Groups (✔)
+  - Horizontal Group (stack elements horizontally) (✔)
+  - Vertical Group (stack elements vertically) (✔)
+  - Sized Group (✔)
+  - Nesting Groups (group in group) (✔)
+  - Adaptive Group (fit elements into it adaptively)
+  - Foldout Group
 - Add controls like text, button, input field, etc.
   - Text (✔)
   - Anim Text (mostly done)
@@ -29,6 +32,7 @@ This is a library mod that helps you to create in-game overlaid (or focused) gui
   - Slide Bar
   - Progress Bar
   - Draggable
+- A gui layout builder (✔)
 - Introduce modular animation options for controls
 - Add crt support (runtime gui setup)
 
@@ -39,16 +43,23 @@ This is a library mod that helps you to create in-game overlaid (or focused) gui
 - Unzip and `ingameinfo-[version].jar` is the mod file
 
 ## How to use
-API is WIP but should look like
 ```java
 GuiLayoutBuilder builder = IgiGui.getBuilder();
-builder.startVertical()
-       .text("Hello World")
-       .text("FPS: {0}", fpsDelegate)
-       .endVertical();
+builder
+    .setDebug(true)
+    .startHorizontalGroup()
+    .addElement(new Text("test1", 1f, Color.GRAY.getRGB()))
+    .startVerticalGroup()
+    .addElement(new Text("test2", 1f, Color.GRAY.getRGB()))
+    .addElement(new Text("test3", 1f, Color.GRAY.getRGB()))
+    .endGroup()
+    .endGroup();
 IgiGui.openGui(builder);
 ```
-Crt API is also WIP but should look similar to java code.
+The default alignment is the top-left corner
+![image](https://github.com/user-attachments/assets/0bbd66db-4ee0-4ef9-a47d-0021ffc3be1b)
+
+Crt API is still WIP but should look similar to java code.
 
 ## Credits
 - Created using [GregTechCEu's Buildscripts](https://github.com/GregTechCEu/Buildscripts)
