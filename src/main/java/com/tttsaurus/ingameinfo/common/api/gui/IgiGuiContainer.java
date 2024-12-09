@@ -17,19 +17,9 @@ public class IgiGuiContainer
 
     private boolean initFlag = false;
 
-    //<editor-fold desc="getters & setters">
-    public void setDebug(boolean debug) { this.debug = debug; }
-
+    //<editor-fold desc="getters">
     public int getExitKeyForFocusedGui() { return exitKeyForFocusedGui; }
-    public void setExitKeyForFocusedGui(int keycode) { exitKeyForFocusedGui = keycode; }
-
     public boolean getFocused() { return isFocused; }
-    public void setFocused(boolean focused) { isFocused = focused; }
-
-    public void setHasFocusBackground(boolean hasFocusBackground) { this.hasFocusBackground = hasFocusBackground; }
-
-    public void setBackgroundColor(int color) { backgroundColor = color; }
-
     public boolean getInitFlag() { return initFlag; }
     //</editor-fold>
 

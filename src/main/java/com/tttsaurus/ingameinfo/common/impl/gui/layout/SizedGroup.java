@@ -1,20 +1,22 @@
-package com.tttsaurus.ingameinfo.common.api.gui.layout;
+package com.tttsaurus.ingameinfo.common.impl.gui.layout;
 
 import com.tttsaurus.ingameinfo.common.api.gui.Element;
+import com.tttsaurus.ingameinfo.common.api.gui.layout.ElementGroup;
+import com.tttsaurus.ingameinfo.common.api.gui.layout.Rect;
 
-public class SizedFreeGroup extends ElementGroup
+public class SizedGroup extends ElementGroup
 {
     // pivot doesn't change how the layout is calculated
 
     protected float width;
     protected float height;
 
-    protected SizedFreeGroup()
+    protected SizedGroup()
     {
 
     }
 
-    public SizedFreeGroup(float width, float height)
+    public SizedGroup(float width, float height)
     {
         this.width = width;
         this.height = height;

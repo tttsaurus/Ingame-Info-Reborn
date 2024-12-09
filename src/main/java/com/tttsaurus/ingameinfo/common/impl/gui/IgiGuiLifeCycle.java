@@ -1,9 +1,12 @@
 package com.tttsaurus.ingameinfo.common.impl.gui;
 
+import com.tttsaurus.ingameinfo.common.api.gui.GuiLayoutBuilder;
+import com.tttsaurus.ingameinfo.common.api.gui.IgiGui;
 import com.tttsaurus.ingameinfo.common.api.gui.IgiGuiContainer;
 import com.tttsaurus.ingameinfo.common.api.gui.delegate.placeholder.IPlaceholderDrawScreen;
 import com.tttsaurus.ingameinfo.common.api.gui.delegate.placeholder.IPlaceholderKeyTyped;
 import com.tttsaurus.ingameinfo.common.api.render.RenderUtils;
+import com.tttsaurus.ingameinfo.common.impl.gui.control.Text;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.renderer.GlStateManager;
@@ -36,7 +39,7 @@ public final class IgiGuiLifeCycle
     public static int getEstimatedFPS() { return estimatedFPS; }
 
     // fixed update fps debug
-    private static boolean displayDelayedFPS = true;
+    private static boolean displayDelayedFPS = false;
     private static int delayedFPS = 0;
     private static double timer = 0.5f;
 
@@ -267,7 +270,26 @@ public final class IgiGuiLifeCycle
             }
         }
         //</editor-fold>
+
+        // testing
+        if (flag)
+        {
+            flag = false;
+            GuiLayoutBuilder builder = IgiGui.getBuilder();
+            builder
+                    .setDebug(true)
+                    .startHorizontalGroup()
+                    .addElement(new Text("test1", 1f, Color.GRAY.getRGB()))
+                    .startVerticalGroup()
+                    .addElement(new Text("test2", 1f, Color.GRAY.getRGB()))
+                    .addElement(new Text("test3", 1f, Color.GRAY.getRGB()))
+                    .endGroup()
+                    .endGroup();
+            IgiGui.openGui(builder);
+        }
     }
+
+    private static boolean flag = true;
 
     // placeholder related
     private static boolean isPlaceholderGuiOn = false;
