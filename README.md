@@ -32,17 +32,18 @@ This is a library mod that helps you to create in-game overlaid (or focused) gui
   - Slide Bar
   - Progress Bar
   - Draggable
-- A gui layout builder (✔)
+- A gui layout builder (partially done)
 - Introduce modular animation options for controls
 - Add crt support (runtime gui setup)
 
 ## Quick Start
 - Go to [GitHub Actions](https://github.com/tttsaurus/Ingame-Info-Reborn/actions)
-- Click on a workflow
+- Click on the latest workflow
 - Scroll down to the bottom and download the `Artifacts`
 - Unzip and `ingameinfo-[version].jar` is the mod file
 
 ## How to use
+Here's an easy example.
 ```java
 GuiLayoutBuilder builder = IgiGui.getBuilder();
 builder
@@ -56,7 +57,7 @@ builder
     .endGroup();
 IgiGui.openGui(builder);
 ```
-The default alignment is the top-left corner
+The default alignment is the top-left corner.
 ![image](https://github.com/user-attachments/assets/0bbd66db-4ee0-4ef9-a47d-0021ffc3be1b)
 
 Crt API is still WIP but should look similar to java code.
