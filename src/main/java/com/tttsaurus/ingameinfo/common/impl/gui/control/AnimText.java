@@ -3,8 +3,10 @@ package com.tttsaurus.ingameinfo.common.impl.gui.control;
 import com.tttsaurus.ingameinfo.common.api.animation.text.ITextAnimDef;
 import com.tttsaurus.ingameinfo.common.api.gui.Element;
 import com.tttsaurus.ingameinfo.common.api.gui.layout.Rect;
+import com.tttsaurus.ingameinfo.common.api.gui.registry.RegisterElement;
 import com.tttsaurus.ingameinfo.common.impl.render.renderer.AnimTextRenderer;
 
+@RegisterElement
 public class AnimText extends Element
 {
     private final AnimTextRenderer animTextRenderer = new AnimTextRenderer();

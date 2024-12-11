@@ -4,17 +4,16 @@ import com.tttsaurus.ingameinfo.common.impl.gui.IgiGuiLifeCycle;
 
 public final class IgiGui
 {
-    public static GuiLayoutBuilder getBuilder()
+    public static GuiLayout getBuilder()
     {
-        return new GuiLayoutBuilder();
+        return new GuiLayout();
     }
-    public static void openGui(GuiLayoutBuilder builder)
+    public static void openGui(GuiLayout builder)
     {
         IgiGuiLifeCycle.openIgiGui(builder.igiGuiContainer);
     }
-    public static void closeGui(GuiLayoutBuilder builder)
+    public static void closeGui(GuiLayout builder)
     {
         IgiGuiLifeCycle.closeIgiGui(builder.igiGuiContainer);
     }
-
 }

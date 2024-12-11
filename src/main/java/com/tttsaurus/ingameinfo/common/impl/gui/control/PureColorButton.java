@@ -5,10 +5,12 @@ import com.tttsaurus.ingameinfo.common.api.gui.delegate.button.IMouseLeaveButton
 import com.tttsaurus.ingameinfo.common.api.gui.delegate.button.IMousePressButton;
 import com.tttsaurus.ingameinfo.common.api.gui.delegate.button.IMouseReleaseButton;
 import com.tttsaurus.ingameinfo.common.api.gui.layout.Rect;
+import com.tttsaurus.ingameinfo.common.api.gui.registry.RegisterElement;
 import com.tttsaurus.ingameinfo.common.api.render.RenderUtils;
 import com.tttsaurus.ingameinfo.common.impl.render.renderer.TextRenderer;
 import java.awt.*;
 
+@RegisterElement
 public class PureColorButton extends Button
 {
     private final TextRenderer textRenderer = new TextRenderer();

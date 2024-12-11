@@ -2,8 +2,10 @@ package com.tttsaurus.ingameinfo.common.impl.gui.control;
 
 import com.tttsaurus.ingameinfo.common.api.gui.Element;
 import com.tttsaurus.ingameinfo.common.api.gui.layout.Rect;
+import com.tttsaurus.ingameinfo.common.api.gui.registry.RegisterElement;
 import com.tttsaurus.ingameinfo.common.impl.render.renderer.TextRenderer;
 
+@RegisterElement
 public class Text extends Element
 {
     private final TextRenderer textRenderer = new TextRenderer();

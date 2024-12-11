@@ -4,31 +4,33 @@ import com.tttsaurus.ingameinfo.common.api.gui.layout.Alignment;
 import com.tttsaurus.ingameinfo.common.api.gui.layout.Padding;
 import com.tttsaurus.ingameinfo.common.api.gui.layout.Pivot;
 import com.tttsaurus.ingameinfo.common.api.gui.layout.Rect;
+import com.tttsaurus.ingameinfo.common.api.gui.registry.RegisterElement;
+import com.tttsaurus.ingameinfo.common.api.gui.style.StyleProperty;
 import com.tttsaurus.ingameinfo.common.api.render.RenderUtils;
 import java.awt.*;
 
+@RegisterElement
 public abstract class Element
 {
-    public Alignment alignment = Alignment.NULL;
-    public Pivot pivot = Pivot.TOP_LEFT;
-    public Padding padding = new Padding(0, 0, 0, 0);
-
+    //<editor-fold desc="runtime variables">
     // stores the actual render pos (top-left) and size
     public Rect rect = new Rect(0, 0, 0, 0);
     // stores the actual render pos before applying the pivot
     public float pivotPosX = 0, pivotPosY = 0;
     // stores the rect of the parent group
     public Rect contextRect = new Rect(0, 0, 0, 0);
+    //</editor-fold>
+
+    @StyleProperty(name = "alignment")
+    public Alignment alignment = Alignment.NULL;
+    @StyleProperty(name = "pivot")
+    public Pivot pivot = Pivot.TOP_LEFT;
+    @StyleProperty(name = "padding")
+    public Padding padding = new Padding(0, 0, 0, 0);
 
     // determines how the background is drawn (optional)
+    @StyleProperty(name = "backgroundStyle")
     public String backgroundStyle;
-
-    //<editor-fold desc="setters">
-    public Element setAlignment(Alignment alignment) { this.alignment = alignment; return this; }
-    public Element setPivot(Pivot pivot) { this.pivot = pivot; return this; }
-    public Element setPadding(Padding padding) { this.padding = padding; return this; }
-    public Element setBackgroundStyle(String style) { backgroundStyle = style; return this; }
-    //</editor-fold>
 
     public void resetRenderInfo()
     {
@@ -64,23 +66,20 @@ public abstract class Element
         if (backgroundStyle == null) return;
         if (backgroundStyle.isEmpty()) return;
 
-        if (backgroundStyle.equals("Box"))
+        switch (backgroundStyle)
         {
-            RenderUtils.renderRect(rect.x, rect.y, rect.width, rect.height, 0x383838FF);
-        }
-        else if (backgroundStyle.equals("OutlineBox"))
-        {
-            RenderUtils.renderRect(rect.x, rect.y, rect.width, rect.height, 0x383838FF);
-            RenderUtils.renderRectOutline(rect.x, rect.y, rect.width, rect.height, 1.0f, 0x232323FF);
-        }
-        else if (backgroundStyle.equals("RoundedBox"))
-        {
-            RenderUtils.renderRoundedRect(rect.x, rect.y, rect.width, rect.height, 3f, 0x383838FF);
-        }
-        else if (backgroundStyle.equals("RoundedOutlineBox"))
-        {
-            RenderUtils.renderRoundedRect(rect.x, rect.y, rect.width, rect.height, 3f, 0x383838FF);
-            RenderUtils.renderRoundedRectOutline(rect.x, rect.y, rect.width, rect.height, 3f, 1.0f, 0x232323FF);
+            case "box" -> RenderUtils.renderRect(rect.x, rect.y, rect.width, rect.height, 0x383838FF);
+            case "outlineBox" ->
+            {
+                RenderUtils.renderRect(rect.x, rect.y, rect.width, rect.height, 0x383838FF);
+                RenderUtils.renderRectOutline(rect.x, rect.y, rect.width, rect.height, 1.0f, 0x232323FF);
+            }
+            case "roundedBox" -> RenderUtils.renderRoundedRect(rect.x, rect.y, rect.width, rect.height, 3f, 0x383838FF);
+            case "roundedOutlineBox" ->
+            {
+                RenderUtils.renderRoundedRect(rect.x, rect.y, rect.width, rect.height, 3f, 0x383838FF);
+                RenderUtils.renderRoundedRectOutline(rect.x, rect.y, rect.width, rect.height, 3f, 1.0f, 0x232323FF);
+            }
         }
     }
 

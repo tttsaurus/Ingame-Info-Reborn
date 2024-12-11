@@ -1,45 +1,49 @@
 package com.tttsaurus.ingameinfo.common.api.gui;
 
+import com.tttsaurus.ingameinfo.InGameInfoReborn;
 import com.tttsaurus.ingameinfo.common.api.gui.layout.ElementGroup;
+import com.tttsaurus.ingameinfo.common.api.gui.style.ISetStyleProperty;
 import com.tttsaurus.ingameinfo.common.impl.gui.layout.HorizontalGroup;
 import com.tttsaurus.ingameinfo.common.impl.gui.layout.MainGroup;
 import com.tttsaurus.ingameinfo.common.impl.gui.layout.SizedGroup;
 import com.tttsaurus.ingameinfo.common.impl.gui.layout.VerticalGroup;
+import com.tttsaurus.ingameinfo.common.impl.gui.registry.ElementRegistry;
+
 import java.util.ArrayList;
 import java.util.List;
 
-public class GuiLayoutBuilder
+public class GuiLayout
 {
     protected final IgiGuiContainer igiGuiContainer;
     private final MainGroup mainGroup;
 
-    protected GuiLayoutBuilder()
+    protected GuiLayout()
     {
         igiGuiContainer = new IgiGuiContainer();
         mainGroup = igiGuiContainer.mainGroup;
     }
 
-    public GuiLayoutBuilder setDebug(boolean debug)
+    public GuiLayout setDebug(boolean debug)
     {
         igiGuiContainer.debug = debug;
         return this;
     }
-    public GuiLayoutBuilder setExitKeyForFocusedGui(int keycode)
+    public GuiLayout setExitKeyForFocusedGui(int keycode)
     {
         igiGuiContainer.exitKeyForFocusedGui = keycode;
         return this;
     }
-    public GuiLayoutBuilder setFocused(boolean focused)
+    public GuiLayout setFocused(boolean focused)
     {
         igiGuiContainer.isFocused = focused;
         return this;
     }
-    public GuiLayoutBuilder setHasFocusBackground(boolean hasFocusBackground)
+    public GuiLayout setHasFocusBackground(boolean hasFocusBackground)
     {
         igiGuiContainer.hasFocusBackground = hasFocusBackground;
         return this;
     }
-    public GuiLayoutBuilder setBackgroundColor(int color)
+    public GuiLayout setBackgroundColor(int color)
     {
         igiGuiContainer.backgroundColor = color;
         return this;
@@ -54,7 +58,7 @@ public class GuiLayoutBuilder
         groupBuffer.add(group);
         groupLayer++;
     }
-    public GuiLayoutBuilder endGroup()
+    public GuiLayout endGroup()
     {
         groupLayer--;
         if (groupLayer - 1 < 0)
@@ -64,24 +68,30 @@ public class GuiLayoutBuilder
         return this;
     }
 
-    public GuiLayoutBuilder startHorizontalGroup()
+    public GuiLayout startHorizontalGroup()
     {
         startGroup(new HorizontalGroup());
         return this;
     }
-    public GuiLayoutBuilder startVerticalGroup()
+    public GuiLayout startVerticalGroup()
     {
         startGroup(new VerticalGroup());
         return this;
     }
-    public GuiLayoutBuilder startSizedGroup(float width, float height)
+    public GuiLayout startSizedGroup(float width, float height)
     {
         startGroup(new SizedGroup(width, height));
         return this;
     }
 
-    public GuiLayoutBuilder addElement(Element element)
+    public GuiLayout addElement(Element element, ElementStyle... styles)
     {
+        for (ElementStyle style: styles)
+        {
+            ISetStyleProperty setter = ElementRegistry.getStylePropertySetter(element.getClass(), style.name);
+            if (setter != null) setter.set(element, style.value);
+        }
+
         if (groupLayer - 1 < 0)
             mainGroup.add(element);
         else

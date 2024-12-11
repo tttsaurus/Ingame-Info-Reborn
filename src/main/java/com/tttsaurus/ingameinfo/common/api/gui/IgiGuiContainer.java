@@ -23,10 +23,7 @@ public class IgiGuiContainer
     public boolean getInitFlag() { return initFlag; }
     //</editor-fold>
 
-    protected IgiGuiContainer()
-    {
-
-    }
+    protected IgiGuiContainer() { }
 
     public void onInit()
     {

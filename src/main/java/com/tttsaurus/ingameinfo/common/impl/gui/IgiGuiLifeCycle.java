@@ -1,10 +1,13 @@
 package com.tttsaurus.ingameinfo.common.impl.gui;
 
-import com.tttsaurus.ingameinfo.common.api.gui.GuiLayoutBuilder;
+import com.tttsaurus.ingameinfo.common.api.gui.ElementStyle;
+import com.tttsaurus.ingameinfo.common.api.gui.GuiLayout;
 import com.tttsaurus.ingameinfo.common.api.gui.IgiGui;
 import com.tttsaurus.ingameinfo.common.api.gui.IgiGuiContainer;
 import com.tttsaurus.ingameinfo.common.api.gui.delegate.placeholder.IPlaceholderDrawScreen;
 import com.tttsaurus.ingameinfo.common.api.gui.delegate.placeholder.IPlaceholderKeyTyped;
+import com.tttsaurus.ingameinfo.common.api.gui.layout.Alignment;
+import com.tttsaurus.ingameinfo.common.api.gui.layout.Pivot;
 import com.tttsaurus.ingameinfo.common.api.render.RenderUtils;
 import com.tttsaurus.ingameinfo.common.impl.gui.control.Text;
 import net.minecraft.client.Minecraft;
@@ -275,11 +278,13 @@ public final class IgiGuiLifeCycle
         if (flag)
         {
             flag = false;
-            GuiLayoutBuilder builder = IgiGui.getBuilder();
+            GuiLayout builder = IgiGui.getBuilder();
             builder
                     .setDebug(true)
                     .startHorizontalGroup()
-                    .addElement(new Text("test1", 1f, Color.GRAY.getRGB()))
+                    .addElement(new Text("test1", 1f, Color.GRAY.getRGB()),
+                                new ElementStyle("alignment", Alignment.BOTTOM_LEFT),
+                                new ElementStyle("pivot", Pivot.BOTTOM_RIGHT))
                     .startVerticalGroup()
                     .addElement(new Text("test2", 1f, Color.GRAY.getRGB()))
                     .addElement(new Text("test3", 1f, Color.GRAY.getRGB()))
