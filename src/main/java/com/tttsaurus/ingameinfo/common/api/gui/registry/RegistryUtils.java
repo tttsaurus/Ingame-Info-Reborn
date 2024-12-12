@@ -75,7 +75,7 @@ public final class RegistryUtils
                 try
                 {
                     setter = lookup.findSetter(clazz, field.getName(), field.getType());
-                    setters.put(styleProperty.name(), (target, value) ->
+                    setters.put(styleProperty.name().isEmpty() ? field.getName() : styleProperty.name(), (target, value) ->
                     {
                         try
                         {

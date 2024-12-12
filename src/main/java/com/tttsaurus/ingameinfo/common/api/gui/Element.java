@@ -21,15 +21,15 @@ public abstract class Element
     public Rect contextRect = new Rect(0, 0, 0, 0);
     //</editor-fold>
 
-    @StyleProperty(name = "alignment")
+    @StyleProperty
     public Alignment alignment = Alignment.NULL;
-    @StyleProperty(name = "pivot")
+    @StyleProperty
     public Pivot pivot = Pivot.TOP_LEFT;
-    @StyleProperty(name = "padding")
+    @StyleProperty
     public Padding padding = new Padding(0, 0, 0, 0);
 
     // determines how the background is drawn (optional)
-    @StyleProperty(name = "backgroundStyle")
+    @StyleProperty
     public String backgroundStyle;
 
     public void resetRenderInfo()

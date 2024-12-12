@@ -16,7 +16,8 @@ public final class ElementRegistry
     private static final List<Class<? extends Element>> registeredElements = new ArrayList<>();
     private static final List<String> elementPackages = new ArrayList<>(Arrays.asList(
             "com.tttsaurus.ingameinfo.common.api.gui",
-            "com.tttsaurus.ingameinfo.common.impl.gui.control"
+            "com.tttsaurus.ingameinfo.common.impl.gui.control",
+            "com.tttsaurus.ingameinfo.common.impl.gui.layout"
     ));
 
     @Nullable

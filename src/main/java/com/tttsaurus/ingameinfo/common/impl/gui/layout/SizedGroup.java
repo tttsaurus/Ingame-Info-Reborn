@@ -3,7 +3,9 @@ package com.tttsaurus.ingameinfo.common.impl.gui.layout;
 import com.tttsaurus.ingameinfo.common.api.gui.Element;
 import com.tttsaurus.ingameinfo.common.api.gui.layout.ElementGroup;
 import com.tttsaurus.ingameinfo.common.api.gui.layout.Rect;
+import com.tttsaurus.ingameinfo.common.api.gui.registry.RegisterElement;
 
+@RegisterElement
 public class SizedGroup extends ElementGroup
 {
     // pivot doesn't change how the layout is calculated
