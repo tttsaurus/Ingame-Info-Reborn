@@ -3,6 +3,8 @@ package com.tttsaurus.ingameinfo.common.api.gui.registry;
 import com.tttsaurus.ingameinfo.common.api.gui.Element;
 import com.tttsaurus.ingameinfo.common.api.gui.style.ISetStyleProperty;
 import com.tttsaurus.ingameinfo.common.api.gui.style.StyleProperty;
+import com.tttsaurus.ingameinfo.common.api.gui.style.StylePropertyDeserializer;
+import com.tttsaurus.ingameinfo.common.api.serialization.IDeserializer;
 import java.io.IOException;
 import java.lang.invoke.MethodHandle;
 import java.lang.invoke.MethodHandles;
@@ -61,21 +63,22 @@ public final class RegistryUtils
         return annotatedClasses;
     }
 
-    public static Map<String, ISetStyleProperty> findStylePropertySetters(Class<? extends Element> clazz)
+    public static Map<String, ISetStyleProperty> findStyleProperties(Class<? extends Element> clazz, Map<ISetStyleProperty, IDeserializer<?>> stylePropertyDeserializers)
     {
-        Class<StyleProperty> annotation = StyleProperty.class;
         Map<String, ISetStyleProperty> setters = new HashMap<>();
 
         for (Field field : clazz.getDeclaredFields())
-            if (field.isAnnotationPresent(annotation))
+            if (field.isAnnotationPresent(StyleProperty.class))
             {
-                StyleProperty styleProperty = field.getAnnotation(annotation);
+                StyleProperty styleProperty = field.getAnnotation(StyleProperty.class);
                 MethodHandles.Lookup lookup = MethodHandles.lookup();
                 MethodHandle setter;
                 try
                 {
-                    setter = lookup.findSetter(clazz, field.getName(), field.getType());
-                    setters.put(styleProperty.name().isEmpty() ? field.getName() : styleProperty.name(), (target, value) ->
+                    Class<?> fieldClass = field.getType();
+                    String fieldName = field.getName();
+                    setter = lookup.findSetter(clazz, fieldName, fieldClass);
+                    ISetStyleProperty wrappedSetter = (target, value) ->
                     {
                         try
                         {
@@ -83,7 +86,14 @@ public final class RegistryUtils
                                 setter.invoke(target, value);
                         }
                         catch (Throwable ignored) { }
-                    });
+                    };
+                    setters.put(styleProperty.name().isEmpty() ? fieldName : styleProperty.name(), wrappedSetter);
+
+                    if (fieldClass.isAnnotationPresent(StylePropertyDeserializer.class))
+                    {
+                        StylePropertyDeserializer stylePropertyDeserializer = fieldClass.getAnnotation(StylePropertyDeserializer.class);
+                        stylePropertyDeserializers.put(wrappedSetter, stylePropertyDeserializer.value().newInstance());
+                    }
                 }
                 catch (Exception ignored) { }
             }

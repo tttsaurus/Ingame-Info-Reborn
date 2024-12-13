@@ -5,6 +5,7 @@ import com.google.common.collect.ImmutableMap;
 import com.tttsaurus.ingameinfo.common.api.gui.Element;
 import com.tttsaurus.ingameinfo.common.api.gui.registry.RegistryUtils;
 import com.tttsaurus.ingameinfo.common.api.gui.style.ISetStyleProperty;
+import com.tttsaurus.ingameinfo.common.api.serialization.IDeserializer;
 import javax.annotation.Nullable;
 import java.util.*;
 
@@ -12,6 +13,7 @@ import java.util.*;
 public final class ElementRegistry
 {
     private static final Map<String, Map<String, ISetStyleProperty>> stylePropertySetters = new HashMap<>();
+    private static final Map<ISetStyleProperty, IDeserializer<?>> stylePropertyDeserializers = new HashMap<>();
 
     private static final List<Class<? extends Element>> registeredElements = new ArrayList<>();
     private static final List<String> elementPackages = new ArrayList<>(Arrays.asList(
@@ -35,6 +37,7 @@ public final class ElementRegistry
     }
 
     public static ImmutableMap<String, Map<String, ISetStyleProperty>> getStylePropertySetters() { return ImmutableMap.copyOf(stylePropertySetters); }
+    public static ImmutableMap<ISetStyleProperty, IDeserializer<?>> getStylePropertyDeserializers() { return ImmutableMap.copyOf(stylePropertyDeserializers); }
     public static ImmutableList<Class<? extends Element>> getRegisteredElements() { return ImmutableList.copyOf(registeredElements); }
     public static void addElementPackage(String packageName) { elementPackages.add(packageName); }
 
@@ -44,7 +47,8 @@ public final class ElementRegistry
         for (String packageName: elementPackages)
             registeredElements.addAll(RegistryUtils.findRegisteredElements(packageName));
         stylePropertySetters.clear();
+        stylePropertyDeserializers.clear();
         for (Class<? extends Element> clazz: registeredElements)
-            stylePropertySetters.put(clazz.getName(), RegistryUtils.findStylePropertySetters(clazz));
+            stylePropertySetters.put(clazz.getName(), RegistryUtils.findStyleProperties(clazz, stylePropertyDeserializers));
     }
 }
