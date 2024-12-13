@@ -283,8 +283,7 @@ public final class IgiGuiLifeCycle
                     .setDebug(true)
                     .startHorizontalGroup()
                     .addElement(new Text("test1", 1f, Color.GRAY.getRGB()),
-                                new ElementStyle("alignment", Alignment.BOTTOM_LEFT),
-                                new ElementStyle("pivot", Pivot.BOTTOM_RIGHT))
+                                "\"alignment\" : BOTTOM_LEFT, \"pivot\" : BOTTOM_RIGHT")
                     .startVerticalGroup()
                     .addElement(new Text("test2", 1f, Color.GRAY.getRGB()))
                     .addElement(new Text("test3", 1f, Color.GRAY.getRGB()))

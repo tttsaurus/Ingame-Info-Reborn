@@ -7,8 +7,10 @@ public final class RawJsonUtils
 {
     public static String extractValue(String json, String key) 
     {
+        json = json.trim();
         if (json.startsWith("{") && json.endsWith("}"))
-            json = json.substring(1, json.length() - 1).trim();
+            json = json.substring(1, json.length() - 1);
+        json = json.trim();
 
         String keyPattern = "\"" + key + "\"";
         int keyIndex = findKeyAtTopLevel(json, keyPattern);
@@ -65,7 +67,8 @@ public final class RawJsonUtils
                             index--;
                         else
                             c1 = json.charAt(--index);
-                    list.add(json.substring(index + 1, endIndex));
+                    String key = json.substring(index + 1, endIndex);
+                    list.add(key.substring(1, key.length() - 1));
                 }
             }
             startIndex++;

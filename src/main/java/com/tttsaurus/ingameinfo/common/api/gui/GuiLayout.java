@@ -1,6 +1,5 @@
 package com.tttsaurus.ingameinfo.common.api.gui;
 
-import com.tttsaurus.ingameinfo.InGameInfoReborn;
 import com.tttsaurus.ingameinfo.common.api.gui.layout.ElementGroup;
 import com.tttsaurus.ingameinfo.common.api.gui.style.ISetStyleProperty;
 import com.tttsaurus.ingameinfo.common.api.serialization.IDeserializer;
@@ -110,7 +109,6 @@ public class GuiLayout
         List<Tuple<String, String>> list = deserializer.deserialize(rawStyles, "json");
         for (Tuple<String, String> pair: list)
         {
-            //InGameInfoReborn.LOGGER.info(pair.getFirst() + ":" + pair.getSecond());
             ISetStyleProperty setter = ElementRegistry.getStylePropertySetter(element.getClass(), pair.getFirst());
             if (setter != null)
             {
