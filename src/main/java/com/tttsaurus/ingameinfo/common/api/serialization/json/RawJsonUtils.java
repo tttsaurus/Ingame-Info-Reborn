@@ -30,6 +30,50 @@ public final class RawJsonUtils
             return extractSimpleValue(json, startIndex);
     }
 
+    public static List<String> extractKeys(String json)
+    {
+        if (json.startsWith("{") && json.endsWith("}"))
+            json = json.substring(1, json.length() - 1).trim();
+
+        List<String> list = new ArrayList<>();
+
+        int level = 0;
+        int startIndex = 0;
+        while (startIndex < json.length())
+        {
+            char c = json.charAt(startIndex);
+
+            if (c == '{' || c == '[')
+                level++;
+            else if (c == '}' || c == ']')
+                level--;
+
+            if (c == ':' && level == 0)
+            {
+                int index = startIndex - 1;
+                if (index >= 0)
+                {
+                    char c1 = json.charAt(index);
+                    while (index - 1 >= 0 && c1 == ' ')
+                        c1 = json.charAt(--index);
+                    int endIndex = index + 1;
+                    while (index >= 0 &&
+                           c1 != ' ' &&
+                           c1 != ',' &&
+                           c1 != '{')
+                        if (index - 1 == -1)
+                            index--;
+                        else
+                            c1 = json.charAt(--index);
+                    list.add(json.substring(index + 1, endIndex));
+                }
+            }
+            startIndex++;
+        }
+
+        return list;
+    }
+
     public static List<String> splitArray(String json)
     {
         if (json.startsWith("[") && json.endsWith("]"))

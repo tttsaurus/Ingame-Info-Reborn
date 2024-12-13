@@ -1,6 +1,9 @@
 package com.tttsaurus.ingameinfo.common.api.serialization;
 
+import javax.annotation.Nullable;
+
 public interface IDeserializer<T>
 {
-    T deserialize(String raw);
+    @Nullable
+    T deserialize(String raw, String protocol);
 }

@@ -6,9 +6,13 @@ import com.tttsaurus.ingameinfo.common.api.serialization.IDeserializer;
 public class AlignmentDeserializer implements IDeserializer<Alignment>
 {
     @Override
-    public Alignment deserialize(String raw)
+    public Alignment deserialize(String raw, String protocol)
     {
-        try { return Alignment.valueOf(raw); }
-        catch (Exception ignored) { return null; }
+        if (protocol.equals("json"))
+        {
+            try { return Alignment.valueOf(raw); }
+            catch (Exception ignored) { return null; }
+        }
+        return null;
     }
 }
