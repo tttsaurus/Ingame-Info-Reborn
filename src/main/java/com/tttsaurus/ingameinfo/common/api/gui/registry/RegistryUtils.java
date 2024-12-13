@@ -3,8 +3,9 @@ package com.tttsaurus.ingameinfo.common.api.gui.registry;
 import com.tttsaurus.ingameinfo.common.api.gui.Element;
 import com.tttsaurus.ingameinfo.common.api.gui.style.ISetStyleProperty;
 import com.tttsaurus.ingameinfo.common.api.gui.style.StyleProperty;
-import com.tttsaurus.ingameinfo.common.api.gui.style.StylePropertyDeserializer;
+import com.tttsaurus.ingameinfo.common.api.serialization.Deserializer;
 import com.tttsaurus.ingameinfo.common.api.serialization.IDeserializer;
+import com.tttsaurus.ingameinfo.common.impl.serialization.PrimitiveTypesDeserializer;
 import java.io.IOException;
 import java.lang.invoke.MethodHandle;
 import java.lang.invoke.MethodHandles;
@@ -89,10 +90,12 @@ public final class RegistryUtils
                     };
                     setters.put(styleProperty.name().isEmpty() ? fieldName : styleProperty.name(), wrappedSetter);
 
-                    if (fieldClass.isAnnotationPresent(StylePropertyDeserializer.class))
+                    if (fieldClass.isPrimitive() || fieldClass.equals(String.class))
+                        stylePropertyDeserializers.put(wrappedSetter, new PrimitiveTypesDeserializer<>(fieldClass));
+                    else if (fieldClass.isAnnotationPresent(Deserializer.class))
                     {
-                        StylePropertyDeserializer stylePropertyDeserializer = fieldClass.getAnnotation(StylePropertyDeserializer.class);
-                        stylePropertyDeserializers.put(wrappedSetter, stylePropertyDeserializer.value().newInstance());
+                        Deserializer deserializer = fieldClass.getAnnotation(Deserializer.class);
+                        stylePropertyDeserializers.put(wrappedSetter, deserializer.value().newInstance());
                     }
                 }
                 catch (Exception ignored) { }

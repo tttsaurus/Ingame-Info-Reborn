@@ -1,9 +1,9 @@
 package com.tttsaurus.ingameinfo.common.api.gui.layout;
 
-import com.tttsaurus.ingameinfo.common.api.gui.style.StylePropertyDeserializer;
+import com.tttsaurus.ingameinfo.common.api.serialization.Deserializer;
 import com.tttsaurus.ingameinfo.common.impl.serialization.PaddingDeserializer;
 
-@StylePropertyDeserializer(PaddingDeserializer.class)
+@Deserializer(PaddingDeserializer.class)
 public class Padding
 {
     public float top;

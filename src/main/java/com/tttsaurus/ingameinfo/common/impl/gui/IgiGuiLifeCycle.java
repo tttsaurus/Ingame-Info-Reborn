@@ -280,13 +280,13 @@ public final class IgiGuiLifeCycle
             flag = false;
             GuiLayout builder = IgiGui.getBuilder();
             builder
-                    .setDebug(true)
+                    .setDebug(false)
                     .startHorizontalGroup()
-                    .addElement(new Text("test1", 1f, Color.GRAY.getRGB()),
-                                "\"alignment\" : BOTTOM_LEFT, \"pivot\" : BOTTOM_RIGHT")
+                    .addElement(new Text("test1", 2f, Color.RED.getRGB()),
+                                "\"alignment\" : BOTTOM_LEFT, \"pivot\" : BOTTOM_RIGHT, \"backgroundStyle\" : \"roundedOutlineBox\"")
                     .startVerticalGroup()
-                    .addElement(new Text("test2", 1f, Color.GRAY.getRGB()))
-                    .addElement(new Text("test3", 1f, Color.GRAY.getRGB()))
+                    .addElement(new Text("test2", 2f, Color.GRAY.getRGB()))
+                    .addElement(new Text("test3", 2f, Color.GRAY.getRGB()))
                     .endGroup()
                     .endGroup();
             IgiGui.openGui(builder);

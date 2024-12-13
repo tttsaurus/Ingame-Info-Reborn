@@ -1,6 +1,5 @@
-package com.tttsaurus.ingameinfo.common.api.gui.style;
+package com.tttsaurus.ingameinfo.common.api.serialization;
 
-import com.tttsaurus.ingameinfo.common.api.serialization.IDeserializer;
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
@@ -8,7 +7,7 @@ import java.lang.annotation.Target;
 
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.TYPE)
-public @interface StylePropertyDeserializer
+public @interface Deserializer
 {
     Class<? extends IDeserializer<?>> value();
 }

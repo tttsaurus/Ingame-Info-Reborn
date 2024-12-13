@@ -1,9 +1,9 @@
 package com.tttsaurus.ingameinfo.common.api.gui.layout;
 
-import com.tttsaurus.ingameinfo.common.api.gui.style.StylePropertyDeserializer;
+import com.tttsaurus.ingameinfo.common.api.serialization.Deserializer;
 import com.tttsaurus.ingameinfo.common.impl.serialization.PivotDeserializer;
 
-@StylePropertyDeserializer(PivotDeserializer.class)
+@Deserializer(PivotDeserializer.class)
 public enum Pivot
 {
     TOP_LEFT(0,0),
