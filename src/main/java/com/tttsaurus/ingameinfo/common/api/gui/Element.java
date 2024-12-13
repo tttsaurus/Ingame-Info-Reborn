@@ -12,6 +12,9 @@ import java.awt.*;
 @RegisterElement
 public abstract class Element
 {
+    public static int DEFAULT_COLOR_DARK = Color.decode("0x383838").getRGB();
+    public static int DEFAULT_COLOR_DARKER = Color.decode("0x232323").getRGB();
+
     //<editor-fold desc="runtime variables">
     // stores the actual render pos (top-left) and size
     public Rect rect = new Rect(0, 0, 0, 0);
@@ -68,17 +71,17 @@ public abstract class Element
 
         switch (backgroundStyle)
         {
-            case "box" -> RenderUtils.renderRect(rect.x, rect.y, rect.width, rect.height, 0x383838FF);
-            case "outlineBox" ->
+            case "box" -> RenderUtils.renderRect(rect.x, rect.y, rect.width, rect.height, DEFAULT_COLOR_DARK);
+            case "boxWithOutline" ->
             {
-                RenderUtils.renderRect(rect.x, rect.y, rect.width, rect.height, 0x383838FF);
-                RenderUtils.renderRectOutline(rect.x, rect.y, rect.width, rect.height, 1.0f, 0x232323FF);
+                RenderUtils.renderRect(rect.x, rect.y, rect.width, rect.height, DEFAULT_COLOR_DARK);
+                RenderUtils.renderRectOutline(rect.x, rect.y, rect.width, rect.height, 1.0f, DEFAULT_COLOR_DARKER);
             }
-            case "roundedBox" -> RenderUtils.renderRoundedRect(rect.x, rect.y, rect.width, rect.height, 3f, 0x383838FF);
-            case "roundedOutlineBox" ->
+            case "roundedBox" -> RenderUtils.renderRoundedRect(rect.x, rect.y, rect.width, rect.height, 3f, DEFAULT_COLOR_DARK);
+            case "roundedBoxWithOutline" ->
             {
-                RenderUtils.renderRoundedRect(rect.x, rect.y, rect.width, rect.height, 3f, 0x383838FF);
-                RenderUtils.renderRoundedRectOutline(rect.x, rect.y, rect.width, rect.height, 3f, 1.0f, 0x232323FF);
+                RenderUtils.renderRoundedRect(rect.x, rect.y, rect.width, rect.height, 3f, DEFAULT_COLOR_DARK);
+                RenderUtils.renderRoundedRectOutline(rect.x, rect.y, rect.width, rect.height, 3f, 1.0f, DEFAULT_COLOR_DARKER);
             }
         }
     }
