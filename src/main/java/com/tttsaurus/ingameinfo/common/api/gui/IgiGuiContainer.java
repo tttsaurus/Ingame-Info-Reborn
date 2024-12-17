@@ -4,10 +4,18 @@ import com.tttsaurus.ingameinfo.common.impl.gui.layout.MainGroup;
 import com.tttsaurus.ingameinfo.common.api.render.RenderUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.ScaledResolution;
+import net.minecraft.item.ItemStack;
 import org.lwjgl.input.Keyboard;
+import java.util.ArrayList;
+import java.util.List;
 
 public class IgiGuiContainer
 {
+    protected boolean useHeldItemWhitelist = false;
+    protected final List<ItemStack> heldItemWhitelist = new ArrayList<>();
+    protected boolean useHeldItemBlacklist = false;
+    protected final List<ItemStack> heldItemBlacklist = new ArrayList<>();
+
     protected boolean debug = false;
     protected int exitKeyForFocusedGui = Keyboard.KEY_ESCAPE;
     protected MainGroup mainGroup = new MainGroup();
@@ -21,6 +29,10 @@ public class IgiGuiContainer
     public int getExitKeyForFocusedGui() { return exitKeyForFocusedGui; }
     public boolean getFocused() { return isFocused; }
     public boolean getInitFlag() { return initFlag; }
+    public boolean getUseHeldItemWhitelist() { return useHeldItemWhitelist; }
+    public boolean getUseHeldItemBlacklist() { return useHeldItemBlacklist; }
+    public List<ItemStack> getHeldItemWhitelist() { return heldItemWhitelist; }
+    public List<ItemStack> getHeldItemBlacklist() { return heldItemBlacklist; }
     //</editor-fold>
 
     protected IgiGuiContainer() { }

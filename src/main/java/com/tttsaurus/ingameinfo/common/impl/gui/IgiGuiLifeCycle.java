@@ -1,18 +1,18 @@
 package com.tttsaurus.ingameinfo.common.impl.gui;
 
-import com.tttsaurus.ingameinfo.common.api.gui.ElementStyle;
 import com.tttsaurus.ingameinfo.common.api.gui.GuiLayout;
 import com.tttsaurus.ingameinfo.common.api.gui.IgiGui;
 import com.tttsaurus.ingameinfo.common.api.gui.IgiGuiContainer;
 import com.tttsaurus.ingameinfo.common.api.gui.delegate.placeholder.IPlaceholderDrawScreen;
 import com.tttsaurus.ingameinfo.common.api.gui.delegate.placeholder.IPlaceholderKeyTyped;
-import com.tttsaurus.ingameinfo.common.api.gui.layout.Alignment;
-import com.tttsaurus.ingameinfo.common.api.gui.layout.Pivot;
 import com.tttsaurus.ingameinfo.common.api.render.RenderUtils;
 import com.tttsaurus.ingameinfo.common.impl.gui.control.Text;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Items;
+import net.minecraft.item.ItemStack;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
@@ -64,6 +64,8 @@ public final class IgiGuiLifeCycle
     }
     private static void onRenderUpdate()
     {
+        ItemStack heldItemMainhand = Minecraft.getMinecraft().player.getHeldItemMainhand();
+
         //<editor-fold desc="gui container render update">
         int firstFocused = -1;
         for (int i = openedGuiList.size() - 1; i >= 0; i--)
@@ -78,10 +80,27 @@ public final class IgiGuiLifeCycle
         for (int i = 0; i < openedGuiList.size(); i++)
         {
             IgiGuiContainer container = openedGuiList.get(i);
-            if (i == firstFocused)
-                container.onRenderUpdate(true);
-            else
-                container.onRenderUpdate(false);
+            boolean display = true;
+
+            if (container.getUseHeldItemWhitelist())
+            {
+                display = false;
+                for (ItemStack itemStack: container.getHeldItemWhitelist())
+                    if (itemStack.isItemEqual(heldItemMainhand))
+                        display = true;
+            }
+            if (container.getUseHeldItemBlacklist())
+            {
+                for (ItemStack itemStack: container.getHeldItemBlacklist())
+                    if (itemStack.isItemEqual(heldItemMainhand))
+                        display = false;
+            }
+
+            if (display)
+                if (i == firstFocused)
+                    container.onRenderUpdate(true);
+                else
+                    container.onRenderUpdate(false);
         }
         //</editor-fold>
 
@@ -281,6 +300,8 @@ public final class IgiGuiLifeCycle
             GuiLayout builder = IgiGui.getBuilder();
             builder
                     .setDebug(false)
+                    .setHeldItemWhitelist(true)
+                    .addHeldItemWhitelist(new ItemStack(Items.APPLE))
                     .startHorizontalGroup()
                     .addElement(new Text("test1", 2f, Color.RED.getRGB()),
                                 "\"alignment\" : BOTTOM_LEFT, \"pivot\" : BOTTOM_RIGHT, \"backgroundStyle\" : \"roundedBoxWithOutline\"")

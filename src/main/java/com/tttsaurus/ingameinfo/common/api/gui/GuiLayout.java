@@ -9,6 +9,7 @@ import com.tttsaurus.ingameinfo.common.impl.gui.layout.SizedGroup;
 import com.tttsaurus.ingameinfo.common.impl.gui.layout.VerticalGroup;
 import com.tttsaurus.ingameinfo.common.impl.gui.registry.ElementRegistry;
 import com.tttsaurus.ingameinfo.common.impl.serialization.RawElementStylesDeserializer;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.Tuple;
 import java.util.ArrayList;
 import java.util.List;
@@ -49,10 +50,29 @@ public class GuiLayout
         igiGuiContainer.backgroundColor = color;
         return this;
     }
+    public GuiLayout setHeldItemWhitelist(boolean flag)
+    {
+        igiGuiContainer.useHeldItemWhitelist = flag;
+        return this;
+    }
+    public GuiLayout setHeldItemBlacklist(boolean flag)
+    {
+        igiGuiContainer.useHeldItemBlacklist = flag;
+        return this;
+    }
+    public GuiLayout addHeldItemWhitelist(ItemStack itemStack)
+    {
+        igiGuiContainer.heldItemWhitelist.add(itemStack);
+        return this;
+    }
+    public GuiLayout addHeldItemBlacklist(ItemStack itemStack)
+    {
+        igiGuiContainer.heldItemBlacklist.add(itemStack);
+        return this;
+    }
 
-    private ElementGroup group;
     private int groupLayer = 0;
-    private List<ElementGroup> groupBuffer = new ArrayList<>();
+    private final List<ElementGroup> groupBuffer = new ArrayList<>();
 
     private void startGroup(ElementGroup group)
     {
