@@ -3,6 +3,7 @@ package com.tttsaurus.ingameinfo.proxy;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import com.tttsaurus.ingameinfo.common.api.gui.Element;
+import com.tttsaurus.ingameinfo.common.api.gui.style.ICallback;
 import com.tttsaurus.ingameinfo.common.api.gui.style.ISetStyleProperty;
 import com.tttsaurus.ingameinfo.common.api.serialization.IDeserializer;
 import com.tttsaurus.ingameinfo.common.impl.gui.IgiGuiLifeCycle;
@@ -32,6 +33,7 @@ public class CommonProxy
         ImmutableList<Class<? extends Element>> elementClasses = ElementRegistry.getRegisteredElements();
         ImmutableMap<String, Map<String, ISetStyleProperty>> setters = ElementRegistry.getStylePropertySetters();
         ImmutableMap<ISetStyleProperty, IDeserializer<?>> deserializers = ElementRegistry.getStylePropertyDeserializers();
+        ImmutableMap<ISetStyleProperty, ICallback> callbacks = ElementRegistry.getStylePropertySetterCallbacks();
         for (Class<? extends Element> clazz: elementClasses)
         {
             logger.info("Registered element type: " + clazz.getName());
@@ -45,6 +47,8 @@ public class CommonProxy
                     if (deserializers.containsKey(entry.getValue()))
                         suffix = " (with deserializer: " + deserializers.get(entry.getValue()).getClass().getName() + ")";
                     logger.info("  - " + entry.getKey() + suffix);
+                    if (callbacks.containsKey(entry.getValue()))
+                        logger.info("    - Setter callback: " + callbacks.get(entry.getValue()).name());
                 }
             }
         }

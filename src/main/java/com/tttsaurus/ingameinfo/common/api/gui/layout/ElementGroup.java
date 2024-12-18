@@ -59,6 +59,14 @@ public abstract class ElementGroup extends Element
     }
 
     @Override
+    public boolean getNeedReCalc()
+    {
+        for (Element element: elements)
+            if (element.getNeedReCalc()) return true;
+        return false;
+    }
+
+    @Override
     public void renderDebugRect()
     {
         RenderUtils.renderRectOutline(rect.x, rect.y, rect.width, rect.height, 1.0f, Color.ORANGE.getRGB());

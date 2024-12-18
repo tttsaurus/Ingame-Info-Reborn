@@ -62,6 +62,14 @@ public class IgiGuiContainer
             ScaledResolution resolution = new ScaledResolution(Minecraft.getMinecraft());
             RenderUtils.renderGradientRect(0, 0, resolution.getScaledWidth(), resolution.getScaledHeight(), backgroundColor, backgroundColor);
         }
+
+        if (mainGroup.getNeedReCalc())
+        {
+            mainGroup.resetRenderInfo();
+            mainGroup.calcWidthHeight();
+            mainGroup.calcRenderPos(mainGroup.rect);
+        }
+
         mainGroup.renderBackground();
         mainGroup.onRenderUpdate(focused);
 

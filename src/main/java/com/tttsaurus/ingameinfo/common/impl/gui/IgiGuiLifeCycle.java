@@ -337,8 +337,5 @@ public final class IgiGuiLifeCycle
     }
 }
 
-// todo 1. change to map
-// todo 2. setter callback
-// todo 3. needReCalc
 // todo 4. inject system
 // todo 5. event publisher

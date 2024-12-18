@@ -5,6 +5,7 @@ import com.tttsaurus.ingameinfo.common.api.gui.layout.Padding;
 import com.tttsaurus.ingameinfo.common.api.gui.layout.Pivot;
 import com.tttsaurus.ingameinfo.common.api.gui.layout.Rect;
 import com.tttsaurus.ingameinfo.common.api.gui.registry.RegisterElement;
+import com.tttsaurus.ingameinfo.common.api.gui.style.Callback;
 import com.tttsaurus.ingameinfo.common.api.gui.style.StyleProperty;
 import com.tttsaurus.ingameinfo.common.api.render.RenderUtils;
 import java.awt.*;
@@ -22,17 +23,23 @@ public abstract class Element
     public float pivotPosX = 0, pivotPosY = 0;
     // stores the rect of the parent group
     public Rect contextRect = new Rect(0, 0, 0, 0);
+    public boolean needReCalc = false;
     //</editor-fold>
 
-    @StyleProperty
+    @Callback
+    public void requestReCalc() { needReCalc = true; }
+
+    @StyleProperty(setterCallback = "requestReCalc")
     public Alignment alignment = Alignment.NULL;
-    @StyleProperty
+
+    @StyleProperty(setterCallback = "requestReCalc")
     public Pivot pivot = Pivot.TOP_LEFT;
-    @StyleProperty
+
+    @StyleProperty(setterCallback = "requestReCalc")
     public Padding padding = new Padding(0, 0, 0, 0);
 
     // determines how the background is drawn (optional)
-    @StyleProperty
+    @StyleProperty(setterCallback = "requestReCalc")
     public String backgroundStyle;
 
     public void resetRenderInfo()
@@ -85,6 +92,8 @@ public abstract class Element
             }
         }
     }
+
+    public boolean getNeedReCalc() { return needReCalc; }
 
     public void renderDebugRect()
     {

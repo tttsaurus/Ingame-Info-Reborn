@@ -1,6 +1,7 @@
 package com.tttsaurus.ingameinfo.common.api.gui.registry;
 
 import com.tttsaurus.ingameinfo.common.api.gui.Element;
+import com.tttsaurus.ingameinfo.common.api.gui.style.ICallback;
 import com.tttsaurus.ingameinfo.common.api.gui.style.ISetStyleProperty;
 import com.tttsaurus.ingameinfo.common.api.gui.style.StyleProperty;
 import com.tttsaurus.ingameinfo.common.api.serialization.Deserializer;
@@ -10,6 +11,7 @@ import java.io.IOException;
 import java.lang.invoke.MethodHandle;
 import java.lang.invoke.MethodHandles;
 import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 import java.net.URL;
 import java.util.*;
 import java.util.jar.JarEntry;
@@ -64,7 +66,7 @@ public final class RegistryUtils
         return annotatedClasses;
     }
 
-    public static Map<String, ISetStyleProperty> findStyleProperties(Class<? extends Element> clazz, Map<ISetStyleProperty, IDeserializer<?>> stylePropertyDeserializers)
+    public static Map<String, ISetStyleProperty> handleStyleProperties(Class<? extends Element> clazz, Map<ISetStyleProperty, IDeserializer<?>> stylePropertyDeserializers, Map<ISetStyleProperty, ICallback> stylePropertySetterCallbacks)
     {
         Map<String, ISetStyleProperty> setters = new HashMap<>();
 
@@ -76,6 +78,7 @@ public final class RegistryUtils
                 MethodHandle setter;
                 try
                 {
+                    // setter
                     Class<?> fieldClass = field.getType();
                     String fieldName = field.getName();
                     setter = lookup.findSetter(clazz, fieldName, fieldClass);
@@ -90,12 +93,36 @@ public final class RegistryUtils
                     };
                     setters.put(styleProperty.name().isEmpty() ? fieldName : styleProperty.name(), wrappedSetter);
 
+                    // deserializer
                     if (fieldClass.isPrimitive() || fieldClass.equals(String.class))
                         stylePropertyDeserializers.put(wrappedSetter, new PrimitiveTypesDeserializer<>(fieldClass));
                     else if (fieldClass.isAnnotationPresent(Deserializer.class))
                     {
                         Deserializer deserializer = fieldClass.getAnnotation(Deserializer.class);
                         stylePropertyDeserializers.put(wrappedSetter, deserializer.value().newInstance());
+                    }
+
+                    // callback
+                    String callbackName = styleProperty.setterCallback();
+                    if (!callbackName.isEmpty())
+                    {
+                        Method callback = clazz.getMethod(callbackName);
+                        ICallback wrappedCallback = new ICallback()
+                        {
+                            @Override
+                            public void invoke(Element target)
+                            {
+                                try
+                                {
+                                    callback.invoke(target, new Object[0]);
+                                }
+                                catch (Exception ignored) { }
+                            }
+
+                            @Override
+                            public String name() { return callbackName; }
+                        };
+                        stylePropertySetterCallbacks.put(wrappedSetter, wrappedCallback);
                     }
                 }
                 catch (Exception ignored) { }
