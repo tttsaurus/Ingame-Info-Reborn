@@ -29,7 +29,7 @@ public abstract class ElementGroup extends Element
             element.resetRenderInfo();
     }
 
-    // how calcRenderPos() is implemented depends on my specific group type
+    // how calcRenderPos() is implemented depends on my specific group types
 
     @Override
     public void calcWidthHeight()
@@ -64,6 +64,12 @@ public abstract class ElementGroup extends Element
         for (Element element: elements)
             if (element.getNeedReCalc()) return true;
         return false;
+    }
+    @Override
+    public void finishReCalc()
+    {
+        for (Element element: elements)
+            element.finishReCalc();
     }
 
     @Override

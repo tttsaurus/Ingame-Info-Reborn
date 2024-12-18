@@ -94,6 +94,7 @@ public abstract class Element
     }
 
     public boolean getNeedReCalc() { return needReCalc; }
+    public void finishReCalc() { needReCalc = false; }
 
     public void renderDebugRect()
     {

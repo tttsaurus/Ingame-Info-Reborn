@@ -68,6 +68,7 @@ public class IgiGuiContainer
             mainGroup.resetRenderInfo();
             mainGroup.calcWidthHeight();
             mainGroup.calcRenderPos(mainGroup.rect);
+            mainGroup.finishReCalc();
         }
 
         mainGroup.renderBackground();
