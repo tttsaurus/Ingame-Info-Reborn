@@ -10,7 +10,6 @@ import com.tttsaurus.ingameinfo.common.impl.gui.control.Text;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fml.common.FMLCommonHandler;
@@ -23,8 +22,8 @@ import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
+import java.util.*;
 import java.util.List;
-import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
 
@@ -51,7 +50,7 @@ public final class IgiGuiLifeCycle
     private static void onFixedUpdate()
     {
         //<editor-fold desc="gui container fixed update">
-        for (IgiGuiContainer container: openedGuiList)
+        for (IgiGuiContainer container: openedGuiList.values())
             container.onFixedUpdate(deltaTime);
         //</editor-fold>
 
@@ -67,19 +66,21 @@ public final class IgiGuiLifeCycle
         ItemStack heldItemMainhand = Minecraft.getMinecraft().player.getHeldItemMainhand();
 
         //<editor-fold desc="gui container render update">
-        int firstFocused = -1;
-        for (int i = openedGuiList.size() - 1; i >= 0; i--)
+
+        List<Map.Entry<String, IgiGuiContainer>> entryList = new ArrayList<>(openedGuiList.entrySet());
+        String firstFocused = "";
+        for (int i = entryList.size() - 1; i >= 0; i--)
         {
-            IgiGuiContainer container = openedGuiList.get(i);
-            if (container.getFocused())
+            Map.Entry<String, IgiGuiContainer> entry = entryList.get(i);
+            if (entry.getValue().getFocused())
             {
-                firstFocused = i;
+                firstFocused = entry.getKey();
                 break;
             }
         }
-        for (int i = 0; i < openedGuiList.size(); i++)
+        for (Map.Entry<String, IgiGuiContainer> entry: openedGuiList.entrySet())
         {
-            IgiGuiContainer container = openedGuiList.get(i);
+            IgiGuiContainer container = entry.getValue();
             boolean display = true;
 
             if (container.getUseHeldItemWhitelist())
@@ -97,7 +98,7 @@ public final class IgiGuiLifeCycle
             }
 
             if (display)
-                if (i == firstFocused)
+                if (entry.getKey().equals(firstFocused))
                     container.onRenderUpdate(true);
                 else
                     container.onRenderUpdate(false);
@@ -182,7 +183,7 @@ public final class IgiGuiLifeCycle
     public static void onRenderGameOverlay(RenderGameOverlayEvent event)
     {
         //<editor-fold desc="gui container init">
-        for (IgiGuiContainer container : openedGuiList)
+        for (IgiGuiContainer container : openedGuiList.values())
             if (!container.getInitFlag())
                 container.onInit();
         //</editor-fold>
@@ -193,7 +194,7 @@ public final class IgiGuiLifeCycle
         if (resolution.getScaleFactor() != event.getResolution().getScaleFactor())
         {
             resolution = event.getResolution();
-            for (IgiGuiContainer container: openedGuiList)
+            for (IgiGuiContainer container: openedGuiList.values())
                 container.onScaledResolutionResize();
         }
         //</editor-fold>
@@ -238,7 +239,7 @@ public final class IgiGuiLifeCycle
                 else
                 {
                     AtomicBoolean focus = new AtomicBoolean(false);
-                    openedGuiList.forEach(guiContainer -> focus.set(focus.get() || guiContainer.getFocused()));
+                    openedGuiList.forEach((uuid, guiContainer) -> focus.set(focus.get() || guiContainer.getFocused()));
 
                     if (!focus.get())
                     {
@@ -252,7 +253,7 @@ public final class IgiGuiLifeCycle
             else if (!isPlaceholderGuiOn && !openedGuiList.isEmpty() && Minecraft.getMinecraft().currentScreen == null)
             {
                 AtomicBoolean focus = new AtomicBoolean(false);
-                openedGuiList.forEach(guiContainer -> focus.set(focus.get() || guiContainer.getFocused()));
+                openedGuiList.forEach((uuis, guiContainer) -> focus.set(focus.get() || guiContainer.getFocused()));
 
                 if (focus.get())
                 {
@@ -272,18 +273,20 @@ public final class IgiGuiLifeCycle
                         @Override
                         public void type(int keycode)
                         {
-                            int index = -1;
-                            for (int i = openedGuiList.size() - 1; i >= 0; i--)
+                            List<Map.Entry<String, IgiGuiContainer>> entryList = new ArrayList<>(openedGuiList.entrySet());
+                            String key = "";
+                            for (int i = entryList.size() - 1; i >= 0; i--)
                             {
-                                IgiGuiContainer container = openedGuiList.get(i);
+                                Map.Entry<String, IgiGuiContainer> entry = entryList.get(i);
+                                IgiGuiContainer container = entry.getValue();
                                 if (container.getFocused())
                                     if (keycode == container.getExitKeyForFocusedGui())
                                     {
-                                        index = i;
+                                        key = entry.getKey();
                                         break;
                                     }
                             }
-                            if (index >= 0) openedGuiList.remove(index);
+                            if (!key.isEmpty()) openedGuiList.remove(key);
                         }
                     });
                     Minecraft.getMinecraft().displayGuiScreen(placeholderGui);
@@ -320,14 +323,22 @@ public final class IgiGuiLifeCycle
     private static boolean isPlaceholderGuiOn = false;
     private static PlaceholderMcGui placeholderGui;
 
-    private static List<IgiGuiContainer> openedGuiList = new CopyOnWriteArrayList<>();
+    private static Map<String, IgiGuiContainer> openedGuiList = new LinkedHashMap<>();
 
-    public static void openIgiGui(IgiGuiContainer guiContainer)
+    public static String openIgiGui(IgiGuiContainer guiContainer)
     {
-        openedGuiList.add(guiContainer);
+        String uuid = UUID.randomUUID().toString();
+        openedGuiList.put(uuid, guiContainer);
+        return uuid;
     }
-    public static void closeIgiGui(IgiGuiContainer guiContainer)
+    public static void closeIgiGui(String uuid)
     {
-        openedGuiList.remove(guiContainer);
+        openedGuiList.remove(uuid);
     }
 }
+
+// todo 1. change to map
+// todo 2. setter callback
+// todo 3. needReCalc
+// todo 4. inject system
+// todo 5. event publisher

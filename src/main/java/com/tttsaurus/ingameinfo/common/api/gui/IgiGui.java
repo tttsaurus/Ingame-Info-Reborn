@@ -8,12 +8,12 @@ public final class IgiGui
     {
         return new GuiLayout();
     }
-    public static void openGui(GuiLayout builder)
+    public static String openGui(GuiLayout builder)
     {
-        IgiGuiLifeCycle.openIgiGui(builder.igiGuiContainer);
+        return IgiGuiLifeCycle.openIgiGui(builder.igiGuiContainer);
     }
-    public static void closeGui(GuiLayout builder)
+    public static void closeGui(String uuid)
     {
-        IgiGuiLifeCycle.closeIgiGui(builder.igiGuiContainer);
+        IgiGuiLifeCycle.closeIgiGui(uuid);
     }
 }
