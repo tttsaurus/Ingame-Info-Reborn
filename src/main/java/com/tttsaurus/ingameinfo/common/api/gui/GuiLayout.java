@@ -3,16 +3,13 @@ package com.tttsaurus.ingameinfo.common.api.gui;
 import com.tttsaurus.ingameinfo.common.api.gui.layout.ElementGroup;
 import com.tttsaurus.ingameinfo.common.api.gui.style.IStylePropertyCallback;
 import com.tttsaurus.ingameinfo.common.api.gui.style.IStylePropertySetter;
-import com.tttsaurus.ingameinfo.common.api.serialization.IDeserializer;
 import com.tttsaurus.ingameinfo.common.impl.gui.layout.HorizontalGroup;
 import com.tttsaurus.ingameinfo.common.impl.gui.layout.MainGroup;
 import com.tttsaurus.ingameinfo.common.impl.gui.layout.SizedGroup;
 import com.tttsaurus.ingameinfo.common.impl.gui.layout.VerticalGroup;
 import com.tttsaurus.ingameinfo.common.impl.gui.registry.ElementRegistry;
 import com.tttsaurus.ingameinfo.common.impl.serialization.ElementStylesDeserializer;
-import com.tttsaurus.ingameinfo.common.impl.serialization.RawElementStylesDeserializer;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.Tuple;
 import java.util.ArrayList;
 import java.util.List;
 

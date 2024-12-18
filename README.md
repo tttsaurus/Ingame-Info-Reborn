@@ -8,6 +8,7 @@ Suggestions/PRs are welcome
 This is a library mod that helps you to create in-game overlaid (or focused) gui with ease.
 
 ## Todo List / Features
+- Approximate Model-View-ViewModel pattern (high priority)
 - Introduce a custom gui container (✔)
 - Maintain a list of custom gui containers (✔)
 - A gui container can be ingame-overlaid/focused (✔)
@@ -32,7 +33,7 @@ This is a library mod that helps you to create in-game overlaid (or focused) gui
   - Slide Bar
   - Progress Bar
   - Draggable
-- A gui layout builder (partially done)
+- A gui layout builder (✔)
 - Introduce modular animation options for controls
 - Add crt support (runtime gui setup)
 
@@ -43,21 +44,23 @@ This is a library mod that helps you to create in-game overlaid (or focused) gui
 - Unzip and `ingameinfo-[version].jar` is the mod file
 
 ## How to use
-Here's an easy example.
+API is changing frequently for the current stage.
+Here's an easy example of how to set up a `View`.
 ```java
-GuiLayoutBuilder builder = IgiGui.getBuilder();
+GuiLayout builder = IgiGui.getBuilder();
 builder
-    .setDebug(true)
-    .startHorizontalGroup()
-    .addElement(new Text("test1", 1f, Color.GRAY.getRGB()))
-    .startVerticalGroup()
-    .addElement(new Text("test2", 1f, Color.GRAY.getRGB()))
-    .addElement(new Text("test3", 1f, Color.GRAY.getRGB()))
-    .endGroup()
-    .endGroup();
-IgiGui.openGui(builder);
+        .setDebug(true)
+        .setHeldItemWhitelist(true)
+        .addHeldItemWhitelist(new ItemStack(Items.APPLE))
+        .startHorizontalGroup("\"padding\" : {\"top\" : 10, \"left\" : 10}")
+        .addElement(new Text(), "\"text\" : \"Test1\", \"scale\" : 2.0f, \"color\" : " + Color.GREEN.getRGB() + ", \"alignment\" : BOTTOM_LEFT, \"pivot\" : BOTTOM_LEFT, \"backgroundStyle\" : \"roundedBoxWithOutline\"")
+        .startVerticalGroup()
+        .addElement(new Text(), "\"text\" : \"Test2\", \"scale\" : 2.0f")
+        .addElement(new Text(), "\"text\" : \"Test3\"")
+        .endGroup()
+        .endGroup();
 ```
-The default alignment is the top-left corner.
+The default alignment and pivot are the top-left corner.
 ![image](https://github.com/user-attachments/assets/0bbd66db-4ee0-4ef9-a47d-0021ffc3be1b)
 
 Crt API is still WIP but should look similar to java code.
