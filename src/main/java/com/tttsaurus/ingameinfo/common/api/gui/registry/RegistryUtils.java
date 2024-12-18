@@ -1,8 +1,8 @@
 package com.tttsaurus.ingameinfo.common.api.gui.registry;
 
 import com.tttsaurus.ingameinfo.common.api.gui.Element;
-import com.tttsaurus.ingameinfo.common.api.gui.style.ICallback;
-import com.tttsaurus.ingameinfo.common.api.gui.style.ISetStyleProperty;
+import com.tttsaurus.ingameinfo.common.api.gui.style.IStylePropertyCallback;
+import com.tttsaurus.ingameinfo.common.api.gui.style.IStylePropertySetter;
 import com.tttsaurus.ingameinfo.common.api.gui.style.StyleProperty;
 import com.tttsaurus.ingameinfo.common.api.serialization.Deserializer;
 import com.tttsaurus.ingameinfo.common.api.serialization.IDeserializer;
@@ -66,9 +66,9 @@ public final class RegistryUtils
         return annotatedClasses;
     }
 
-    public static Map<String, ISetStyleProperty> handleStyleProperties(Class<? extends Element> clazz, Map<ISetStyleProperty, IDeserializer<?>> stylePropertyDeserializers, Map<ISetStyleProperty, ICallback> stylePropertySetterCallbacks)
+    public static Map<String, IStylePropertySetter> handleStyleProperties(Class<? extends Element> clazz, Map<IStylePropertySetter, IDeserializer<?>> stylePropertyDeserializers, Map<IStylePropertySetter, IStylePropertyCallback> stylePropertySetterCallbacks)
     {
-        Map<String, ISetStyleProperty> setters = new HashMap<>();
+        Map<String, IStylePropertySetter> setters = new HashMap<>();
 
         for (Field field : clazz.getDeclaredFields())
             if (field.isAnnotationPresent(StyleProperty.class))
@@ -82,7 +82,7 @@ public final class RegistryUtils
                     Class<?> fieldClass = field.getType();
                     String fieldName = field.getName();
                     setter = lookup.findSetter(clazz, fieldName, fieldClass);
-                    ISetStyleProperty wrappedSetter = (target, value) ->
+                    IStylePropertySetter wrappedSetter = (target, value) ->
                     {
                         try
                         {
@@ -107,7 +107,7 @@ public final class RegistryUtils
                     if (!callbackName.isEmpty())
                     {
                         Method callback = clazz.getMethod(callbackName);
-                        ICallback wrappedCallback = new ICallback()
+                        IStylePropertyCallback wrappedCallback = new IStylePropertyCallback()
                         {
                             @Override
                             public void invoke(Element target)

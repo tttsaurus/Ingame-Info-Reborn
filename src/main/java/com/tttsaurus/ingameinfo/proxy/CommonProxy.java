@@ -3,8 +3,8 @@ package com.tttsaurus.ingameinfo.proxy;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import com.tttsaurus.ingameinfo.common.api.gui.Element;
-import com.tttsaurus.ingameinfo.common.api.gui.style.ICallback;
-import com.tttsaurus.ingameinfo.common.api.gui.style.ISetStyleProperty;
+import com.tttsaurus.ingameinfo.common.api.gui.style.IStylePropertyCallback;
+import com.tttsaurus.ingameinfo.common.api.gui.style.IStylePropertySetter;
 import com.tttsaurus.ingameinfo.common.api.serialization.IDeserializer;
 import com.tttsaurus.ingameinfo.common.impl.gui.IgiGuiLifeCycle;
 import com.tttsaurus.ingameinfo.common.impl.appcommunication.spotify.InGameCommandHandler;
@@ -31,17 +31,17 @@ public class CommonProxy
 
         ElementRegistry.register();
         ImmutableList<Class<? extends Element>> elementClasses = ElementRegistry.getRegisteredElements();
-        ImmutableMap<String, Map<String, ISetStyleProperty>> setters = ElementRegistry.getStylePropertySetters();
-        ImmutableMap<ISetStyleProperty, IDeserializer<?>> deserializers = ElementRegistry.getStylePropertyDeserializers();
-        ImmutableMap<ISetStyleProperty, ICallback> callbacks = ElementRegistry.getStylePropertySetterCallbacks();
+        ImmutableMap<String, Map<String, IStylePropertySetter>> setters = ElementRegistry.getStylePropertySetters();
+        ImmutableMap<IStylePropertySetter, IDeserializer<?>> deserializers = ElementRegistry.getStylePropertyDeserializers();
+        ImmutableMap<IStylePropertySetter, IStylePropertyCallback> callbacks = ElementRegistry.getStylePropertySetterCallbacks();
         for (Class<? extends Element> clazz: elementClasses)
         {
             logger.info("Registered element type: " + clazz.getName());
-            Map<String, ISetStyleProperty> map = setters.get(clazz.getName());
+            Map<String, IStylePropertySetter> map = setters.get(clazz.getName());
             if (!map.isEmpty())
             {
                 logger.info("- With style properties:");
-                for (Map.Entry<String, ISetStyleProperty> entry: map.entrySet())
+                for (Map.Entry<String, IStylePropertySetter> entry: map.entrySet())
                 {
                     String suffix = "";
                     if (deserializers.containsKey(entry.getValue()))

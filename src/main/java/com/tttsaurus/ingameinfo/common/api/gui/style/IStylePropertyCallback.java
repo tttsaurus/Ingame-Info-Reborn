@@ -2,7 +2,7 @@ package com.tttsaurus.ingameinfo.common.api.gui.style;
 
 import com.tttsaurus.ingameinfo.common.api.gui.Element;
 
-public interface ICallback
+public interface IStylePropertyCallback
 {
     void invoke(Element target);
     String name();

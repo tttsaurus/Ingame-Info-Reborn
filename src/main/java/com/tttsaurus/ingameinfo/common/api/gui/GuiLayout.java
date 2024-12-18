@@ -1,7 +1,7 @@
 package com.tttsaurus.ingameinfo.common.api.gui;
 
 import com.tttsaurus.ingameinfo.common.api.gui.layout.ElementGroup;
-import com.tttsaurus.ingameinfo.common.api.gui.style.ISetStyleProperty;
+import com.tttsaurus.ingameinfo.common.api.gui.style.IStylePropertySetter;
 import com.tttsaurus.ingameinfo.common.api.serialization.IDeserializer;
 import com.tttsaurus.ingameinfo.common.impl.gui.layout.HorizontalGroup;
 import com.tttsaurus.ingameinfo.common.impl.gui.layout.MainGroup;
@@ -116,7 +116,7 @@ public class GuiLayout
     {
         for (ElementStyle style: styles)
         {
-            ISetStyleProperty setter = ElementRegistry.getStylePropertySetter(element.getClass(), style.name);
+            IStylePropertySetter setter = ElementRegistry.getStylePropertySetter(element.getClass(), style.name);
             if (setter != null) setter.set(element, style.value);
         }
 
@@ -129,7 +129,7 @@ public class GuiLayout
         List<Tuple<String, String>> list = deserializer.deserialize(rawStyles, "json");
         for (Tuple<String, String> pair: list)
         {
-            ISetStyleProperty setter = ElementRegistry.getStylePropertySetter(element.getClass(), pair.getFirst());
+            IStylePropertySetter setter = ElementRegistry.getStylePropertySetter(element.getClass(), pair.getFirst());
             if (setter != null)
             {
                 IDeserializer<?> stylePropertyDeserializer = ElementRegistry.getStylePropertyDeserializer(setter);

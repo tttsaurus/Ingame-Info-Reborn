@@ -5,7 +5,7 @@ import com.tttsaurus.ingameinfo.common.api.gui.layout.Padding;
 import com.tttsaurus.ingameinfo.common.api.gui.layout.Pivot;
 import com.tttsaurus.ingameinfo.common.api.gui.layout.Rect;
 import com.tttsaurus.ingameinfo.common.api.gui.registry.RegisterElement;
-import com.tttsaurus.ingameinfo.common.api.gui.style.Callback;
+import com.tttsaurus.ingameinfo.common.api.gui.style.StylePropertyCallback;
 import com.tttsaurus.ingameinfo.common.api.gui.style.StyleProperty;
 import com.tttsaurus.ingameinfo.common.api.render.RenderUtils;
 import java.awt.*;
@@ -26,7 +26,7 @@ public abstract class Element
     public boolean needReCalc = false;
     //</editor-fold>
 
-    @Callback
+    @StylePropertyCallback
     public void requestReCalc() { needReCalc = true; }
 
     @StyleProperty(setterCallback = "requestReCalc")
