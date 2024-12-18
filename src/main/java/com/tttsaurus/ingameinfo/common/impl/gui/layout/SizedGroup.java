@@ -4,25 +4,18 @@ import com.tttsaurus.ingameinfo.common.api.gui.Element;
 import com.tttsaurus.ingameinfo.common.api.gui.layout.ElementGroup;
 import com.tttsaurus.ingameinfo.common.api.gui.layout.Rect;
 import com.tttsaurus.ingameinfo.common.api.gui.registry.RegisterElement;
+import com.tttsaurus.ingameinfo.common.api.gui.style.StyleProperty;
 
 @RegisterElement
 public class SizedGroup extends ElementGroup
 {
     // pivot doesn't change how the layout is calculated
 
-    protected float width;
-    protected float height;
+    @StyleProperty(setterCallback = "requestReCalc")
+    public float width;
 
-    protected SizedGroup()
-    {
-
-    }
-
-    public SizedGroup(float width, float height)
-    {
-        this.width = width;
-        this.height = height;
-    }
+    @StyleProperty(setterCallback = "requestReCalc")
+    public float height;
 
     @Override
     public void calcRenderPos(Rect contextRect)

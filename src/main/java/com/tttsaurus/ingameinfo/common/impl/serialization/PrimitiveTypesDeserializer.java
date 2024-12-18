@@ -12,12 +12,16 @@ public class PrimitiveTypesDeserializer<T> implements IDeserializer<T>
     public T deserialize(String raw, String protocol)
     {
         //Class<T> clazz = (Class<T>)((ParameterizedType)getClass().getGenericSuperclass()).getActualTypeArguments()[0];
-        if (protocol.equals("json"))
+        //if (protocol.equals("json"))
         {
             // int
             if (clazz.getName().equals("int"))
                 try { return (T)(Object)Integer.parseInt(raw); }
                 catch (Exception ignored) { return (T)(Object)0; }
+            // float
+            else if (clazz.getName().equals("float"))
+                try { return (T)(Object)Float.parseFloat(raw); }
+                catch (Exception ignored) { return (T)(Object)0f; }
             // String
             else if (clazz.equals(String.class))
                 try { return (T)(Object)raw; }

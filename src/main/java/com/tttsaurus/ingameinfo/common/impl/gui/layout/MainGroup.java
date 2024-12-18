@@ -19,8 +19,6 @@ public class MainGroup extends SizedGroup
         ScaledResolution resolution = new ScaledResolution(Minecraft.getMinecraft());
         width = resolution.getScaledWidth();
         height = resolution.getScaledHeight();
-        rect.width = width;
-        rect.height = height;
         super.calcWidthHeight();
     }
 

@@ -86,8 +86,7 @@ public final class RegistryUtils
                     {
                         try
                         {
-                            if (value.getClass().getName().equals(field.getType().getName()))
-                                setter.invoke(target, value);
+                            setter.invoke(target, value);
                         }
                         catch (Throwable ignored) { }
                     };

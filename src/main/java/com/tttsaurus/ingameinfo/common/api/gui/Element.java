@@ -23,7 +23,7 @@ public abstract class Element
     public float pivotPosX = 0, pivotPosY = 0;
     // stores the rect of the parent group
     public Rect contextRect = new Rect(0, 0, 0, 0);
-    public boolean needReCalc = false;
+    private boolean needReCalc = false;
     //</editor-fold>
 
     @StylePropertyCallback
@@ -39,7 +39,7 @@ public abstract class Element
     public Padding padding = new Padding(0, 0, 0, 0);
 
     // determines how the background is drawn (optional)
-    @StyleProperty(setterCallback = "requestReCalc")
+    @StyleProperty
     public String backgroundStyle;
 
     public void resetRenderInfo()

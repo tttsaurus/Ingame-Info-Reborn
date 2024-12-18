@@ -43,6 +43,11 @@ public final class ElementRegistry
     {
         return stylePropertyDeserializers.get(setter);
     }
+    @Nullable
+    public static IStylePropertyCallback getStylePropertySetterCallback(IStylePropertySetter setter)
+    {
+        return stylePropertySetterCallbacks.get(setter);
+    }
 
     public static ImmutableMap<String, Map<String, IStylePropertySetter>> getStylePropertySetters() { return ImmutableMap.copyOf(stylePropertySetters); }
     public static ImmutableMap<IStylePropertySetter, IDeserializer<?>> getStylePropertyDeserializers() { return ImmutableMap.copyOf(stylePropertyDeserializers); }

@@ -302,15 +302,14 @@ public final class IgiGuiLifeCycle
             flag = false;
             GuiLayout builder = IgiGui.getBuilder();
             builder
-                    .setDebug(false)
+                    .setDebug(true)
                     .setHeldItemWhitelist(true)
                     .addHeldItemWhitelist(new ItemStack(Items.APPLE))
-                    .startHorizontalGroup()
-                    .addElement(new Text("test1", 2f, Color.RED.getRGB()),
-                                "\"alignment\" : BOTTOM_LEFT, \"pivot\" : BOTTOM_RIGHT, \"backgroundStyle\" : \"roundedBoxWithOutline\"")
+                    .startHorizontalGroup("\"padding\" : {\"top\" : 10, \"left\" : 10}")
+                    .addElement(new Text(), "\"text\" : \"Test1\", \"scale\" : 2.0f, \"color\" : " + Color.GREEN.getRGB() + ", \"alignment\" : BOTTOM_LEFT, \"pivot\" : BOTTOM_LEFT, \"backgroundStyle\" : \"roundedBoxWithOutline\"")
                     .startVerticalGroup()
-                    .addElement(new Text("test2", 2f, Color.GRAY.getRGB()))
-                    .addElement(new Text("test3", 2f, Color.GRAY.getRGB()))
+                    .addElement(new Text(), "\"text\" : \"Test2\", \"scale\" : 2.0f")
+                    .addElement(new Text(), "\"text\" : \"Test3\"")
                     .endGroup()
                     .endGroup();
             IgiGui.openGui(builder);
@@ -337,5 +336,4 @@ public final class IgiGuiLifeCycle
     }
 }
 
-// todo 4. inject system
-// todo 5. event publisher
+// todo: approximate mvvm (HIGH PRIORITY)

@@ -1,6 +1,7 @@
 package com.tttsaurus.ingameinfo.common.api.gui;
 
 import com.tttsaurus.ingameinfo.common.api.gui.layout.ElementGroup;
+import com.tttsaurus.ingameinfo.common.api.gui.style.IStylePropertyCallback;
 import com.tttsaurus.ingameinfo.common.api.gui.style.IStylePropertySetter;
 import com.tttsaurus.ingameinfo.common.api.serialization.IDeserializer;
 import com.tttsaurus.ingameinfo.common.impl.gui.layout.HorizontalGroup;
@@ -8,12 +9,14 @@ import com.tttsaurus.ingameinfo.common.impl.gui.layout.MainGroup;
 import com.tttsaurus.ingameinfo.common.impl.gui.layout.SizedGroup;
 import com.tttsaurus.ingameinfo.common.impl.gui.layout.VerticalGroup;
 import com.tttsaurus.ingameinfo.common.impl.gui.registry.ElementRegistry;
+import com.tttsaurus.ingameinfo.common.impl.serialization.ElementStylesDeserializer;
 import com.tttsaurus.ingameinfo.common.impl.serialization.RawElementStylesDeserializer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Tuple;
 import java.util.ArrayList;
 import java.util.List;
 
+@SuppressWarnings("all")
 public class GuiLayout
 {
     protected final IgiGuiContainer igiGuiContainer;
@@ -94,54 +97,68 @@ public class GuiLayout
         startGroup(new HorizontalGroup());
         return this;
     }
+    public GuiLayout startHorizontalGroup(String rawStyles)
+    {
+        ElementGroup element = new HorizontalGroup();
+        injectStyles(element, (new ElementStylesDeserializer(element.getClass())).deserialize(rawStyles, "json"));
+        startGroup(element);
+        return this;
+    }
     public GuiLayout startVerticalGroup()
     {
         startGroup(new VerticalGroup());
         return this;
     }
-    public GuiLayout startSizedGroup(float width, float height)
+    public GuiLayout startVerticalGroup(String rawStyles)
     {
-        startGroup(new SizedGroup(width, height));
+        ElementGroup element = new HorizontalGroup();
+        injectStyles(element, (new ElementStylesDeserializer(element.getClass())).deserialize(rawStyles, "json"));
+        startGroup(element);
+        return this;
+    }
+    public GuiLayout startSizedGroup()
+    {
+        startGroup(new SizedGroup());
+        return this;
+    }
+    public GuiLayout startSizedGroup(String rawStyles)
+    {
+        ElementGroup element = new SizedGroup();
+        injectStyles(element, (new ElementStylesDeserializer(element.getClass())).deserialize(rawStyles, "json"));
+        startGroup(element);
         return this;
     }
 
-    private void addElement(Element element)
+    private void addElementInternal(Element element)
     {
         if (groupLayer - 1 < 0)
             mainGroup.add(element);
         else
             groupBuffer.get(groupLayer - 1).add(element);
     }
-    public GuiLayout addElement(Element element, ElementStyle... styles)
+    public GuiLayout addElement(Element element)
     {
-        for (ElementStyle style: styles)
-        {
-            IStylePropertySetter setter = ElementRegistry.getStylePropertySetter(element.getClass(), style.name);
-            if (setter != null) setter.set(element, style.value);
-        }
-
-        addElement(element);
+        addElementInternal(element);
         return this;
     }
     public GuiLayout addElement(Element element, String rawStyles)
     {
-        RawElementStylesDeserializer deserializer = new RawElementStylesDeserializer();
-        List<Tuple<String, String>> list = deserializer.deserialize(rawStyles, "json");
-        for (Tuple<String, String> pair: list)
+        injectStyles(element, (new ElementStylesDeserializer(element.getClass())).deserialize(rawStyles, "json"));
+        addElementInternal(element);
+        return this;
+    }
+
+    private void injectStyles(Element element, List<ElementStyle> styles)
+    {
+        for (ElementStyle style: styles)
         {
-            IStylePropertySetter setter = ElementRegistry.getStylePropertySetter(element.getClass(), pair.getFirst());
+            IStylePropertySetter setter = ElementRegistry.getStylePropertySetter(element.getClass(), style.name);
             if (setter != null)
             {
-                IDeserializer<?> stylePropertyDeserializer = ElementRegistry.getStylePropertyDeserializer(setter);
-                if (stylePropertyDeserializer != null)
-                {
-                    Object obj = stylePropertyDeserializer.deserialize(pair.getSecond(), "json");
-                    if (obj != null) setter.set(element, obj);
-                }
+                setter.set(element, style.value);
+                IStylePropertyCallback callback = ElementRegistry.getStylePropertySetterCallback(setter);
+                if (callback != null) callback.invoke(element);
             }
         }
-
-        addElement(element);
-        return this;
     }
 }

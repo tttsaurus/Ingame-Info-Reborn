@@ -3,6 +3,8 @@ package com.tttsaurus.ingameinfo.common.impl.gui.control;
 import com.tttsaurus.ingameinfo.common.api.gui.Element;
 import com.tttsaurus.ingameinfo.common.api.gui.layout.Rect;
 import com.tttsaurus.ingameinfo.common.api.gui.registry.RegisterElement;
+import com.tttsaurus.ingameinfo.common.api.gui.style.StyleProperty;
+import com.tttsaurus.ingameinfo.common.api.gui.style.StylePropertyCallback;
 import com.tttsaurus.ingameinfo.common.impl.render.renderer.TextRenderer;
 
 @RegisterElement
@@ -10,12 +12,31 @@ public class Text extends Element
 {
     private final TextRenderer textRenderer = new TextRenderer();
 
-    public Text(String text, float scale, int color)
+    @StylePropertyCallback
+    public void setTextCallback()
     {
         textRenderer.setText(text);
+        requestReCalc();
+    }
+    @StyleProperty(setterCallback = "setTextCallback")
+    public String text;
+
+    @StylePropertyCallback
+    public void setScaleCallback()
+    {
         textRenderer.setScale(scale);
+        requestReCalc();
+    }
+    @StyleProperty(setterCallback = "setScaleCallback")
+    public float scale;
+
+    @StylePropertyCallback
+    public void setColorCallback()
+    {
         textRenderer.setColor(color);
     }
+    @StyleProperty(setterCallback = "setColorCallback")
+    public int color;
 
     @Override
     public void calcRenderPos(Rect contextRect)

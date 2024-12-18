@@ -2,7 +2,6 @@ package com.tttsaurus.ingameinfo.common.impl.render.renderer;
 
 import com.tttsaurus.ingameinfo.common.api.render.RenderUtils;
 import com.tttsaurus.ingameinfo.common.api.render.renderer.IRenderer;
-
 import java.awt.*;
 
 public class TextRenderer implements IRenderer
