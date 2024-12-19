@@ -1,6 +1,5 @@
 package com.tttsaurus.ingameinfo.common.api.gui.registry;
 
-import com.tttsaurus.ingameinfo.InGameInfoReborn;
 import com.tttsaurus.ingameinfo.common.api.gui.Element;
 import com.tttsaurus.ingameinfo.common.api.gui.style.IStylePropertyCallback;
 import com.tttsaurus.ingameinfo.common.api.gui.style.IStylePropertySetter;

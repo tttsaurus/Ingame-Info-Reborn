@@ -6,6 +6,7 @@ import com.tttsaurus.ingameinfo.common.api.gui.IgiGuiContainer;
 import com.tttsaurus.ingameinfo.common.api.gui.delegate.placeholder.IPlaceholderDrawScreen;
 import com.tttsaurus.ingameinfo.common.api.gui.delegate.placeholder.IPlaceholderKeyTyped;
 import com.tttsaurus.ingameinfo.common.api.render.RenderUtils;
+import com.tttsaurus.ingameinfo.common.impl.gui.control.PureColorButton;
 import com.tttsaurus.ingameinfo.common.impl.gui.control.Text;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.ScaledResolution;
@@ -302,7 +303,8 @@ public final class IgiGuiLifeCycle
             flag = false;
             GuiLayout builder = IgiGui.getBuilder();
             builder
-                    .setDebug(true)
+                    //.setDebug(true)
+                    .setFocused(true)
                     .setHeldItemWhitelist(true)
                     .addHeldItemWhitelist(new ItemStack(Items.APPLE))
                     .startHorizontalGroup("\"padding\" : {\"top\" : 10, \"left\" : 10}")
@@ -310,6 +312,7 @@ public final class IgiGuiLifeCycle
                     .startVerticalGroup()
                     .addElement(new Text(), "\"text\" : \"Test2\", \"scale\" : 2.0f")
                     .addElement(new Text(), "\"text\" : \"Test3\"")
+                    .addElement(new PureColorButton(), "\"text\" : \"Test4\", \"holdColor\" : " + Color.GREEN.getRGB())
                     .endGroup()
                     .endGroup();
             IgiGui.openGui(builder);
