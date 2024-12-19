@@ -13,7 +13,7 @@ import com.tttsaurus.ingameinfo.common.impl.gui.style.wrapped.IntProperty;
 import com.tttsaurus.ingameinfo.common.impl.render.renderer.TextRenderer;
 
 @RegisterElement
-public class PureColorButton extends Button
+public class SimpleButton extends Button
 {
     private final TextRenderer textRenderer = new TextRenderer();
 
@@ -40,7 +40,7 @@ public class PureColorButton extends Button
     @StyleProperty(setterCallback = "setTextCallback")
     public String text;
 
-    public PureColorButton()
+    public SimpleButton()
     {
         defaultColor.set(DEFAULT_COLOR_DARK);
         hoverColor.set(DEFAULT_COLOR_LIGHT);

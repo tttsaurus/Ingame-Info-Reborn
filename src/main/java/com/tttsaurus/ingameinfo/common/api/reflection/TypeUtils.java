@@ -2,6 +2,10 @@ package com.tttsaurus.ingameinfo.common.api.reflection;
 
 public final class TypeUtils
 {
+    public static boolean isFromParentPackage(Class<?> clazz, String packageName)
+    {
+        return clazz.getName().startsWith(packageName);
+    }
     public static boolean isPrimitiveOrWrappedPrimitive(Class<?> clazz)
     {
         return clazz.isPrimitive() ||

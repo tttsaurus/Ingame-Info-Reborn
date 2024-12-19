@@ -6,7 +6,7 @@ import com.tttsaurus.ingameinfo.common.api.gui.IgiGuiContainer;
 import com.tttsaurus.ingameinfo.common.api.gui.delegate.placeholder.IPlaceholderDrawScreen;
 import com.tttsaurus.ingameinfo.common.api.gui.delegate.placeholder.IPlaceholderKeyTyped;
 import com.tttsaurus.ingameinfo.common.api.render.RenderUtils;
-import com.tttsaurus.ingameinfo.common.impl.gui.control.PureColorButton;
+import com.tttsaurus.ingameinfo.common.impl.gui.control.SimpleButton;
 import com.tttsaurus.ingameinfo.common.impl.gui.control.Text;
 import com.tttsaurus.ingameinfo.common.impl.gui.layout.HorizontalGroup;
 import com.tttsaurus.ingameinfo.common.impl.gui.layout.VerticalGroup;
@@ -313,7 +313,7 @@ public final class IgiGuiLifeCycle
                     .startGroup(new VerticalGroup())
                     .addElement(new Text(), "\"text\" : \"Test2\", \"scale\" : 2.0f")
                     .addElement(new Text(), "\"text\" : \"Test3\"")
-                    .addElement(new PureColorButton(), "\"text\" : \"Test4\", \"width\" : 80, \"holdColor\" : " + Color.GREEN.getRGB())
+                    .addElement(new SimpleButton(), "\"text\" : \"Test4\", \"width\" : 80, \"holdColor\" : " + Color.GREEN.getRGB())
                     .endGroup()
                     .endGroup();
             IgiGui.openGui(builder);
@@ -341,5 +341,5 @@ public final class IgiGuiLifeCycle
 }
 
 // todo: approximate mvvm (HIGH PRIORITY)
-// todo: add "forbidden" to RegisterElement
-// todo: refactor button to make it a group
+// todo: add "constructable" to RegisterElement
+// todo: add button group to handle complex button setup

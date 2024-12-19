@@ -5,6 +5,7 @@ import com.google.common.collect.ImmutableMap;
 import com.tttsaurus.ingameinfo.common.api.gui.Element;
 import com.tttsaurus.ingameinfo.common.api.gui.style.IStylePropertyCallback;
 import com.tttsaurus.ingameinfo.common.api.gui.style.IStylePropertySetter;
+import com.tttsaurus.ingameinfo.common.api.reflection.TypeUtils;
 import com.tttsaurus.ingameinfo.common.api.serialization.IDeserializer;
 import com.tttsaurus.ingameinfo.common.impl.gui.IgiGuiLifeCycle;
 import com.tttsaurus.ingameinfo.common.impl.appcommunication.spotify.InGameCommandHandler;
@@ -29,14 +30,17 @@ public class CommonProxy
         MinecraftForge.EVENT_BUS.register(IgiGuiLifeCycle.class);
         MinecraftForge.EVENT_BUS.register(InGameCommandHandler.class);
 
+        String myPackage = "com.tttsaurus.ingameinfo";
         ElementRegistry.register();
+
         ImmutableList<Class<? extends Element>> elementClasses = ElementRegistry.getRegisteredElements();
         ImmutableMap<String, Map<String, IStylePropertySetter>> setters = ElementRegistry.getStylePropertySetters();
         ImmutableMap<IStylePropertySetter, IDeserializer<?>> deserializers = ElementRegistry.getStylePropertyDeserializers();
         ImmutableMap<IStylePropertySetter, IStylePropertyCallback> callbacks = ElementRegistry.getStylePropertySetterCallbacks();
+
         for (Class<? extends Element> clazz: elementClasses)
         {
-            logger.info("Registered element type: " + clazz.getName());
+            logger.info("Registered element type: " + (TypeUtils.isFromParentPackage(clazz, myPackage) ? clazz.getSimpleName() : clazz.getName()));
             Map<String, IStylePropertySetter> map = setters.get(clazz.getName());
             if (!map.isEmpty())
             {
@@ -45,7 +49,7 @@ public class CommonProxy
                 {
                     String suffix = "";
                     if (deserializers.containsKey(entry.getValue()))
-                        suffix = " (with deserializer: " + deserializers.get(entry.getValue()).getClass().getName() + ")";
+                        suffix = " (with deserializer: " + (TypeUtils.isFromParentPackage(deserializers.get(entry.getValue()).getClass(), myPackage) ? deserializers.get(entry.getValue()).getClass().getSimpleName() : deserializers.get(entry.getValue()).getClass().getName()) + ")";
                     logger.info("  - " + entry.getKey() + suffix);
                     if (callbacks.containsKey(entry.getValue()))
                         logger.info("    - Setter callback: " + callbacks.get(entry.getValue()).name());
