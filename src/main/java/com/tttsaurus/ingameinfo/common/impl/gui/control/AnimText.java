@@ -4,21 +4,43 @@ import com.tttsaurus.ingameinfo.common.api.animation.text.ITextAnimDef;
 import com.tttsaurus.ingameinfo.common.api.gui.Element;
 import com.tttsaurus.ingameinfo.common.api.gui.layout.Rect;
 import com.tttsaurus.ingameinfo.common.api.gui.registry.RegisterElement;
+import com.tttsaurus.ingameinfo.common.api.gui.style.StyleProperty;
+import com.tttsaurus.ingameinfo.common.api.gui.style.StylePropertyCallback;
 import com.tttsaurus.ingameinfo.common.impl.render.renderer.AnimTextRenderer;
 
 @RegisterElement
 public class AnimText extends Element
 {
     private final AnimTextRenderer animTextRenderer = new AnimTextRenderer();
-    private final ITextAnimDef animDef;
 
-    public AnimText(String text, float scale, int color, ITextAnimDef animDef)
+    @StyleProperty
+    public ITextAnimDef animDef;
+
+    @StylePropertyCallback
+    public void setTextCallback()
     {
         animTextRenderer.setText(text);
-        animTextRenderer.setScale(scale);
-        animTextRenderer.setColor(color);
-        this.animDef = animDef;
+        requestReCalc();
     }
+    @StyleProperty(setterCallback = "setTextCallback")
+    public String text;
+
+    @StylePropertyCallback
+    public void setScaleCallback()
+    {
+        animTextRenderer.setScale(scale);
+        requestReCalc();
+    }
+    @StyleProperty(setterCallback = "setScaleCallback")
+    public float scale;
+
+    @StylePropertyCallback
+    public void setColorCallback()
+    {
+        animTextRenderer.setColor(color);
+    }
+    @StyleProperty(setterCallback = "setColorCallback")
+    public int color;
 
     @Override
     public void calcRenderPos(Rect contextRect)

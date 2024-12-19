@@ -8,6 +8,8 @@ import com.tttsaurus.ingameinfo.common.api.gui.delegate.placeholder.IPlaceholder
 import com.tttsaurus.ingameinfo.common.api.render.RenderUtils;
 import com.tttsaurus.ingameinfo.common.impl.gui.control.PureColorButton;
 import com.tttsaurus.ingameinfo.common.impl.gui.control.Text;
+import com.tttsaurus.ingameinfo.common.impl.gui.layout.HorizontalGroup;
+import com.tttsaurus.ingameinfo.common.impl.gui.layout.VerticalGroup;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.renderer.GlStateManager;
@@ -304,15 +306,14 @@ public final class IgiGuiLifeCycle
             GuiLayout builder = IgiGui.getBuilder();
             builder
                     //.setDebug(true)
-                    .setFocused(true)
                     .setHeldItemWhitelist(true)
                     .addHeldItemWhitelist(new ItemStack(Items.APPLE))
-                    .startHorizontalGroup("\"padding\" : {\"top\" : 10, \"left\" : 10}")
+                    .startGroup(new HorizontalGroup(), "\"padding\" : {\"top\" : 10, \"left\" : 10}")
                     .addElement(new Text(), "\"text\" : \"Test1\", \"scale\" : 2.0f, \"color\" : " + Color.GREEN.getRGB() + ", \"alignment\" : BOTTOM_LEFT, \"pivot\" : BOTTOM_LEFT, \"backgroundStyle\" : \"roundedBoxWithOutline\"")
-                    .startVerticalGroup()
+                    .startGroup(new VerticalGroup())
                     .addElement(new Text(), "\"text\" : \"Test2\", \"scale\" : 2.0f")
                     .addElement(new Text(), "\"text\" : \"Test3\"")
-                    .addElement(new PureColorButton(), "\"text\" : \"Test4\", \"holdColor\" : " + Color.GREEN.getRGB())
+                    .addElement(new PureColorButton(), "\"text\" : \"Test4\", \"width\" : 80, \"holdColor\" : " + Color.GREEN.getRGB())
                     .endGroup()
                     .endGroup();
             IgiGui.openGui(builder);
@@ -340,3 +341,5 @@ public final class IgiGuiLifeCycle
 }
 
 // todo: approximate mvvm (HIGH PRIORITY)
+// todo: add "forbidden" to RegisterElement
+// todo: refactor button to make it a group

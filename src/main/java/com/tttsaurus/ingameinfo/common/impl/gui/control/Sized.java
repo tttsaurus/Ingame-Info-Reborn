@@ -1,8 +1,10 @@
 package com.tttsaurus.ingameinfo.common.impl.gui.control;
 
 import com.tttsaurus.ingameinfo.common.api.gui.Element;
+import com.tttsaurus.ingameinfo.common.api.gui.registry.RegisterElement;
 import com.tttsaurus.ingameinfo.common.api.gui.style.StyleProperty;
 
+@RegisterElement
 public abstract class Sized extends Element
 {
     @StyleProperty(setterCallback = "requestReCalc")

@@ -3,10 +3,7 @@ package com.tttsaurus.ingameinfo.common.api.gui;
 import com.tttsaurus.ingameinfo.common.api.gui.layout.ElementGroup;
 import com.tttsaurus.ingameinfo.common.api.gui.style.IStylePropertyCallback;
 import com.tttsaurus.ingameinfo.common.api.gui.style.IStylePropertySetter;
-import com.tttsaurus.ingameinfo.common.impl.gui.layout.HorizontalGroup;
 import com.tttsaurus.ingameinfo.common.impl.gui.layout.MainGroup;
-import com.tttsaurus.ingameinfo.common.impl.gui.layout.SizedGroup;
-import com.tttsaurus.ingameinfo.common.impl.gui.layout.VerticalGroup;
 import com.tttsaurus.ingameinfo.common.impl.gui.registry.ElementRegistry;
 import com.tttsaurus.ingameinfo.common.impl.serialization.ElementStylesDeserializer;
 import net.minecraft.item.ItemStack;
@@ -74,7 +71,7 @@ public class GuiLayout
     private int groupLayer = 0;
     private final List<ElementGroup> groupBuffer = new ArrayList<>();
 
-    private void startGroup(ElementGroup group)
+    private void startGroupInternal(ElementGroup group)
     {
         groupBuffer.add(group);
         groupLayer++;
@@ -89,40 +86,15 @@ public class GuiLayout
         return this;
     }
 
-    public GuiLayout startHorizontalGroup()
+    public GuiLayout startGroup(ElementGroup group)
     {
-        startGroup(new HorizontalGroup());
+        startGroupInternal(group);
         return this;
     }
-    public GuiLayout startHorizontalGroup(String rawStyles)
+    public GuiLayout startGroup(ElementGroup group, String rawStyles)
     {
-        ElementGroup element = new HorizontalGroup();
-        injectStyles(element, (new ElementStylesDeserializer(element.getClass())).deserialize(rawStyles, "json"));
-        startGroup(element);
-        return this;
-    }
-    public GuiLayout startVerticalGroup()
-    {
-        startGroup(new VerticalGroup());
-        return this;
-    }
-    public GuiLayout startVerticalGroup(String rawStyles)
-    {
-        ElementGroup element = new HorizontalGroup();
-        injectStyles(element, (new ElementStylesDeserializer(element.getClass())).deserialize(rawStyles, "json"));
-        startGroup(element);
-        return this;
-    }
-    public GuiLayout startSizedGroup()
-    {
-        startGroup(new SizedGroup());
-        return this;
-    }
-    public GuiLayout startSizedGroup(String rawStyles)
-    {
-        ElementGroup element = new SizedGroup();
-        injectStyles(element, (new ElementStylesDeserializer(element.getClass())).deserialize(rawStyles, "json"));
-        startGroup(element);
+        injectStyles(group, (new ElementStylesDeserializer(group.getClass())).deserialize(rawStyles, "json"));
+        startGroupInternal(group);
         return this;
     }
 
