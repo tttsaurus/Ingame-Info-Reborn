@@ -1,17 +1,15 @@
 package com.tttsaurus.ingameinfo.common.impl.gui.control;
 
 import com.tttsaurus.ingameinfo.common.api.gui.Element;
+import com.tttsaurus.ingameinfo.common.api.gui.style.StyleProperty;
 
 public abstract class Sized extends Element
 {
-    protected float width;
-    protected float height;
+    @StyleProperty(setterCallback = "requestReCalc")
+    public float width;
 
-    public Sized(float width, float height)
-    {
-        this.width = width;
-        this.height = height;
-    }
+    @StyleProperty(setterCallback = "requestReCalc")
+    public float height;
 
     @Override
     public void calcWidthHeight()

@@ -22,11 +22,6 @@ public abstract class Button extends Sized
     public Button addListener(IMouseReleaseButton action) { release.add(action); return this; }
     public Button addListener(IMouseClickButton action) { click.add(action); return this; }
 
-    public Button(float width, float height)
-    {
-        super(width, height);
-    }
-
     @Override
     public void onFixedUpdate(double deltaTime)
     {

@@ -1,9 +1,13 @@
 package com.tttsaurus.ingameinfo.common.api.gui.registry;
 
+import com.tttsaurus.ingameinfo.InGameInfoReborn;
 import com.tttsaurus.ingameinfo.common.api.gui.Element;
 import com.tttsaurus.ingameinfo.common.api.gui.style.IStylePropertyCallback;
 import com.tttsaurus.ingameinfo.common.api.gui.style.IStylePropertySetter;
 import com.tttsaurus.ingameinfo.common.api.gui.style.StyleProperty;
+import com.tttsaurus.ingameinfo.common.api.gui.style.StylePropertyCallback;
+import com.tttsaurus.ingameinfo.common.api.gui.style.wrapped.IWrappedStyleProperty;
+import com.tttsaurus.ingameinfo.common.api.reflection.TypeUtils;
 import com.tttsaurus.ingameinfo.common.api.serialization.Deserializer;
 import com.tttsaurus.ingameinfo.common.api.serialization.IDeserializer;
 import com.tttsaurus.ingameinfo.common.impl.serialization.PrimitiveTypesDeserializer;
@@ -12,6 +16,7 @@ import java.lang.invoke.MethodHandle;
 import java.lang.invoke.MethodHandles;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
+import java.lang.reflect.ParameterizedType;
 import java.net.URL;
 import java.util.*;
 import java.util.jar.JarEntry;
@@ -75,25 +80,58 @@ public final class RegistryUtils
             {
                 StyleProperty styleProperty = field.getAnnotation(StyleProperty.class);
                 MethodHandles.Lookup lookup = MethodHandles.lookup();
-                MethodHandle setter;
                 try
                 {
                     // setter
                     Class<?> fieldClass = field.getType();
                     String fieldName = field.getName();
-                    setter = lookup.findSetter(clazz, fieldName, fieldClass);
-                    IStylePropertySetter wrappedSetter = (target, value) ->
+                    IStylePropertySetter wrappedSetter;
+                    if (IWrappedStyleProperty.class.isAssignableFrom(fieldClass))
                     {
-                        try
+                        MethodHandle getter = lookup.findGetter(clazz, fieldName, fieldClass);
+                        wrappedSetter = (target, value) ->
                         {
-                            setter.invoke(target, value);
-                        }
-                        catch (Throwable ignored) { }
-                    };
+                            try
+                            {
+                                IWrappedStyleProperty fieldValue = (IWrappedStyleProperty)getter.invoke(target);
+                                fieldValue.set(value);
+                            }
+                            catch (Throwable ignored) { }
+                        };
+                    }
+                    else
+                    {
+                        MethodHandle setter = lookup.findSetter(clazz, fieldName, fieldClass);
+                        wrappedSetter = (target, value) ->
+                        {
+                            try
+                            {
+                                setter.invoke(target, value);
+                            }
+                            catch (Throwable ignored) { }
+                        };
+                    }
                     setters.put(styleProperty.name().isEmpty() ? fieldName : styleProperty.name(), wrappedSetter);
 
                     // deserializer
-                    if (fieldClass.isPrimitive() || fieldClass.equals(String.class))
+                    boolean hasWrappedClass = false;
+                    boolean isWrappedClassPrimitive = false;
+                    Class<?> wrappedClass = null;
+                    if (IWrappedStyleProperty.class.isAssignableFrom(fieldClass))
+                    {
+                        hasWrappedClass = true;
+                        wrappedClass = (Class<?>)((ParameterizedType)fieldClass.getGenericSuperclass()).getActualTypeArguments()[0];
+                        if (TypeUtils.isPrimitiveOrWrappedPrimitive(wrappedClass) || wrappedClass.equals(String.class)) isWrappedClassPrimitive = true;
+                    }
+
+                    if (hasWrappedClass && isWrappedClassPrimitive)
+                        stylePropertyDeserializers.put(wrappedSetter, new PrimitiveTypesDeserializer<>(wrappedClass));
+                    else if (hasWrappedClass && wrappedClass.isAnnotationPresent(Deserializer.class))
+                    {
+                        Deserializer deserializer = wrappedClass.getAnnotation(Deserializer.class);
+                        stylePropertyDeserializers.put(wrappedSetter, deserializer.value().newInstance());
+                    }
+                    else if (TypeUtils.isPrimitiveOrWrappedPrimitive(fieldClass) || fieldClass.equals(String.class))
                         stylePropertyDeserializers.put(wrappedSetter, new PrimitiveTypesDeserializer<>(fieldClass));
                     else if (fieldClass.isAnnotationPresent(Deserializer.class))
                     {
@@ -101,27 +139,30 @@ public final class RegistryUtils
                         stylePropertyDeserializers.put(wrappedSetter, deserializer.value().newInstance());
                     }
 
-                    // callback
-                    String callbackName = styleProperty.setterCallback();
-                    if (!callbackName.isEmpty())
+                    // setter callback
+                    String setterCallbackName = styleProperty.setterCallback();
+                    if (!setterCallbackName.isEmpty())
                     {
-                        Method callback = clazz.getMethod(callbackName);
-                        IStylePropertyCallback wrappedCallback = new IStylePropertyCallback()
+                        Method callback = clazz.getMethod(setterCallbackName);
+                        if (callback.isAnnotationPresent(StylePropertyCallback.class) && callback.getReturnType().equals(void.class) && callback.getParameterCount() == 0)
                         {
-                            @Override
-                            public void invoke(Element target)
+                            IStylePropertyCallback wrappedSetterCallback = new IStylePropertyCallback()
                             {
-                                try
+                                @Override
+                                public void invoke(Element target)
                                 {
-                                    callback.invoke(target, new Object[0]);
+                                    try
+                                    {
+                                        callback.invoke(target, new Object[0]);
+                                    }
+                                    catch (Exception ignored) { }
                                 }
-                                catch (Exception ignored) { }
-                            }
 
-                            @Override
-                            public String name() { return callbackName; }
-                        };
-                        stylePropertySetterCallbacks.put(wrappedSetter, wrappedCallback);
+                                @Override
+                                public String name() { return setterCallbackName; }
+                            };
+                            stylePropertySetterCallbacks.put(wrappedSetter, wrappedSetterCallback);
+                        }
                     }
                 }
                 catch (Exception ignored) { }

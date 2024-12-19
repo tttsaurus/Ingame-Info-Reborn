@@ -13,6 +13,7 @@ import java.awt.*;
 @RegisterElement
 public abstract class Element
 {
+    public static int DEFAULT_COLOR_LIGHT = Color.decode("0xd2d2d2").getRGB();
     public static int DEFAULT_COLOR_DARK = Color.decode("0x383838").getRGB();
     public static int DEFAULT_COLOR_DARKER = Color.decode("0x232323").getRGB();
 

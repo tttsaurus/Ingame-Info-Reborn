@@ -16,7 +16,7 @@ public class VerticalGroup extends ElementGroup
     // pivot does change how the layout is calculated when skewness is null
     // skewness determines the layout when it's set
     // elements' alignment overrides the skewness
-    @StyleProperty
+    @StyleProperty(setterCallback = "requestReCalc")
     public Skewness skewness = Skewness.NULL;
 
     @Override
