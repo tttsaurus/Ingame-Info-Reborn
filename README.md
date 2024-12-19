@@ -61,7 +61,7 @@ builder
         .endGroup();
 ```
 The default alignment and pivot are the top-left corner.
-![image](https://github.com/user-attachments/assets/0bbd66db-4ee0-4ef9-a47d-0021ffc3be1b)
+![Snipaste_2024-12-18_18-21-48](https://github.com/user-attachments/assets/dcaadd00-8ac0-48b3-915d-1183a53ef113)
 
 Crt API is still WIP but should look similar to java code.
 
