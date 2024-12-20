@@ -27,6 +27,9 @@ public abstract class Element
     private boolean needReCalc = false;
     //</editor-fold>
 
+    @StyleProperty
+    public String uid = "";
+
     @StylePropertyCallback
     public void requestReCalc() { needReCalc = true; }
 

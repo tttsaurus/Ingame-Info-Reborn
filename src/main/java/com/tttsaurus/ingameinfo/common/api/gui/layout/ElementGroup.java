@@ -8,17 +8,11 @@ import java.util.List;
 
 public abstract class ElementGroup extends Element
 {
-    protected final List<Element> elements = new ArrayList<>();
+    public final List<Element> elements = new ArrayList<>();
 
-    public ElementGroup add(Element element)
+    public void add(Element element)
     {
         elements.add(element);
-        return this;
-    }
-    public ElementGroup remove(Element element)
-    {
-        elements.remove(element);
-        return this;
     }
 
     @Override

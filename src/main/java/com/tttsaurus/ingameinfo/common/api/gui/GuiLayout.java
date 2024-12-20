@@ -14,7 +14,7 @@ import java.util.List;
 public class GuiLayout
 {
     protected final IgiGuiContainer igiGuiContainer;
-    private final MainGroup mainGroup;
+    private MainGroup mainGroup;
 
     protected GuiLayout()
     {
