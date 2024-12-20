@@ -1,14 +1,14 @@
 package com.tttsaurus.ingameinfo.common.api.mvvm.binding;
 
+import com.tttsaurus.ingameinfo.InGameInfoReborn;
 import com.tttsaurus.ingameinfo.common.api.gui.GuiLayout;
-import com.tttsaurus.ingameinfo.common.api.gui.IgiGui;
 import com.tttsaurus.ingameinfo.common.api.mvvm.view.View;
 import com.tttsaurus.ingameinfo.common.api.mvvm.viewmodel.ViewModel;
 import com.tttsaurus.ingameinfo.common.impl.gui.layout.MainGroup;
-import java.lang.reflect.Field;
+import com.tttsaurus.ingameinfo.common.impl.mvvm.registry.MvvmRegistry;
 import java.lang.reflect.ParameterizedType;
 
-public class VVMBinding<T extends View>
+public class VvmBinding<T extends View>
 {
     private T view;
     private ViewModel<T> viewModel;
@@ -23,24 +23,17 @@ public class VVMBinding<T extends View>
         }
         catch (Exception ignored) { }
 
-        GuiLayout guiLayout = IgiGui.getBuilder();
+        GuiLayout guiLayout = MvvmRegistry.internalMethods.GuiLayout$constructor.invoke();
         view.init(guiLayout);
-        MainGroup mainGroup = null;
-        try
-        {
-            Field field = guiLayout.getClass().getDeclaredField("mainGroup");
-            field.setAccessible(true);
-            mainGroup = (MainGroup)field.get(guiLayout);
-        }
-        catch (Exception ignored) { }
-        try
-        {
-            Field field = view.getClass().getSuperclass().getDeclaredField("mainGroup");
-            field.setAccessible(true);
-            field.set(view, mainGroup);
-        }
-        catch (Exception ignored) { }
+        MainGroup mainGroup = MvvmRegistry.internalMethods.GuiLayout$mainGroup$getter.invoke(guiLayout);
+        MvvmRegistry.internalMethods.View$mainGroup$setter.invoke(view, mainGroup);
 
         return guiLayout;
+    }
+
+    public void bindReactiveObject(Reactive reactive, ReactiveObject<?> reactiveObject)
+    {
+        //InGameInfoReborn.LOGGER.info("bind: " + reactive.targetUid());
+        //view.getElements(reactive.targetUid());
     }
 }

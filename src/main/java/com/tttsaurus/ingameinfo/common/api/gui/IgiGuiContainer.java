@@ -1,5 +1,6 @@
 package com.tttsaurus.ingameinfo.common.api.gui;
 
+import com.tttsaurus.ingameinfo.common.api.mvvm.viewmodel.ViewModel;
 import com.tttsaurus.ingameinfo.common.impl.gui.layout.MainGroup;
 import com.tttsaurus.ingameinfo.common.api.render.RenderUtils;
 import net.minecraft.client.Minecraft;
@@ -11,14 +12,16 @@ import java.util.List;
 
 public class IgiGuiContainer
 {
+    protected ViewModel<?> viewModel;
+
     protected boolean useHeldItemWhitelist = false;
     protected final List<ItemStack> heldItemWhitelist = new ArrayList<>();
     protected boolean useHeldItemBlacklist = false;
     protected final List<ItemStack> heldItemBlacklist = new ArrayList<>();
 
+    protected MainGroup mainGroup = new MainGroup();
     protected boolean debug = false;
     protected int exitKeyForFocusedGui = Keyboard.KEY_ESCAPE;
-    protected MainGroup mainGroup = new MainGroup();
     protected boolean isFocused = false;
     protected boolean hasFocusBackground = true;
     protected int backgroundColor = -1072689136;

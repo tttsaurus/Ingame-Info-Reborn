@@ -14,6 +14,7 @@ import java.util.*;
 public final class ElementRegistry
 {
     // IStylePropertySetter is the primary key here
+    // key: element class name
     private static final Map<String, Map<String, IStylePropertySetter>> stylePropertySetters = new HashMap<>();
     private static final Map<IStylePropertySetter, IDeserializer<?>> stylePropertyDeserializers = new HashMap<>();
     private static final Map<IStylePropertySetter, IStylePropertyCallback> stylePropertySetterCallbacks = new HashMap<>();

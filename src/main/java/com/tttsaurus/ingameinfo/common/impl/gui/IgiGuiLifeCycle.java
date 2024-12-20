@@ -1,10 +1,11 @@
 package com.tttsaurus.ingameinfo.common.impl.gui;
 
-import com.tttsaurus.ingameinfo.common.api.gui.IgiGui;
+import com.tttsaurus.ingameinfo.common.api.gui.IgiGuiManager;
 import com.tttsaurus.ingameinfo.common.api.gui.IgiGuiContainer;
 import com.tttsaurus.ingameinfo.common.api.gui.delegate.placeholder.IPlaceholderDrawScreen;
 import com.tttsaurus.ingameinfo.common.api.gui.delegate.placeholder.IPlaceholderKeyTyped;
 import com.tttsaurus.ingameinfo.common.api.render.RenderUtils;
+import com.tttsaurus.ingameinfo.common.impl.mvvm.registry.MvvmRegistry;
 import com.tttsaurus.ingameinfo.common.impl.test.TestViewModel;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.ScaledResolution;
@@ -48,7 +49,7 @@ public final class IgiGuiLifeCycle
     private static void onFixedUpdate()
     {
         //<editor-fold desc="gui container fixed update">
-        for (IgiGuiContainer container: openedGuiList.values())
+        for (IgiGuiContainer container: openedGuiMap.values())
             container.onFixedUpdate(deltaTime);
         //</editor-fold>
 
@@ -64,8 +65,7 @@ public final class IgiGuiLifeCycle
         ItemStack heldItemMainhand = Minecraft.getMinecraft().player.getHeldItemMainhand();
 
         //<editor-fold desc="gui container render update">
-
-        List<Map.Entry<String, IgiGuiContainer>> entryList = new ArrayList<>(openedGuiList.entrySet());
+        List<Map.Entry<String, IgiGuiContainer>> entryList = new ArrayList<>(openedGuiMap.entrySet());
         String firstFocused = "";
         for (int i = entryList.size() - 1; i >= 0; i--)
         {
@@ -76,7 +76,7 @@ public final class IgiGuiLifeCycle
                 break;
             }
         }
-        for (Map.Entry<String, IgiGuiContainer> entry: openedGuiList.entrySet())
+        for (Map.Entry<String, IgiGuiContainer> entry: openedGuiMap.entrySet())
         {
             IgiGuiContainer container = entry.getValue();
             boolean display = true;
@@ -181,7 +181,7 @@ public final class IgiGuiLifeCycle
     public static void onRenderGameOverlay(RenderGameOverlayEvent event)
     {
         //<editor-fold desc="gui container init">
-        for (IgiGuiContainer container : openedGuiList.values())
+        for (IgiGuiContainer container : openedGuiMap.values())
             if (!container.getInitFlag())
                 container.onInit();
         //</editor-fold>
@@ -192,7 +192,7 @@ public final class IgiGuiLifeCycle
         if (resolution.getScaleFactor() != event.getResolution().getScaleFactor())
         {
             resolution = event.getResolution();
-            for (IgiGuiContainer container: openedGuiList.values())
+            for (IgiGuiContainer container: openedGuiMap.values())
                 container.onScaledResolutionResize();
         }
         //</editor-fold>
@@ -228,7 +228,7 @@ public final class IgiGuiLifeCycle
             // close placeholder
             if (isPlaceholderGuiOn)
             {
-                if (openedGuiList.isEmpty())
+                if (openedGuiMap.isEmpty())
                 {
                     isPlaceholderGuiOn = false;
                     placeholderGui = null;
@@ -237,7 +237,7 @@ public final class IgiGuiLifeCycle
                 else
                 {
                     AtomicBoolean focus = new AtomicBoolean(false);
-                    openedGuiList.forEach((uuid, guiContainer) -> focus.set(focus.get() || guiContainer.getFocused()));
+                    openedGuiMap.forEach((uuid, guiContainer) -> focus.set(focus.get() || guiContainer.getFocused()));
 
                     if (!focus.get())
                     {
@@ -248,10 +248,10 @@ public final class IgiGuiLifeCycle
                 }
             }
             // open placeholder
-            else if (!isPlaceholderGuiOn && !openedGuiList.isEmpty() && Minecraft.getMinecraft().currentScreen == null)
+            else if (!isPlaceholderGuiOn && !openedGuiMap.isEmpty() && Minecraft.getMinecraft().currentScreen == null)
             {
                 AtomicBoolean focus = new AtomicBoolean(false);
-                openedGuiList.forEach((uuis, guiContainer) -> focus.set(focus.get() || guiContainer.getFocused()));
+                openedGuiMap.forEach((uuis, guiContainer) -> focus.set(focus.get() || guiContainer.getFocused()));
 
                 if (focus.get())
                 {
@@ -271,7 +271,7 @@ public final class IgiGuiLifeCycle
                         @Override
                         public void type(int keycode)
                         {
-                            List<Map.Entry<String, IgiGuiContainer>> entryList = new ArrayList<>(openedGuiList.entrySet());
+                            List<Map.Entry<String, IgiGuiContainer>> entryList = new ArrayList<>(openedGuiMap.entrySet());
                             String key = "";
                             for (int i = entryList.size() - 1; i >= 0; i--)
                             {
@@ -284,7 +284,7 @@ public final class IgiGuiLifeCycle
                                         break;
                                     }
                             }
-                            if (!key.isEmpty()) openedGuiList.remove(key);
+                            if (!key.isEmpty()) openedGuiMap.remove(key);
                         }
                     });
                     Minecraft.getMinecraft().displayGuiScreen(placeholderGui);
@@ -298,10 +298,8 @@ public final class IgiGuiLifeCycle
         if (flag)
         {
             flag = false;
-            TestViewModel testViewModel = new TestViewModel();
-
-            // test gui layout
-            IgiGui.openGui(testViewModel.init());
+            MvvmRegistry.register("test", TestViewModel.class);
+            IgiGuiManager.openGui("test");
         }
     }
 
@@ -311,17 +309,17 @@ public final class IgiGuiLifeCycle
     private static boolean isPlaceholderGuiOn = false;
     private static PlaceholderMcGui placeholderGui;
 
-    private static Map<String, IgiGuiContainer> openedGuiList = new LinkedHashMap<>();
+    private static Map<String, IgiGuiContainer> openedGuiMap = new LinkedHashMap<>();
 
     public static String openIgiGui(IgiGuiContainer guiContainer)
     {
         String uuid = UUID.randomUUID().toString();
-        openedGuiList.put(uuid, guiContainer);
+        openedGuiMap.put(uuid, guiContainer);
         return uuid;
     }
     public static void closeIgiGui(String uuid)
     {
-        openedGuiList.remove(uuid);
+        openedGuiMap.remove(uuid);
     }
 }
 
