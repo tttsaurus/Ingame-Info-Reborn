@@ -18,6 +18,7 @@ public final class ElementRegistry
     private static final Map<String, Map<String, IStylePropertySetter>> stylePropertySetters = new HashMap<>();
     private static final Map<IStylePropertySetter, IDeserializer<?>> stylePropertyDeserializers = new HashMap<>();
     private static final Map<IStylePropertySetter, IStylePropertyCallback> stylePropertySetterCallbacks = new HashMap<>();
+    private static final Map<IStylePropertySetter, Class<?>> stylePropertyClasses = new HashMap<>();
 
     private static final List<Class<? extends Element>> registeredElements = new ArrayList<>();
     private static final List<String> elementPackages = new ArrayList<>(Arrays.asList(
@@ -49,6 +50,11 @@ public final class ElementRegistry
     {
         return stylePropertySetterCallbacks.get(setter);
     }
+    @Nullable
+    public static Class<?> getStylePropertyClass(IStylePropertySetter setter)
+    {
+        return stylePropertyClasses.get(setter);
+    }
 
     public static ImmutableMap<String, Map<String, IStylePropertySetter>> getStylePropertySetters() { return ImmutableMap.copyOf(stylePropertySetters); }
     public static ImmutableMap<IStylePropertySetter, IDeserializer<?>> getStylePropertyDeserializers() { return ImmutableMap.copyOf(stylePropertyDeserializers); }
@@ -60,12 +66,20 @@ public final class ElementRegistry
     public static void register()
     {
         registeredElements.clear();
+
         for (String packageName: elementPackages)
             registeredElements.addAll(RegistryUtils.findRegisteredElements(packageName));
+
         stylePropertySetters.clear();
         stylePropertyDeserializers.clear();
         stylePropertySetterCallbacks.clear();
+        stylePropertyClasses.clear();
+
         for (Class<? extends Element> clazz: registeredElements)
-            stylePropertySetters.put(clazz.getName(), RegistryUtils.handleStyleProperties(clazz, stylePropertyDeserializers, stylePropertySetterCallbacks));
+            stylePropertySetters.put(clazz.getName(), RegistryUtils.handleStyleProperties(
+                    clazz,
+                    stylePropertyDeserializers,
+                    stylePropertySetterCallbacks,
+                    stylePropertyClasses));
     }
 }

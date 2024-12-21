@@ -10,8 +10,6 @@ import java.util.List;
 // only do one inheritance; don't do nested inheritance
 public abstract class View
 {
-    public boolean test() { return mainGroup != null; }
-
     private MainGroup mainGroup = null;
 
     public List<Element> getElements(String uid)

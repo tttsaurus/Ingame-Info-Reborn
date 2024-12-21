@@ -9,7 +9,7 @@ public final class IgiGuiManager
     public static String openGui(String mvvmRegistryName)
     {
         if (!MvvmRegistry.isMvvmRegistered(mvvmRegistryName)) return "";
-        ViewModel<?> viewModel = MvvmRegistry.instantiateViewModel(mvvmRegistryName);
+        ViewModel<?> viewModel = MvvmRegistry.newViewModel(mvvmRegistryName);
         if (viewModel == null) return "";
         GuiLayout guiLayout = viewModel.init();
         guiLayout.igiGuiContainer.viewModel = viewModel;

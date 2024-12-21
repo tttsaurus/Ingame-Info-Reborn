@@ -70,7 +70,12 @@ public final class RegistryUtils
         return annotatedClasses;
     }
 
-    public static Map<String, IStylePropertySetter> handleStyleProperties(Class<? extends Element> clazz, Map<IStylePropertySetter, IDeserializer<?>> stylePropertyDeserializers, Map<IStylePropertySetter, IStylePropertyCallback> stylePropertySetterCallbacks)
+    public static Map<String, IStylePropertySetter> handleStyleProperties(
+            Class<? extends Element> clazz,
+            Map<IStylePropertySetter,
+            IDeserializer<?>> stylePropertyDeserializers,
+            Map<IStylePropertySetter, IStylePropertyCallback> stylePropertySetterCallbacks,
+            Map<IStylePropertySetter, Class<?>> stylePropertyClasses)
     {
         Map<String, IStylePropertySetter> setters = new HashMap<>();
 
@@ -111,6 +116,9 @@ public final class RegistryUtils
                         };
                     }
                     setters.put(styleProperty.name().isEmpty() ? fieldName : styleProperty.name(), wrappedSetter);
+
+                    // class
+                    stylePropertyClasses.put(wrappedSetter, fieldClass);
 
                     // deserializer
                     boolean hasWrappedClass = false;

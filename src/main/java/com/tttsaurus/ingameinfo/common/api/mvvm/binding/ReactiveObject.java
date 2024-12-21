@@ -15,6 +15,6 @@ public class ReactiveObject<T>
     public void set(T value)
     {
         this.value = value;
-        for (IReactiveCallback callback: setterCallbacks) callback.invoke();
+        for (IReactiveCallback callback: setterCallbacks) callback.invoke(value);
     }
 }

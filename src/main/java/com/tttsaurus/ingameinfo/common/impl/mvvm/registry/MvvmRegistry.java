@@ -28,7 +28,7 @@ public final class MvvmRegistry
     public static boolean isMvvmRegistered(String mvvmRegistryName) { return viewModelClasses.containsKey(mvvmRegistryName); }
 
     @Nullable
-    public static ViewModel<?> instantiateViewModel(String mvvmRegistryName)
+    public static ViewModel<?> newViewModel(String mvvmRegistryName)
     {
         try { return viewModelClasses.get(mvvmRegistryName).newInstance(); }
         catch (Exception e) { return null; }

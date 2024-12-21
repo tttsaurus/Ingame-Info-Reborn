@@ -2,5 +2,5 @@ package com.tttsaurus.ingameinfo.common.api.mvvm.binding;
 
 public interface IReactiveCallback
 {
-    void invoke();
+    void invoke(Object value);
 }

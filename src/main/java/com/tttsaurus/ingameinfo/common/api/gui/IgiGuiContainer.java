@@ -48,6 +48,8 @@ public class IgiGuiContainer
         mainGroup.calcWidthHeight();
         mainGroup.calcRenderPos(mainGroup.rect);
         mainGroup.finishReCalc();
+
+        viewModel.start();
     }
     public void onScaledResolutionResize()
     {

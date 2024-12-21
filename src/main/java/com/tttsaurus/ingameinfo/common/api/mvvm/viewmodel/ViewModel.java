@@ -25,4 +25,6 @@ public abstract class ViewModel<T extends View>
 
         return guiLayout;
     }
+
+    public abstract void start();
 }
