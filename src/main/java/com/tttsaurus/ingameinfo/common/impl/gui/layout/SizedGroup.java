@@ -11,10 +11,10 @@ public class SizedGroup extends ElementGroup
 {
     // pivot doesn't change how the layout is calculated
 
-    @StyleProperty(setterCallback = "requestReCalc")
+    @StyleProperty(setterCallbackPost = "requestReCalc")
     public float width;
 
-    @StyleProperty(setterCallback = "requestReCalc")
+    @StyleProperty(setterCallbackPost = "requestReCalc")
     public float height;
 
     @Override

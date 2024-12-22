@@ -12,7 +12,7 @@ import java.lang.reflect.Method;
 @SuppressWarnings("all")
 public class InternalMethods
 {
-    public final static InternalMethods instance = new InternalMethods();
+    public static InternalMethods instance;
 
     public IFunc<GuiLayout> GuiLayout$constructor;
     public IFunc_1Param<MainGroup, GuiLayout> GuiLayout$mainGroup$getter;

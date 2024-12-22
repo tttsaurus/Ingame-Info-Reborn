@@ -37,7 +37,7 @@ public class SimpleButton extends Button
         height = textRenderer.simulateHeight() + 4;
         requestReCalc();
     }
-    @StyleProperty(setterCallback = "setTextCallback")
+    @StyleProperty(setterCallbackPost = "setTextCallback")
     public String text;
 
     public SimpleButton()

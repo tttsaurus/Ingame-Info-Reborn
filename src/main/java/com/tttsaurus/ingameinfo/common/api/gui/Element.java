@@ -33,13 +33,13 @@ public abstract class Element
     @StylePropertyCallback
     public void requestReCalc() { needReCalc = true; }
 
-    @StyleProperty(setterCallback = "requestReCalc")
+    @StyleProperty(setterCallbackPost = "requestReCalc")
     public Alignment alignment = Alignment.NULL;
 
-    @StyleProperty(setterCallback = "requestReCalc")
+    @StyleProperty(setterCallbackPost = "requestReCalc")
     public Pivot pivot = Pivot.TOP_LEFT;
 
-    @StyleProperty(setterCallback = "requestReCalc")
+    @StyleProperty(setterCallbackPost = "requestReCalc")
     public Padding padding = new Padding(0, 0, 0, 0);
 
     // determines how the background is drawn (optional)

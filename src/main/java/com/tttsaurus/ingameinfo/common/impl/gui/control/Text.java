@@ -18,7 +18,7 @@ public class Text extends Element
         textRenderer.setText(text);
         requestReCalc();
     }
-    @StyleProperty(setterCallback = "setTextCallback")
+    @StyleProperty(setterCallbackPost = "setTextCallback")
     public String text;
 
     @StylePropertyCallback
@@ -27,7 +27,7 @@ public class Text extends Element
         textRenderer.setScale(scale);
         requestReCalc();
     }
-    @StyleProperty(setterCallback = "setScaleCallback")
+    @StyleProperty(setterCallbackPost = "setScaleCallback")
     public float scale;
 
     @StylePropertyCallback
@@ -35,7 +35,7 @@ public class Text extends Element
     {
         textRenderer.setColor(color);
     }
-    @StyleProperty(setterCallback = "setColorCallback")
+    @StyleProperty(setterCallbackPost = "setColorCallback")
     public int color;
 
     @Override

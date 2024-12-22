@@ -48,15 +48,17 @@ public class VvmBinding<TView extends View>
         for (Element element: elements)
         {
             IStylePropertySetter setter = ElementRegistry.getStylePropertySetter(element.getClass(), reactive.property());
-            IStylePropertyCallback setterCallback = ElementRegistry.getStylePropertySetterCallback(setter);
+            IStylePropertyCallback setterCallbackPre = ElementRegistry.getStylePropertySetterCallbackPost(setter);
+            IStylePropertyCallback setterCallbackPost = ElementRegistry.getStylePropertySetterCallbackPost(setter);
             Class<?> stylePropertyClass = ElementRegistry.getStylePropertyClass(setter);
 
             if (setter != null && stylePropertyClass != null)
                 if (reactive.initiativeSync() && reactiveObjectParameter.equals(stylePropertyClass))
                     reactiveObject.setterCallbacks.add((value) ->
                     {
+                        if (setterCallbackPre != null) setterCallbackPre.invoke(element, value);
                         setter.set(element, value);
-                        if (setterCallback != null) setterCallback.invoke(element);
+                        if (setterCallbackPost != null) setterCallbackPost.invoke(element, value);
                     });
         }
     }

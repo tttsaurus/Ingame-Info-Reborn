@@ -72,9 +72,9 @@ public final class RegistryUtils
 
     public static Map<String, IStylePropertySetter> handleStyleProperties(
             Class<? extends Element> clazz,
-            Map<IStylePropertySetter,
-            IDeserializer<?>> stylePropertyDeserializers,
-            Map<IStylePropertySetter, IStylePropertyCallback> stylePropertySetterCallbacks,
+            Map<IStylePropertySetter, IDeserializer<?>> stylePropertyDeserializers,
+            Map<IStylePropertySetter, IStylePropertyCallback> stylePropertySetterCallbacksPre,
+            Map<IStylePropertySetter, IStylePropertyCallback> stylePropertySetterCallbacksPost,
             Map<IStylePropertySetter, Class<?>> stylePropertyClasses)
     {
         Map<String, IStylePropertySetter> setters = new HashMap<>();
@@ -117,9 +117,6 @@ public final class RegistryUtils
                     }
                     setters.put(styleProperty.name().isEmpty() ? fieldName : styleProperty.name(), wrappedSetter);
 
-                    // class
-                    stylePropertyClasses.put(wrappedSetter, fieldClass);
-
                     // deserializer
                     boolean hasWrappedClass = false;
                     boolean isWrappedClassPrimitive = false;
@@ -146,31 +143,110 @@ public final class RegistryUtils
                         stylePropertyDeserializers.put(wrappedSetter, deserializer.value().newInstance());
                     }
 
-                    // setter callback
-                    String setterCallbackName = styleProperty.setterCallback();
-                    if (!setterCallbackName.isEmpty())
+                    // setter callback pre
+                    String setterCallbackPreName = styleProperty.setterCallbackPre();
+                    if (!setterCallbackPreName.isEmpty())
                     {
-                        Method callback = clazz.getMethod(setterCallbackName);
-                        if (callback.isAnnotationPresent(StylePropertyCallback.class) && callback.getReturnType().equals(void.class) && callback.getParameterCount() == 0)
+                        boolean hasInputValue = false;
+                        Method setterCallbackPre = null;
+                        try
                         {
-                            IStylePropertyCallback wrappedSetterCallback = new IStylePropertyCallback()
+                            setterCallbackPre = clazz.getMethod(setterCallbackPreName);
+                            hasInputValue = false;
+                        }
+                        catch (Exception ignored) { }
+                        if (setterCallbackPre == null)
+                            try
                             {
-                                @Override
-                                public void invoke(Element target)
-                                {
-                                    try
-                                    {
-                                        callback.invoke(target, new Object[0]);
-                                    }
-                                    catch (Exception ignored) { }
-                                }
+                                if (hasWrappedClass)
+                                    setterCallbackPre = clazz.getMethod(setterCallbackPreName, wrappedClass);
+                                else
+                                    setterCallbackPre = clazz.getMethod(setterCallbackPreName, fieldClass);
+                                hasInputValue = true;
+                            }
+                            catch (Exception ignored) { }
 
-                                @Override
-                                public String name() { return setterCallbackName; }
-                            };
-                            stylePropertySetterCallbacks.put(wrappedSetter, wrappedSetterCallback);
+                        if (setterCallbackPre != null)
+                        {
+                            if (setterCallbackPre.isAnnotationPresent(StylePropertyCallback.class) && setterCallbackPre.getReturnType().equals(void.class))
+                            {
+                                boolean finalHasInputValue = hasInputValue;
+                                Method finalSetterCallbackPre = setterCallbackPre;
+                                stylePropertySetterCallbacksPre.put(wrappedSetter, new IStylePropertyCallback()
+                                {
+                                    @Override
+                                    public void invoke(Element target, Object value)
+                                    {
+                                        try
+                                        {
+                                            if (finalHasInputValue)
+                                                finalSetterCallbackPre.invoke(target, value);
+                                            else
+                                                finalSetterCallbackPre.invoke(target, new Object[0]);
+                                        }
+                                        catch (Exception ignored) { }
+                                    }
+
+                                    @Override
+                                    public String name() { return setterCallbackPreName; }
+                                });
+                            }
                         }
                     }
+
+                    // setter callback post
+                    String setterCallbackPostName = styleProperty.setterCallbackPost();
+                    if (!setterCallbackPostName.isEmpty())
+                    {
+                        boolean hasInputValue = false;
+                        Method setterCallbackPost = null;
+                        try
+                        {
+                            setterCallbackPost = clazz.getMethod(setterCallbackPostName);
+                            hasInputValue = false;
+                        }
+                        catch (Exception ignored) { }
+                        if (setterCallbackPost == null)
+                            try
+                            {
+                                if (hasWrappedClass)
+                                    setterCallbackPost = clazz.getMethod(setterCallbackPostName, wrappedClass);
+                                else
+                                    setterCallbackPost = clazz.getMethod(setterCallbackPostName, fieldClass);
+                                hasInputValue = true;
+                            }
+                            catch (Exception ignored) { }
+
+                        if (setterCallbackPost != null)
+                        {
+                            if (setterCallbackPost.isAnnotationPresent(StylePropertyCallback.class) && setterCallbackPost.getReturnType().equals(void.class))
+                            {
+                                boolean finalHasInputValue = hasInputValue;
+                                Method finalSetterCallbackPost = setterCallbackPost;
+                                stylePropertySetterCallbacksPost.put(wrappedSetter, new IStylePropertyCallback()
+                                {
+                                    @Override
+                                    public void invoke(Element target, Object value)
+                                    {
+                                        try
+                                        {
+                                            if (finalHasInputValue)
+                                                finalSetterCallbackPost.invoke(target, value);
+                                            else
+                                                finalSetterCallbackPost.invoke(target, new Object[0]);
+                                        }
+                                        catch (Exception ignored) { }
+                                    }
+
+                                    @Override
+                                    public String name() { return setterCallbackPostName; }
+                                });
+                            }
+                        }
+                    }
+
+                    // class
+                    stylePropertyClasses.put(wrappedSetter, hasWrappedClass ? wrappedClass : fieldClass);
                 }
                 catch (Exception ignored) { }
             }

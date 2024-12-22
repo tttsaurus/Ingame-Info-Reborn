@@ -7,10 +7,10 @@ import com.tttsaurus.ingameinfo.common.api.gui.style.StyleProperty;
 @RegisterElement
 public abstract class Sized extends Element
 {
-    @StyleProperty(setterCallback = "requestReCalc")
+    @StyleProperty(setterCallbackPost = "requestReCalc")
     public float width;
 
-    @StyleProperty(setterCallback = "requestReCalc")
+    @StyleProperty(setterCallbackPost = "requestReCalc")
     public float height;
 
     @Override

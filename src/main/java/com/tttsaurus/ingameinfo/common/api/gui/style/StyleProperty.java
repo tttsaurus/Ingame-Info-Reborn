@@ -10,5 +10,6 @@ import java.lang.annotation.Target;
 public @interface StyleProperty
 {
     String name() default "";
-    String setterCallback() default "";
+    String setterCallbackPre() default "";
+    String setterCallbackPost() default "";
 }

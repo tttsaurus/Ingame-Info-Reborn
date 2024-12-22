@@ -13,11 +13,13 @@ import java.util.*;
 @SuppressWarnings("all")
 public final class ElementRegistry
 {
-    // IStylePropertySetter is the primary key here
     // key: element class name
     private static final Map<String, Map<String, IStylePropertySetter>> stylePropertySetters = new HashMap<>();
+
+    // IStylePropertySetter is the primary key here
     private static final Map<IStylePropertySetter, IDeserializer<?>> stylePropertyDeserializers = new HashMap<>();
-    private static final Map<IStylePropertySetter, IStylePropertyCallback> stylePropertySetterCallbacks = new HashMap<>();
+    private static final Map<IStylePropertySetter, IStylePropertyCallback> stylePropertySetterCallbacksPre = new HashMap<>();
+    private static final Map<IStylePropertySetter, IStylePropertyCallback> stylePropertySetterCallbacksPost = new HashMap<>();
     private static final Map<IStylePropertySetter, Class<?>> stylePropertyClasses = new HashMap<>();
 
     private static final List<Class<? extends Element>> registeredElements = new ArrayList<>();
@@ -46,9 +48,14 @@ public final class ElementRegistry
         return stylePropertyDeserializers.get(setter);
     }
     @Nullable
-    public static IStylePropertyCallback getStylePropertySetterCallback(IStylePropertySetter setter)
+    public static IStylePropertyCallback getStylePropertySetterCallbackPre(IStylePropertySetter setter)
     {
-        return stylePropertySetterCallbacks.get(setter);
+        return stylePropertySetterCallbacksPre.get(setter);
+    }
+    @Nullable
+    public static IStylePropertyCallback getStylePropertySetterCallbackPost(IStylePropertySetter setter)
+    {
+        return stylePropertySetterCallbacksPost.get(setter);
     }
     @Nullable
     public static Class<?> getStylePropertyClass(IStylePropertySetter setter)
@@ -58,7 +65,9 @@ public final class ElementRegistry
 
     public static ImmutableMap<String, Map<String, IStylePropertySetter>> getStylePropertySetters() { return ImmutableMap.copyOf(stylePropertySetters); }
     public static ImmutableMap<IStylePropertySetter, IDeserializer<?>> getStylePropertyDeserializers() { return ImmutableMap.copyOf(stylePropertyDeserializers); }
-    public static ImmutableMap<IStylePropertySetter, IStylePropertyCallback> getStylePropertySetterCallbacks() { return ImmutableMap.copyOf(stylePropertySetterCallbacks); }
+    public static ImmutableMap<IStylePropertySetter, IStylePropertyCallback> getStylePropertySetterCallbacksPre() { return ImmutableMap.copyOf(stylePropertySetterCallbacksPre); }
+    public static ImmutableMap<IStylePropertySetter, IStylePropertyCallback> getStylePropertySetterCallbacksPost() { return ImmutableMap.copyOf(stylePropertySetterCallbacksPost); }
+    public static ImmutableMap<IStylePropertySetter, Class<?>> getStylePropertyClasses() { return ImmutableMap.copyOf(stylePropertyClasses); }
 
     public static ImmutableList<Class<? extends Element>> getRegisteredElements() { return ImmutableList.copyOf(registeredElements); }
     public static void addElementPackage(String packageName) { elementPackages.add(packageName); }
@@ -72,14 +81,16 @@ public final class ElementRegistry
 
         stylePropertySetters.clear();
         stylePropertyDeserializers.clear();
-        stylePropertySetterCallbacks.clear();
+        stylePropertySetterCallbacksPre.clear();
+        stylePropertySetterCallbacksPost.clear();
         stylePropertyClasses.clear();
 
         for (Class<? extends Element> clazz: registeredElements)
             stylePropertySetters.put(clazz.getName(), RegistryUtils.handleStyleProperties(
                     clazz,
                     stylePropertyDeserializers,
-                    stylePropertySetterCallbacks,
+                    stylePropertySetterCallbacksPre,
+                    stylePropertySetterCallbacksPost,
                     stylePropertyClasses));
     }
 }

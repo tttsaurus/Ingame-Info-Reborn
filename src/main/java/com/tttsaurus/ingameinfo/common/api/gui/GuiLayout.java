@@ -124,9 +124,11 @@ public class GuiLayout
             IStylePropertySetter setter = ElementRegistry.getStylePropertySetter(element.getClass(), style.name);
             if (setter != null)
             {
+                IStylePropertyCallback setterCallbackPre = ElementRegistry.getStylePropertySetterCallbackPre(setter);
+                if (setterCallbackPre != null) setterCallbackPre.invoke(element, style.value);
                 setter.set(element, style.value);
-                IStylePropertyCallback setterCallback = ElementRegistry.getStylePropertySetterCallback(setter);
-                if (setterCallback != null) setterCallback.invoke(element);
+                IStylePropertyCallback setterCallbackPost = ElementRegistry.getStylePropertySetterCallbackPost(setter);
+                if (setterCallbackPost != null) setterCallbackPost.invoke(element, style.value);
             }
         }
     }

@@ -327,4 +327,4 @@ public final class IgiGuiLifeCycle
 // todo: add "constructable" to RegisterElement
 // todo: add button group to handle complex button setup
 // todo: optimize reCalc logic
-// todo: add pre & post callbacks to style properties
+// todo: add "cancelable" to style property callback pre

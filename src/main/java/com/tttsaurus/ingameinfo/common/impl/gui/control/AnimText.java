@@ -22,7 +22,7 @@ public class AnimText extends Element
         animTextRenderer.setText(text);
         requestReCalc();
     }
-    @StyleProperty(setterCallback = "setTextCallback")
+    @StyleProperty(setterCallbackPost = "setTextCallback")
     public String text;
 
     @StylePropertyCallback
@@ -31,7 +31,7 @@ public class AnimText extends Element
         animTextRenderer.setScale(scale);
         requestReCalc();
     }
-    @StyleProperty(setterCallback = "setScaleCallback")
+    @StyleProperty(setterCallbackPost = "setScaleCallback")
     public float scale;
 
     @StylePropertyCallback
@@ -39,7 +39,7 @@ public class AnimText extends Element
     {
         animTextRenderer.setColor(color);
     }
-    @StyleProperty(setterCallback = "setColorCallback")
+    @StyleProperty(setterCallbackPost = "setColorCallback")
     public int color;
 
     @Override
