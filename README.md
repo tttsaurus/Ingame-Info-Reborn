@@ -70,6 +70,9 @@ public class TestViewModel extends ViewModel<TestView>
         testString.set("New Test");
     }
 }
+
+MvvmRegistry.register("test", TestViewModel.class);
+IgiGuiManager.openGui("test");
 ```
 The default alignment and pivot are the top-left corner.
 ![Snipaste_2024-12-21_19-01-57](https://github.com/user-attachments/assets/b6b23e72-5081-45d7-97d9-b811c8336141)
