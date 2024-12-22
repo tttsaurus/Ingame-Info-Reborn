@@ -1,4 +1,4 @@
-package com.tttsaurus.ingameinfo.common.api.mvvm.registry.internal;
+package com.tttsaurus.ingameinfo.common.api.internal;
 
 public interface IFunc_1Param<TReturn, T0>
 {

@@ -4,22 +4,20 @@ import com.tttsaurus.ingameinfo.common.api.gui.Element;
 import com.tttsaurus.ingameinfo.common.api.gui.GuiLayout;
 import com.tttsaurus.ingameinfo.common.api.gui.style.IStylePropertyCallback;
 import com.tttsaurus.ingameinfo.common.api.gui.style.IStylePropertySetter;
+import com.tttsaurus.ingameinfo.common.api.internal.InternalMethods;
 import com.tttsaurus.ingameinfo.common.api.mvvm.view.View;
 import com.tttsaurus.ingameinfo.common.api.mvvm.viewmodel.ViewModel;
 import com.tttsaurus.ingameinfo.common.impl.gui.layout.MainGroup;
 import com.tttsaurus.ingameinfo.common.impl.gui.registry.ElementRegistry;
-import com.tttsaurus.ingameinfo.common.impl.mvvm.registry.MvvmRegistry;
 import java.lang.reflect.ParameterizedType;
 import java.util.List;
 
 public class VvmBinding<TView extends View>
 {
     private TView view;
-    private ViewModel<TView> viewModel;
 
     public GuiLayout init(ViewModel<TView> viewModel)
     {
-        this.viewModel = viewModel;
         Class<?> viewClass = (Class<?>)((ParameterizedType)viewModel.getClass().getGenericSuperclass()).getActualTypeArguments()[0];
         try
         {
@@ -27,16 +25,17 @@ public class VvmBinding<TView extends View>
         }
         catch (Exception ignored) { }
 
-        GuiLayout guiLayout = MvvmRegistry.internalMethods.GuiLayout$constructor.invoke();
+        GuiLayout guiLayout = InternalMethods.instance.GuiLayout$constructor.invoke();
         view.init(guiLayout);
-        MainGroup mainGroup = MvvmRegistry.internalMethods.GuiLayout$mainGroup$getter.invoke(guiLayout);
-        MvvmRegistry.internalMethods.View$mainGroup$setter.invoke(view, mainGroup);
+        MainGroup mainGroup = InternalMethods.instance.GuiLayout$mainGroup$getter.invoke(guiLayout);
+        InternalMethods.instance.View$mainGroup$setter.invoke(view, mainGroup);
 
         return guiLayout;
     }
 
     public <T> void bindReactiveObject(Reactive reactive, ReactiveObject<T> reactiveObject)
     {
+        if (reactive.targetUid().isEmpty()) return;
         Class<T> reactiveObjectParameter;
         try
         {

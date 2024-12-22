@@ -12,10 +12,10 @@ import java.util.Map;
 // ofc T can't be View
 public abstract class ViewModel<T extends View>
 {
-    private VvmBinding<T> binding = new VvmBinding<>();
+    private final VvmBinding<T> binding = new VvmBinding<>();
 
     // entry point
-    public GuiLayout init()
+    private GuiLayout init()
     {
         GuiLayout guiLayout = binding.init(this);
 

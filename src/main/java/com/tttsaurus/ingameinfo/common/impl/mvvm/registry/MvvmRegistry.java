@@ -2,7 +2,6 @@ package com.tttsaurus.ingameinfo.common.impl.mvvm.registry;
 
 import com.tttsaurus.ingameinfo.common.api.mvvm.binding.IReactiveObjectGetter;
 import com.tttsaurus.ingameinfo.common.api.mvvm.binding.Reactive;
-import com.tttsaurus.ingameinfo.common.api.mvvm.registry.internal.InternalMethods;
 import com.tttsaurus.ingameinfo.common.api.mvvm.registry.RegistryUtils;
 import com.tttsaurus.ingameinfo.common.api.mvvm.viewmodel.ViewModel;
 import javax.annotation.Nullable;
@@ -20,8 +19,6 @@ public final class MvvmRegistry
         if (map == null) return new HashMap<>();
         return map;
     }
-
-    public static final InternalMethods internalMethods = new InternalMethods();
 
     private static final Map<String, Class<? extends ViewModel<?>>> viewModelClasses = new HashMap<>();
 

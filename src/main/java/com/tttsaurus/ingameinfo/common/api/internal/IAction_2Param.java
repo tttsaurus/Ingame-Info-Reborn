@@ -1,4 +1,4 @@
-package com.tttsaurus.ingameinfo.common.api.mvvm.registry.internal;
+package com.tttsaurus.ingameinfo.common.api.internal;
 
 public interface IAction_2Param<T0, T1>
 {
