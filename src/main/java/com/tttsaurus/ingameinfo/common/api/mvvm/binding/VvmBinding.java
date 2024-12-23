@@ -9,6 +9,7 @@ import com.tttsaurus.ingameinfo.common.api.internal.IAction_1Param;
 import com.tttsaurus.ingameinfo.common.api.internal.InternalMethods;
 import com.tttsaurus.ingameinfo.common.api.mvvm.view.View;
 import com.tttsaurus.ingameinfo.common.api.mvvm.viewmodel.ViewModel;
+import com.tttsaurus.ingameinfo.common.api.reflection.TypeUtils;
 import com.tttsaurus.ingameinfo.common.impl.gui.layout.MainGroup;
 import com.tttsaurus.ingameinfo.common.impl.gui.registry.ElementRegistry;
 import java.lang.reflect.ParameterizedType;
@@ -56,8 +57,7 @@ public class VvmBinding<TView extends View>
             Class<?> stylePropertyClass = ElementRegistry.getStylePropertyClass(setter);
 
             if (setter != null && stylePropertyClass != null)
-                // todo: better type check
-                if (reactive.initiativeSync() && reactiveObjectParameter.equals(stylePropertyClass))
+                if (reactive.initiativeSync() && TypeUtils.looseTypeCheck(reactiveObjectParameter, stylePropertyClass))
                 {
                     IAction_1Param<Object> action = ElementRegistry.getStylePropertySetterWithCallbacksHandled(
                             setter,
