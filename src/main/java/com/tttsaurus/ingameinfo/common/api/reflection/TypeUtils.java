@@ -4,7 +4,9 @@ public final class TypeUtils
 {
     public static boolean looseTypeCheck(Class<?> clazz1, Class<?> clazz2)
     {
-        if (isIntOrWrappedInt(clazz1) && isIntOrWrappedInt(clazz2))
+        if (clazz1.getName().equals(clazz2.getName()))
+            return true;
+        else if (isIntOrWrappedInt(clazz1) && isIntOrWrappedInt(clazz2))
             return true;
         else if (isLongOrWrappedLong(clazz1) && isLongOrWrappedLong(clazz2))
             return true;
@@ -20,7 +22,7 @@ public final class TypeUtils
             return true;
         else if (isBooleanOrWrappedBoolean(clazz1) && isBooleanOrWrappedBoolean(clazz2))
             return true;
-        else return clazz1.getName().equals(clazz2.getName());
+        return false;
     }
     public static boolean isFromParentPackage(Class<?> clazz, String packageName)
     {

@@ -21,10 +21,12 @@ import java.util.jar.JarFile;
 @SuppressWarnings("all")
 public final class RegistryUtils
 {
-    public static List<Class<? extends Element>> findRegisteredElements(String packageName)
+    public static Map<String, Class<? extends Element>> handleRegisteredElements(
+            String packageName,
+            Map<Class<? extends Element>, RegisterElement> elementAnnotations)
     {
         Class<RegisterElement> annotation = RegisterElement.class;
-        List<Class<? extends Element>> annotatedClasses = new ArrayList<>();
+        Map<String, Class<? extends Element>> annotatedClasses = new HashMap<>();
 
         String path = packageName.replace(".", "/");
         URL packageURL = annotation.getClassLoader().getResource(path);
@@ -53,7 +55,11 @@ public final class RegistryUtils
                                 {
                                     Class<?> clazz = Class.forName(className);
                                     if (clazz.isAnnotationPresent(annotation) && Element.class.isAssignableFrom(clazz))
-                                        annotatedClasses.add((Class<? extends Element>) clazz);
+                                    {
+                                        Class<? extends Element> elementClass = (Class<? extends Element>)clazz;
+                                        annotatedClasses.put(clazz.getSimpleName(), elementClass);
+                                        elementAnnotations.put(elementClass, elementClass.getAnnotation(annotation));
+                                    }
                                 }
                                 catch (ClassNotFoundException ignored) { }
                             }

@@ -3,6 +3,7 @@ package com.tttsaurus.ingameinfo.common.impl.gui.registry;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import com.tttsaurus.ingameinfo.common.api.gui.Element;
+import com.tttsaurus.ingameinfo.common.api.gui.registry.RegisterElement;
 import com.tttsaurus.ingameinfo.common.api.gui.registry.RegistryUtils;
 import com.tttsaurus.ingameinfo.common.api.gui.style.CallbackInfo;
 import com.tttsaurus.ingameinfo.common.api.gui.style.IStylePropertyCallbackPost;
@@ -26,7 +27,10 @@ public final class ElementRegistry
     private static final Map<IStylePropertySetter, IStylePropertyCallbackPost> stylePropertySetterCallbacksPost = new HashMap<>();
     private static final Map<IStylePropertySetter, Class<?>> stylePropertyClasses = new HashMap<>();
 
-    private static final List<Class<? extends Element>> registeredElements = new ArrayList<>();
+    // key: element class simple name
+    private static final Map<String, Class<? extends Element>> registeredElements = new HashMap<>();
+    private static final Map<Class<? extends Element>, RegisterElement> elementAnnotations = new HashMap<>();
+
     private static final List<String> elementPackages = new ArrayList<>(Arrays.asList(
             "com.tttsaurus.ingameinfo.common.api.gui",
             "com.tttsaurus.ingameinfo.common.impl.gui.control",
@@ -66,6 +70,21 @@ public final class ElementRegistry
     {
         return stylePropertyClasses.get(setter);
     }
+    @Nullable
+    public static Element newElement(String name)
+    {
+        Class<? extends Element> clazz = registeredElements.get(name);
+        if (clazz == null) return null;
+        RegisterElement annotation = elementAnnotations.get(clazz);
+        if (annotation == null) return null;
+        if (!annotation.constructable()) return null;
+        try
+        {
+            return clazz.newInstance();
+        }
+        catch (Exception e) { return null; }
+    }
+
     public static IAction_1Param<Object> getStylePropertySetterWithCallbacksHandled(
             @Nonnull IStylePropertySetter setter,
             @Nonnull Element element,
@@ -90,15 +109,18 @@ public final class ElementRegistry
     public static ImmutableMap<IStylePropertySetter, IStylePropertyCallbackPost> getStylePropertySetterCallbacksPost() { return ImmutableMap.copyOf(stylePropertySetterCallbacksPost); }
     public static ImmutableMap<IStylePropertySetter, Class<?>> getStylePropertyClasses() { return ImmutableMap.copyOf(stylePropertyClasses); }
 
-    public static ImmutableList<Class<? extends Element>> getRegisteredElements() { return ImmutableList.copyOf(registeredElements); }
+    public static ImmutableList<Class<? extends Element>> getRegisteredElements() { return ImmutableList.copyOf(registeredElements.values()); }
     public static void addElementPackage(String packageName) { elementPackages.add(packageName); }
 
     public static void register()
     {
         registeredElements.clear();
+        elementAnnotations.clear();
 
         for (String packageName: elementPackages)
-            registeredElements.addAll(RegistryUtils.findRegisteredElements(packageName));
+            registeredElements.putAll(RegistryUtils.handleRegisteredElements(
+                    packageName,
+                    elementAnnotations));
 
         stylePropertySetters.clear();
         stylePropertyDeserializers.clear();
@@ -106,7 +128,7 @@ public final class ElementRegistry
         stylePropertySetterCallbacksPost.clear();
         stylePropertyClasses.clear();
 
-        for (Class<? extends Element> clazz: registeredElements)
+        for (Class<? extends Element> clazz: registeredElements.values())
             stylePropertySetters.put(clazz.getName(), RegistryUtils.handleStyleProperties(
                     clazz,
                     stylePropertyDeserializers,

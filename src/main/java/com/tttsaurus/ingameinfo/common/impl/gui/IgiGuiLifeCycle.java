@@ -324,6 +324,5 @@ public final class IgiGuiLifeCycle
 }
 
 // todo: approximate mvvm (HIGH PRIORITY)
-// todo: add "constructable" to RegisterElement
 // todo: add button group to handle complex button setup
 // todo: optimize reCalc logic

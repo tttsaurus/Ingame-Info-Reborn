@@ -15,7 +15,13 @@ public class PrimitiveTypesDeserializer<T> implements IDeserializer<T>
         {
             // int
             if (TypeUtils.isIntOrWrappedInt(clazz))
-                try { return (T)(Object)Integer.parseInt(raw); }
+                try
+                {
+                    if (raw.startsWith("0x"))
+                        return (T)(Object)Integer.parseInt(raw.substring(2), 16);
+                    else
+                        return (T)(Object)Integer.parseInt(raw);
+                }
                 catch (Exception ignored) { return (T)(Object)0; }
             // long
             else if (TypeUtils.isLongOrWrappedLong(clazz))

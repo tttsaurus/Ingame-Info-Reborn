@@ -8,4 +8,7 @@ import java.lang.annotation.Target;
 // register an element in order to use StyleProperty
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.TYPE)
-public @interface RegisterElement { }
+public @interface RegisterElement
+{
+    boolean constructable() default true;
+}
