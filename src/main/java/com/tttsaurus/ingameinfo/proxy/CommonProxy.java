@@ -3,7 +3,8 @@ package com.tttsaurus.ingameinfo.proxy;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import com.tttsaurus.ingameinfo.common.api.gui.Element;
-import com.tttsaurus.ingameinfo.common.api.gui.style.IStylePropertyCallback;
+import com.tttsaurus.ingameinfo.common.api.gui.style.IStylePropertyCallbackPost;
+import com.tttsaurus.ingameinfo.common.api.gui.style.IStylePropertyCallbackPre;
 import com.tttsaurus.ingameinfo.common.api.gui.style.IStylePropertySetter;
 import com.tttsaurus.ingameinfo.common.api.internal.InternalMethods;
 import com.tttsaurus.ingameinfo.common.api.reflection.TypeUtils;
@@ -39,8 +40,8 @@ public class CommonProxy
         ImmutableList<Class<? extends Element>> elementClasses = ElementRegistry.getRegisteredElements();
         ImmutableMap<String, Map<String, IStylePropertySetter>> setters = ElementRegistry.getStylePropertySetters();
         ImmutableMap<IStylePropertySetter, IDeserializer<?>> deserializers = ElementRegistry.getStylePropertyDeserializers();
-        ImmutableMap<IStylePropertySetter, IStylePropertyCallback> setterCallbacksPre = ElementRegistry.getStylePropertySetterCallbacksPre();
-        ImmutableMap<IStylePropertySetter, IStylePropertyCallback> setterCallbacksPost = ElementRegistry.getStylePropertySetterCallbacksPost();
+        ImmutableMap<IStylePropertySetter, IStylePropertyCallbackPre> setterCallbacksPre = ElementRegistry.getStylePropertySetterCallbacksPre();
+        ImmutableMap<IStylePropertySetter, IStylePropertyCallbackPost> setterCallbacksPost = ElementRegistry.getStylePropertySetterCallbacksPost();
         ImmutableMap<IStylePropertySetter, Class<?>> classes = ElementRegistry.getStylePropertyClasses();
 
         for (Class<? extends Element> clazz: elementClasses)

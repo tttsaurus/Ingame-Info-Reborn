@@ -4,9 +4,13 @@ import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import com.tttsaurus.ingameinfo.common.api.gui.Element;
 import com.tttsaurus.ingameinfo.common.api.gui.registry.RegistryUtils;
-import com.tttsaurus.ingameinfo.common.api.gui.style.IStylePropertyCallback;
+import com.tttsaurus.ingameinfo.common.api.gui.style.CallbackInfo;
+import com.tttsaurus.ingameinfo.common.api.gui.style.IStylePropertyCallbackPost;
+import com.tttsaurus.ingameinfo.common.api.gui.style.IStylePropertyCallbackPre;
 import com.tttsaurus.ingameinfo.common.api.gui.style.IStylePropertySetter;
+import com.tttsaurus.ingameinfo.common.api.internal.IAction_1Param;
 import com.tttsaurus.ingameinfo.common.api.serialization.IDeserializer;
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.*;
 
@@ -18,8 +22,8 @@ public final class ElementRegistry
 
     // IStylePropertySetter is the primary key here
     private static final Map<IStylePropertySetter, IDeserializer<?>> stylePropertyDeserializers = new HashMap<>();
-    private static final Map<IStylePropertySetter, IStylePropertyCallback> stylePropertySetterCallbacksPre = new HashMap<>();
-    private static final Map<IStylePropertySetter, IStylePropertyCallback> stylePropertySetterCallbacksPost = new HashMap<>();
+    private static final Map<IStylePropertySetter, IStylePropertyCallbackPre> stylePropertySetterCallbacksPre = new HashMap<>();
+    private static final Map<IStylePropertySetter, IStylePropertyCallbackPost> stylePropertySetterCallbacksPost = new HashMap<>();
     private static final Map<IStylePropertySetter, Class<?>> stylePropertyClasses = new HashMap<>();
 
     private static final List<Class<? extends Element>> registeredElements = new ArrayList<>();
@@ -48,12 +52,12 @@ public final class ElementRegistry
         return stylePropertyDeserializers.get(setter);
     }
     @Nullable
-    public static IStylePropertyCallback getStylePropertySetterCallbackPre(IStylePropertySetter setter)
+    public static IStylePropertyCallbackPre getStylePropertySetterCallbackPre(IStylePropertySetter setter)
     {
         return stylePropertySetterCallbacksPre.get(setter);
     }
     @Nullable
-    public static IStylePropertyCallback getStylePropertySetterCallbackPost(IStylePropertySetter setter)
+    public static IStylePropertyCallbackPost getStylePropertySetterCallbackPost(IStylePropertySetter setter)
     {
         return stylePropertySetterCallbacksPost.get(setter);
     }
@@ -62,11 +66,28 @@ public final class ElementRegistry
     {
         return stylePropertyClasses.get(setter);
     }
+    public static IAction_1Param<Object> getStylePropertySetterWithCallbacksHandled(
+            @Nonnull IStylePropertySetter setter,
+            @Nonnull Element element,
+            IStylePropertyCallbackPre setterCallbackPre,
+            IStylePropertyCallbackPost setterCallbackPost)
+    {
+        return (value) ->
+        {
+            CallbackInfo callbackInfo = new CallbackInfo();
+            if (setterCallbackPre != null) setterCallbackPre.invoke(element, value, callbackInfo);
+            if (!callbackInfo.cancel)
+            {
+                setter.set(element, value);
+                if (setterCallbackPost != null) setterCallbackPost.invoke(element, value);
+            }
+        };
+    }
 
     public static ImmutableMap<String, Map<String, IStylePropertySetter>> getStylePropertySetters() { return ImmutableMap.copyOf(stylePropertySetters); }
     public static ImmutableMap<IStylePropertySetter, IDeserializer<?>> getStylePropertyDeserializers() { return ImmutableMap.copyOf(stylePropertyDeserializers); }
-    public static ImmutableMap<IStylePropertySetter, IStylePropertyCallback> getStylePropertySetterCallbacksPre() { return ImmutableMap.copyOf(stylePropertySetterCallbacksPre); }
-    public static ImmutableMap<IStylePropertySetter, IStylePropertyCallback> getStylePropertySetterCallbacksPost() { return ImmutableMap.copyOf(stylePropertySetterCallbacksPost); }
+    public static ImmutableMap<IStylePropertySetter, IStylePropertyCallbackPre> getStylePropertySetterCallbacksPre() { return ImmutableMap.copyOf(stylePropertySetterCallbacksPre); }
+    public static ImmutableMap<IStylePropertySetter, IStylePropertyCallbackPost> getStylePropertySetterCallbacksPost() { return ImmutableMap.copyOf(stylePropertySetterCallbacksPost); }
     public static ImmutableMap<IStylePropertySetter, Class<?>> getStylePropertyClasses() { return ImmutableMap.copyOf(stylePropertyClasses); }
 
     public static ImmutableList<Class<? extends Element>> getRegisteredElements() { return ImmutableList.copyOf(registeredElements); }

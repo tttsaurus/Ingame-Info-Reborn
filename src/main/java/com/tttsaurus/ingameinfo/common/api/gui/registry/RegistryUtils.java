@@ -1,10 +1,7 @@
 package com.tttsaurus.ingameinfo.common.api.gui.registry;
 
 import com.tttsaurus.ingameinfo.common.api.gui.Element;
-import com.tttsaurus.ingameinfo.common.api.gui.style.IStylePropertyCallback;
-import com.tttsaurus.ingameinfo.common.api.gui.style.IStylePropertySetter;
-import com.tttsaurus.ingameinfo.common.api.gui.style.StyleProperty;
-import com.tttsaurus.ingameinfo.common.api.gui.style.StylePropertyCallback;
+import com.tttsaurus.ingameinfo.common.api.gui.style.*;
 import com.tttsaurus.ingameinfo.common.api.gui.style.wrapped.IWrappedStyleProperty;
 import com.tttsaurus.ingameinfo.common.api.reflection.TypeUtils;
 import com.tttsaurus.ingameinfo.common.api.serialization.Deserializer;
@@ -73,8 +70,8 @@ public final class RegistryUtils
     public static Map<String, IStylePropertySetter> handleStyleProperties(
             Class<? extends Element> clazz,
             Map<IStylePropertySetter, IDeserializer<?>> stylePropertyDeserializers,
-            Map<IStylePropertySetter, IStylePropertyCallback> stylePropertySetterCallbacksPre,
-            Map<IStylePropertySetter, IStylePropertyCallback> stylePropertySetterCallbacksPost,
+            Map<IStylePropertySetter, IStylePropertyCallbackPre> stylePropertySetterCallbacksPre,
+            Map<IStylePropertySetter, IStylePropertyCallbackPost> stylePropertySetterCallbacksPost,
             Map<IStylePropertySetter, Class<?>> stylePropertyClasses)
     {
         Map<String, IStylePropertySetter> setters = new HashMap<>();
@@ -151,7 +148,7 @@ public final class RegistryUtils
                         Method setterCallbackPre = null;
                         try
                         {
-                            setterCallbackPre = clazz.getMethod(setterCallbackPreName);
+                            setterCallbackPre = clazz.getMethod(setterCallbackPreName, CallbackInfo.class);
                             hasInputValue = false;
                         }
                         catch (Exception ignored) { }
@@ -159,9 +156,9 @@ public final class RegistryUtils
                             try
                             {
                                 if (hasWrappedClass)
-                                    setterCallbackPre = clazz.getMethod(setterCallbackPreName, wrappedClass);
+                                    setterCallbackPre = clazz.getMethod(setterCallbackPreName, wrappedClass, CallbackInfo.class);
                                 else
-                                    setterCallbackPre = clazz.getMethod(setterCallbackPreName, fieldClass);
+                                    setterCallbackPre = clazz.getMethod(setterCallbackPreName, fieldClass, CallbackInfo.class);
                                 hasInputValue = true;
                             }
                             catch (Exception ignored) { }
@@ -172,17 +169,17 @@ public final class RegistryUtils
                             {
                                 boolean finalHasInputValue = hasInputValue;
                                 Method finalSetterCallbackPre = setterCallbackPre;
-                                stylePropertySetterCallbacksPre.put(wrappedSetter, new IStylePropertyCallback()
+                                stylePropertySetterCallbacksPre.put(wrappedSetter, new IStylePropertyCallbackPre()
                                 {
                                     @Override
-                                    public void invoke(Element target, Object value)
+                                    public void invoke(Element target, Object value, CallbackInfo callbackInfo)
                                     {
                                         try
                                         {
                                             if (finalHasInputValue)
-                                                finalSetterCallbackPre.invoke(target, value);
+                                                finalSetterCallbackPre.invoke(target, value, callbackInfo);
                                             else
-                                                finalSetterCallbackPre.invoke(target, new Object[0]);
+                                                finalSetterCallbackPre.invoke(target, callbackInfo);
                                         }
                                         catch (Exception ignored) { }
                                     }
@@ -223,7 +220,7 @@ public final class RegistryUtils
                             {
                                 boolean finalHasInputValue = hasInputValue;
                                 Method finalSetterCallbackPost = setterCallbackPost;
-                                stylePropertySetterCallbacksPost.put(wrappedSetter, new IStylePropertyCallback()
+                                stylePropertySetterCallbacksPost.put(wrappedSetter, new IStylePropertyCallbackPost()
                                 {
                                     @Override
                                     public void invoke(Element target, Object value)

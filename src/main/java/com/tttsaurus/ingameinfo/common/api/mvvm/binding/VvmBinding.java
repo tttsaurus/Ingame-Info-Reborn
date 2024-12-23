@@ -2,8 +2,10 @@ package com.tttsaurus.ingameinfo.common.api.mvvm.binding;
 
 import com.tttsaurus.ingameinfo.common.api.gui.Element;
 import com.tttsaurus.ingameinfo.common.api.gui.GuiLayout;
-import com.tttsaurus.ingameinfo.common.api.gui.style.IStylePropertyCallback;
+import com.tttsaurus.ingameinfo.common.api.gui.style.IStylePropertyCallbackPost;
+import com.tttsaurus.ingameinfo.common.api.gui.style.IStylePropertyCallbackPre;
 import com.tttsaurus.ingameinfo.common.api.gui.style.IStylePropertySetter;
+import com.tttsaurus.ingameinfo.common.api.internal.IAction_1Param;
 import com.tttsaurus.ingameinfo.common.api.internal.InternalMethods;
 import com.tttsaurus.ingameinfo.common.api.mvvm.view.View;
 import com.tttsaurus.ingameinfo.common.api.mvvm.viewmodel.ViewModel;
@@ -12,6 +14,7 @@ import com.tttsaurus.ingameinfo.common.impl.gui.registry.ElementRegistry;
 import java.lang.reflect.ParameterizedType;
 import java.util.List;
 
+@SuppressWarnings("all")
 public class VvmBinding<TView extends View>
 {
     private TView view;
@@ -48,18 +51,24 @@ public class VvmBinding<TView extends View>
         for (Element element: elements)
         {
             IStylePropertySetter setter = ElementRegistry.getStylePropertySetter(element.getClass(), reactive.property());
-            IStylePropertyCallback setterCallbackPre = ElementRegistry.getStylePropertySetterCallbackPost(setter);
-            IStylePropertyCallback setterCallbackPost = ElementRegistry.getStylePropertySetterCallbackPost(setter);
+            IStylePropertyCallbackPre setterCallbackPre = ElementRegistry.getStylePropertySetterCallbackPre(setter);
+            IStylePropertyCallbackPost setterCallbackPost = ElementRegistry.getStylePropertySetterCallbackPost(setter);
             Class<?> stylePropertyClass = ElementRegistry.getStylePropertyClass(setter);
 
             if (setter != null && stylePropertyClass != null)
+                // todo: better type check
                 if (reactive.initiativeSync() && reactiveObjectParameter.equals(stylePropertyClass))
+                {
+                    IAction_1Param<Object> action = ElementRegistry.getStylePropertySetterWithCallbacksHandled(
+                            setter,
+                            element,
+                            setterCallbackPre,
+                            setterCallbackPost);
                     reactiveObject.setterCallbacks.add((value) ->
                     {
-                        if (setterCallbackPre != null) setterCallbackPre.invoke(element, value);
-                        setter.set(element, value);
-                        if (setterCallbackPost != null) setterCallbackPost.invoke(element, value);
+                        action.invoke(value);
                     });
+                }
         }
     }
 }

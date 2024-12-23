@@ -1,7 +1,6 @@
 package com.tttsaurus.ingameinfo.common.api.gui;
 
 import com.tttsaurus.ingameinfo.common.api.gui.layout.ElementGroup;
-import com.tttsaurus.ingameinfo.common.api.gui.style.IStylePropertyCallback;
 import com.tttsaurus.ingameinfo.common.api.gui.style.IStylePropertySetter;
 import com.tttsaurus.ingameinfo.common.impl.gui.layout.MainGroup;
 import com.tttsaurus.ingameinfo.common.impl.gui.registry.ElementRegistry;
@@ -123,13 +122,11 @@ public class GuiLayout
         {
             IStylePropertySetter setter = ElementRegistry.getStylePropertySetter(element.getClass(), style.name);
             if (setter != null)
-            {
-                IStylePropertyCallback setterCallbackPre = ElementRegistry.getStylePropertySetterCallbackPre(setter);
-                if (setterCallbackPre != null) setterCallbackPre.invoke(element, style.value);
-                setter.set(element, style.value);
-                IStylePropertyCallback setterCallbackPost = ElementRegistry.getStylePropertySetterCallbackPost(setter);
-                if (setterCallbackPost != null) setterCallbackPost.invoke(element, style.value);
-            }
+                ElementRegistry.getStylePropertySetterWithCallbacksHandled(
+                        setter,
+                        element,
+                        ElementRegistry.getStylePropertySetterCallbackPre(setter),
+                        ElementRegistry.getStylePropertySetterCallbackPost(setter)).invoke(style.value);
         }
     }
 }
