@@ -110,6 +110,19 @@ public final class ElementRegistry
     public static ImmutableMap<IStylePropertySetter, Class<?>> getStylePropertyClasses() { return ImmutableMap.copyOf(stylePropertyClasses); }
 
     public static ImmutableList<Class<? extends Element>> getRegisteredElements() { return ImmutableList.copyOf(registeredElements.values()); }
+    public static List<Class<? extends Element>> getConstructableElements()
+    {
+        List<Class<? extends Element>> list = new ArrayList<>();
+        for (Class<? extends Element> clazz: registeredElements.values())
+        {
+            RegisterElement annotation = elementAnnotations.get(clazz);
+            if (annotation != null)
+                if (annotation.constructable())
+                    list.add(clazz);
+        }
+        return list;
+    }
+
     public static void addElementPackage(String packageName) { elementPackages.add(packageName); }
 
     public static void register()

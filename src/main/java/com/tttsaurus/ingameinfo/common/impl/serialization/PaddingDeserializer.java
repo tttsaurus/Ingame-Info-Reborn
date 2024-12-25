@@ -9,7 +9,11 @@ public class PaddingDeserializer implements IDeserializer<Padding>
     @Override
     public Padding deserialize(String raw, String protocol)
     {
-        if (protocol.equals("json"))
+        if (protocol.equals("ixml"))
+        {
+
+        }
+        else if (protocol.equals("json"))
         {
             String top = RawJsonUtils.extractValue(raw, "top");
             String bottom = RawJsonUtils.extractValue(raw, "bottom");

@@ -8,11 +8,7 @@ public class PivotDeserializer implements IDeserializer<Pivot>
     @Override
     public Pivot deserialize(String raw, String protocol)
     {
-        if (protocol.equals("json"))
-        {
-            try { return Pivot.valueOf(raw); }
-            catch (Exception ignored) { return null; }
-        }
-        return null;
+        try { return Pivot.valueOf(raw); }
+        catch (Exception ignored) { return null; }
     }
 }

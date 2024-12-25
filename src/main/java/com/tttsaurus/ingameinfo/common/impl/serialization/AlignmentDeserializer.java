@@ -8,11 +8,7 @@ public class AlignmentDeserializer implements IDeserializer<Alignment>
     @Override
     public Alignment deserialize(String raw, String protocol)
     {
-        if (protocol.equals("json"))
-        {
-            try { return Alignment.valueOf(raw); }
-            catch (Exception ignored) { return null; }
-        }
-        return null;
+        try { return Alignment.valueOf(raw); }
+        catch (Exception ignored) { return null; }
     }
 }

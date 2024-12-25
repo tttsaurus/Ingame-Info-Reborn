@@ -1,6 +1,7 @@
 package com.tttsaurus.ingameinfo.common.impl.serialization;
 
 import com.tttsaurus.ingameinfo.common.api.serialization.IDeserializer;
+import com.tttsaurus.ingameinfo.common.api.serialization.ixml.RawIxmlUtils;
 import com.tttsaurus.ingameinfo.common.api.serialization.json.RawJsonUtils;
 import net.minecraft.util.Tuple;
 import java.util.ArrayList;
@@ -11,7 +12,11 @@ public class RawElementStylesDeserializer implements IDeserializer<List<Tuple<St
     @Override
     public List<Tuple<String, String>> deserialize(String raw, String protocol)
     {
-        if (protocol.equals("json"))
+        if (protocol.equals("ixml"))
+        {
+            return RawIxmlUtils.splitParams(raw);
+        }
+        else if (protocol.equals("json"))
         {
             List<Tuple<String, String>> list = new ArrayList<>();
             List<String> args = RawJsonUtils.extractKeys(raw);

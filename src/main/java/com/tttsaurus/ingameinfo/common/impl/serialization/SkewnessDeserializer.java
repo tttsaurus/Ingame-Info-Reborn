@@ -8,11 +8,7 @@ public class SkewnessDeserializer implements IDeserializer<Skewness>
     @Override
     public Skewness deserialize(String raw, String protocol)
     {
-        if (protocol.equals("json"))
-        {
-            try { return Skewness.valueOf(raw); }
-            catch (Exception ignored) { return null; }
-        }
-        return null;
+        try { return Skewness.valueOf(raw); }
+        catch (Exception ignored) { return null; }
     }
 }
