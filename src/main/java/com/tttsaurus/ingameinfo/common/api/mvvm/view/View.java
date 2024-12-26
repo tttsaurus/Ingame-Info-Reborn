@@ -3,7 +3,10 @@ package com.tttsaurus.ingameinfo.common.api.mvvm.view;
 import com.tttsaurus.ingameinfo.common.api.gui.Element;
 import com.tttsaurus.ingameinfo.common.api.gui.GuiLayout;
 import com.tttsaurus.ingameinfo.common.api.gui.layout.ElementGroup;
+import com.tttsaurus.ingameinfo.common.api.internal.InternalMethods;
 import com.tttsaurus.ingameinfo.common.impl.gui.layout.MainGroup;
+import com.tttsaurus.ingameinfo.common.impl.serialization.GuiLayoutDeserializer;
+import java.io.RandomAccessFile;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -33,5 +36,30 @@ public abstract class View
         return list;
     }
 
-    public abstract void init(GuiLayout guiLayout);
+    public abstract String getIxmlFileName();
+
+    private GuiLayout init()
+    {
+        try
+        {
+            RandomAccessFile file = new RandomAccessFile("config/ingameinfo/" + getIxmlFileName(), "rw");
+
+            StringBuilder builder = new StringBuilder();
+
+            String line = file.readLine();
+            while (line != null)
+            {
+                builder.append(line);
+                line = file.readLine();
+            }
+
+            GuiLayoutDeserializer deserializer = new GuiLayoutDeserializer();
+            GuiLayout guiLayout = deserializer.deserialize(builder.toString(), "ixml");
+
+            file.close();
+
+            return guiLayout;
+        }
+        catch (Exception ignored) { return InternalMethods.instance.GuiLayout$constructor.invoke(); }
+    }
 }

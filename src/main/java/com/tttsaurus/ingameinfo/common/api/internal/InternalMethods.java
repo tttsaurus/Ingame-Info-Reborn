@@ -18,6 +18,7 @@ public class InternalMethods
     public IFunc_1Param<MainGroup, GuiLayout> GuiLayout$mainGroup$getter;
     public IAction_2Param<View, MainGroup> View$mainGroup$setter;
     public IFunc_1Param<GuiLayout, ViewModel> ViewModel$init;
+    public IFunc_1Param<GuiLayout, View> View$init;
 
     public InternalMethods()
     {
@@ -56,7 +57,7 @@ public class InternalMethods
         catch (Exception exception)
         {
             GuiLayout$mainGroup$getter = null;
-            InGameInfoReborn.LOGGER.info("Reflection setup failed for GuiLayout$mainGroup$getter" + exception.getMessage());
+            InGameInfoReborn.LOGGER.info("Reflection setup failed for GuiLayout$mainGroup$getter: " + exception.getMessage());
         }
 
         try
@@ -75,7 +76,7 @@ public class InternalMethods
         catch (Exception exception)
         {
             View$mainGroup$setter = null;
-            InGameInfoReborn.LOGGER.info("Reflection setup failed for View$mainGroup$setter" + exception.getMessage());
+            InGameInfoReborn.LOGGER.info("Reflection setup failed for View$mainGroup$setter: " + exception.getMessage());
         }
 
         try
@@ -94,7 +95,26 @@ public class InternalMethods
         catch (Exception exception)
         {
             ViewModel$init = null;
-            InGameInfoReborn.LOGGER.info("Reflection setup failed for ViewModel$init" + exception.getMessage());
+            InGameInfoReborn.LOGGER.info("Reflection setup failed for ViewModel$init: " + exception.getMessage());
+        }
+
+        try
+        {
+            Method method = View.class.getDeclaredMethod("init", new Class[0]);
+            method.setAccessible(true);
+            View$init = (arg0) ->
+            {
+                try
+                {
+                    return (GuiLayout)method.invoke(arg0, new Object[0]);
+                }
+                catch (Exception ignored) { return null; }
+            };
+        }
+        catch (Exception exception)
+        {
+            View$init = null;
+            InGameInfoReborn.LOGGER.info("Reflection setup failed for View$init: " + exception.getMessage());
         }
 
         InGameInfoReborn.LOGGER.info("Reflection setup succeeded. Internal methods are ready");

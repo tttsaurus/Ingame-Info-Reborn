@@ -4,7 +4,6 @@ import com.tttsaurus.ingameinfo.common.api.gui.layout.ElementGroup;
 import com.tttsaurus.ingameinfo.common.api.gui.style.IStylePropertySetter;
 import com.tttsaurus.ingameinfo.common.impl.gui.layout.MainGroup;
 import com.tttsaurus.ingameinfo.common.impl.gui.registry.ElementRegistry;
-import com.tttsaurus.ingameinfo.common.impl.serialization.ElementStylesDeserializer;
 import net.minecraft.item.ItemStack;
 import java.util.ArrayList;
 import java.util.List;
@@ -90,9 +89,9 @@ public class GuiLayout
         startGroupInternal(group);
         return this;
     }
-    public GuiLayout startGroup(ElementGroup group, String rawStyles)
+    public GuiLayout startGroup(ElementGroup group, List<ElementStyle> styles)
     {
-        injectStyles(group, (new ElementStylesDeserializer(group.getClass())).deserialize(rawStyles, "json"));
+        injectStyles(group, styles);
         startGroupInternal(group);
         return this;
     }
@@ -109,9 +108,9 @@ public class GuiLayout
         addElementInternal(element);
         return this;
     }
-    public GuiLayout addElement(Element element, String rawStyles)
+    public GuiLayout addElement(Element element, List<ElementStyle> styles)
     {
-        injectStyles(element, (new ElementStylesDeserializer(element.getClass())).deserialize(rawStyles, "json"));
+        injectStyles(element, styles);
         addElementInternal(element);
         return this;
     }

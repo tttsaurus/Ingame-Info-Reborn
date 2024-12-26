@@ -29,8 +29,7 @@ public class VvmBinding<TView extends View>
         }
         catch (Exception ignored) { }
 
-        GuiLayout guiLayout = InternalMethods.instance.GuiLayout$constructor.invoke();
-        view.init(guiLayout);
+        GuiLayout guiLayout = InternalMethods.instance.View$init.invoke(view);
         MainGroup mainGroup = InternalMethods.instance.GuiLayout$mainGroup$getter.invoke(guiLayout);
         InternalMethods.instance.View$mainGroup$setter.invoke(view, mainGroup);
 
