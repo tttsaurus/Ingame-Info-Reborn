@@ -3,6 +3,7 @@ package com.tttsaurus.ingameinfo.common.impl.test;
 import com.tttsaurus.ingameinfo.common.api.mvvm.binding.Reactive;
 import com.tttsaurus.ingameinfo.common.api.mvvm.binding.ReactiveObject;
 import com.tttsaurus.ingameinfo.common.api.mvvm.viewmodel.ViewModel;
+import com.tttsaurus.ingameinfo.common.impl.event.EventCenter;
 
 public class TestViewModel extends ViewModel<TestView>
 {
@@ -12,6 +13,9 @@ public class TestViewModel extends ViewModel<TestView>
     @Override
     public void start()
     {
-        testString.set("New Test");
+        EventCenter.igiGuiFpsEvent.addListener((fps) ->
+        {
+            testString.set("GUI FPS: " + fps);
+        });
     }
 }

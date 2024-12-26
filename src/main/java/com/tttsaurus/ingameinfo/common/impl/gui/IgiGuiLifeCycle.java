@@ -1,11 +1,10 @@
 package com.tttsaurus.ingameinfo.common.impl.gui;
 
-import com.tttsaurus.ingameinfo.InGameInfoReborn;
 import com.tttsaurus.ingameinfo.common.api.gui.IgiGuiManager;
 import com.tttsaurus.ingameinfo.common.api.gui.IgiGuiContainer;
 import com.tttsaurus.ingameinfo.common.api.gui.delegate.placeholder.IPlaceholderDrawScreen;
 import com.tttsaurus.ingameinfo.common.api.gui.delegate.placeholder.IPlaceholderKeyTyped;
-import com.tttsaurus.ingameinfo.common.api.render.RenderUtils;
+import com.tttsaurus.ingameinfo.common.impl.event.EventCenter;
 import com.tttsaurus.ingameinfo.common.impl.mvvm.registry.MvvmRegistry;
 import com.tttsaurus.ingameinfo.common.impl.test.TestViewModel;
 import net.minecraft.client.Minecraft;
@@ -17,7 +16,6 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import org.apache.commons.lang3.time.StopWatch;
 import org.lwjgl.opengl.GL11;
-import java.awt.*;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.FloatBuffer;
@@ -38,15 +36,8 @@ public final class IgiGuiLifeCycle
     private static int estimatedFPS = 0;
     private static ScaledResolution resolution = new ScaledResolution(Minecraft.getMinecraft());
 
-    public static int getEstimatedFPS() { return estimatedFPS; }
-
     // fixed update fps debug
-    private static boolean displayDelayedFPS = false;
-    private static int delayedFPS = 0;
     private static double timer = 0.5f;
-
-    public static int getDelayedFPS() { return delayedFPS; }
-
     private static void onFixedUpdate()
     {
         //<editor-fold desc="gui container fixed update">
@@ -58,7 +49,7 @@ public final class IgiGuiLifeCycle
         if (timer >= 0.5d)
         {
             timer -= 0.5d;
-            delayedFPS = estimatedFPS;
+            EventCenter.igiGuiFpsEvent.trigger(estimatedFPS);
         }
     }
     private static void onRenderUpdate()
@@ -103,15 +94,6 @@ public final class IgiGuiLifeCycle
                     container.onRenderUpdate(false);
         }
         //</editor-fold>
-
-        if (displayDelayedFPS)
-        {
-            String str = "FPS: " + delayedFPS;
-            int width = RenderUtils.fontRenderer.getStringWidth(str) + 4;
-            RenderUtils.renderRoundedRect(10, 10, width, 15, 5, Color.DARK_GRAY.getRGB());
-            RenderUtils.renderRoundedRectOutline(10, 10, width, 15, 5, 1, Color.LIGHT_GRAY.getRGB());
-            RenderUtils.renderText(str, 12, 13.5f, 1, Color.LIGHT_GRAY.getRGB(), true);
-        }
     }
 
     //<editor-fold desc="gl states">
