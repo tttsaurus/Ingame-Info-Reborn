@@ -10,9 +10,10 @@ import java.util.Map;
 
 // only do one inheritance; don't do nested inheritance
 // ofc T can't be View
+@SuppressWarnings("all")
 public abstract class ViewModel<T extends View>
 {
-    private final VvmBinding<T> binding = new VvmBinding<>();
+    private VvmBinding<T> binding = new VvmBinding<>();
 
     // entry point
     private GuiLayout init()

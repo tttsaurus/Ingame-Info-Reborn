@@ -1,7 +1,5 @@
 package com.tttsaurus.ingameinfo.common.api.gui;
 
-import com.tttsaurus.ingameinfo.common.api.internal.InternalMethods;
-import com.tttsaurus.ingameinfo.common.api.mvvm.viewmodel.ViewModel;
 import com.tttsaurus.ingameinfo.common.impl.gui.IgiGuiLifeCycle;
 import com.tttsaurus.ingameinfo.common.impl.mvvm.registry.MvvmRegistry;
 
@@ -9,12 +7,9 @@ public final class IgiGuiManager
 {
     public static String openGui(String mvvmRegistryName)
     {
-        if (!MvvmRegistry.isMvvmRegistered(mvvmRegistryName)) return "";
-        ViewModel<?> viewModel = MvvmRegistry.newViewModel(mvvmRegistryName);
-        if (viewModel == null) return "";
-        GuiLayout guiLayout = InternalMethods.instance.ViewModel$init.invoke(viewModel);
-        guiLayout.igiGuiContainer.viewModel = viewModel;
-        return IgiGuiLifeCycle.openIgiGui(guiLayout.igiGuiContainer);
+        IgiGuiContainer igiGuiContainer = MvvmRegistry.getIgiGuiContainer(mvvmRegistryName);
+        if (igiGuiContainer == null) return "";
+        return IgiGuiLifeCycle.openIgiGui(igiGuiContainer);
     }
 
     public static void closeGui(String uuid)

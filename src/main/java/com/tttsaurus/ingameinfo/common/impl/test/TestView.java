@@ -5,5 +5,5 @@ import com.tttsaurus.ingameinfo.common.api.mvvm.view.View;
 public class TestView extends View
 {
     @Override
-    public String getIxmlFileName() { return "test.ixml"; }
+    public String getIxmlFileName() { return "test"; }
 }

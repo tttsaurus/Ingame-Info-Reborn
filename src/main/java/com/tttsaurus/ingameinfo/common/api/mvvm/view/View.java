@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 // only do one inheritance; don't do nested inheritance
+@SuppressWarnings("all")
 public abstract class View
 {
     private MainGroup mainGroup = null;
@@ -42,7 +43,7 @@ public abstract class View
     {
         try
         {
-            RandomAccessFile file = new RandomAccessFile("config/ingameinfo/" + getIxmlFileName(), "rw");
+            RandomAccessFile file = new RandomAccessFile("config/ingameinfo/" + getIxmlFileName() + ".ixml", "rw");
 
             StringBuilder builder = new StringBuilder();
 

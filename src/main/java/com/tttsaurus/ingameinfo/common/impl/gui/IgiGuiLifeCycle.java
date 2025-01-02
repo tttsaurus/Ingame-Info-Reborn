@@ -281,7 +281,6 @@ public final class IgiGuiLifeCycle
         if (flag)
         {
             flag = false;
-            MvvmRegistry.register("test", TestViewModel.class);
             IgiGuiManager.openGui("test");
         }
     }
@@ -306,6 +305,5 @@ public final class IgiGuiLifeCycle
     }
 }
 
-// todo: approximate mvvm (HIGH PRIORITY)
 // todo: add button group to handle complex button setup
 // todo: optimize reCalc logic

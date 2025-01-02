@@ -12,6 +12,8 @@ import com.tttsaurus.ingameinfo.common.api.serialization.IDeserializer;
 import com.tttsaurus.ingameinfo.common.impl.gui.IgiGuiLifeCycle;
 import com.tttsaurus.ingameinfo.common.impl.appcommunication.spotify.InGameCommandHandler;
 import com.tttsaurus.ingameinfo.common.impl.gui.registry.ElementRegistry;
+import com.tttsaurus.ingameinfo.common.impl.mvvm.registry.MvvmRegistry;
+import com.tttsaurus.ingameinfo.common.impl.test.TestViewModel;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
@@ -66,5 +68,7 @@ public class CommonProxy
                 }
             }
         }
+
+        MvvmRegistry.register("test", TestViewModel.class);
     }
 }

@@ -11,7 +11,7 @@ import java.util.List;
 @SuppressWarnings("all")
 public class GuiLayout
 {
-    protected final IgiGuiContainer igiGuiContainer;
+    private IgiGuiContainer igiGuiContainer;
     private MainGroup mainGroup;
 
     protected GuiLayout()

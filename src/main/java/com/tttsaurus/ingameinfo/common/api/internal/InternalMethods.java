@@ -2,6 +2,7 @@ package com.tttsaurus.ingameinfo.common.api.internal;
 
 import com.tttsaurus.ingameinfo.InGameInfoReborn;
 import com.tttsaurus.ingameinfo.common.api.gui.GuiLayout;
+import com.tttsaurus.ingameinfo.common.api.gui.IgiGuiContainer;
 import com.tttsaurus.ingameinfo.common.api.mvvm.view.View;
 import com.tttsaurus.ingameinfo.common.api.mvvm.viewmodel.ViewModel;
 import com.tttsaurus.ingameinfo.common.impl.gui.layout.MainGroup;
@@ -16,6 +17,8 @@ public class InternalMethods
 
     public IFunc<GuiLayout> GuiLayout$constructor;
     public IFunc_1Param<MainGroup, GuiLayout> GuiLayout$mainGroup$getter;
+    public IFunc_1Param<IgiGuiContainer, GuiLayout> GuiLayout$igiGuiContainer$getter;
+    public IAction_2Param<IgiGuiContainer, ViewModel> IgiGuiContainer$viewModel$setter;
     public IAction_2Param<View, MainGroup> View$mainGroup$setter;
     public IFunc_1Param<GuiLayout, ViewModel> ViewModel$init;
     public IFunc_1Param<GuiLayout, View> View$init;
@@ -58,6 +61,44 @@ public class InternalMethods
         {
             GuiLayout$mainGroup$getter = null;
             InGameInfoReborn.LOGGER.info("Reflection setup failed for GuiLayout$mainGroup$getter: " + exception.getMessage());
+        }
+
+        try
+        {
+            Field field = GuiLayout.class.getDeclaredField("igiGuiContainer");
+            field.setAccessible(true);
+            GuiLayout$igiGuiContainer$getter = (arg0) ->
+            {
+                try
+                {
+                    return (IgiGuiContainer)field.get(arg0);
+                }
+                catch (Exception ignored) { return null; }
+            };
+        }
+        catch (Exception exception)
+        {
+            GuiLayout$igiGuiContainer$getter = null;
+            InGameInfoReborn.LOGGER.info("Reflection setup failed for GuiLayout$igiGuiContainer$getter: " + exception.getMessage());
+        }
+
+        try
+        {
+            Field field = IgiGuiContainer.class.getDeclaredField("viewModel");
+            field.setAccessible(true);
+            IgiGuiContainer$viewModel$setter = (arg0, arg1) ->
+            {
+                try
+                {
+                    field.set(arg0, arg1);
+                }
+                catch (Exception ignored) { }
+            };
+        }
+        catch (Exception exception)
+        {
+            IgiGuiContainer$viewModel$setter = null;
+            InGameInfoReborn.LOGGER.info("Reflection setup failed for IgiGuiContainer$viewModel$setter: " + exception.getMessage());
         }
 
         try
@@ -117,6 +158,6 @@ public class InternalMethods
             InGameInfoReborn.LOGGER.info("Reflection setup failed for View$init: " + exception.getMessage());
         }
 
-        InGameInfoReborn.LOGGER.info("Reflection setup succeeded. Internal methods are ready");
+        InGameInfoReborn.LOGGER.info("Reflection setup finished");
     }
 }
