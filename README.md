@@ -8,7 +8,7 @@ Suggestions/PRs are welcome
 This is a library mod that helps you to create in-game overlaid (or focused) gui with ease.
 
 ## Todo List / Features
-- Approximate Model-View-ViewModel pattern (high priority)
+- Approximate Model-View-ViewModel pattern (✔)
 - Introduce a custom gui container (✔)
 - Maintain a list of custom gui containers (✔)
 - A gui container can be ingame-overlaid/focused (✔)
@@ -46,19 +46,23 @@ This is a library mod that helps you to create in-game overlaid (or focused) gui
 ## How to use
 API is changing frequently for the current stage.
 Here's an easy example.
+
+under `./config/ingameinfo/`
+```xml
+<HorizontalGroup>
+    <Text uid = "AAA" scale = 2.0f>
+</Group>
+```
+`TestView.java`
 ```java
 public class TestView extends View
 {
     @Override
-    public void init(GuiLayout guiLayout)
-    {
-        guiLayout
-                .startGroup(new HorizontalGroup(), "\"padding\" : {\"top\" : 10, \"left\" : 10}")
-                .addElement(new Text(), "\"uid\" : \"AAA\", \"scale\" : 2.0f, \"backgroundStyle\" : \"roundedBoxWithOutline\"")
-                .endGroup();
-    }
+    public String getIxmlFileName() { return "test.ixml"; }
 }
-
+```
+`TestViewModel.java`
+```java
 public class TestViewModel extends ViewModel<TestView>
 {
     @Reactive(targetUid = "AAA", property = "text", initiativeSync = true)
@@ -67,15 +71,19 @@ public class TestViewModel extends ViewModel<TestView>
     @Override
     public void start()
     {
-        testString.set("New Test");
+        EventCenter.igiGuiFpsEvent.addListener((fps) ->
+        {
+            testString.set("GUI FPS: " + fps);
+        });
     }
 }
-
+```
+```java
 MvvmRegistry.register("test", TestViewModel.class);
 IgiGuiManager.openGui("test");
 ```
 The default alignment and pivot are the top-left corner.
-![Snipaste_2024-12-21_19-01-57](https://github.com/user-attachments/assets/b6b23e72-5081-45d7-97d9-b811c8336141)
+![Snipaste_2024-12-26_14-29-07](https://github.com/user-attachments/assets/5e04ff27-718f-4633-824a-f0f7e001829d)
 
 Crt API is still WIP but should look similar to java code.
 
