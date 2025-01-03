@@ -3,7 +3,7 @@ package com.tttsaurus.ingameinfo.common.impl.test;
 import com.tttsaurus.ingameinfo.common.api.mvvm.binding.Reactive;
 import com.tttsaurus.ingameinfo.common.api.mvvm.binding.ReactiveObject;
 import com.tttsaurus.ingameinfo.common.api.mvvm.viewmodel.ViewModel;
-import com.tttsaurus.ingameinfo.common.impl.event.EventCenter;
+import com.tttsaurus.ingameinfo.common.impl.igievent.EventCenter;
 
 public class TestViewModel extends ViewModel<TestView>
 {

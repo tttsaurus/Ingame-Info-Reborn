@@ -2,6 +2,7 @@ package com.tttsaurus.ingameinfo.proxy;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
+import com.tttsaurus.ingameinfo.common.api.event.MvvmRegisterEvent;
 import com.tttsaurus.ingameinfo.common.api.gui.Element;
 import com.tttsaurus.ingameinfo.common.api.gui.style.IStylePropertyCallbackPost;
 import com.tttsaurus.ingameinfo.common.api.gui.style.IStylePropertyCallbackPre;
@@ -12,8 +13,7 @@ import com.tttsaurus.ingameinfo.common.api.serialization.IDeserializer;
 import com.tttsaurus.ingameinfo.common.impl.gui.IgiGuiLifeCycle;
 import com.tttsaurus.ingameinfo.common.impl.appcommunication.spotify.InGameCommandHandler;
 import com.tttsaurus.ingameinfo.common.impl.gui.registry.ElementRegistry;
-import com.tttsaurus.ingameinfo.common.impl.mvvm.registry.MvvmRegistry;
-import com.tttsaurus.ingameinfo.common.impl.test.TestViewModel;
+import com.tttsaurus.ingameinfo.common.impl.mvvm.registry.MvvmRegisterEventHandler;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
@@ -34,6 +34,8 @@ public class CommonProxy
         InternalMethods.instance = new InternalMethods();
 
         MinecraftForge.EVENT_BUS.register(IgiGuiLifeCycle.class);
+        MinecraftForge.EVENT_BUS.register(MvvmRegisterEventHandler.class);
+
         MinecraftForge.EVENT_BUS.register(InGameCommandHandler.class);
 
         String myPackage = "com.tttsaurus.ingameinfo";
@@ -69,6 +71,7 @@ public class CommonProxy
             }
         }
 
-        MvvmRegistry.register("test", TestViewModel.class);
+        logger.info("Starts registering mvvm.");
+        MinecraftForge.EVENT_BUS.post(new MvvmRegisterEvent());
     }
 }

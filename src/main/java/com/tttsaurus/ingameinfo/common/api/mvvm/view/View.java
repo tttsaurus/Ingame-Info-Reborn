@@ -37,6 +37,8 @@ public abstract class View
         return list;
     }
 
+    // searching the file under ./config/ingameinfo/
+    // and .ixml is the suffix
     public abstract String getIxmlFileName();
 
     private GuiLayout init()

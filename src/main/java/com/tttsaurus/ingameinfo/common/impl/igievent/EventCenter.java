@@ -1,4 +1,4 @@
-package com.tttsaurus.ingameinfo.common.impl.event;
+package com.tttsaurus.ingameinfo.common.impl.igievent;
 
 public final class EventCenter
 {

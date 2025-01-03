@@ -158,6 +158,6 @@ public class InternalMethods
             InGameInfoReborn.LOGGER.info("Reflection setup failed for View$init: " + exception.getMessage());
         }
 
-        InGameInfoReborn.LOGGER.info("Reflection setup finished");
+        InGameInfoReborn.LOGGER.info("Reflection setup finished.");
     }
 }

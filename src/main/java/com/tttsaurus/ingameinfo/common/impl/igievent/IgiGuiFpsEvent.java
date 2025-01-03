@@ -1,6 +1,6 @@
-package com.tttsaurus.ingameinfo.common.impl.event;
+package com.tttsaurus.ingameinfo.common.impl.igievent;
 
-import com.tttsaurus.ingameinfo.common.api.event.EventBase;
+import com.tttsaurus.ingameinfo.common.api.igievent.EventBase;
 import com.tttsaurus.ingameinfo.common.api.internal.IAction_1Param;
 
 public final class IgiGuiFpsEvent extends EventBase

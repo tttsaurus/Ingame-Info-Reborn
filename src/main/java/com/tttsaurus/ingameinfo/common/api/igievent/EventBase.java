@@ -1,4 +1,4 @@
-package com.tttsaurus.ingameinfo.common.api.event;
+package com.tttsaurus.ingameinfo.common.api.igievent;
 
 import com.tttsaurus.ingameinfo.common.api.internal.IAction;
 import com.tttsaurus.ingameinfo.common.api.internal.IAction_1Param;
