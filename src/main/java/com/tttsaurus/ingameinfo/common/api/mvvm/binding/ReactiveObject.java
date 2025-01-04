@@ -12,9 +12,9 @@ public class ReactiveObject<T>
     {
         return value;
     }
-    public void set(T value)
+    public void set(Object value)
     {
-        this.value = value;
-        for (IReactiveCallback callback: setterCallbacks) callback.invoke(value);
+        this.value = (T)value;
+        for (IReactiveCallback callback: setterCallbacks) callback.invoke(this.value);
     }
 }

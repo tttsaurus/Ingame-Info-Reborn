@@ -91,7 +91,27 @@ IgiGuiManager.openGui("test");
 The default alignment and pivot are the top-left corner.
 ![Snipaste_2024-12-26_14-29-07](https://github.com/user-attachments/assets/5e04ff27-718f-4633-824a-f0f7e001829d)
 
-Crt API is still WIP but should look similar to java code.
+Crt version is as follows
+```zenscript
+#loader preinit
+
+import mods.ingameinfo.mvvm.ViewModel;
+import mods.ingameinfo.mvvm.View;
+import mods.ingameinfo.Types;
+import mods.ingameinfo.event.EventCenter;
+
+View.setIxmlFileName("test");
+
+ViewModel.addReactiveObject("testString", Types.String, "AAA", "text", true);
+
+ViewModel.setStartAction(function()
+{
+    EventCenter.addIgiGuiFpsEventListener(function(fps as int)
+    {
+        ViewModel.getReactiveObject("testString").set("GUI FPS: " ~ fps);
+    });
+});
+```
 
 ## Credits
 - Created using [GregTechCEu's Buildscripts](https://github.com/GregTechCEu/Buildscripts)

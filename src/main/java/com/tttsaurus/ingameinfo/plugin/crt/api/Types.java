@@ -1,4 +1,4 @@
-package com.tttsaurus.ingameinfo.plugin.crt;
+package com.tttsaurus.ingameinfo.plugin.crt.api;
 
 public enum Types
 {

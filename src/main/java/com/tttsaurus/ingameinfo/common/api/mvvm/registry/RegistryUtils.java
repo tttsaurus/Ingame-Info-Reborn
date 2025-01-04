@@ -4,6 +4,8 @@ import com.tttsaurus.ingameinfo.common.api.mvvm.binding.IReactiveObjectGetter;
 import com.tttsaurus.ingameinfo.common.api.mvvm.binding.Reactive;
 import com.tttsaurus.ingameinfo.common.api.mvvm.binding.ReactiveObject;
 import com.tttsaurus.ingameinfo.common.api.mvvm.viewmodel.ViewModel;
+import com.tttsaurus.ingameinfo.plugin.crt.impl.CrtViewModel;
+import net.minecraft.util.Tuple;
 import java.lang.invoke.MethodHandle;
 import java.lang.invoke.MethodHandles;
 import java.lang.reflect.Field;
@@ -14,8 +16,17 @@ public final class RegistryUtils
 {
     public static Map<Reactive, IReactiveObjectGetter> findReactiveObjects(Class<? extends ViewModel<?>> clazz)
     {
-        Class<Reactive> annotation = Reactive.class;
         Map<Reactive, IReactiveObjectGetter> reactiveObjects = new HashMap<>();
+
+        // crt support
+        if (CrtViewModel.class.isAssignableFrom(clazz))
+        {
+            for (Tuple<Reactive, ReactiveObject<?>> tuple: CrtViewModel.reactiveObjectDefs.values())
+                reactiveObjects.put(tuple.getFirst(), (target) -> tuple.getSecond());
+            return reactiveObjects;
+        }
+
+        Class<Reactive> annotation = Reactive.class;
 
         for (Field field: clazz.getDeclaredFields())
             if (field.isAnnotationPresent(annotation))

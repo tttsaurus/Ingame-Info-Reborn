@@ -1,4 +1,4 @@
-package com.tttsaurus.ingameinfo.plugin.crt;
+package com.tttsaurus.ingameinfo.plugin.crt.api;
 
 import crafttweaker.annotations.ZenRegister;
 import stanhebben.zenscript.annotations.ZenClass;
@@ -8,7 +8,7 @@ import stanhebben.zenscript.annotations.ZenProperty;
 @ZenClass("mods.ingameinfo.Types")
 public class TypesWrapper
 {
-    protected final Types types;
+    public final Types types;
     private TypesWrapper(Types types)
     {
         this.types = types;

@@ -279,7 +279,7 @@ public final class IgiGuiLifeCycle
         if (flag)
         {
             flag = false;
-            IgiGuiManager.openGui("test");
+            IgiGuiManager.openGui("crt");
         }
     }
 
