@@ -79,7 +79,13 @@ public class TestViewModel extends ViewModel<TestView>
 }
 ```
 ```java
-MvvmRegistry.register("test", TestViewModel.class);
+@SubscribeEvent
+public static void onMvvmRegister(MvvmRegisterEvent event)
+{
+    MvvmRegistry.register("test", TestViewModel.class);
+}
+```
+```java
 IgiGuiManager.openGui("test");
 ```
 The default alignment and pivot are the top-left corner.
