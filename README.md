@@ -35,7 +35,7 @@ This is a library mod that helps you to create in-game overlaid (or focused) gui
   - Draggable
 - A gui layout builder (✔)
 - Introduce modular animation options for controls
-- Add crt support (runtime gui setup)
+- Add crt support (✔)
 
 ## Quick Start
 - Go to [GitHub Actions](https://github.com/tttsaurus/Ingame-Info-Reborn/actions)
@@ -91,7 +91,7 @@ IgiGuiManager.openGui("test");
 The default alignment and pivot are the top-left corner.
 ![Snipaste_2024-12-26_14-29-07](https://github.com/user-attachments/assets/5e04ff27-718f-4633-824a-f0f7e001829d)
 
-Crt version is as follows
+Crt version is as follows (install ProbeZS and ZS IntelliSense for more api details)
 ```zenscript
 #loader preinit
 
