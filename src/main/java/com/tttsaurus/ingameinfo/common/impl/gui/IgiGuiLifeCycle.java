@@ -34,7 +34,6 @@ public final class IgiGuiLifeCycle
     private static int estimatedFPS = 0;
     private static ScaledResolution resolution = new ScaledResolution(Minecraft.getMinecraft());
 
-    // fixed update fps debug
     private static double timer = 0.5f;
     private static void onFixedUpdate()
     {
@@ -48,6 +47,9 @@ public final class IgiGuiLifeCycle
         {
             timer -= 0.5d;
             EventCenter.igiGuiFpsEvent.trigger(estimatedFPS);
+            EventCenter.gameFpsEvent.trigger(Minecraft.getMinecraft().getDebugFPS());
+            Runtime runtime = Runtime.getRuntime();
+            EventCenter.gameMemoryEvent.trigger(runtime.totalMemory() - runtime.freeMemory());
         }
     }
     private static void onRenderUpdate()
