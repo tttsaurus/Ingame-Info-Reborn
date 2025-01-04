@@ -47,7 +47,7 @@ This is a library mod that helps you to create in-game overlaid (or focused) gui
 API is changing frequently for the current stage.
 Here's an easy example.
 
-under `./config/ingameinfo/`
+`./config/ingameinfo/test.ixml`
 ```xml
 <HorizontalGroup>
     <Text uid = "AAA" scale = 2.0f>
@@ -58,7 +58,7 @@ under `./config/ingameinfo/`
 public class TestView extends View
 {
     @Override
-    public String getIxmlFileName() { return "test.ixml"; }
+    public String getIxmlFileName() { return "test"; }
 }
 ```
 `TestViewModel.java`
