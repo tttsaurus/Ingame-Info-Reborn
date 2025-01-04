@@ -15,7 +15,7 @@ public abstract class ViewModel<T extends View>
 {
     private VvmBinding<T> binding = new VvmBinding<>();
 
-    // entry point
+    // init entry point
     private GuiLayout init()
     {
         GuiLayout guiLayout = binding.init(this);

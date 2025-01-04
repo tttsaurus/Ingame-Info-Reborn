@@ -38,19 +38,19 @@
  * For more details, see https://docs.gradle.org/8.4/userguide/java_library_plugin.html#sec:java_library_configurations_graph
  */
 dependencies {
-    //compileOnly "com.cleanroommc:groovyscript:${grs_version}"
-    //runtimeOnly "com.cleanroommc:groovyscript:${grs_version}"
+    //compileOnly "com.cleanroommc:groovyscript:${grsVersion}"
+    //runtimeOnly "com.cleanroommc:groovyscript:${grsVersion}"
 
-    //compileOnly "mezz.jei:jei_1.12.2:${jei_version}:api"
-    //runtimeOnly "mezz.jei:jei_1.12.2:${jei_version}:api"
+    //compileOnly "mezz.jei:jei_1.12.2:${jeiVersion}:api"
+    //runtimeOnly "mezz.jei:jei_1.12.2:${jeiVersion}:api"
 
     //compileOnly "com.cleanroommc:modularui:2.5.0-rc2"
     //runtimeOnly "com.cleanroommc:modularui:2.5.0-rc2"
 
     // zenutils-1.12.8
-    //compileOnly "curse.maven:zenutils-401178:4394263"
-    //runtimeOnly "curse.maven:zenutils-401178:4394263"
+    compileOnly "curse.maven:zenutils-401178:4394263"
+    runtimeOnly "curse.maven:zenutils-401178:4394263"
 
-    //compileOnly "CraftTweaker2:CraftTweaker2-MC1120-Main:1.12-${crafttweaker_version}"
-    //runtimeOnly "CraftTweaker2:CraftTweaker2-MC1120-Main:1.12-${crafttweaker_version}"
+    compileOnly "CraftTweaker2:CraftTweaker2-MC1120-Main:1.12-${crafttweakerVersion}"
+    runtimeOnly "CraftTweaker2:CraftTweaker2-MC1120-Main:1.12-${crafttweakerVersion}"
 }
