@@ -1,12 +1,12 @@
 [{
     "modid": "${modid}",
     "name": "${modname}",
-    "description": "An example mod for Minecraft 1.12.2 with Forge",
+    "description": "Inspired by InGame-Info-XML and it's bringing more modular controls and layouts to hud and also mvvm architecture",
     "version": "${version}",
     "mcversion": "${mcversion}",
-    "logoFile": "",
-    "url": "",
-    "authorList": [],
+    "logoFile": "logo.png",
+    "url": "https://github.com/tttsaurus/Ingame-Info-Reborn",
+    "authorList": ["tttsaurus"],
     "credits": "",
     "dependencies": []
 }]
