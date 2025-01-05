@@ -13,14 +13,14 @@ import java.util.Map;
 @SuppressWarnings("all")
 public abstract class ViewModel<T extends View>
 {
-    private VvmBinding<T> binding = new VvmBinding<>();
+    public VvmBinding<T> binding = new VvmBinding<>();
 
     // init entry point
-    private GuiLayout init()
+    private GuiLayout init(String mvvmRegistryName)
     {
-        GuiLayout guiLayout = binding.init(this);
+        GuiLayout guiLayout = binding.init(this, mvvmRegistryName);
 
-        Map<Reactive, IReactiveObjectGetter> reactiveObjects = MvvmRegistry.getRegisteredReactiveObjects(this.getClass());
+        Map<Reactive, IReactiveObjectGetter> reactiveObjects = MvvmRegistry.getRegisteredReactiveObjects(mvvmRegistryName);
         for (Map.Entry<Reactive, IReactiveObjectGetter> entry: reactiveObjects.entrySet())
             binding.bindReactiveObject(entry.getKey(), entry.getValue().get(this));
 

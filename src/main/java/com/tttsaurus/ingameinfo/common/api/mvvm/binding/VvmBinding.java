@@ -12,15 +12,16 @@ import com.tttsaurus.ingameinfo.common.api.mvvm.viewmodel.ViewModel;
 import com.tttsaurus.ingameinfo.common.api.reflection.TypeUtils;
 import com.tttsaurus.ingameinfo.common.impl.gui.layout.MainGroup;
 import com.tttsaurus.ingameinfo.common.impl.gui.registry.ElementRegistry;
+import com.tttsaurus.ingameinfo.plugin.crt.impl.CrtView;
 import java.lang.reflect.ParameterizedType;
 import java.util.List;
 
 @SuppressWarnings("all")
 public class VvmBinding<TView extends View>
 {
-    private TView view;
+    public TView view;
 
-    public GuiLayout init(ViewModel<TView> viewModel)
+    public GuiLayout init(ViewModel<TView> viewModel, String mvvmRegistryName)
     {
         Class<?> viewClass = (Class<?>)((ParameterizedType)viewModel.getClass().getGenericSuperclass()).getActualTypeArguments()[0];
         try
@@ -28,6 +29,10 @@ public class VvmBinding<TView extends View>
             view = (TView)viewClass.newInstance();
         }
         catch (Exception ignored) { }
+
+        // crt support
+        if (CrtView.class.isAssignableFrom(viewClass))
+            ((CrtView)view).runtimeMvvm = mvvmRegistryName;
 
         GuiLayout guiLayout = InternalMethods.instance.View$init.invoke(view);
         MainGroup mainGroup = InternalMethods.instance.GuiLayout$mainGroup$getter.invoke(guiLayout);

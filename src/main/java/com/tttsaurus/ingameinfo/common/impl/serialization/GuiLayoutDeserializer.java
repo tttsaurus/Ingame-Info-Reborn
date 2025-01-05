@@ -19,6 +19,8 @@ public class GuiLayoutDeserializer implements IDeserializer<GuiLayout>
         {
             GuiLayout guiLayout = InternalMethods.instance.GuiLayout$constructor.invoke();
 
+            if (raw.isEmpty()) return guiLayout;
+
             List<Tuple<String, String>> nodes = RawIxmlUtils.extractNodes(raw);
 
             for (Tuple<String, String> pair: nodes)

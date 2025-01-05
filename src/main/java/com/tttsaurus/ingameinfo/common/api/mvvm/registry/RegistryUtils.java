@@ -14,15 +14,17 @@ import java.util.Map;
 
 public final class RegistryUtils
 {
-    public static Map<Reactive, IReactiveObjectGetter> findReactiveObjects(Class<? extends ViewModel<?>> clazz)
+    public static Map<Reactive, IReactiveObjectGetter> findReactiveObjects(String mvvmRegistryName, Class<? extends ViewModel<?>> clazz)
     {
         Map<Reactive, IReactiveObjectGetter> reactiveObjects = new HashMap<>();
 
         // crt support
         if (CrtViewModel.class.isAssignableFrom(clazz))
         {
-            for (Tuple<Reactive, ReactiveObject<?>> tuple: CrtViewModel.reactiveObjectDefs.values())
-                reactiveObjects.put(tuple.getFirst(), (target) -> tuple.getSecond());
+            Map<String, Tuple<Reactive, ReactiveObject<?>>> def = CrtViewModel.reactiveObjectDefs.get(mvvmRegistryName);
+            if (def != null)
+                for (Tuple<Reactive, ReactiveObject<?>> tuple: def.values())
+                    reactiveObjects.put(tuple.getFirst(), (target) -> tuple.getSecond());
             return reactiveObjects;
         }
 

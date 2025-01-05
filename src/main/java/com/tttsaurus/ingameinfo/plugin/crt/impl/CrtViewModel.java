@@ -18,17 +18,23 @@ import java.util.Map;
 @ZenClass("mods.ingameinfo.mvvm.ViewModel")
 public final class CrtViewModel extends ViewModel<CrtView>
 {
-    private static IViewModelStart startAction;
+    public String runtimeMvvm;
+
+    // key: mvvm registry name
+    private static Map<String, IViewModelStart> startActions = new HashMap<>();
 
     @ZenMethod
-    public static void setStartAction(IViewModelStart action) { startAction = action; }
+    public static void setStartAction(IViewModelStart action) { startActions.put(CrtMvvm.currentMvvm, action); }
 
-    public static final Map<String, Tuple<Reactive, ReactiveObject<?>>> reactiveObjectDefs = new HashMap<>();
+    // key: mvvm registry name
+    public static final Map<String, Map<String, Tuple<Reactive, ReactiveObject<?>>>> reactiveObjectDefs = new HashMap<>();
 
     @ZenMethod
-    public static ReactiveObjectWrapper addReactiveObject(String fieldName, TypesWrapper typesWrapper, String targetUid, String property, @Optional boolean initiativeSync, @Optional boolean passiveSync)
+    public static ReactiveObjectWrapper registerReactiveObject(String fieldName, TypesWrapper typesWrapper, String targetUid, String property, @Optional boolean initiativeSync, @Optional boolean passiveSync)
     {
-        if (reactiveObjectDefs.containsKey(fieldName)) return null;
+        Map<String, Tuple<Reactive, ReactiveObject<?>>> def = reactiveObjectDefs.computeIfAbsent(CrtMvvm.currentMvvm, k -> new HashMap<>());
+
+        if (def.containsKey(fieldName)) return null;
 
         Map<String, Object> values = new HashMap<>();
         values.put("targetUid", targetUid);
@@ -39,7 +45,7 @@ public final class CrtViewModel extends ViewModel<CrtView>
 
         ReactiveObjectWrapper wrapper = ReactiveObjectWrapper.instantiate(typesWrapper.types);
 
-        reactiveObjectDefs.put(fieldName, new Tuple<Reactive, ReactiveObject<?>>(reactive, wrapper.reactiveObject));
+        def.put(fieldName, new Tuple<Reactive, ReactiveObject<?>>(reactive, wrapper.reactiveObject));
 
         return wrapper;
     }
@@ -47,7 +53,9 @@ public final class CrtViewModel extends ViewModel<CrtView>
     @ZenMethod
     public static ReactiveObjectWrapper getReactiveObject(String fieldName)
     {
-        Tuple<Reactive, ReactiveObject<?>> tuple = reactiveObjectDefs.get(fieldName);
+        Map<String, Tuple<Reactive, ReactiveObject<?>>> def = reactiveObjectDefs.get(CrtMvvm.currentMvvm);
+        if (def == null) return null;
+        Tuple<Reactive, ReactiveObject<?>> tuple = def.get(fieldName);
         if (tuple == null) return null;
         return new ReactiveObjectWrapper(tuple.getSecond());
     }
@@ -55,6 +63,7 @@ public final class CrtViewModel extends ViewModel<CrtView>
     @Override
     public void start()
     {
-        startAction.start();
+        IViewModelStart action = startActions.get(runtimeMvvm);
+        if (action != null) action.start();
     }
 }

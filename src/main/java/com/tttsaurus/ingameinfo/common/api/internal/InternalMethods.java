@@ -20,7 +20,7 @@ public class InternalMethods
     public IFunc_1Param<IgiGuiContainer, GuiLayout> GuiLayout$igiGuiContainer$getter;
     public IAction_2Param<IgiGuiContainer, ViewModel> IgiGuiContainer$viewModel$setter;
     public IAction_2Param<View, MainGroup> View$mainGroup$setter;
-    public IFunc_1Param<GuiLayout, ViewModel> ViewModel$init;
+    public IFunc_2Param<GuiLayout, ViewModel, String> ViewModel$init;
     public IFunc_1Param<GuiLayout, View> View$init;
 
     public InternalMethods()
@@ -122,13 +122,13 @@ public class InternalMethods
 
         try
         {
-            Method method = ViewModel.class.getDeclaredMethod("init", new Class[0]);
+            Method method = ViewModel.class.getDeclaredMethod("init", String.class);
             method.setAccessible(true);
-            ViewModel$init = (arg0) ->
+            ViewModel$init = (arg0, arg1) ->
             {
                 try
                 {
-                    return (GuiLayout)method.invoke(arg0, new Object[0]);
+                    return (GuiLayout)method.invoke(arg0, arg1);
                 }
                 catch (Exception ignored) { return null; }
             };
