@@ -29,7 +29,6 @@ public class IgiGuiContainer
     private boolean initFlag = false;
 
     //<editor-fold desc="getters">
-    public ViewModel<?> getViewModel() { return viewModel; }
     public int getExitKeyForFocusedGui() { return exitKeyForFocusedGui; }
     public boolean getFocused() { return isFocused; }
     public boolean getInitFlag() { return initFlag; }

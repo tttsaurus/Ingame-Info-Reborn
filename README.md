@@ -37,7 +37,8 @@ This is a library mod that helps you to create in-game overlaid (or focused) gui
 - Introduce modular animation options for controls
 - Add crt support (✔)
 
-## Quick Start
+## Latest Build
+In case you want to use the latest action build
 - Go to [GitHub Actions](https://github.com/tttsaurus/Ingame-Info-Reborn/actions)
 - Click on the latest workflow
 - Scroll down to the bottom and download the `Artifacts`
@@ -45,7 +46,7 @@ This is a library mod that helps you to create in-game overlaid (or focused) gui
 
 ## How to use
 API is changing frequently for the current stage.
-Here's an easy example.
+Here's an easy example under v1.0.0-b1.
 
 `./config/ingameinfo/test.ixml`
 ```xml

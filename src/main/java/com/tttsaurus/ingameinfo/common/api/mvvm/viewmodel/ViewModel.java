@@ -13,7 +13,7 @@ import java.util.Map;
 @SuppressWarnings("all")
 public abstract class ViewModel<T extends View>
 {
-    public VvmBinding<T> binding = new VvmBinding<>();
+    private VvmBinding<T> binding = new VvmBinding<>();
 
     // init entry point
     private GuiLayout init(String mvvmRegistryName)

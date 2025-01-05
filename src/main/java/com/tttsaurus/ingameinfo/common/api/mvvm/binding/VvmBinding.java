@@ -19,7 +19,7 @@ import java.util.List;
 @SuppressWarnings("all")
 public class VvmBinding<TView extends View>
 {
-    public TView view;
+    private TView view;
 
     public GuiLayout init(ViewModel<TView> viewModel, String mvvmRegistryName)
     {
