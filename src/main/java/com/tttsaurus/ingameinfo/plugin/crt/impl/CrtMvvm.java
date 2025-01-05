@@ -8,7 +8,7 @@ import java.util.List;
 
 @ZenRegister
 @ZenClass("mods.ingameinfo.mvvm.Mvvm")
-public class CrtMvvm
+public final class CrtMvvm
 {
     public static List<String> mvvms = new ArrayList<>();
     public static String currentMvvm;

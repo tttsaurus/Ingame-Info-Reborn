@@ -1,6 +1,6 @@
 package com.tttsaurus.ingameinfo.common.impl.gui;
 
-import com.tttsaurus.ingameinfo.common.api.gui.IgiGuiManager;
+import com.tttsaurus.ingameinfo.common.api.event.IgiGuiInitEvent;
 import com.tttsaurus.ingameinfo.common.api.gui.IgiGuiContainer;
 import com.tttsaurus.ingameinfo.common.api.gui.delegate.placeholder.IPlaceholderDrawScreen;
 import com.tttsaurus.ingameinfo.common.api.gui.delegate.placeholder.IPlaceholderKeyTyped;
@@ -9,6 +9,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.item.ItemStack;
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
@@ -277,15 +278,14 @@ public final class IgiGuiLifeCycle
         }
         //</editor-fold>
 
-        // testing
-        if (flag)
+        if (initFlag)
         {
-            flag = false;
-            IgiGuiManager.openGui("test");
+            initFlag = false;
+            MinecraftForge.EVENT_BUS.post(new IgiGuiInitEvent());
         }
     }
 
-    private static boolean flag = true;
+    private static boolean initFlag = true;
 
     // placeholder related
     private static boolean isPlaceholderGuiOn = false;

@@ -9,7 +9,7 @@ import stanhebben.zenscript.annotations.ZenClass;
 import stanhebben.zenscript.annotations.ZenMethod;
 
 @ZenRegister
-@ZenClass("mods.ingameinfo.event.EventCenter")
+@ZenClass("mods.ingameinfo.igievent.EventCenter")
 public final class EventCenterWrapper
 {
     @ZenMethod

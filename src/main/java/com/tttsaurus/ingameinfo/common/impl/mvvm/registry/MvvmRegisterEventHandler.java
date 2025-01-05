@@ -17,7 +17,5 @@ public final class MvvmRegisterEventHandler
             crtViewModel.runtimeMvvm = mvvm;
             MvvmRegistry.setIgiGuiContainer(mvvm, crtViewModel);
         }
-
-        //MvvmRegistry.autoRegister("test", TestViewModel.class);
     }
 }

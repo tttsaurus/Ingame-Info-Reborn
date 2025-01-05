@@ -4,7 +4,7 @@ import crafttweaker.annotations.ZenRegister;
 import stanhebben.zenscript.annotations.ZenClass;
 
 @ZenRegister
-@ZenClass("mods.ingameinfo.event.IIgiGuiFpsEventListener")
+@ZenClass("mods.ingameinfo.igievent.IgiGuiFpsEventListener")
 public interface IIgiGuiFpsEventListener
 {
     void invoke(int arg0);

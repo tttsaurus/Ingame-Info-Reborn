@@ -14,6 +14,7 @@ import com.tttsaurus.ingameinfo.common.impl.gui.IgiGuiLifeCycle;
 import com.tttsaurus.ingameinfo.common.impl.appcommunication.spotify.InGameCommandHandler;
 import com.tttsaurus.ingameinfo.common.impl.gui.registry.ElementRegistry;
 import com.tttsaurus.ingameinfo.common.impl.mvvm.registry.MvvmRegisterEventHandler;
+import com.tttsaurus.ingameinfo.plugin.crt.impl.CrtEventManager;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
@@ -33,9 +34,14 @@ public class CommonProxy
 
         InternalMethods.instance = new InternalMethods();
 
+        // core
         MinecraftForge.EVENT_BUS.register(IgiGuiLifeCycle.class);
         MinecraftForge.EVENT_BUS.register(MvvmRegisterEventHandler.class);
 
+        // crt support
+        MinecraftForge.EVENT_BUS.register(CrtEventManager.Handler.class);
+
+        // app communication
         MinecraftForge.EVENT_BUS.register(InGameCommandHandler.class);
 
         String myPackage = "com.tttsaurus.ingameinfo";
