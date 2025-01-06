@@ -1,6 +1,7 @@
 package com.tttsaurus.ingameinfo.common.impl.mvvm.registry;
 
 import com.tttsaurus.ingameinfo.common.api.event.MvvmRegisterEvent;
+import com.tttsaurus.ingameinfo.common.impl.appcommunication.spotify.SpotifyViewModel;
 import com.tttsaurus.ingameinfo.plugin.crt.impl.CrtMvvm;
 import com.tttsaurus.ingameinfo.plugin.crt.impl.CrtViewModel;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -17,5 +18,7 @@ public final class MvvmRegisterEventHandler
             crtViewModel.runtimeMvvm = mvvm;
             MvvmRegistry.setIgiGuiContainer(mvvm, crtViewModel);
         }
+
+        MvvmRegistry.autoRegister("spotify", SpotifyViewModel.class);
     }
 }

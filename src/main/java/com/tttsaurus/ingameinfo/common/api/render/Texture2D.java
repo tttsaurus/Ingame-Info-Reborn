@@ -5,7 +5,7 @@ import java.nio.ByteBuffer;
 
 public class Texture2D
 {
-    private int glTextureID;
+    private int glTextureID = 0;
     private final int width;
     private final int height;
     private boolean isGlBound;
@@ -35,7 +35,7 @@ public class Texture2D
 
     public void dispose()
     {
-        GL11.glDeleteTextures(glTextureID);
+        if (glTextureID != 0) GL11.glDeleteTextures(glTextureID);
         glTextureID = 0;
         isGlBound = false;
     }

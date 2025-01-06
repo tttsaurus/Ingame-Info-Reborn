@@ -8,11 +8,13 @@ import java.io.InputStream;
 import java.net.URL;
 import java.nio.ByteBuffer;
 
-public class URLImageRenderer extends ImageRenderer
+public class UrlImageRenderer extends ImageRenderer
 {
-    public static final URLImageRenderer SHARED = new URLImageRenderer("https://media.forgecdn.net/avatars/thumbnails/1071/348/256/256/638606872011907048.png");
+    public static final UrlImageRenderer SHARED = new UrlImageRenderer("https://media.forgecdn.net/avatars/thumbnails/1071/348/256/256/638606872011907048.png");
 
-    public URLImageRenderer(String url)
+    public UrlImageRenderer() { }
+
+    public UrlImageRenderer(String url)
     {
         BufferedImage image = downloadImage(url);
         if (image != null) texture = createTexture(image);
@@ -23,7 +25,7 @@ public class URLImageRenderer extends ImageRenderer
         BufferedImage image = downloadImage(url);
         if (image != null)
         {
-            texture.dispose();
+            if (texture != null) texture.dispose();
             texture = createTexture(image);
         }
     }

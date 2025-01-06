@@ -4,7 +4,7 @@ import com.tttsaurus.ingameinfo.common.api.appcommunication.spotify.SpotifyAcces
 import com.tttsaurus.ingameinfo.common.api.appcommunication.spotify.SpotifyOAuthUtils;
 import com.tttsaurus.ingameinfo.common.api.appcommunication.spotify.TrackPlaying;
 import com.tttsaurus.ingameinfo.common.api.appcommunication.spotify.SpotifyUserInfo;
-import com.tttsaurus.ingameinfo.common.impl.render.renderer.URLImageRenderer;
+import com.tttsaurus.ingameinfo.common.impl.render.renderer.UrlImageRenderer;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.util.text.Style;
@@ -14,7 +14,7 @@ import net.minecraft.util.text.event.ClickEvent;
 import net.minecraftforge.client.event.ClientChatReceivedEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
-public final class InGameCommandHandler
+public final class SpotifyCommandHandler
 {
     @SubscribeEvent
     public static void onChatReceived(ClientChatReceivedEvent event)
@@ -85,7 +85,7 @@ public final class InGameCommandHandler
                             TrackPlaying trackPlaying = SpotifyAccessUtils.getCurrentlyPlaying(SpotifyUserInfo.token.accessToken);
                             player.sendMessage(new TextComponentString(TextFormatting.AQUA + "[SpotifyBot]" + TextFormatting.RESET + " " + trackPlaying.trackName));
                             trackPlaying.artists.forEach(str -> player.sendMessage(new TextComponentString(TextFormatting.AQUA + "[SpotifyBot]" + TextFormatting.RESET + " " + str)));
-                            URLImageRenderer.SHARED.updateURL(trackPlaying.albumImage640by640);
+                            UrlImageRenderer.SHARED.updateURL(trackPlaying.albumImage640by640);
                         }
                         catch (Exception e)
                         {

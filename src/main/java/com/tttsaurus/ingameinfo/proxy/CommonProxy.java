@@ -11,7 +11,7 @@ import com.tttsaurus.ingameinfo.common.api.internal.InternalMethods;
 import com.tttsaurus.ingameinfo.common.api.reflection.TypeUtils;
 import com.tttsaurus.ingameinfo.common.api.serialization.IDeserializer;
 import com.tttsaurus.ingameinfo.common.impl.gui.IgiGuiLifeCycle;
-import com.tttsaurus.ingameinfo.common.impl.appcommunication.spotify.InGameCommandHandler;
+import com.tttsaurus.ingameinfo.common.impl.appcommunication.spotify.SpotifyCommandHandler;
 import com.tttsaurus.ingameinfo.common.impl.gui.registry.ElementRegistry;
 import com.tttsaurus.ingameinfo.common.impl.mvvm.registry.MvvmRegisterEventHandler;
 import com.tttsaurus.ingameinfo.plugin.crt.impl.CrtEventManager;
@@ -42,7 +42,7 @@ public class CommonProxy
         MinecraftForge.EVENT_BUS.register(CrtEventManager.Handler.class);
 
         // app communication
-        MinecraftForge.EVENT_BUS.register(InGameCommandHandler.class);
+        MinecraftForge.EVENT_BUS.register(SpotifyCommandHandler.class);
 
         String myPackage = "com.tttsaurus.ingameinfo";
         ElementRegistry.register();

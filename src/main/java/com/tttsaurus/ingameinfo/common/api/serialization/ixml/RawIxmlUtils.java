@@ -81,6 +81,23 @@ public final class RawIxmlUtils
                 value = param.substring(endIndex + 1, endIndex2);
                 endIndex2++;
             }
+            else if (c == '{')
+            {
+                int braceCount = 1;
+                endIndex2 += 1;
+
+                while (endIndex2 < param.length() && braceCount > 0)
+                {
+                    c = param.charAt(endIndex2);
+                    if (c == '{')
+                        braceCount++;
+                    else if (c == '}')
+                        braceCount--;
+                    endIndex2++;
+                }
+
+                value = param.substring(endIndex, endIndex2);
+            }
             else
             {
                 while (endIndex2 + 1 < param.length() && (c != ' '))

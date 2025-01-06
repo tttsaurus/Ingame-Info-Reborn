@@ -6,7 +6,9 @@ import com.tttsaurus.ingameinfo.common.api.gui.layout.ElementGroup;
 import com.tttsaurus.ingameinfo.common.api.internal.InternalMethods;
 import com.tttsaurus.ingameinfo.common.impl.gui.layout.MainGroup;
 import com.tttsaurus.ingameinfo.common.impl.serialization.GuiLayoutDeserializer;
+import java.io.File;
 import java.io.RandomAccessFile;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -37,6 +39,8 @@ public abstract class View
         return list;
     }
 
+    public String getDefaultIxml() { return ""; }
+
     // searching the file under ./config/ingameinfo/
     // and .ixml is the suffix
     public abstract String getIxmlFileName();
@@ -45,15 +49,29 @@ public abstract class View
     {
         try
         {
-            RandomAccessFile file = new RandomAccessFile("config/ingameinfo/" + getIxmlFileName() + ".ixml", "rw");
+            File directory = new File("config/ingameinfo");
+            if (!directory.exists()) directory.mkdirs();
 
+            String filePath = "config/ingameinfo/" + getIxmlFileName() + ".ixml";
+            File testFile = new File(filePath);
+            boolean writeDefault = !testFile.exists();
+
+            RandomAccessFile file = new RandomAccessFile(filePath, "rw");
             StringBuilder builder = new StringBuilder();
 
-            String line = file.readLine();
-            while (line != null)
+            if (writeDefault)
             {
-                builder.append(line);
-                line = file.readLine();
+                file.write(getDefaultIxml().getBytes(StandardCharsets.UTF_8));
+                builder.append(getDefaultIxml().replace("\n", ""));
+            }
+            else
+            {
+                String line = file.readLine();
+                while (line != null)
+                {
+                    builder.append(line);
+                    line = file.readLine();
+                }
             }
 
             GuiLayoutDeserializer deserializer = new GuiLayoutDeserializer();

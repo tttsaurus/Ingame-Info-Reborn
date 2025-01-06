@@ -20,7 +20,6 @@ public class ImageRenderer implements IRenderer
     protected float y = 0;
     protected float width = 0;
     protected float height = 0;
-    protected float scale = 1f;
 
     //<editor-fold desc="getters & setters">
     public Texture2D getTexture() { return texture; }
@@ -36,15 +35,9 @@ public class ImageRenderer implements IRenderer
 
     public float getHeight() { return height; }
     public void setHeight(float height) { this.height = height; }
-
-    public float getScale() { return scale; }
-    public void setSclae(float scale) { this.scale = scale; }
     //</editor-fold>
 
-    protected ImageRenderer()
-    {
-
-    }
+    protected ImageRenderer() { }
     public ImageRenderer(Texture2D texture)
     {
         this.texture = texture;

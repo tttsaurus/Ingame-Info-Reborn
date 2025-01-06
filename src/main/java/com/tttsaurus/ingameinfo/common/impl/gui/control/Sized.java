@@ -4,6 +4,7 @@ import com.tttsaurus.ingameinfo.common.api.gui.Element;
 import com.tttsaurus.ingameinfo.common.api.gui.registry.RegisterElement;
 import com.tttsaurus.ingameinfo.common.api.gui.style.StyleProperty;
 
+// for those who don't implicitly have a size
 @RegisterElement(constructable = false)
 public abstract class Sized extends Element
 {
