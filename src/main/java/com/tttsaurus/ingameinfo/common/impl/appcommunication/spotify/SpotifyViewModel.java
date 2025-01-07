@@ -9,7 +9,6 @@ import com.tttsaurus.ingameinfo.common.api.mvvm.binding.ReactiveObject;
 import com.tttsaurus.ingameinfo.common.api.mvvm.viewmodel.ViewModel;
 import com.tttsaurus.ingameinfo.common.impl.igievent.EventCenter;
 import java.io.File;
-import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.time.Duration;
 import java.time.LocalDateTime;
@@ -67,6 +66,22 @@ public class SpotifyViewModel extends ViewModel<SpotifyView>
                 return null;
             });
     }
+    private void refreshTrackInfo()
+    {
+        CompletableFuture.supplyAsync(() ->
+        {
+            try
+            {
+                TrackPlaying trackPlaying = SpotifyAccessUtils.getCurrentlyPlaying(SpotifyUserInfo.token.accessToken);
+                if (!albumImageUrl.get().equals(trackPlaying.albumImage300by300))
+                    albumImageUrl.set(trackPlaying.albumImage300by300);
+                if (!trackTitleText.get().equals(trackPlaying.trackName))
+                    trackTitleText.set(trackPlaying.trackName);
+            }
+            catch (Exception ignored) { }
+            return null;
+        });
+    }
 
     @Override
     public void start()
@@ -108,6 +123,7 @@ public class SpotifyViewModel extends ViewModel<SpotifyView>
                 builder.append(line);
                 line = file.readLine();
             }
+            file.close();
 
             String refreshToken = builder.toString();
             if (!refreshToken.isEmpty())
@@ -115,21 +131,34 @@ public class SpotifyViewModel extends ViewModel<SpotifyView>
                 SpotifyUserInfo.token.refreshToken = refreshToken;
                 CompletableFuture.supplyAsync(() ->
                 {
+                    boolean success = false;
                     try
                     {
                         SpotifyOAuthUtils.refreshAccessToken(SpotifyUserInfo.token);
+                        success = true;
                     }
-                    catch (IOException ignored) { }
+                    catch (Exception e)
+                    {
+                        SpotifyUserInfo.token.accessToken = "";
+                    }
+
+                    if (success)
+                    {
+                        try
+                        {
+                            SpotifyUserInfo.userName = SpotifyAccessUtils.getUserName(SpotifyUserInfo.token.accessToken);
+                        }
+                        catch (Exception ignored) { }
+                    }
                     return null;
                 });
             }
-
-            file.close();
         }
         catch (Exception ignored) { }
     }
 
     private float refreshTokenTimer = 0;
+    private float refreshTrackTimer = 0;
     @Override
     public void onFixedUpdate(double deltaTime)
     {
@@ -138,6 +167,13 @@ public class SpotifyViewModel extends ViewModel<SpotifyView>
         {
             refreshTokenTimer -= 5f;
             refreshTokenIfNeeded();
+        }
+
+        refreshTrackTimer += (float)deltaTime;
+        if (refreshTrackTimer > 3f)
+        {
+            refreshTrackTimer -= 3f;
+            refreshTrackInfo();
         }
     }
 }
