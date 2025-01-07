@@ -80,7 +80,10 @@ public class GuiLayout
         if (groupLayer - 1 < 0)
             mainGroup.add(groupBuffer.get(groupLayer));
         else
+        {
             groupBuffer.get(groupLayer - 1).add(groupBuffer.get(groupLayer));
+            groupBuffer.remove(groupBuffer.size() - 1);
+        }
         return this;
     }
 

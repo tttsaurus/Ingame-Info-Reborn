@@ -5,6 +5,7 @@ import com.tttsaurus.ingameinfo.common.api.gui.layout.Padding;
 import com.tttsaurus.ingameinfo.common.api.gui.layout.Pivot;
 import com.tttsaurus.ingameinfo.common.api.gui.layout.Rect;
 import com.tttsaurus.ingameinfo.common.api.gui.registry.RegisterElement;
+import com.tttsaurus.ingameinfo.common.api.gui.style.CallbackInfo;
 import com.tttsaurus.ingameinfo.common.api.gui.style.StylePropertyCallback;
 import com.tttsaurus.ingameinfo.common.api.gui.style.StyleProperty;
 import com.tttsaurus.ingameinfo.common.api.render.RenderUtils;
@@ -27,23 +28,48 @@ public abstract class Element
     private boolean needReCalc = false;
     //</editor-fold>
 
-    @StyleProperty
-    public String uid = "";
-
     @StylePropertyCallback
     public void requestReCalc() { needReCalc = true; }
 
-    @StyleProperty(setterCallbackPost = "requestReCalc")
+    @StylePropertyCallback
+    public void uidValidation(String value, CallbackInfo callbackInfo)
+    {
+        if (value == null) callbackInfo.cancel = true;
+    }
+    @StyleProperty(setterCallbackPre = "uidValidation")
+    public String uid = "";
+
+    @StylePropertyCallback
+    public void alignmentValidation(Alignment value, CallbackInfo callbackInfo)
+    {
+        if (value == null) callbackInfo.cancel = true;
+    }
+    @StyleProperty(setterCallbackPost = "requestReCalc", setterCallbackPre = "alignmentValidation")
     public Alignment alignment = Alignment.NULL;
 
-    @StyleProperty(setterCallbackPost = "requestReCalc")
+    @StylePropertyCallback
+    public void pivotValidation(Pivot value, CallbackInfo callbackInfo)
+    {
+        if (value == null) callbackInfo.cancel = true;
+    }
+    @StyleProperty(setterCallbackPost = "requestReCalc", setterCallbackPre = "pivotValidation")
     public Pivot pivot = Pivot.TOP_LEFT;
 
-    @StyleProperty(setterCallbackPost = "requestReCalc")
+    @StylePropertyCallback
+    public void paddingValidation(Padding value, CallbackInfo callbackInfo)
+    {
+        if (value == null) callbackInfo.cancel = true;
+    }
+    @StyleProperty(setterCallbackPost = "requestReCalc", setterCallbackPre = "paddingValidation")
     public Padding padding = new Padding(0, 0, 0, 0);
 
     // determines how the background is drawn (optional)
-    @StyleProperty
+    @StylePropertyCallback
+    public void backgroundStyleValidation(String value, CallbackInfo callbackInfo)
+    {
+        if (value == null) callbackInfo.cancel = true;
+    }
+    @StyleProperty(setterCallbackPre = "backgroundStyleValidation")
     public String backgroundStyle;
 
     public void resetRenderInfo()

@@ -4,6 +4,7 @@ import com.tttsaurus.ingameinfo.common.api.animation.text.ITextAnimDef;
 import com.tttsaurus.ingameinfo.common.api.gui.Element;
 import com.tttsaurus.ingameinfo.common.api.gui.layout.Rect;
 import com.tttsaurus.ingameinfo.common.api.gui.registry.RegisterElement;
+import com.tttsaurus.ingameinfo.common.api.gui.style.CallbackInfo;
 import com.tttsaurus.ingameinfo.common.api.gui.style.StyleProperty;
 import com.tttsaurus.ingameinfo.common.api.gui.style.StylePropertyCallback;
 import com.tttsaurus.ingameinfo.common.impl.gui.style.wrapped.DoubleProperty;
@@ -20,28 +21,43 @@ public class AnimText extends Element
         animTextRenderer.setColor(color);
     }
 
-    @StyleProperty
+    @StylePropertyCallback
+    public void textAnimDefValidation(ITextAnimDef value, CallbackInfo callbackInfo)
+    {
+        if (value == null) callbackInfo.cancel = true;
+    }
+    @StyleProperty(setterCallbackPre = "textAnimDefValidation")
     public ITextAnimDef animDef;
 
     @StyleProperty
     public DoubleProperty timer = new DoubleProperty();
 
     @StylePropertyCallback
+    public void textValidation(String value, CallbackInfo callbackInfo)
+    {
+        if (value == null) callbackInfo.cancel = true;
+    }
+    @StylePropertyCallback
     public void setTextCallback()
     {
         animTextRenderer.setText(text);
         requestReCalc();
     }
-    @StyleProperty(setterCallbackPost = "setTextCallback")
+    @StyleProperty(setterCallbackPost = "setTextCallback", setterCallbackPre = "textValidation")
     public String text;
 
+    @StylePropertyCallback
+    public void scaleValidation(float value, CallbackInfo callbackInfo)
+    {
+        if (value < 0) callbackInfo.cancel = true;
+    }
     @StylePropertyCallback
     public void setScaleCallback()
     {
         animTextRenderer.setScale(scale);
         requestReCalc();
     }
-    @StyleProperty(setterCallbackPost = "setScaleCallback")
+    @StyleProperty(setterCallbackPost = "setScaleCallback", setterCallbackPre = "scaleValidation")
     public float scale;
 
     @StylePropertyCallback

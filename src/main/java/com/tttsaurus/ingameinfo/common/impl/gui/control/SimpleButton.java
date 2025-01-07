@@ -6,6 +6,7 @@ import com.tttsaurus.ingameinfo.common.api.gui.delegate.button.IMousePressButton
 import com.tttsaurus.ingameinfo.common.api.gui.delegate.button.IMouseReleaseButton;
 import com.tttsaurus.ingameinfo.common.api.gui.layout.Rect;
 import com.tttsaurus.ingameinfo.common.api.gui.registry.RegisterElement;
+import com.tttsaurus.ingameinfo.common.api.gui.style.CallbackInfo;
 import com.tttsaurus.ingameinfo.common.api.gui.style.StyleProperty;
 import com.tttsaurus.ingameinfo.common.api.gui.style.StylePropertyCallback;
 import com.tttsaurus.ingameinfo.common.api.render.RenderUtils;
@@ -30,6 +31,11 @@ public class SimpleButton extends AbstractButton
     public IntProperty holdColor = new IntProperty();
 
     @StylePropertyCallback
+    public void textValidation(String value, CallbackInfo callbackInfo)
+    {
+        if (value == null) callbackInfo.cancel = true;
+    }
+    @StylePropertyCallback
     public void setTextCallback()
     {
         textRenderer.setText(text);
@@ -37,7 +43,7 @@ public class SimpleButton extends AbstractButton
         height = textRenderer.simulateHeight() + 4;
         requestReCalc();
     }
-    @StyleProperty(setterCallbackPost = "setTextCallback")
+    @StyleProperty(setterCallbackPost = "setTextCallback", setterCallbackPre = "textValidation")
     public String text;
 
     public SimpleButton()

@@ -2,6 +2,7 @@ package com.tttsaurus.ingameinfo.common.impl.gui.control;
 
 import com.tttsaurus.ingameinfo.common.api.gui.layout.Rect;
 import com.tttsaurus.ingameinfo.common.api.gui.registry.RegisterElement;
+import com.tttsaurus.ingameinfo.common.api.gui.style.CallbackInfo;
 import com.tttsaurus.ingameinfo.common.api.gui.style.StyleProperty;
 import com.tttsaurus.ingameinfo.common.api.gui.style.StylePropertyCallback;
 import com.tttsaurus.ingameinfo.common.api.render.RenderUtils;
@@ -26,18 +27,29 @@ public class SlidingText extends Sized
     private float freezeTimer = 0;
     private boolean onFreezeTiming = false;
 
-    @StyleProperty
+    @StylePropertyCallback
+    public void nonNegativeFloatValidation(float value, CallbackInfo callbackInfo)
+    {
+        if (value < 0) callbackInfo.cancel = true;
+    }
+
+    @StyleProperty(setterCallbackPre = "nonNegativeFloatValidation")
     public float spareWidth = 10f;
 
-    @StyleProperty
+    @StyleProperty(setterCallbackPre = "nonNegativeFloatValidation")
     public float xShiftSpeed = 8f;
 
-    @StyleProperty
-    public boolean onDemandSliding;
-
-    @StyleProperty
+    @StyleProperty(setterCallbackPre = "nonNegativeFloatValidation")
     public float freezeTime = 2f;
 
+    @StyleProperty
+    public boolean onDemandSliding = false;
+
+    @StylePropertyCallback
+    public void textValidation(String value, CallbackInfo callbackInfo)
+    {
+        if (value == null) callbackInfo.cancel = true;
+    }
     @StylePropertyCallback
     public void setTextCallback()
     {
@@ -48,7 +60,7 @@ public class SlidingText extends Sized
         height = textRenderer.simulateHeight();
         requestReCalc();
     }
-    @StyleProperty(setterCallbackPost = "setTextCallback")
+    @StyleProperty(setterCallbackPost = "setTextCallback", setterCallbackPre = "textValidation")
     public String text;
 
     @StylePropertyCallback
@@ -61,7 +73,7 @@ public class SlidingText extends Sized
         height = textRenderer.simulateHeight();
         requestReCalc();
     }
-    @StyleProperty(setterCallbackPost = "setScaleCallback")
+    @StyleProperty(setterCallbackPost = "setScaleCallback", setterCallbackPre = "nonNegativeFloatValidation")
     public float scale;
 
     @StylePropertyCallback

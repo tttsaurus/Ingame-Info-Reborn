@@ -3,6 +3,7 @@ package com.tttsaurus.ingameinfo.common.impl.gui.control;
 import com.tttsaurus.ingameinfo.common.api.gui.Element;
 import com.tttsaurus.ingameinfo.common.api.gui.layout.Rect;
 import com.tttsaurus.ingameinfo.common.api.gui.registry.RegisterElement;
+import com.tttsaurus.ingameinfo.common.api.gui.style.CallbackInfo;
 import com.tttsaurus.ingameinfo.common.api.gui.style.StyleProperty;
 import com.tttsaurus.ingameinfo.common.api.gui.style.StylePropertyCallback;
 import com.tttsaurus.ingameinfo.common.impl.render.renderer.TextRenderer;
@@ -19,21 +20,31 @@ public class Text extends Element
     }
 
     @StylePropertyCallback
+    public void textValidation(String value, CallbackInfo callbackInfo)
+    {
+        if (value == null) callbackInfo.cancel = true;
+    }
+    @StylePropertyCallback
     public void setTextCallback()
     {
         textRenderer.setText(text);
         requestReCalc();
     }
-    @StyleProperty(setterCallbackPost = "setTextCallback")
+    @StyleProperty(setterCallbackPost = "setTextCallback", setterCallbackPre = "textValidation")
     public String text;
 
+    @StylePropertyCallback
+    public void scaleValidation(float value, CallbackInfo callbackInfo)
+    {
+        if (value < 0) callbackInfo.cancel = true;
+    }
     @StylePropertyCallback
     public void setScaleCallback()
     {
         textRenderer.setScale(scale);
         requestReCalc();
     }
-    @StyleProperty(setterCallbackPost = "setScaleCallback")
+    @StyleProperty(setterCallbackPost = "setScaleCallback", setterCallbackPre = "scaleValidation")
     public float scale;
 
     @StylePropertyCallback

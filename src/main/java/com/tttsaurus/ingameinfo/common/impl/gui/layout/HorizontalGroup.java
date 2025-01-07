@@ -6,7 +6,9 @@ import com.tttsaurus.ingameinfo.common.api.gui.layout.ElementGroup;
 import com.tttsaurus.ingameinfo.common.api.gui.layout.Rect;
 import com.tttsaurus.ingameinfo.common.api.gui.layout.Skewness;
 import com.tttsaurus.ingameinfo.common.api.gui.registry.RegisterElement;
+import com.tttsaurus.ingameinfo.common.api.gui.style.CallbackInfo;
 import com.tttsaurus.ingameinfo.common.api.gui.style.StyleProperty;
+import com.tttsaurus.ingameinfo.common.api.gui.style.StylePropertyCallback;
 
 @RegisterElement
 public class HorizontalGroup extends ElementGroup
@@ -16,7 +18,13 @@ public class HorizontalGroup extends ElementGroup
     // pivot does change how the layout is calculated when skewness is null
     // skewness determines the layout when it's set
     // elements' alignment overrides the skewness
-    @StyleProperty(setterCallbackPost = "requestReCalc")
+
+    @StylePropertyCallback
+    public void skewnessValidation(Skewness value, CallbackInfo callbackInfo)
+    {
+        if (value == null) callbackInfo.cancel = true;
+    }
+    @StyleProperty(setterCallbackPost = "requestReCalc", setterCallbackPre = "skewnessValidation")
     public Skewness skewness = Skewness.NULL;
 
     @Override
