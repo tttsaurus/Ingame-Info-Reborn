@@ -23,17 +23,64 @@ public class SpotifyViewModel extends ViewModel<SpotifyView>
     @Reactive(targetUid = "trackTitle", property = "text", initiativeSync = true)
     public ReactiveObject<String> trackTitleText = new ReactiveObject<>(){};
 
+    private void refreshTokenIfNeeded()
+    {
+        long timeSpan = Duration.between(SpotifyUserInfo.token.start, LocalDateTime.now()).getSeconds();
+        if (timeSpan >= (SpotifyUserInfo.token.expiresIn - 10))
+        {
+            CompletableFuture.supplyAsync(() ->
+            {
+                try
+                {
+                    SpotifyOAuthUtils.refreshAccessToken(SpotifyUserInfo.token);
+                }
+                catch (Exception e)
+                {
+                    SpotifyUserInfo.token.accessToken = "";
+                }
+                return null;
+            });
+        }
+    }
+    private void refreshTokenIfNeeded(Runnable asyncThen)
+    {
+        long timeSpan = Duration.between(SpotifyUserInfo.token.start, LocalDateTime.now()).getSeconds();
+        if (timeSpan >= (SpotifyUserInfo.token.expiresIn - 10))
+        {
+            CompletableFuture.supplyAsync(() ->
+            {
+                try
+                {
+                    SpotifyOAuthUtils.refreshAccessToken(SpotifyUserInfo.token);
+                }
+                catch (Exception e)
+                {
+                    SpotifyUserInfo.token.accessToken = "";
+                }
+                return null;
+            }).thenRun(asyncThen);
+        }
+        else
+            CompletableFuture.supplyAsync(() ->
+            {
+                asyncThen.run();
+                return null;
+            });
+    }
+
     @Override
     public void start()
     {
         activeSetter.invoke(false);
+
         EventCenter.spotifyOverlayEvent.addListener((flag) ->
         {
             if (flag)
             {
                 activeSetter.invoke(true);
                 trackTitleText.set("Please wait...");
-                CompletableFuture.supplyAsync(() ->
+
+                refreshTokenIfNeeded(() ->
                 {
                     try
                     {
@@ -42,7 +89,6 @@ public class SpotifyViewModel extends ViewModel<SpotifyView>
                         trackTitleText.set(trackPlaying.trackName);
                     }
                     catch (Exception ignored) { }
-                    return null;
                 });
             }
             else
@@ -66,15 +112,16 @@ public class SpotifyViewModel extends ViewModel<SpotifyView>
             String refreshToken = builder.toString();
             if (!refreshToken.isEmpty())
             {
-                try
+                SpotifyUserInfo.token.refreshToken = refreshToken;
+                CompletableFuture.supplyAsync(() ->
                 {
-                    SpotifyUserInfo.token.refreshToken = refreshToken;
-                    SpotifyOAuthUtils.refreshAccessToken(SpotifyUserInfo.token);
-                }
-                catch (IOException e)
-                {
-                    file.setLength(0);
-                }
+                    try
+                    {
+                        SpotifyOAuthUtils.refreshAccessToken(SpotifyUserInfo.token);
+                    }
+                    catch (IOException ignored) { }
+                    return null;
+                });
             }
 
             file.close();
@@ -87,22 +134,10 @@ public class SpotifyViewModel extends ViewModel<SpotifyView>
     public void onFixedUpdate(double deltaTime)
     {
         refreshTokenTimer += (float)deltaTime;
-        if (refreshTokenTimer > 1f)
+        if (refreshTokenTimer > 5f)
         {
-            refreshTokenTimer -= 1f;
-            long timeSpan = Duration.between(SpotifyUserInfo.token.start, LocalDateTime.now()).getSeconds();
-            if (timeSpan >= (SpotifyUserInfo.token.expiresIn - 5))
-            {
-                CompletableFuture.supplyAsync(() ->
-                {
-                    try
-                    {
-                        SpotifyOAuthUtils.refreshAccessToken(SpotifyUserInfo.token);
-                    }
-                    catch (Exception ignored) { }
-                    return null;
-                });
-            }
+            refreshTokenTimer -= 5f;
+            refreshTokenIfNeeded();
         }
     }
 }
