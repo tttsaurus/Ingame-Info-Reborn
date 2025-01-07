@@ -12,6 +12,12 @@ public class Text extends Element
 {
     private final TextRenderer textRenderer = new TextRenderer();
 
+    public Text()
+    {
+        color = DEFAULT_COLOR_LIGHT;
+        textRenderer.setColor(color);
+    }
+
     @StylePropertyCallback
     public void setTextCallback()
     {
@@ -58,6 +64,7 @@ public class Text extends Element
     {
 
     }
+
     @Override
     public void onRenderUpdate(boolean focused)
     {

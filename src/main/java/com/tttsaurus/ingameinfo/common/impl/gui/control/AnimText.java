@@ -6,6 +6,7 @@ import com.tttsaurus.ingameinfo.common.api.gui.layout.Rect;
 import com.tttsaurus.ingameinfo.common.api.gui.registry.RegisterElement;
 import com.tttsaurus.ingameinfo.common.api.gui.style.StyleProperty;
 import com.tttsaurus.ingameinfo.common.api.gui.style.StylePropertyCallback;
+import com.tttsaurus.ingameinfo.common.impl.gui.style.wrapped.DoubleProperty;
 import com.tttsaurus.ingameinfo.common.impl.render.renderer.AnimTextRenderer;
 
 @RegisterElement
@@ -13,8 +14,17 @@ public class AnimText extends Element
 {
     private final AnimTextRenderer animTextRenderer = new AnimTextRenderer();
 
+    public AnimText()
+    {
+        color = DEFAULT_COLOR_LIGHT;
+        animTextRenderer.setColor(color);
+    }
+
     @StyleProperty
     public ITextAnimDef animDef;
+
+    @StyleProperty
+    public DoubleProperty timer = new DoubleProperty();
 
     @StylePropertyCallback
     public void setTextCallback()
@@ -60,7 +70,8 @@ public class AnimText extends Element
     @Override
     public void onFixedUpdate(double deltaTime)
     {
-        animDef.calcAnim(animTextRenderer.getCharacterInfos(), 0, deltaTime);
+        animDef.calcAnim(animTextRenderer.getCharacterInfos(), timer, deltaTime);
+        timer.set(timer.get() + deltaTime);
     }
 
     @Override

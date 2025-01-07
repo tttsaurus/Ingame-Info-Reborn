@@ -4,6 +4,6 @@ package com.tttsaurus.ingameinfo.common.api.gui.style.wrapped;
 public abstract class IWrappedStyleProperty<T>
 {
     protected T value;
-    public abstract T get();
-    public abstract void set(T value);
+    public T get() { return value; }
+    public void set(T value) { this.value = value; }
 }

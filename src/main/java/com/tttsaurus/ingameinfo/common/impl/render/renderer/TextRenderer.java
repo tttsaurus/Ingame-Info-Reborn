@@ -6,8 +6,6 @@ import java.awt.*;
 
 public class TextRenderer implements IRenderer
 {
-    public static final TextRenderer SHARED = new TextRenderer();
-
     public static final float DEFAULT_SCALE = 1f;
     public static final int DEFAULT_COLOR = Color.WHITE.getRGB();
     public static final boolean DEFAULT_SHADOW = true;
@@ -17,7 +15,7 @@ public class TextRenderer implements IRenderer
     protected float scale = DEFAULT_SCALE;
     protected int color = DEFAULT_COLOR;
     protected boolean shadow = DEFAULT_SHADOW;
-    protected String text;
+    protected String text = "";
 
     //<editor-fold desc="getters & setters">
     public float getX() { return x; }

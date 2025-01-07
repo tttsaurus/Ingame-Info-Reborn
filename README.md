@@ -24,17 +24,19 @@ This is a library mod that helps you to create in-game overlaid (or focused) gui
   - Foldout Group
 - Add controls like text, button, input field, etc.
   - Text (✔)
-  - Anim Text (mostly done)
-  - Button (✔)
+  - Sliding Text (✔)
+  - Anim Text (✔)
+  - Simple Button (✔)
   - Checkbox
   - Input Field
   - Image
+  - Url Image (✔)
   - GIF
   - Slide Bar
   - Progress Bar
   - Draggable
 - A gui layout builder (✔)
-- Introduce modular animation options for controls
+- Introduce modular animation options for controls (WIP)
 - Add crt support (✔)
 
 ## Latest Build

@@ -48,6 +48,7 @@ public abstract class ElementGroup extends Element
     @Override
     public void renderBackground()
     {
+        super.renderBackground();
         for (Element element: elements)
             element.renderBackground();
     }

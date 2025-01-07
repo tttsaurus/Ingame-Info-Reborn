@@ -4,10 +4,10 @@ import com.tttsaurus.ingameinfo.common.api.reflection.TypeUtils;
 import com.tttsaurus.ingameinfo.common.api.serialization.IDeserializer;
 
 @SuppressWarnings("all")
-public class PrimitiveTypesDeserializer<T> implements IDeserializer<T>
+public class BuiltinTypesDeserializer<T> implements IDeserializer<T>
 {
     private final Class<T> clazz;
-    public PrimitiveTypesDeserializer(Class<T> clazz) { this.clazz = clazz; }
+    public BuiltinTypesDeserializer(Class<T> clazz) { this.clazz = clazz; }
 
     @Override
     public T deserialize(String raw, String protocol)

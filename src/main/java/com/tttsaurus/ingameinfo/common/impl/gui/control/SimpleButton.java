@@ -13,7 +13,7 @@ import com.tttsaurus.ingameinfo.common.impl.gui.style.wrapped.IntProperty;
 import com.tttsaurus.ingameinfo.common.impl.render.renderer.TextRenderer;
 
 @RegisterElement
-public class SimpleButton extends Button
+public class SimpleButton extends AbstractButton
 {
     private final TextRenderer textRenderer = new TextRenderer();
 

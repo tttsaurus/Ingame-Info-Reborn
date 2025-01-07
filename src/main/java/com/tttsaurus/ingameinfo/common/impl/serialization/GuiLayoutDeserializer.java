@@ -25,11 +25,25 @@ public class GuiLayoutDeserializer implements IDeserializer<GuiLayout>
 
             for (Tuple<String, String> pair: nodes)
             {
-                if (pair.getFirst().equals("/Group"))
+                if (pair.getFirst().equals("Def"))
+                {
+                    List<Tuple<String, String>> defs = RawIxmlUtils.splitParams(pair.getSecond());
+                    for (Tuple<String, String> def: defs)
+                    {
+                        if (def.getFirst().equals("debug"))
+                            guiLayout.setDebug(Boolean.parseBoolean(def.getSecond()));
+                        else if (def.getFirst().equals("exitKey"))
+                            try { guiLayout.setExitKeyForFocusedGui(Integer.parseInt(def.getSecond())); }
+                            catch (Exception ignored) { }
+                        // and so on
+                    }
+                }
+                else if (pair.getFirst().equals("/Group"))
                 {
                     guiLayout.endGroup();
                     continue;
                 }
+
                 Element element = ElementRegistry.newElement(pair.getFirst());
                 if (element != null)
                 {

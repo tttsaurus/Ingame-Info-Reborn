@@ -6,7 +6,7 @@ import com.tttsaurus.ingameinfo.common.api.gui.style.wrapped.IWrappedStyleProper
 import com.tttsaurus.ingameinfo.common.api.reflection.TypeUtils;
 import com.tttsaurus.ingameinfo.common.api.serialization.Deserializer;
 import com.tttsaurus.ingameinfo.common.api.serialization.IDeserializer;
-import com.tttsaurus.ingameinfo.common.impl.serialization.PrimitiveTypesDeserializer;
+import com.tttsaurus.ingameinfo.common.impl.serialization.BuiltinTypesDeserializer;
 import java.io.IOException;
 import java.lang.invoke.MethodHandle;
 import java.lang.invoke.MethodHandles;
@@ -132,14 +132,14 @@ public final class RegistryUtils
                     }
 
                     if (hasWrappedClass && isWrappedClassPrimitive)
-                        stylePropertyDeserializers.put(wrappedSetter, new PrimitiveTypesDeserializer<>(wrappedClass));
+                        stylePropertyDeserializers.put(wrappedSetter, new BuiltinTypesDeserializer<>(wrappedClass));
                     else if (hasWrappedClass && wrappedClass.isAnnotationPresent(Deserializer.class))
                     {
                         Deserializer deserializer = wrappedClass.getAnnotation(Deserializer.class);
                         stylePropertyDeserializers.put(wrappedSetter, deserializer.value().newInstance());
                     }
                     else if (TypeUtils.isPrimitiveOrWrappedPrimitive(fieldClass) || fieldClass.equals(String.class))
-                        stylePropertyDeserializers.put(wrappedSetter, new PrimitiveTypesDeserializer<>(fieldClass));
+                        stylePropertyDeserializers.put(wrappedSetter, new BuiltinTypesDeserializer<>(fieldClass));
                     else if (fieldClass.isAnnotationPresent(Deserializer.class))
                     {
                         Deserializer deserializer = fieldClass.getAnnotation(Deserializer.class);

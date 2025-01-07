@@ -27,7 +27,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 @SuppressWarnings("all")
 public final class IgiGuiLifeCycle
 {
-    private static final int maxFPS = 75;
+    private static final int maxFPS = 125;
     private static final double timePerFrame = 1d / maxFPS;
     private static final StopWatch stopwatch = new StopWatch();
     private static double deltaTime = 0d;

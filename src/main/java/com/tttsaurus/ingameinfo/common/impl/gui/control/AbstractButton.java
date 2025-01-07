@@ -5,7 +5,7 @@ import com.tttsaurus.ingameinfo.common.api.input.MouseUtils;
 import java.util.ArrayList;
 import java.util.List;
 
-public abstract class Button extends Sized
+public abstract class AbstractButton extends Sized
 {
     private boolean hover = false;
     private boolean hold = false;
@@ -16,17 +16,18 @@ public abstract class Button extends Sized
     private final List<IMouseReleaseButton> release = new ArrayList<>();
     private final List<IMouseClickButton> click = new ArrayList<>();
 
-    public Button addListener(IMouseEnterButton action) { enter.add(action); return this; }
-    public Button addListener(IMouseLeaveButton action) { leave.add(action); return this; }
-    public Button addListener(IMousePressButton action) { press.add(action); return this; }
-    public Button addListener(IMouseReleaseButton action) { release.add(action); return this; }
-    public Button addListener(IMouseClickButton action) { click.add(action); return this; }
+    public AbstractButton addListener(IMouseEnterButton action) { enter.add(action); return this; }
+    public AbstractButton addListener(IMouseLeaveButton action) { leave.add(action); return this; }
+    public AbstractButton addListener(IMousePressButton action) { press.add(action); return this; }
+    public AbstractButton addListener(IMouseReleaseButton action) { release.add(action); return this; }
+    public AbstractButton addListener(IMouseClickButton action) { click.add(action); return this; }
 
     @Override
     public void onFixedUpdate(double deltaTime)
     {
 
     }
+
     @Override
     public void onRenderUpdate(boolean focused)
     {
