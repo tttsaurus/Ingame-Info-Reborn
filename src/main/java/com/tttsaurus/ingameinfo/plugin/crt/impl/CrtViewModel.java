@@ -66,4 +66,10 @@ public final class CrtViewModel extends ViewModel<CrtView>
         IViewModelStart action = startActions.get(runtimeMvvm);
         if (action != null) action.start();
     }
+
+    @Override
+    public void onFixedUpdate(double deltaTime)
+    {
+
+    }
 }

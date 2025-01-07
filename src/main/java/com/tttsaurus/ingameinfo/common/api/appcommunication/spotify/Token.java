@@ -1,6 +1,6 @@
 package com.tttsaurus.ingameinfo.common.api.appcommunication.spotify;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 public class Token
 {
@@ -8,14 +8,14 @@ public class Token
     public String refreshToken;
 
     public int expiresIn;
-    public LocalDate start;
+    public LocalDateTime start;
 
     public Token(String accessToken, String refreshToken, int expiresIn)
     {
         this.accessToken = accessToken;
         this.refreshToken = refreshToken;
         this.expiresIn = expiresIn;
-        this.start = LocalDate.now();
+        this.start = LocalDateTime.now();
     }
 
     public Token()
@@ -23,6 +23,6 @@ public class Token
         accessToken = "";
         refreshToken = "";
         expiresIn = 0;
-        start = LocalDate.now();
+        start = LocalDateTime.now();
     }
 }

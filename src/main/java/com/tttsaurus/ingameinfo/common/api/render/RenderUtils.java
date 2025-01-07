@@ -11,6 +11,8 @@ import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import org.lwjgl.BufferUtils;
 import org.lwjgl.opengl.GL11;
 import java.nio.ByteBuffer;
+import java.nio.ByteOrder;
+import java.nio.IntBuffer;
 
 public final class RenderUtils
 {
@@ -248,8 +250,12 @@ public final class RenderUtils
         GlStateManager.popMatrix();
     }
 
+    private static final IntBuffer intBuffer = ByteBuffer.allocateDirect(16 << 2).order(ByteOrder.nativeOrder()).asIntBuffer();
     public static void renderTexture2D(float x, float y, float width, float height, int textureWidth, int textureHeight)
     {
+        GL11.glGetInteger(GL11.GL_TEXTURE_BINDING_2D, intBuffer);
+        int textureID = intBuffer.get(0);
+
         GlStateManager.enableTexture2D();
         GlStateManager.disableLighting();
         GlStateManager.enableBlend();
@@ -263,6 +269,8 @@ public final class RenderUtils
         GlStateManager.scale(width/(float)((int)(width)), height/(float)((int)(height)), 0);
         Gui.drawScaledCustomSizeModalRect(0, 0, 0, 0, textureWidth, textureHeight, (int)width, (int)height, textureWidth, textureHeight);
         GlStateManager.popMatrix();
+
+        GlStateManager.bindTexture(textureID);
     }
 
     public static Texture2D getInGameScreenShot(int x, int y, int width, int height)

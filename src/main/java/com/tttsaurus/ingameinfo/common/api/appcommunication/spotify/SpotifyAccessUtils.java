@@ -47,9 +47,9 @@ public final class SpotifyAccessUtils
                 String album = RawJsonUtils.extractValue(item, "album");
                 String images = RawJsonUtils.extractValue(album, "images");
                 List<String> imageList = RawJsonUtils.splitArray(images);
-                track.albumImage64by64 = RawJsonUtils.extractValue(imageList.get(0), "url");
+                track.albumImage64by64 = RawJsonUtils.extractValue(imageList.get(2), "url");
                 track.albumImage300by300 = RawJsonUtils.extractValue(imageList.get(1), "url");
-                track.albumImage640by640 = RawJsonUtils.extractValue(imageList.get(2), "url");
+                track.albumImage640by640 = RawJsonUtils.extractValue(imageList.get(0), "url");
 
                 String artists = RawJsonUtils.extractValue(item, "artists");
                 List<String> artistList = RawJsonUtils.splitArray(artists);

@@ -2,6 +2,8 @@ package com.tttsaurus.ingameinfo.proxy;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
+import com.tttsaurus.ingameinfo.IgiConfig;
+import com.tttsaurus.ingameinfo.common.api.appcommunication.spotify.SpotifyOAuthUtils;
 import com.tttsaurus.ingameinfo.common.api.event.MvvmRegisterEvent;
 import com.tttsaurus.ingameinfo.common.api.gui.Element;
 import com.tttsaurus.ingameinfo.common.api.gui.style.IStylePropertyCallbackPost;
@@ -16,6 +18,7 @@ import com.tttsaurus.ingameinfo.common.impl.gui.registry.ElementRegistry;
 import com.tttsaurus.ingameinfo.common.impl.mvvm.registry.MvvmRegisterEventHandler;
 import com.tttsaurus.ingameinfo.plugin.crt.impl.CrtEventManager;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import org.apache.logging.log4j.Logger;
@@ -25,7 +28,11 @@ public class CommonProxy
 {
     public void preInit(FMLPreInitializationEvent event, Logger logger)
     {
+        IgiConfig.CONFIG = new Configuration(event.getSuggestedConfigurationFile());
+        IgiConfig.loadConfig();
 
+        SpotifyOAuthUtils.CLIENT_ID = IgiConfig.SPOTIFY_CLIENT_ID;
+        SpotifyOAuthUtils.CLIENT_SECRET = IgiConfig.SPOTIFY_CLIENT_SECRET;
     }
 
     public void init(FMLInitializationEvent event, Logger logger)

@@ -20,7 +20,7 @@ public class UrlImage extends Sized
     @StylePropertyCallback
     public void setUrlCallback()
     {
-        urlImageRenderer.updateURL(url);
+        urlImageRenderer.updateUrlAsync(url);
     }
     @StyleProperty(setterCallbackPost = "setUrlCallback", setterCallbackPre = "urlValidation")
     public String url;

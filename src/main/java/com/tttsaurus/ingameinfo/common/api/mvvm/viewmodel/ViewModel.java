@@ -1,6 +1,7 @@
 package com.tttsaurus.ingameinfo.common.api.mvvm.viewmodel;
 
 import com.tttsaurus.ingameinfo.common.api.gui.GuiLayout;
+import com.tttsaurus.ingameinfo.common.api.internal.IAction_1Param;
 import com.tttsaurus.ingameinfo.common.api.mvvm.binding.IReactiveObjectGetter;
 import com.tttsaurus.ingameinfo.common.api.mvvm.binding.Reactive;
 import com.tttsaurus.ingameinfo.common.api.mvvm.binding.VvmBinding;
@@ -13,6 +14,8 @@ import java.util.Map;
 @SuppressWarnings("all")
 public abstract class ViewModel<T extends View>
 {
+    public IAction_1Param<Boolean> activeSetter;
+
     private VvmBinding<T> binding = new VvmBinding<>();
 
     // init entry point
@@ -28,4 +31,5 @@ public abstract class ViewModel<T extends View>
     }
 
     public abstract void start();
+    public abstract void onFixedUpdate(double deltaTime);
 }

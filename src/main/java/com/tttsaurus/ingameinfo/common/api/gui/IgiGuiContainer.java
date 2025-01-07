@@ -27,6 +27,7 @@ public class IgiGuiContainer
     protected int backgroundColor = -1072689136;
 
     private boolean initFlag = false;
+    private boolean active = true;
 
     //<editor-fold desc="getters">
     public int getExitKeyForFocusedGui() { return exitKeyForFocusedGui; }
@@ -49,6 +50,7 @@ public class IgiGuiContainer
         mainGroup.calcRenderPos(mainGroup.rect);
         mainGroup.finishReCalc();
 
+        viewModel.activeSetter = (flag) -> { active = flag; };
         viewModel.start();
     }
     public void onScaledResolutionResize()
@@ -59,10 +61,15 @@ public class IgiGuiContainer
     }
     public void onFixedUpdate(double deltaTime)
     {
+        if (!active) return;
+
+        viewModel.onFixedUpdate(deltaTime);
         mainGroup.onFixedUpdate(deltaTime);
     }
     public void onRenderUpdate(boolean focused)
     {
+        if (!active) return;
+
         if (isFocused && hasFocusBackground)
         {
             ScaledResolution resolution = new ScaledResolution(Minecraft.getMinecraft());

@@ -1,10 +1,8 @@
 package com.tttsaurus.ingameinfo.common.impl.appcommunication.spotify;
 
-import com.tttsaurus.ingameinfo.common.api.appcommunication.spotify.SpotifyAccessUtils;
 import com.tttsaurus.ingameinfo.common.api.appcommunication.spotify.SpotifyOAuthUtils;
-import com.tttsaurus.ingameinfo.common.api.appcommunication.spotify.TrackPlaying;
 import com.tttsaurus.ingameinfo.common.api.appcommunication.spotify.SpotifyUserInfo;
-import com.tttsaurus.ingameinfo.common.impl.render.renderer.UrlImageRenderer;
+import com.tttsaurus.ingameinfo.common.impl.igievent.EventCenter;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.util.text.Style;
@@ -42,10 +40,10 @@ public final class SpotifyCommandHandler
         else if (message.startsWith("#spotify-oauth-code"))
         {
             event.setCanceled(true);
-            player.sendMessage(new TextComponentString(TextFormatting.DARK_PURPLE + message));
             String[] args = message.split(" ");
             if (args.length == 2)
             {
+                player.sendMessage(new TextComponentString(TextFormatting.DARK_PURPLE + message));
                 String authorizationCode = args[1];
                 try
                 {
@@ -62,38 +60,29 @@ public final class SpotifyCommandHandler
                 }
             }
         }
-        else if (message.startsWith("#spotify-ui-display"))
+        else if (message.startsWith("#spotify-gui"))
         {
             event.setCanceled(true);
-            player.sendMessage(new TextComponentString(TextFormatting.DARK_PURPLE + message));
             String[] args = message.split(" ");
             if (args.length == 2)
             {
                 String param = args[1];
                 if (param.equals("true") || param.equals("false"))
                 {
+                    player.sendMessage(new TextComponentString(TextFormatting.DARK_PURPLE + message));
                     boolean flag = param.equals("true");
                     if (flag)
                     {
                         if (SpotifyUserInfo.token.accessToken.isEmpty())
                         {
                             player.sendMessage(new TextComponentString(TextFormatting.AQUA + "[SpotifyBot]" + TextFormatting.RESET + " The access token is empty."));
+                            player.sendMessage(new TextComponentString(TextFormatting.AQUA + "[SpotifyBot]" + TextFormatting.RESET + " Please run the command #spotify-oauth first."));
                             return;
                         }
-                        try
-                        {
-                            TrackPlaying trackPlaying = SpotifyAccessUtils.getCurrentlyPlaying(SpotifyUserInfo.token.accessToken);
-                            player.sendMessage(new TextComponentString(TextFormatting.AQUA + "[SpotifyBot]" + TextFormatting.RESET + " " + trackPlaying.trackName));
-                            trackPlaying.artists.forEach(str -> player.sendMessage(new TextComponentString(TextFormatting.AQUA + "[SpotifyBot]" + TextFormatting.RESET + " " + str)));
-                            UrlImageRenderer.SHARED.updateURL(trackPlaying.albumImage640by640);
-                        }
-                        catch (Exception e)
-                        {
-                            player.sendMessage(new TextComponentString(TextFormatting.AQUA + "[SpotifyBot]" + TextFormatting.RESET + " Exception: " + e.getMessage()));
-                            return;
-                        }
-                        // display
+                        EventCenter.spotifyOverlayEvent.trigger(true);
                     }
+                    else
+                        EventCenter.spotifyOverlayEvent.trigger(false);
                 }
             }
         }

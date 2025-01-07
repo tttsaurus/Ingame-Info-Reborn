@@ -235,7 +235,7 @@ public final class IgiGuiLifeCycle
             else if (!isPlaceholderGuiOn && !openedGuiMap.isEmpty() && Minecraft.getMinecraft().currentScreen == null)
             {
                 AtomicBoolean focus = new AtomicBoolean(false);
-                openedGuiMap.forEach((uuis, guiContainer) -> focus.set(focus.get() || guiContainer.getFocused()));
+                openedGuiMap.forEach((uuid, guiContainer) -> focus.set(focus.get() || guiContainer.getFocused()));
 
                 if (focus.get())
                 {

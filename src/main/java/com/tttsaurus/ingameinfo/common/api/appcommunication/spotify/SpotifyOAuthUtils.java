@@ -7,7 +7,7 @@ import com.tttsaurus.ingameinfo.common.api.serialization.json.RawJsonUtils;
 import java.io.*;
 import java.net.*;
 import java.nio.charset.StandardCharsets;
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import javax.net.ssl.HttpsURLConnection;
 
 @SuppressWarnings("all")
@@ -45,6 +45,19 @@ public final class SpotifyOAuthUtils
                 {
                     SpotifyUserInfo.token = getToken(authorizationCode);
 
+                    // write it to local cache
+                    File directory = new File("config/ingameinfo/cache");
+                    if (!directory.exists()) directory.mkdirs();
+                    try
+                    {
+                        RandomAccessFile file = new RandomAccessFile("config/ingameinfo/cache/spotify_refresh_token.txt", "rw");
+                        file.setLength(0);
+                        file.seek(0);
+                        file.write(SpotifyUserInfo.token.refreshToken.getBytes(StandardCharsets.UTF_8));
+                        file.close();
+                    }
+                    catch (Exception ignored) { }
+
                     String response = "<h1>[In-Game Info Reborn]</h1><br><h2>Authorization Successful</h2><p>You can close this window</p>";
                     byte[] responseBytes = response.getBytes(StandardCharsets.UTF_8);
                     exchange.getResponseHeaders().set("Content-Type", "text/html; charset=UTF-8");
@@ -80,8 +93,8 @@ public final class SpotifyOAuthUtils
         }
     }
 
-    public static final String CLIENT_ID = "";
-    public static final String CLIENT_SECRET = "";
+    public static String CLIENT_ID = "";
+    public static String CLIENT_SECRET = "";
 
     // make sure this matches the redirect uri registered in your Spotify app
     private static final String REDIRECT_URI = "http://localhost:8888";
@@ -197,6 +210,6 @@ public final class SpotifyOAuthUtils
 
         token.accessToken = accessToken;
         token.expiresIn = Integer.parseInt(expiresIn);
-        token.start = LocalDate.now();
+        token.start = LocalDateTime.now();
     }
 }

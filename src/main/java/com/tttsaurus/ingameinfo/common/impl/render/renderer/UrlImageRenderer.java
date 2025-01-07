@@ -7,11 +7,10 @@ import java.awt.image.BufferedImage;
 import java.io.InputStream;
 import java.net.URL;
 import java.nio.ByteBuffer;
+import java.util.concurrent.CompletableFuture;
 
 public class UrlImageRenderer extends ImageRenderer
 {
-    public static final UrlImageRenderer SHARED = new UrlImageRenderer("https://media.forgecdn.net/avatars/thumbnails/1071/348/256/256/638606872011907048.png");
-
     public UrlImageRenderer() { }
 
     public UrlImageRenderer(String url)
@@ -20,7 +19,41 @@ public class UrlImageRenderer extends ImageRenderer
         if (image != null) texture = createTexture(image);
     }
 
-    public void updateURL(String url)
+    private BufferedImage asyncImage = null;
+
+    public void updateUrlAsync(String url)
+    {
+        CompletableFuture.supplyAsync(() ->
+        {
+            try
+            {
+                URL imageUrl = new URL(url);
+                InputStream in = imageUrl.openStream();
+                return ImageIO.read(in);
+            }
+            catch (Exception e)
+            {
+                return null;
+            }
+        }).thenAccept(image ->
+        {
+            if (image != null) asyncImage = image;
+        });
+    }
+
+    @Override
+    public void render()
+    {
+        if (asyncImage != null)
+        {
+            if (texture != null) texture.dispose();
+            texture = createTexture(asyncImage);
+            asyncImage = null;
+        }
+        super.render();
+    }
+
+    public void updateUrl(String url)
     {
         BufferedImage image = downloadImage(url);
         if (image != null)

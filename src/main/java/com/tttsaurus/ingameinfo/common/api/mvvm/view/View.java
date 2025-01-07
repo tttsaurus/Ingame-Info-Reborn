@@ -74,10 +74,10 @@ public abstract class View
                 }
             }
 
+            file.close();
+
             GuiLayoutDeserializer deserializer = new GuiLayoutDeserializer();
             GuiLayout guiLayout = deserializer.deserialize(builder.toString(), "ixml");
-
-            file.close();
 
             return guiLayout;
         }
