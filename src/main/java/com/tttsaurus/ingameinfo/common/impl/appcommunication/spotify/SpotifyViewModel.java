@@ -25,6 +25,10 @@ public class SpotifyViewModel extends ViewModel<SpotifyView>
     @Reactive(targetUid = "progressBar", property = "percentage", initiativeSync = true)
     public ReactiveObject<Float> progressBarPercentage = new ReactiveObject<>(){};
 
+    private float durationMs = 0;
+    private float estimatedProgressMs;
+    private boolean isPlaying = false;
+
     private void refreshTokenIfNeeded()
     {
         long timeSpan = Duration.between(SpotifyUserInfo.token.start, LocalDateTime.now()).getSeconds();
@@ -86,6 +90,9 @@ public class SpotifyViewModel extends ViewModel<SpotifyView>
                     if (trackPlaying.durationMs != 0)
                         percentage = ((float)trackPlaying.progressMs) / ((float)trackPlaying.durationMs);
                     progressBarPercentage.set(percentage);
+                    durationMs = trackPlaying.durationMs;
+                    estimatedProgressMs = trackPlaying.progressMs;
+                    isPlaying = trackPlaying.isPlaying;
                 }
             }
             catch (Exception ignored) { }
@@ -97,6 +104,7 @@ public class SpotifyViewModel extends ViewModel<SpotifyView>
     public void start()
     {
         activeSetter.invoke(false);
+        progressBarPercentage.set(0f);
 
         EventCenter.spotifyOverlayEvent.addListener((flag) ->
         {
@@ -118,6 +126,9 @@ public class SpotifyViewModel extends ViewModel<SpotifyView>
                             if (trackPlaying.durationMs != 0)
                                 percentage = ((float)trackPlaying.progressMs) / ((float)trackPlaying.durationMs);
                             progressBarPercentage.set(percentage);
+                            durationMs = trackPlaying.durationMs;
+                            estimatedProgressMs = trackPlaying.progressMs;
+                            isPlaying = trackPlaying.isPlaying;
                         }
                     }
                     catch (Exception ignored) { }
@@ -191,6 +202,22 @@ public class SpotifyViewModel extends ViewModel<SpotifyView>
         {
             refreshTrackTimer -= 3f;
             refreshTrackInfo();
+        }
+
+        if (progressBarPercentage.get() < 1 && isPlaying)
+        {
+            int timeMs = (int)(deltaTime * 1000);
+            estimatedProgressMs += timeMs;
+            if (durationMs != 0)
+            {
+                if (estimatedProgressMs >= durationMs)
+                {
+                    estimatedProgressMs = durationMs;
+                    refreshTrackTimer = 2f;
+                }
+                float percentage = estimatedProgressMs / durationMs;
+                progressBarPercentage.set(percentage);
+            }
         }
     }
 }

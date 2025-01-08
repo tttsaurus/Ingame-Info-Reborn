@@ -35,8 +35,12 @@ public class ProgressBar extends Sized
     {
         if (rect.width == 0 || rect.height == 0) return;
         RenderUtils.renderRoundedRect(rect.x, rect.y, rect.width, rect.height, rect.height / 2f, backgroundColor);
-        if (rect.width * percentage > rect.height)
-            RenderUtils.renderRoundedRect(rect.x, rect.y, rect.width * percentage, rect.height, rect.height / 2f, fillerColor);
+        if (percentage != 0)
+        {
+            RenderUtils.startRoundedRectStencil(rect.x, rect.y, rect.width, rect.height, 2, rect.height / 2f);
+            RenderUtils.renderRect(rect.x, rect.y, rect.width * percentage, rect.height, fillerColor);
+            RenderUtils.endStencil();
+        }
         RenderUtils.renderRoundedRectOutline(rect.x, rect.y, rect.width, rect.height, rect.height / 2f, 1.0f, outlineColor);
     }
 }
