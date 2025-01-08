@@ -1,5 +1,6 @@
 package com.tttsaurus.ingameinfo.common.api.appcommunication.spotify;
 
+import com.tttsaurus.ingameinfo.InGameInfoReborn;
 import com.tttsaurus.ingameinfo.common.api.serialization.json.RawJsonUtils;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -34,12 +35,17 @@ public final class SpotifyAccessUtils
                 TrackPlaying track = new TrackPlaying();
                 track.trackExists = true;
 
+                InGameInfoReborn.LOGGER.info(rawJson);
+
                 String progressMs = RawJsonUtils.extractValue(rawJson, "progress_ms");
                 String isPlaying = RawJsonUtils.extractValue(rawJson, "is_playing");
                 track.progressMs = Integer.parseInt(progressMs);
                 track.isPlaying = Boolean.parseBoolean(isPlaying);
 
                 String item = RawJsonUtils.extractValue(rawJson, "item");
+
+                String durationMs = RawJsonUtils.extractValue(item, "duration_ms");
+                track.durationMs = Integer.parseInt(durationMs);
 
                 String trackName = RawJsonUtils.extractValue(item, "name");
                 track.trackName = trackName;

@@ -25,13 +25,7 @@ public class SlidingText extends Sized
     private boolean needSliding;
     private float simulatedWidth;
     private float freezeTimer = 0;
-    private boolean onFreezeTiming = false;
-
-    @StylePropertyCallback
-    public void nonNegativeFloatValidation(float value, CallbackInfo callbackInfo)
-    {
-        if (value < 0) callbackInfo.cancel = true;
-    }
+    private boolean onFreezeTiming = true;
 
     @StyleProperty(setterCallbackPre = "nonNegativeFloatValidation")
     public float spareWidth = 10f;
@@ -46,6 +40,16 @@ public class SlidingText extends Sized
     public boolean onDemandSliding = false;
 
     @StylePropertyCallback
+    public void setForwardSlidingCallback()
+    {
+        xShift = 0;
+        freezeTimer = 0;
+        onFreezeTiming = true;
+    }
+    @StyleProperty(setterCallbackPost = "setForwardSlidingCallback")
+    public boolean forwardSliding = false;
+
+    @StylePropertyCallback
     public void textValidation(String value, CallbackInfo callbackInfo)
     {
         if (value == null) callbackInfo.cancel = true;
@@ -58,6 +62,9 @@ public class SlidingText extends Sized
         simulatedWidth = textRenderer.simulateWidth();
         needSliding = simulatedWidth > width;
         height = textRenderer.simulateHeight();
+        xShift = 0;
+        freezeTimer = 0;
+        onFreezeTiming = true;
         requestReCalc();
     }
     @StyleProperty(setterCallbackPost = "setTextCallback", setterCallbackPre = "textValidation")
@@ -116,24 +123,50 @@ public class SlidingText extends Sized
         {
             RenderUtils.startStencil(rect.x, rect.y, rect.width, rect.height, 1);
 
-            float x = rect.x + xShift;
-            if (x < rect.x + rect.width)
+            if (forwardSliding)
             {
-                textRenderer.setX(x);
-                textRenderer.render();
-            }
-            if (xShift > spareWidth)
-            {
-                float secondX = rect.x - simulatedWidth - spareWidth + xShift;
-                if (secondX >= rect.x)
+                float x = rect.x + xShift;
+                if (x < rect.x + rect.width)
                 {
-                    xShift = 0;
-                    onFreezeTiming = true;
+                    textRenderer.setX(x);
+                    textRenderer.render();
                 }
-                else
+                if (xShift > spareWidth)
                 {
-                    secondTextRenderer.setX(secondX);
-                    secondTextRenderer.render();
+                    float secondX = rect.x - simulatedWidth - spareWidth + xShift;
+                    if (secondX >= rect.x)
+                    {
+                        xShift = 0;
+                        onFreezeTiming = true;
+                    }
+                    else
+                    {
+                        secondTextRenderer.setX(secondX);
+                        secondTextRenderer.render();
+                    }
+                }
+            }
+            else
+            {
+                float x = rect.x - xShift;
+                if (x > rect.x - simulatedWidth)
+                {
+                    textRenderer.setX(x);
+                    textRenderer.render();
+                }
+                if (xShift > spareWidth + simulatedWidth - rect.width)
+                {
+                    float secondX = rect.x + spareWidth + simulatedWidth - xShift;
+                    if (secondX <= rect.x)
+                    {
+                        xShift = 0;
+                        onFreezeTiming = true;
+                    }
+                    else
+                    {
+                        secondTextRenderer.setX(secondX);
+                        secondTextRenderer.render();
+                    }
                 }
             }
 

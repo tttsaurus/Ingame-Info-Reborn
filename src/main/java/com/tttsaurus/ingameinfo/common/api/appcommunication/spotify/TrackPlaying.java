@@ -13,4 +13,5 @@ public class TrackPlaying
     public String trackName;
     public int progressMs;
     public boolean isPlaying;
+    public int durationMs;
 }

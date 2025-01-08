@@ -22,6 +22,9 @@ public class SpotifyViewModel extends ViewModel<SpotifyView>
     @Reactive(targetUid = "trackTitle", property = "text", initiativeSync = true)
     public ReactiveObject<String> trackTitleText = new ReactiveObject<>(){};
 
+    @Reactive(targetUid = "progressBar", property = "percentage", initiativeSync = true)
+    public ReactiveObject<Float> progressBarPercentage = new ReactiveObject<>(){};
+
     private void refreshTokenIfNeeded()
     {
         long timeSpan = Duration.between(SpotifyUserInfo.token.start, LocalDateTime.now()).getSeconds();
@@ -73,10 +76,17 @@ public class SpotifyViewModel extends ViewModel<SpotifyView>
             try
             {
                 TrackPlaying trackPlaying = SpotifyAccessUtils.getCurrentlyPlaying(SpotifyUserInfo.token.accessToken);
-                if (!albumImageUrl.get().equals(trackPlaying.albumImage300by300))
-                    albumImageUrl.set(trackPlaying.albumImage300by300);
-                if (!trackTitleText.get().equals(trackPlaying.trackName))
-                    trackTitleText.set(trackPlaying.trackName);
+                if (trackPlaying.trackExists)
+                {
+                    if (!albumImageUrl.get().equals(trackPlaying.albumImage300by300))
+                        albumImageUrl.set(trackPlaying.albumImage300by300);
+                    if (!trackTitleText.get().equals(trackPlaying.trackName))
+                        trackTitleText.set(trackPlaying.trackName);
+                    float percentage = 0f;
+                    if (trackPlaying.durationMs != 0)
+                        percentage = ((float)trackPlaying.progressMs) / ((float)trackPlaying.durationMs);
+                    progressBarPercentage.set(percentage);
+                }
             }
             catch (Exception ignored) { }
             return null;
@@ -100,8 +110,15 @@ public class SpotifyViewModel extends ViewModel<SpotifyView>
                     try
                     {
                         TrackPlaying trackPlaying = SpotifyAccessUtils.getCurrentlyPlaying(SpotifyUserInfo.token.accessToken);
-                        albumImageUrl.set(trackPlaying.albumImage300by300);
-                        trackTitleText.set(trackPlaying.trackName);
+                        if (trackPlaying.trackExists)
+                        {
+                            albumImageUrl.set(trackPlaying.albumImage300by300);
+                            trackTitleText.set(trackPlaying.trackName);
+                            float percentage = 0f;
+                            if (trackPlaying.durationMs != 0)
+                                percentage = ((float)trackPlaying.progressMs) / ((float)trackPlaying.durationMs);
+                            progressBarPercentage.set(percentage);
+                        }
                     }
                     catch (Exception ignored) { }
                 });
