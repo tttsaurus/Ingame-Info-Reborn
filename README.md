@@ -45,7 +45,9 @@ Also under early stage of development
 
 Version Requirement: >= v1.0.0-b2
 - It depends on the Spotify Web API, so it only works when you are connected to the Internet
-- You have to register your own spotify app first and then input the client id & secret to the config file to allow the Web API to function ([About Spotify App](https://developer.spotify.com/documentation/web-api/concepts/apps). Btw, Redirect URI should be set to http://localhost:8888 for this mod to listen)
+- You have to register your own spotify app first and then input the client id & secret to the config file to allow the Web API to function ([About Spotify App](https://developer.spotify.com/documentation/web-api/concepts/apps). Btw, Redirect URI should be set to http://localhost:8888 for this mod to listen)<br><br>Specific spotify app config is as follows
+![Snipaste_2025-01-08_10-58-25](https://github.com/user-attachments/assets/241d10bf-3309-4ac1-9bdc-b1f33946b455)
+
 - Input the command `#spotify-oauth` to the chat to authorize your spotify app
 - After you finished the authentication, input the command `#spotify-gui true` while you're listening to sth on Spotify to open the gui overlay. `#spotify-gui false` for closing ofc
 - You can always run `#spotify-gui true` again to refresh
