@@ -71,18 +71,7 @@ public final class SpotifyCommandHandler
                 {
                     player.sendMessage(new TextComponentString(TextFormatting.DARK_PURPLE + message));
                     boolean flag = param.equals("true");
-                    if (flag)
-                    {
-                        if (SpotifyUserInfo.token.accessToken.isEmpty())
-                        {
-                            player.sendMessage(new TextComponentString(TextFormatting.AQUA + "[SpotifyBot]" + TextFormatting.RESET + " The access token is empty."));
-                            player.sendMessage(new TextComponentString(TextFormatting.AQUA + "[SpotifyBot]" + TextFormatting.RESET + " Please run the command #spotify-oauth first."));
-                            return;
-                        }
-                        EventCenter.spotifyOverlayEvent.trigger(true);
-                    }
-                    else
-                        EventCenter.spotifyOverlayEvent.trigger(false);
+                    EventCenter.spotifyOverlayEvent.trigger(flag);
                 }
             }
         }

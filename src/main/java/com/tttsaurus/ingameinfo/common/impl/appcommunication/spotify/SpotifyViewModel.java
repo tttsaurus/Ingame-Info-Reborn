@@ -1,5 +1,6 @@
 package com.tttsaurus.ingameinfo.common.impl.appcommunication.spotify;
 
+import com.tttsaurus.ingameinfo.IgiConfig;
 import com.tttsaurus.ingameinfo.common.api.appcommunication.spotify.SpotifyAccessUtils;
 import com.tttsaurus.ingameinfo.common.api.appcommunication.spotify.SpotifyOAuthUtils;
 import com.tttsaurus.ingameinfo.common.api.appcommunication.spotify.SpotifyUserInfo;
@@ -8,6 +9,10 @@ import com.tttsaurus.ingameinfo.common.api.mvvm.binding.Reactive;
 import com.tttsaurus.ingameinfo.common.api.mvvm.binding.ReactiveObject;
 import com.tttsaurus.ingameinfo.common.api.mvvm.viewmodel.ViewModel;
 import com.tttsaurus.ingameinfo.common.impl.igievent.EventCenter;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.entity.EntityPlayerSP;
+import net.minecraft.util.text.TextComponentString;
+import net.minecraft.util.text.TextFormatting;
 import java.io.File;
 import java.io.RandomAccessFile;
 import java.time.Duration;
@@ -110,6 +115,17 @@ public class SpotifyViewModel extends ViewModel<SpotifyView>
         {
             if (flag)
             {
+                if (SpotifyUserInfo.token.accessToken.isEmpty())
+                {
+                    EntityPlayerSP player = Minecraft.getMinecraft().player;
+                    if (player != null)
+                    {
+                        player.sendMessage(new TextComponentString(TextFormatting.AQUA + "[SpotifyBot]" + TextFormatting.RESET + " The access token is empty."));
+                        player.sendMessage(new TextComponentString(TextFormatting.AQUA + "[SpotifyBot]" + TextFormatting.RESET + " Please run the command #spotify-oauth first."));
+                    }
+                    return;
+                }
+
                 activeSetter.invoke(true);
                 trackTitleText.set("Please wait...");
 
@@ -177,6 +193,8 @@ public class SpotifyViewModel extends ViewModel<SpotifyView>
                             SpotifyUserInfo.userName = SpotifyAccessUtils.getUserName(SpotifyUserInfo.token.accessToken);
                         }
                         catch (Exception ignored) { }
+                        if (IgiConfig.SPOTIFY_AUTO_DISPLAY)
+                            EventCenter.spotifyOverlayEvent.trigger(true);
                     }
                     return null;
                 });
