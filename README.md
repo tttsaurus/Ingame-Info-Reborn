@@ -33,11 +33,28 @@ This is a library mod that helps you to create in-game overlaid (or focused) gui
   - Url Image (✔)
   - GIF
   - Slide Bar
-  - Progress Bar
+  - Progress Bar (✔)
   - Draggable
 - A gui layout builder (✔)
 - Introduce modular animation options for controls (WIP)
 - Add crt support (✔)
+- Ingame spotify support (✔)
+
+## About Spotify Overlay
+Also under early stage of development
+
+Version Requirement: >= v1.0.0-b2
+- It depends on the Spotify Web API, so it only works when you are connected to the Internet
+- You have to register your own spotify app first and then input the client id & secret to the config file to allow the Web API to function ([About Spotify App](https://developer.spotify.com/documentation/web-api/concepts/apps). Btw, Redirect URI should be set to http://localhost:8888 for this mod to listen)
+- Input the command `#spotify-oauth` to the chat to authorize your spotify app
+- After you finished the authentication, input the command `#spotify-gui true` while you're listening to sth on Spotify to open the gui overlay. `#spotify-gui false` for closing ofc
+- You can always run `#spotify-gui true` again to refresh
+- Album image loading could be slow
+- Theoretically, you no longer need to run `#spotify-oauth` for the next launch and so on, but you should run `#spotify-oauth` to refresh if you encountered any issues
+
+Additionally
+- You can edit ./config/ingameinfo/spotify.ixml to create whatever layout you want
+- Logic and layout definition are completely separated
 
 ## Latest Build
 In case you want to use the latest action build
