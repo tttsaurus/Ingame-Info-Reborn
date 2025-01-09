@@ -109,6 +109,7 @@ public class SpotifyViewModel extends ViewModel<SpotifyView>
     public void start()
     {
         activeSetter.invoke(false);
+        albumImageUrl.set("");
         progressBarPercentage.set(0f);
 
         EventCenter.spotifyOverlayEvent.addListener((flag) ->
@@ -127,7 +128,7 @@ public class SpotifyViewModel extends ViewModel<SpotifyView>
                 }
 
                 activeSetter.invoke(true);
-                trackTitleText.set("Please wait...");
+                trackTitleText.set("Please wait... And make sure you play a track on Spotify");
 
                 refreshTokenIfNeeded(() ->
                 {

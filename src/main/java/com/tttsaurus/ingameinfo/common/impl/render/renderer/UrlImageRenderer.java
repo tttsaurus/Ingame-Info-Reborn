@@ -23,6 +23,7 @@ public class UrlImageRenderer extends ImageRenderer
 
     public void updateUrlAsync(String url)
     {
+        if (url.isEmpty()) return;
         CompletableFuture.supplyAsync(() ->
         {
             try
@@ -55,6 +56,7 @@ public class UrlImageRenderer extends ImageRenderer
 
     public void updateUrl(String url)
     {
+        if (url.isEmpty()) return;
         BufferedImage image = downloadImage(url);
         if (image != null)
         {
