@@ -5,7 +5,7 @@ import com.tttsaurus.ingameinfo.common.api.gui.registry.RegisterElement;
 import com.tttsaurus.ingameinfo.common.api.gui.style.CallbackInfo;
 import com.tttsaurus.ingameinfo.common.api.gui.style.StyleProperty;
 import com.tttsaurus.ingameinfo.common.api.gui.style.StylePropertyCallback;
-import com.tttsaurus.ingameinfo.common.api.render.RenderUtils;
+import com.tttsaurus.ingameinfo.common.impl.render.RenderMask;
 import com.tttsaurus.ingameinfo.common.impl.render.renderer.TextRenderer;
 
 @RegisterElement
@@ -13,6 +13,7 @@ public class SlidingText extends Sized
 {
     private final TextRenderer textRenderer = new TextRenderer();
     private final TextRenderer secondTextRenderer = new TextRenderer();
+    private final RenderMask mask = new RenderMask(RenderMask.MaskShape.RECT);
 
     public SlidingText()
     {
@@ -98,6 +99,7 @@ public class SlidingText extends Sized
         super.calcRenderPos(contextRect);
         textRenderer.setY(rect.y);
         secondTextRenderer.setY(rect.y);
+        mask.setRectMask(rect.x, rect.y, rect.width, rect.height);
     }
 
     @Override
@@ -121,7 +123,7 @@ public class SlidingText extends Sized
     {
         if (!onDemandSliding || needSliding)
         {
-            RenderUtils.startRectStencil(rect.x, rect.y, rect.width, rect.height, 1, false);
+            mask.startMasking();
 
             if (forwardSliding)
             {
@@ -170,7 +172,7 @@ public class SlidingText extends Sized
                 }
             }
 
-            RenderUtils.endStencil();
+            mask.endMasking();
         }
         else
         {

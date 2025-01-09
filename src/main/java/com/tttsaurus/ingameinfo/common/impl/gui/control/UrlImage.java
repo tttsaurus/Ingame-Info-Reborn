@@ -5,13 +5,14 @@ import com.tttsaurus.ingameinfo.common.api.gui.registry.RegisterElement;
 import com.tttsaurus.ingameinfo.common.api.gui.style.CallbackInfo;
 import com.tttsaurus.ingameinfo.common.api.gui.style.StyleProperty;
 import com.tttsaurus.ingameinfo.common.api.gui.style.StylePropertyCallback;
-import com.tttsaurus.ingameinfo.common.api.render.RenderUtils;
+import com.tttsaurus.ingameinfo.common.impl.render.RenderMask;
 import com.tttsaurus.ingameinfo.common.impl.render.renderer.UrlImageRenderer;
 
 @RegisterElement
 public class UrlImage extends Sized
 {
     private final UrlImageRenderer urlImageRenderer = new UrlImageRenderer();
+    private final RenderMask mask = new RenderMask(RenderMask.MaskShape.ROUNDED_RECT);
 
     @StyleProperty
     public boolean rounded;
@@ -35,6 +36,7 @@ public class UrlImage extends Sized
         super.calcRenderPos(contextRect);
         urlImageRenderer.setX(rect.x);
         urlImageRenderer.setY(rect.y);
+        mask.setRoundedRectMask(rect.x, rect.y, rect.width, rect.height, 3f);
     }
 
     @Override
@@ -55,9 +57,9 @@ public class UrlImage extends Sized
     public void onRenderUpdate(boolean focused)
     {
         if (rounded)
-            RenderUtils.startRoundedRectStencil(rect.x, rect.y, rect.width, rect.height, 3, false, 3f);
+            mask.startMasking();
         urlImageRenderer.render();
         if (rounded)
-            RenderUtils.endStencil();
+            mask.endMasking();
     }
 }

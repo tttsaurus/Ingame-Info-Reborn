@@ -1,13 +1,17 @@
 package com.tttsaurus.ingameinfo.common.impl.gui.control;
 
+import com.tttsaurus.ingameinfo.common.api.gui.layout.Rect;
 import com.tttsaurus.ingameinfo.common.api.gui.registry.RegisterElement;
 import com.tttsaurus.ingameinfo.common.api.gui.style.CallbackInfo;
 import com.tttsaurus.ingameinfo.common.api.gui.style.StyleProperty;
 import com.tttsaurus.ingameinfo.common.api.render.RenderUtils;
+import com.tttsaurus.ingameinfo.common.impl.render.RenderMask;
 
 @RegisterElement
 public class ProgressBar extends Sized
 {
+    private final RenderMask mask = new RenderMask(RenderMask.MaskShape.ROUNDED_RECT);
+
     @StyleProperty
     public int fillerColor = DEFAULT_COLOR_LIGHT;
 
@@ -19,10 +23,18 @@ public class ProgressBar extends Sized
 
     public void percentageValidation(float value, CallbackInfo callbackInfo)
     {
-        if (value < 0 || value > 1) callbackInfo.cancel = true;
+        if (value < 0f) { percentage = 0f; callbackInfo.cancel = true; }
+        else if (value > 1f) { percentage = 1f; callbackInfo.cancel = true; }
     }
     @StyleProperty(setterCallbackPre = "percentageValidation")
     public float percentage = 0f;
+
+    @Override
+    public void calcRenderPos(Rect contextRect)
+    {
+        super.calcRenderPos(contextRect);
+        mask.setRoundedRectMask(rect.x, rect.y, rect.width, rect.height, rect.height / 2f);
+    }
 
     @Override
     public void onFixedUpdate(double deltaTime)
@@ -37,9 +49,9 @@ public class ProgressBar extends Sized
         RenderUtils.renderRoundedRect(rect.x, rect.y, rect.width, rect.height, rect.height / 2f, backgroundColor);
         if (percentage != 0)
         {
-            RenderUtils.startRoundedRectStencil(rect.x, rect.y, rect.width, rect.height, 2, false, rect.height / 2f);
+            mask.startMasking();
             RenderUtils.renderRect(rect.x, rect.y, rect.width * percentage, rect.height, fillerColor);
-            RenderUtils.endStencil();
+            mask.endMasking();
         }
         RenderUtils.renderRoundedRectOutline(rect.x, rect.y, rect.width, rect.height, rect.height / 2f, 1.0f, outlineColor);
     }

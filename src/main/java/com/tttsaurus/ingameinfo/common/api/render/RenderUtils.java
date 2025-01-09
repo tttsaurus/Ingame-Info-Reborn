@@ -143,7 +143,7 @@ public final class RenderUtils
         }
     }
 
-    public static void startRoundedRectStencil(float x, float y, float stencilWidth, float stencilHeight, int stencilValue, boolean exclude, float radius)
+    public static void initStencilStep1(int stencilValue)
     {
         if (!Minecraft.getMinecraft().getFramebuffer().isStencilEnabled())
             Minecraft.getMinecraft().getFramebuffer().enableStencil();
@@ -162,6 +162,23 @@ public final class RenderUtils
 
         // mask area
         GL11.glStencilMask(0xFF);
+    }
+    public static void initStencilStep2(int stencilValue, boolean exclude)
+    {
+        GL11.glStencilMask(0x00);
+
+        GlStateManager.depthMask(true);
+        GlStateManager.colorMask(true, true, true, true);
+        if (exclude)
+            GL11.glStencilFunc(GL11.GL_NOTEQUAL, stencilValue, 0xFF);
+        else
+            GL11.glStencilFunc(GL11.GL_EQUAL, stencilValue, 0xFF);
+        GL11.glStencilOp(GL11.GL_KEEP, GL11.GL_KEEP, GL11.GL_KEEP);
+    }
+
+    public static void startRoundedRectStencil(float x, float y, float stencilWidth, float stencilHeight, int stencilValue, boolean exclude, float radius)
+    {
+        initStencilStep1(stencilValue);
 
         int segments = Math.max(3, (int)(radius / 2f));
         Tessellator tessellator = Tessellator.getInstance();
@@ -183,36 +200,11 @@ public final class RenderUtils
 
         tessellator.draw();
 
-        GL11.glStencilMask(0x00);
-
-        GlStateManager.depthMask(true);
-        GlStateManager.colorMask(true, true, true, true);
-        if (exclude)
-            GL11.glStencilFunc(GL11.GL_NOTEQUAL, stencilValue, 0xFF);
-        else
-            GL11.glStencilFunc(GL11.GL_EQUAL, stencilValue, 0xFF);
-        GL11.glStencilOp(GL11.GL_KEEP, GL11.GL_KEEP, GL11.GL_KEEP);
+        initStencilStep2(stencilValue, exclude);
     }
-
     public static void startRectStencil(float x, float y, float stencilWidth, float stencilHeight, int stencilValue, boolean exclude)
     {
-        if (!Minecraft.getMinecraft().getFramebuffer().isStencilEnabled())
-            Minecraft.getMinecraft().getFramebuffer().enableStencil();
-
-        GlStateManager.disableTexture2D();
-        GlStateManager.disableCull();
-
-        GL11.glEnable(GL11.GL_STENCIL_TEST);
-        //GL11.glClearStencil(0);
-        //GL11.glClear(GL11.GL_STENCIL_BUFFER_BIT);
-
-        GlStateManager.depthMask(false);
-        GlStateManager.colorMask(false, false, false, false);
-        GL11.glStencilFunc(GL11.GL_ALWAYS, stencilValue, 0xFF);
-        GL11.glStencilOp(GL11.GL_REPLACE, GL11.GL_REPLACE, GL11.GL_REPLACE);
-
-        // mask area
-        GL11.glStencilMask(0xFF);
+        initStencilStep1(stencilValue);
 
         GL11.glBegin(GL11.GL_QUADS);
         GL11.glVertex2f(x, y);
@@ -221,17 +213,8 @@ public final class RenderUtils
         GL11.glVertex2f(x, y + stencilHeight);
         GL11.glEnd();
 
-        GL11.glStencilMask(0x00);
-
-        GlStateManager.depthMask(true);
-        GlStateManager.colorMask(true, true, true, true);
-        if (exclude)
-            GL11.glStencilFunc(GL11.GL_NOTEQUAL, stencilValue, 0xFF);
-        else
-            GL11.glStencilFunc(GL11.GL_EQUAL, stencilValue, 0xFF);
-        GL11.glStencilOp(GL11.GL_KEEP, GL11.GL_KEEP, GL11.GL_KEEP);
+        initStencilStep2(stencilValue, exclude);
     }
-
     public static void endStencil()
     {
         GL11.glDisable(GL11.GL_STENCIL_TEST);
