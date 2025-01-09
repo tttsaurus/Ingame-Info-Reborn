@@ -1,6 +1,6 @@
 package com.tttsaurus.ingameinfo.common.impl.render;
 
-import com.tttsaurus.ingameinfo.common.api.internal.IAction;
+import com.tttsaurus.ingameinfo.common.api.function.IAction;
 import com.tttsaurus.ingameinfo.common.api.render.RenderUtils;
 import java.util.HashMap;
 import java.util.Map;

@@ -1,8 +1,8 @@
 package com.tttsaurus.ingameinfo.common.api.igievent;
 
-import com.tttsaurus.ingameinfo.common.api.internal.IAction;
-import com.tttsaurus.ingameinfo.common.api.internal.IAction_1Param;
-import com.tttsaurus.ingameinfo.common.api.internal.IAction_2Param;
+import com.tttsaurus.ingameinfo.common.api.function.IAction;
+import com.tttsaurus.ingameinfo.common.api.function.IAction_1Param;
+import com.tttsaurus.ingameinfo.common.api.function.IAction_2Param;
 import java.util.ArrayList;
 import java.util.List;
 

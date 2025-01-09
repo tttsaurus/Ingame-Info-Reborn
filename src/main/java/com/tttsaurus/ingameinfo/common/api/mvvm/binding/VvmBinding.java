@@ -5,7 +5,7 @@ import com.tttsaurus.ingameinfo.common.api.gui.GuiLayout;
 import com.tttsaurus.ingameinfo.common.api.gui.style.IStylePropertyCallbackPost;
 import com.tttsaurus.ingameinfo.common.api.gui.style.IStylePropertyCallbackPre;
 import com.tttsaurus.ingameinfo.common.api.gui.style.IStylePropertySetter;
-import com.tttsaurus.ingameinfo.common.api.internal.IAction_1Param;
+import com.tttsaurus.ingameinfo.common.api.function.IAction_1Param;
 import com.tttsaurus.ingameinfo.common.api.internal.InternalMethods;
 import com.tttsaurus.ingameinfo.common.api.mvvm.view.View;
 import com.tttsaurus.ingameinfo.common.api.mvvm.viewmodel.ViewModel;

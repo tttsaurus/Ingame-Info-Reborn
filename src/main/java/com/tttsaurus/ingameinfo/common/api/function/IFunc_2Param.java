@@ -1,4 +1,4 @@
-package com.tttsaurus.ingameinfo.common.api.internal;
+package com.tttsaurus.ingameinfo.common.api.function;
 
 public interface IFunc_2Param<TReturn, T0, T1>
 {

@@ -252,7 +252,7 @@ public class SpotifyViewModel extends ViewModel<SpotifyView>
                 if (estimatedProgressMs >= durationMs)
                 {
                     estimatedProgressMs = durationMs;
-                    refreshTrackTimer = 2f;
+                    refreshTrackTimer = 1.5f;
                 }
                 float percentage = estimatedProgressMs / durationMs;
                 progressBarPercentage.set(percentage);

@@ -9,7 +9,7 @@ import com.tttsaurus.ingameinfo.common.api.gui.style.CallbackInfo;
 import com.tttsaurus.ingameinfo.common.api.gui.style.IStylePropertyCallbackPost;
 import com.tttsaurus.ingameinfo.common.api.gui.style.IStylePropertyCallbackPre;
 import com.tttsaurus.ingameinfo.common.api.gui.style.IStylePropertySetter;
-import com.tttsaurus.ingameinfo.common.api.internal.IAction_1Param;
+import com.tttsaurus.ingameinfo.common.api.function.IAction_1Param;
 import com.tttsaurus.ingameinfo.common.api.serialization.IDeserializer;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;

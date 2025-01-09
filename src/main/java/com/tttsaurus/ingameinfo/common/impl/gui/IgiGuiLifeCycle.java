@@ -4,7 +4,7 @@ import com.tttsaurus.ingameinfo.common.api.event.IgiGuiInitEvent;
 import com.tttsaurus.ingameinfo.common.api.gui.IgiGuiContainer;
 import com.tttsaurus.ingameinfo.common.api.gui.delegate.placeholder.IPlaceholderDrawScreen;
 import com.tttsaurus.ingameinfo.common.api.gui.delegate.placeholder.IPlaceholderKeyTyped;
-import com.tttsaurus.ingameinfo.common.api.internal.IFunc;
+import com.tttsaurus.ingameinfo.common.api.function.IFunc;
 import com.tttsaurus.ingameinfo.common.impl.igievent.EventCenter;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.ScaledResolution;

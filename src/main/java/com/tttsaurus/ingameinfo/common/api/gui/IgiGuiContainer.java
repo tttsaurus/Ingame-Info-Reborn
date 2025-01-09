@@ -1,6 +1,6 @@
 package com.tttsaurus.ingameinfo.common.api.gui;
 
-import com.tttsaurus.ingameinfo.common.api.internal.IFunc;
+import com.tttsaurus.ingameinfo.common.api.function.IFunc;
 import com.tttsaurus.ingameinfo.common.api.mvvm.viewmodel.ViewModel;
 import com.tttsaurus.ingameinfo.common.impl.gui.layout.MainGroup;
 import com.tttsaurus.ingameinfo.common.api.render.RenderUtils;

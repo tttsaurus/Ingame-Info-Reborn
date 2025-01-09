@@ -1,6 +1,10 @@
 package com.tttsaurus.ingameinfo.common.api.internal;
 
 import com.tttsaurus.ingameinfo.InGameInfoReborn;
+import com.tttsaurus.ingameinfo.common.api.function.IAction_2Param;
+import com.tttsaurus.ingameinfo.common.api.function.IFunc;
+import com.tttsaurus.ingameinfo.common.api.function.IFunc_1Param;
+import com.tttsaurus.ingameinfo.common.api.function.IFunc_2Param;
 import com.tttsaurus.ingameinfo.common.api.gui.GuiLayout;
 import com.tttsaurus.ingameinfo.common.api.gui.IgiGuiContainer;
 import com.tttsaurus.ingameinfo.common.api.mvvm.view.View;
