@@ -19,6 +19,8 @@ public final class RenderUtils
     public static FontRenderer fontRenderer = Minecraft.getMinecraft().fontRenderer;
     public static float zLevel = 0;
 
+    private static final IntBuffer intBuffer = ByteBuffer.allocateDirect(16 << 2).order(ByteOrder.nativeOrder()).asIntBuffer();
+
     // for all render methods, pivot is in the top-left corner
     // all methods use Minecraft scaled resolution's coordinate
 
@@ -141,7 +143,7 @@ public final class RenderUtils
         }
     }
 
-    public static void startRoundedRectStencil(float x, float y, float stencilWidth, float stencilHeight, int stencilValue, float radius)
+    public static void startRoundedRectStencil(float x, float y, float stencilWidth, float stencilHeight, int stencilValue, boolean exclude, float radius)
     {
         if (!Minecraft.getMinecraft().getFramebuffer().isStencilEnabled())
             Minecraft.getMinecraft().getFramebuffer().enableStencil();
@@ -185,11 +187,14 @@ public final class RenderUtils
 
         GlStateManager.depthMask(true);
         GlStateManager.colorMask(true, true, true, true);
-        GL11.glStencilFunc(GL11.GL_EQUAL, stencilValue, 0xFF);
+        if (exclude)
+            GL11.glStencilFunc(GL11.GL_NOTEQUAL, stencilValue, 0xFF);
+        else
+            GL11.glStencilFunc(GL11.GL_EQUAL, stencilValue, 0xFF);
         GL11.glStencilOp(GL11.GL_KEEP, GL11.GL_KEEP, GL11.GL_KEEP);
     }
 
-    public static void startRectStencil(float x, float y, float stencilWidth, float stencilHeight, int stencilValue)
+    public static void startRectStencil(float x, float y, float stencilWidth, float stencilHeight, int stencilValue, boolean exclude)
     {
         if (!Minecraft.getMinecraft().getFramebuffer().isStencilEnabled())
             Minecraft.getMinecraft().getFramebuffer().enableStencil();
@@ -220,7 +225,10 @@ public final class RenderUtils
 
         GlStateManager.depthMask(true);
         GlStateManager.colorMask(true, true, true, true);
-        GL11.glStencilFunc(GL11.GL_EQUAL, stencilValue, 0xFF);
+        if (exclude)
+            GL11.glStencilFunc(GL11.GL_NOTEQUAL, stencilValue, 0xFF);
+        else
+            GL11.glStencilFunc(GL11.GL_EQUAL, stencilValue, 0xFF);
         GL11.glStencilOp(GL11.GL_KEEP, GL11.GL_KEEP, GL11.GL_KEEP);
     }
 
@@ -300,7 +308,6 @@ public final class RenderUtils
         GlStateManager.popMatrix();
     }
 
-    private static final IntBuffer intBuffer = ByteBuffer.allocateDirect(16 << 2).order(ByteOrder.nativeOrder()).asIntBuffer();
     public static void renderTexture2D(float x, float y, float width, float height, int textureWidth, int textureHeight)
     {
         GL11.glGetInteger(GL11.GL_TEXTURE_BINDING_2D, intBuffer);

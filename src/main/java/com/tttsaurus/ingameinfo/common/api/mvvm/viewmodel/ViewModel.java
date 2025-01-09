@@ -15,11 +15,13 @@ import java.util.Map;
 @SuppressWarnings("all")
 public abstract class ViewModel<T extends View>
 {
-    // setters
+    // getters & setters
     // will be init before start()
     public IAction_1Param<Boolean> isActiveSetter;
+    public IFunc<Boolean> isActiveGetter;
     public IAction_1Param<IFunc<Boolean>> exitCallbackSetter;
     public IAction_1Param<Boolean> isFocusedSetter;
+    public IFunc<Boolean> isFocusedGetter;
 
     private VvmBinding<T> binding = new VvmBinding<>();
 

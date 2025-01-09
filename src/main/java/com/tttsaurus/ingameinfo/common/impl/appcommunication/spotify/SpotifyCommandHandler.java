@@ -60,6 +60,12 @@ public final class SpotifyCommandHandler
                 }
             }
         }
+        else if (message.equals("#spotify-gui-edit"))
+        {
+            event.setCanceled(true);
+            player.sendMessage(new TextComponentString(TextFormatting.DARK_PURPLE + message));
+            EventCenter.spotifyOverlayEditEvent.trigger();
+        }
         else if (message.startsWith("#spotify-gui"))
         {
             event.setCanceled(true);

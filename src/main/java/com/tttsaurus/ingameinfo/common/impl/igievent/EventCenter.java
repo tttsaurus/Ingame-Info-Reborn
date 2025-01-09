@@ -8,4 +8,5 @@ public final class EventCenter
 
     // spotify
     public final static SpotifyOverlayEvent spotifyOverlayEvent = new SpotifyOverlayEvent();
+    public final static SpotifyOverlayEditEvent spotifyOverlayEditEvent = new SpotifyOverlayEditEvent();
 }

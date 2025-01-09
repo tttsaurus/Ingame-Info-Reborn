@@ -55,7 +55,7 @@ public class UrlImage extends Sized
     public void onRenderUpdate(boolean focused)
     {
         if (rounded)
-            RenderUtils.startRoundedRectStencil(rect.x, rect.y, rect.width, rect.height, 1, 3f);
+            RenderUtils.startRoundedRectStencil(rect.x, rect.y, rect.width, rect.height, 3, false, 3f);
         urlImageRenderer.render();
         if (rounded)
             RenderUtils.endStencil();

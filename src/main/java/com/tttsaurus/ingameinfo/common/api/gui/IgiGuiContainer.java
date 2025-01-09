@@ -54,8 +54,10 @@ public class IgiGuiContainer
         mainGroup.calcRenderPos(mainGroup.rect);
         mainGroup.finishReCalc();
 
+        viewModel.isActiveGetter = () -> { return isActive; };
         viewModel.isActiveSetter = (flag) -> { isActive = flag; };
         viewModel.exitCallbackSetter = (callback) -> { exitCallback = callback; };
+        viewModel.isFocusedGetter = () -> { return isFocused; };
         viewModel.isFocusedSetter = (focused) -> { isFocused = focused; };
         viewModel.start();
     }

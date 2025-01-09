@@ -121,7 +121,7 @@ public class SlidingText extends Sized
     {
         if (!onDemandSliding || needSliding)
         {
-            RenderUtils.startRectStencil(rect.x, rect.y, rect.width, rect.height, 1);
+            RenderUtils.startRectStencil(rect.x, rect.y, rect.width, rect.height, 1, false);
 
             if (forwardSliding)
             {

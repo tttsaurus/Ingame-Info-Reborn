@@ -114,10 +114,19 @@ public abstract class Element
                 RenderUtils.renderRect(rect.x, rect.y, rect.width, rect.height, DEFAULT_COLOR_DARK);
                 RenderUtils.renderRectOutline(rect.x, rect.y, rect.width, rect.height, 1.0f, DEFAULT_COLOR_DARKER);
             }
-            case "roundedBox" -> RenderUtils.renderRoundedRect(rect.x, rect.y, rect.width, rect.height, 3f, DEFAULT_COLOR_DARK);
+            case "roundedBox" ->
+            {
+                // todo: avoid using stencil
+                // todo: rework stencil value colliding solution
+                RenderUtils.startRoundedRectStencil(rect.x, rect.y, rect.width, rect.height, 4, false, 3f);
+                RenderUtils.renderRect(rect.x, rect.y, rect.width, rect.height, DEFAULT_COLOR_DARK);
+                RenderUtils.endStencil();
+            }
             case "roundedBoxWithOutline" ->
             {
-                RenderUtils.renderRoundedRect(rect.x, rect.y, rect.width, rect.height, 3f, DEFAULT_COLOR_DARK);
+                RenderUtils.startRoundedRectStencil(rect.x, rect.y, rect.width, rect.height, 4, false, 3f);
+                RenderUtils.renderRect(rect.x, rect.y, rect.width, rect.height, DEFAULT_COLOR_DARK);
+                RenderUtils.endStencil();
                 RenderUtils.renderRoundedRectOutline(rect.x, rect.y, rect.width, rect.height, 3f, 1.0f, DEFAULT_COLOR_DARKER);
             }
         }

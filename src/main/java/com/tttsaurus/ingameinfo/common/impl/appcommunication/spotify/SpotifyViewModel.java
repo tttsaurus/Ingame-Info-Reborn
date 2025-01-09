@@ -27,6 +27,9 @@ public class SpotifyViewModel extends ViewModel<SpotifyView>
     @Reactive(targetUid = "trackTitle", property = "text", initiativeSync = true)
     public ReactiveObject<String> trackTitleText = new ReactiveObject<>(){};
 
+    @Reactive(targetUid = "trackTitle", property = "xShiftSpeed", initiativeSync = true)
+    public ReactiveObject<Float> trackTitleXShiftSpeed = new ReactiveObject<>(){};
+
     @Reactive(targetUid = "progressBar", property = "percentage", initiativeSync = true)
     public ReactiveObject<Float> progressBarPercentage = new ReactiveObject<>(){};
 
@@ -87,6 +90,7 @@ public class SpotifyViewModel extends ViewModel<SpotifyView>
                 TrackPlaying trackPlaying = SpotifyAccessUtils.getCurrentlyPlaying(SpotifyUserInfo.token.accessToken);
                 if (trackPlaying.trackExists)
                 {
+                    trackTitleXShiftSpeed.set(8f);
                     if (!albumImageUrl.get().equals(trackPlaying.albumImage300by300))
                         albumImageUrl.set(trackPlaying.albumImage300by300);
                     if (!trackTitleText.get().equals(trackPlaying.trackName))
@@ -134,6 +138,7 @@ public class SpotifyViewModel extends ViewModel<SpotifyView>
                 }
 
                 isActiveSetter.invoke(true);
+                trackTitleXShiftSpeed.set(20f);
                 trackTitleText.set("Please wait... And make sure you play a track on Spotify");
 
                 refreshTokenIfNeeded(() ->
@@ -143,6 +148,7 @@ public class SpotifyViewModel extends ViewModel<SpotifyView>
                         TrackPlaying trackPlaying = SpotifyAccessUtils.getCurrentlyPlaying(SpotifyUserInfo.token.accessToken);
                         if (trackPlaying.trackExists)
                         {
+                            trackTitleXShiftSpeed.set(8f);
                             albumImageUrl.set(trackPlaying.albumImage300by300);
                             trackTitleText.set(trackPlaying.trackName);
                             float percentage = 0f;
@@ -159,6 +165,14 @@ public class SpotifyViewModel extends ViewModel<SpotifyView>
             }
             else
                 isActiveSetter.invoke(false);
+        });
+
+        EventCenter.spotifyOverlayEditEvent.addListener(() ->
+        {
+            if (isActiveGetter.invoke())
+            {
+                isFocusedSetter.invoke(true);
+            }
         });
 
         // read refresh token and refresh
