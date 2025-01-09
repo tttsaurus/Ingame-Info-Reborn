@@ -2,6 +2,7 @@ package com.tttsaurus.ingameinfo.common.api.mvvm.viewmodel;
 
 import com.tttsaurus.ingameinfo.common.api.gui.GuiLayout;
 import com.tttsaurus.ingameinfo.common.api.internal.IAction_1Param;
+import com.tttsaurus.ingameinfo.common.api.internal.IFunc;
 import com.tttsaurus.ingameinfo.common.api.mvvm.binding.IReactiveObjectGetter;
 import com.tttsaurus.ingameinfo.common.api.mvvm.binding.Reactive;
 import com.tttsaurus.ingameinfo.common.api.mvvm.binding.VvmBinding;
@@ -14,11 +15,15 @@ import java.util.Map;
 @SuppressWarnings("all")
 public abstract class ViewModel<T extends View>
 {
-    public IAction_1Param<Boolean> activeSetter;
+    // setters
+    // will be init before start()
+    public IAction_1Param<Boolean> isActiveSetter;
+    public IAction_1Param<IFunc<Boolean>> exitCallbackSetter;
+    public IAction_1Param<Boolean> isFocusedSetter;
 
     private VvmBinding<T> binding = new VvmBinding<>();
 
-    // init entry point
+    // register entry point
     private GuiLayout init(String mvvmRegistryName)
     {
         GuiLayout guiLayout = binding.init(this, mvvmRegistryName);

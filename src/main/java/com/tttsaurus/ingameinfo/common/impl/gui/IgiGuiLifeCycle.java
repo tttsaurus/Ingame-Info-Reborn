@@ -4,6 +4,7 @@ import com.tttsaurus.ingameinfo.common.api.event.IgiGuiInitEvent;
 import com.tttsaurus.ingameinfo.common.api.gui.IgiGuiContainer;
 import com.tttsaurus.ingameinfo.common.api.gui.delegate.placeholder.IPlaceholderDrawScreen;
 import com.tttsaurus.ingameinfo.common.api.gui.delegate.placeholder.IPlaceholderKeyTyped;
+import com.tttsaurus.ingameinfo.common.api.internal.IFunc;
 import com.tttsaurus.ingameinfo.common.impl.igievent.EventCenter;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.ScaledResolution;
@@ -221,7 +222,7 @@ public final class IgiGuiLifeCycle
                 else
                 {
                     AtomicBoolean focus = new AtomicBoolean(false);
-                    openedGuiMap.forEach((uuid, guiContainer) -> focus.set(focus.get() || guiContainer.getFocused()));
+                    openedGuiMap.forEach((uuid, guiContainer) -> focus.set(focus.get() || (guiContainer.getFocused() && guiContainer.getActive())));
 
                     if (!focus.get())
                     {
@@ -235,7 +236,7 @@ public final class IgiGuiLifeCycle
             else if (!isPlaceholderGuiOn && !openedGuiMap.isEmpty() && Minecraft.getMinecraft().currentScreen == null)
             {
                 AtomicBoolean focus = new AtomicBoolean(false);
-                openedGuiMap.forEach((uuid, guiContainer) -> focus.set(focus.get() || guiContainer.getFocused()));
+                openedGuiMap.forEach((uuid, guiContainer) -> focus.set(focus.get() || (guiContainer.getFocused() && guiContainer.getActive())));
 
                 if (focus.get())
                 {
@@ -257,6 +258,7 @@ public final class IgiGuiLifeCycle
                         {
                             List<Map.Entry<String, IgiGuiContainer>> entryList = new ArrayList<>(openedGuiMap.entrySet());
                             String key = "";
+                            IFunc<Boolean> exitCallback = null;
                             for (int i = entryList.size() - 1; i >= 0; i--)
                             {
                                 Map.Entry<String, IgiGuiContainer> entry = entryList.get(i);
@@ -265,10 +267,15 @@ public final class IgiGuiLifeCycle
                                     if (keycode == container.getExitKeyForFocusedGui())
                                     {
                                         key = entry.getKey();
+                                        exitCallback = entry.getValue().getExitCallback();
                                         break;
                                     }
                             }
-                            if (!key.isEmpty()) openedGuiMap.remove(key);
+                            if (!key.isEmpty())
+                            {
+                                if (exitCallback.invoke())
+                                    openedGuiMap.remove(key);
+                            }
                         }
                     });
                     Minecraft.getMinecraft().displayGuiScreen(placeholderGui);

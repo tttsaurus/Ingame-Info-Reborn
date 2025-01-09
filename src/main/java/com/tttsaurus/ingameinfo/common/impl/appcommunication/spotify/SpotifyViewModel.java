@@ -108,7 +108,13 @@ public class SpotifyViewModel extends ViewModel<SpotifyView>
     @Override
     public void start()
     {
-        activeSetter.invoke(false);
+        isActiveSetter.invoke(false);
+        exitCallbackSetter.invoke(() ->
+        {
+            isFocusedSetter.invoke(false);
+            return false;
+        });
+
         albumImageUrl.set("");
         progressBarPercentage.set(0f);
 
@@ -127,7 +133,7 @@ public class SpotifyViewModel extends ViewModel<SpotifyView>
                     return;
                 }
 
-                activeSetter.invoke(true);
+                isActiveSetter.invoke(true);
                 trackTitleText.set("Please wait... And make sure you play a track on Spotify");
 
                 refreshTokenIfNeeded(() ->
@@ -152,7 +158,7 @@ public class SpotifyViewModel extends ViewModel<SpotifyView>
                 });
             }
             else
-                activeSetter.invoke(false);
+                isActiveSetter.invoke(false);
         });
 
         // read refresh token and refresh

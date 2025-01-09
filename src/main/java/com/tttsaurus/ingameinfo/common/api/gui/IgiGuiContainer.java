@@ -1,5 +1,6 @@
 package com.tttsaurus.ingameinfo.common.api.gui;
 
+import com.tttsaurus.ingameinfo.common.api.internal.IFunc;
 import com.tttsaurus.ingameinfo.common.api.mvvm.viewmodel.ViewModel;
 import com.tttsaurus.ingameinfo.common.impl.gui.layout.MainGroup;
 import com.tttsaurus.ingameinfo.common.api.render.RenderUtils;
@@ -27,9 +28,12 @@ public class IgiGuiContainer
     protected int backgroundColor = -1072689136;
 
     private boolean initFlag = false;
-    private boolean active = true;
+    private boolean isActive = true;
+    private IFunc<Boolean> exitCallback;
 
     //<editor-fold desc="getters">
+    public boolean getActive() { return isActive; }
+    public IFunc<Boolean> getExitCallback() { return exitCallback; }
     public int getExitKeyForFocusedGui() { return exitKeyForFocusedGui; }
     public boolean getFocused() { return isFocused; }
     public boolean getInitFlag() { return initFlag; }
@@ -50,7 +54,9 @@ public class IgiGuiContainer
         mainGroup.calcRenderPos(mainGroup.rect);
         mainGroup.finishReCalc();
 
-        viewModel.activeSetter = (flag) -> { active = flag; };
+        viewModel.isActiveSetter = (flag) -> { isActive = flag; };
+        viewModel.exitCallbackSetter = (callback) -> { exitCallback = callback; };
+        viewModel.isFocusedSetter = (focused) -> { isFocused = focused; };
         viewModel.start();
     }
     public void onScaledResolutionResize()
@@ -61,14 +67,14 @@ public class IgiGuiContainer
     }
     public void onFixedUpdate(double deltaTime)
     {
-        if (!active) return;
+        if (!isActive) return;
 
         viewModel.onFixedUpdate(deltaTime);
         mainGroup.onFixedUpdate(deltaTime);
     }
     public void onRenderUpdate(boolean focused)
     {
-        if (!active) return;
+        if (!isActive) return;
 
         if (isFocused && hasFocusBackground)
         {
