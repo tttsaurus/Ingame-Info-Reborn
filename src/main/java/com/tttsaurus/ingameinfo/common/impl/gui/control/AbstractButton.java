@@ -1,14 +1,64 @@
 package com.tttsaurus.ingameinfo.common.impl.gui.control;
 
 import com.tttsaurus.ingameinfo.common.api.gui.delegate.button.*;
+import com.tttsaurus.ingameinfo.common.api.gui.registry.RegisterElement;
+import com.tttsaurus.ingameinfo.common.api.gui.style.CallbackInfo;
+import com.tttsaurus.ingameinfo.common.api.gui.style.StyleProperty;
+import com.tttsaurus.ingameinfo.common.api.gui.style.StylePropertyCallback;
 import com.tttsaurus.ingameinfo.common.api.input.MouseUtils;
 import java.util.ArrayList;
 import java.util.List;
 
+@RegisterElement(constructable = false)
 public abstract class AbstractButton extends Sized
 {
     private boolean hover = false;
     private boolean hold = false;
+
+    @StylePropertyCallback
+    public void addEnterListenerHelper(IMouseEnterButton value, CallbackInfo callbackInfo)
+    {
+        callbackInfo.cancel = true;
+        addListener(value);
+    }
+    @StyleProperty(setterCallbackPre = "addEnterListenerHelper")
+    public IMouseEnterButton addEnterListener;
+
+    @StylePropertyCallback
+    public void addLeaveListenerHelper(IMouseLeaveButton value, CallbackInfo callbackInfo)
+    {
+        callbackInfo.cancel = true;
+        addListener(value);
+    }
+    @StyleProperty(setterCallbackPre = "addLeaveListenerHelper")
+    public IMouseLeaveButton addLeaveListener;
+
+    @StylePropertyCallback
+    public void addPressListenerHelper(IMousePressButton value, CallbackInfo callbackInfo)
+    {
+        callbackInfo.cancel = true;
+        addListener(value);
+    }
+    @StyleProperty(setterCallbackPre = "addPressListenerHelper")
+    public IMousePressButton addPressListener;
+
+    @StylePropertyCallback
+    public void addReleaseListenerHelper(IMouseReleaseButton value, CallbackInfo callbackInfo)
+    {
+        callbackInfo.cancel = true;
+        addListener(value);
+    }
+    @StyleProperty(setterCallbackPre = "addReleaseListenerHelper")
+    public IMouseReleaseButton addReleaseListener;
+
+    @StylePropertyCallback
+    public void addClickListenerHelper(IMouseClickButton value, CallbackInfo callbackInfo)
+    {
+        callbackInfo.cancel = true;
+        addListener(value);
+    }
+    @StyleProperty(setterCallbackPre = "addClickListenerHelper")
+    public IMouseClickButton addClickListener;
 
     private final List<IMouseEnterButton> enter = new ArrayList<>();
     private final List<IMouseLeaveButton> leave = new ArrayList<>();

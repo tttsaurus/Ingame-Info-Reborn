@@ -5,6 +5,7 @@ import com.tttsaurus.ingameinfo.common.api.appcommunication.spotify.SpotifyAcces
 import com.tttsaurus.ingameinfo.common.api.appcommunication.spotify.SpotifyOAuthUtils;
 import com.tttsaurus.ingameinfo.common.api.appcommunication.spotify.SpotifyUserInfo;
 import com.tttsaurus.ingameinfo.common.api.appcommunication.spotify.TrackPlaying;
+import com.tttsaurus.ingameinfo.common.api.gui.delegate.button.IMouseClickButton;
 import com.tttsaurus.ingameinfo.common.api.mvvm.binding.Reactive;
 import com.tttsaurus.ingameinfo.common.api.mvvm.binding.ReactiveObject;
 import com.tttsaurus.ingameinfo.common.api.mvvm.viewmodel.ViewModel;
@@ -32,6 +33,12 @@ public class SpotifyViewModel extends ViewModel<SpotifyView>
 
     @Reactive(targetUid = "progressBar", property = "percentage", initiativeSync = true)
     public ReactiveObject<Float> progressBarPercentage = new ReactiveObject<>(){};
+
+    @Reactive(targetUid = "editButton", property = "enabled", initiativeSync = true)
+    public ReactiveObject<Boolean> editButtonEnabled = new ReactiveObject<>(){};
+
+    @Reactive(targetUid = "editButton", property = "addClickListener", initiativeSync = true)
+    public ReactiveObject<IMouseClickButton> editButtonAddClickListener = new ReactiveObject<>(){};
 
     private float durationMs = 0;
     private float estimatedProgressMs;
@@ -115,12 +122,19 @@ public class SpotifyViewModel extends ViewModel<SpotifyView>
         isActiveSetter.invoke(false);
         exitCallbackSetter.invoke(() ->
         {
+            editButtonEnabled.set(false);
             isFocusedSetter.invoke(false);
             return false;
         });
 
         albumImageUrl.set("");
         progressBarPercentage.set(0f);
+        editButtonEnabled.set(false);
+        editButtonAddClickListener.set((IMouseClickButton)(() ->
+        {
+            if (Minecraft.getMinecraft().player != null)
+                Minecraft.getMinecraft().player.sendChatMessage("test");
+        }));
 
         EventCenter.spotifyOverlayEvent.addListener((flag) ->
         {
@@ -171,6 +185,7 @@ public class SpotifyViewModel extends ViewModel<SpotifyView>
         {
             if (isActiveGetter.invoke())
             {
+                editButtonEnabled.set(true);
                 isFocusedSetter.invoke(true);
             }
         });
