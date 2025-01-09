@@ -34,6 +34,9 @@ public abstract class Element
     @StylePropertyCallback
     public void requestReCalc() { needReCalc = true; }
 
+    @StyleProperty
+    public boolean enabled = true;
+
     @StylePropertyCallback
     public void uidValidation(String value, CallbackInfo callbackInfo)
     {

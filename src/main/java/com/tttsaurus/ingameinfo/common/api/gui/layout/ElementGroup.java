@@ -35,14 +35,18 @@ public abstract class ElementGroup extends Element
     @Override
     public void onFixedUpdate(double deltaTime)
     {
+        if (!enabled) return;
         for (Element element: elements)
-            element.onFixedUpdate(deltaTime);
+            if (element.enabled)
+                element.onFixedUpdate(deltaTime);
     }
     @Override
     public void onRenderUpdate(boolean focused)
     {
+        if (!enabled) return;
         for (Element element: elements)
-            element.onRenderUpdate(focused);
+            if (element.enabled)
+                element.onRenderUpdate(focused);
     }
 
     @Override
