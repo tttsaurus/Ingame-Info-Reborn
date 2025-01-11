@@ -118,6 +118,7 @@ public class GuiLayout
         return this;
     }
 
+    // todo: add inject priority
     private void injectStyles(Element element, List<ElementStyle> styles)
     {
         for (ElementStyle style: styles)

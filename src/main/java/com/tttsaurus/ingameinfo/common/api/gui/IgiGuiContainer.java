@@ -29,7 +29,7 @@ public class IgiGuiContainer
 
     private boolean initFlag = false;
     private boolean isActive = true;
-    private IFunc<Boolean> exitCallback;
+    private IFunc<Boolean> exitCallback = () -> { return true; };
 
     //<editor-fold desc="getters">
     public boolean getActive() { return isActive; }
@@ -66,6 +66,7 @@ public class IgiGuiContainer
         mainGroup.resetRenderInfo();
         mainGroup.calcWidthHeight();
         mainGroup.calcRenderPos(mainGroup.rect);
+        mainGroup.finishReCalc();
     }
     public void onFixedUpdate(double deltaTime)
     {

@@ -22,19 +22,50 @@ public abstract class Element
     private final RenderMask mask = new RenderMask(RenderMask.MaskShape.ROUNDED_RECT);
 
     //<editor-fold desc="runtime variables">
+
+    // stores width & height when enabled is false
+    public float cachedWidth = 0f, cachedHeight = 0f;
+
+    // stores padding when enabled is false
+    public Padding cachedPadding = new Padding(0f, 0f, 0f, 0f);
+
     // stores the actual render pos (top-left) and size
-    public Rect rect = new Rect(0, 0, 0, 0);
+    public Rect rect = new Rect(0f, 0f, 0f, 0f);
+
     // stores the actual render pos before applying the pivot
-    public float pivotPosX = 0, pivotPosY = 0;
+    public float pivotPosX = 0f, pivotPosY = 0f;
+
     // stores the rect of the parent group
-    public Rect contextRect = new Rect(0, 0, 0, 0);
+    public Rect contextRect = new Rect(0f, 0f, 0f, 0f);
+
     private boolean needReCalc = false;
     //</editor-fold>
 
     @StylePropertyCallback
     public void requestReCalc() { needReCalc = true; }
 
-    @StyleProperty
+    @StylePropertyCallback
+    public void setEnabledCallbackPre(boolean value, CallbackInfo callbackInfo)
+    {
+        if (!enabled && value)
+        {
+            rect.width = cachedWidth;
+            rect.height = cachedHeight;
+            padding.set(cachedPadding.top, cachedPadding.bottom, cachedPadding.left, cachedPadding.right);
+            requestReCalc();
+        }
+        if (enabled && !value)
+        {
+            cachedWidth = rect.width;
+            cachedHeight = rect.height;
+            rect.width = 0f;
+            rect.height = 0f;
+            cachedPadding.set(padding.top, padding.bottom, padding.left, padding.right);
+            padding.set(0f, 0f, 0f, 0f);
+            requestReCalc();
+        }
+    }
+    @StyleProperty(setterCallbackPre = "setEnabledCallbackPre")
     public boolean enabled = true;
 
     @StylePropertyCallback
@@ -62,12 +93,21 @@ public abstract class Element
     public Pivot pivot = Pivot.TOP_LEFT;
 
     @StylePropertyCallback
-    public void paddingValidation(Padding value, CallbackInfo callbackInfo)
+    public void setPaddingCallbackPre(Padding value, CallbackInfo callbackInfo)
     {
-        if (value == null) callbackInfo.cancel = true;
+        if (value == null)
+        {
+            callbackInfo.cancel = true;
+            return;
+        }
+        if (!enabled)
+        {
+            cachedPadding.set(value.top, value.bottom, value.left, value.right);
+            callbackInfo.cancel = true;
+        }
     }
-    @StyleProperty(setterCallbackPost = "requestReCalc", setterCallbackPre = "paddingValidation")
-    public Padding padding = new Padding(0, 0, 0, 0);
+    @StyleProperty(setterCallbackPost = "requestReCalc", setterCallbackPre = "setPaddingCallbackPre")
+    public Padding padding = new Padding(0f, 0f, 0f, 0f);
 
     // determines how the background is drawn (optional)
     @StylePropertyCallback

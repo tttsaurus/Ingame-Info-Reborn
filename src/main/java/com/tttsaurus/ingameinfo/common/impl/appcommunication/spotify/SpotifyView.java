@@ -12,17 +12,22 @@ public class SpotifyView extends View
                <Def debug = false>
                <VerticalGroup padding = {"top": 10, "left": 10}>
                    <VerticalGroup backgroundStyle = "roundedBoxWithOutline">
-                       <HorizontalGroup padding = {"top": 10, "bottom": 5}>
+                       <HorizontalGroup uid = "albumImageGroup" padding = {"top": 10, "bottom": 5}>
                            <UrlImage uid = "albumImage" rounded = true width = 40 height = 40 padding = {"left": 10, "right": 10}>
+                           <VerticalGroup uid = "anotherTrackTitleGroup" padding = {"top": 10, "left": 5} enabled = false>
+                               <SlidingText uid = "anotherTrackTitle" width = 40 spareWidth = 20 onDemandSliding = true>
+                               <SlidingText uid = "anotherTrackAuthor" scale = 0.7f width = 30 spareWidth = 20 onDemandSliding = true padding = {"top": 5}>
+                               <Text uid = "anotherTrackTimer" scale = 0.7f alignment = TOP_RIGHT pivot = TOP_RIGHT padding = {"top": 25}>
+                           </Group>
                        </Group>
-                       <HorizontalGroup padding = {"bottom": 5}>
-                            <SlidingText uid = "trackTitle" width = 40 spareWidth = 20 onDemandSliding = true padding = {"left": 10, "right": 10}>
+                       <HorizontalGroup uid = "trackTitleGroup" padding = {"bottom": 5}>
+                           <SlidingText uid = "trackTitle" width = 40 spareWidth = 20 onDemandSliding = true padding = {"left": 10, "right": 10}>
                        </Group>
-                       <HorizontalGroup padding = {"bottom": 10}>
-                             <ProgressBar uid = "progressBar" width = 50 height = 3 padding = {"left": 5, "right": 5}>
+                       <HorizontalGroup uid = "progressBarGroup" padding = {"bottom": 10}>
+                           <ProgressBar uid = "progressBar" width = 50 height = 3 padding = {"left": 5, "right": 5}>
                        </Group>
                    </Group>
-                   <SimpleButton uid = "editButton" text = "test" enabled = false padding = {"top": 5}>
+                   <SimpleButton uid = "editButton" text = "Switch Layout" padding = {"top": 5} enabled = false>
                </Group>
                """;
     }

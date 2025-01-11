@@ -29,7 +29,16 @@ public abstract class ElementGroup extends Element
     public void calcWidthHeight()
     {
         for (Element element: elements)
+        {
             element.calcWidthHeight();
+            if (!element.enabled)
+            {
+                element.cachedWidth = element.rect.width;
+                element.cachedHeight = element.rect.height;
+                element.rect.width = 0f;
+                element.rect.height = 0f;
+            }
+        }
     }
 
     @Override
@@ -60,6 +69,7 @@ public abstract class ElementGroup extends Element
     @Override
     public boolean getNeedReCalc()
     {
+        if (super.getNeedReCalc()) return true;
         for (Element element: elements)
             if (element.getNeedReCalc()) return true;
         return false;
@@ -67,6 +77,7 @@ public abstract class ElementGroup extends Element
     @Override
     public void finishReCalc()
     {
+        super.finishReCalc();
         for (Element element: elements)
             element.finishReCalc();
     }

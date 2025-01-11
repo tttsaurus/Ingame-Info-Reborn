@@ -6,6 +6,7 @@ import com.tttsaurus.ingameinfo.common.api.appcommunication.spotify.SpotifyOAuth
 import com.tttsaurus.ingameinfo.common.api.appcommunication.spotify.SpotifyUserInfo;
 import com.tttsaurus.ingameinfo.common.api.appcommunication.spotify.TrackPlaying;
 import com.tttsaurus.ingameinfo.common.api.gui.delegate.button.IMouseClickButton;
+import com.tttsaurus.ingameinfo.common.api.gui.layout.Padding;
 import com.tttsaurus.ingameinfo.common.api.mvvm.binding.Reactive;
 import com.tttsaurus.ingameinfo.common.api.mvvm.binding.ReactiveObject;
 import com.tttsaurus.ingameinfo.common.api.mvvm.viewmodel.ViewModel;
@@ -22,24 +23,69 @@ import java.util.concurrent.CompletableFuture;
 
 public class SpotifyViewModel extends ViewModel<SpotifyView>
 {
+    // albumImageGroup
+    @Reactive(targetUid = "albumImageGroup", property = "padding", initiativeSync = true)
+    public ReactiveObject<Padding> albumImageGroupPadding = new ReactiveObject<>(){};
+
+    // albumImage
     @Reactive(targetUid = "albumImage", property = "url", initiativeSync = true)
     public ReactiveObject<String> albumImageUrl = new ReactiveObject<>(){};
 
+    @Reactive(targetUid = "albumImage", property = "width", initiativeSync = true)
+    public ReactiveObject<Float> albumImageWidth = new ReactiveObject<>(){};
+
+    @Reactive(targetUid = "albumImage", property = "height", initiativeSync = true)
+    public ReactiveObject<Float> albumImageHeight = new ReactiveObject<>(){};
+
+    @Reactive(targetUid = "albumImage", property = "padding", initiativeSync = true)
+    public ReactiveObject<Padding> albumImagePadding = new ReactiveObject<>(){};
+
+    // trackTitleGroup
+    @Reactive(targetUid = "trackTitleGroup", property = "enabled", initiativeSync = true)
+    public ReactiveObject<Boolean> trackTitleGroupEnabled = new ReactiveObject<>(){};
+
+    // trackTitle
     @Reactive(targetUid = "trackTitle", property = "text", initiativeSync = true)
     public ReactiveObject<String> trackTitleText = new ReactiveObject<>(){};
 
     @Reactive(targetUid = "trackTitle", property = "xShiftSpeed", initiativeSync = true)
     public ReactiveObject<Float> trackTitleXShiftSpeed = new ReactiveObject<>(){};
 
+    // progressBarGroup
+    @Reactive(targetUid = "progressBarGroup", property = "padding", initiativeSync = true)
+    public ReactiveObject<Padding> progressBarGroupPadding = new ReactiveObject<>(){};
+
+    // progressBar
     @Reactive(targetUid = "progressBar", property = "percentage", initiativeSync = true)
     public ReactiveObject<Float> progressBarPercentage = new ReactiveObject<>(){};
 
+    @Reactive(targetUid = "progressBar", property = "width", initiativeSync = true)
+    public ReactiveObject<Float> progressBarWidth = new ReactiveObject<>(){};
+
+    // anotherTrackTitleGroup
+    @Reactive(targetUid = "anotherTrackTitleGroup", property = "enabled", initiativeSync = true)
+    public ReactiveObject<Boolean> anotherTrackTitleGroupEnabled = new ReactiveObject<>(){};
+
+    @Reactive(targetUid = "anotherTrackTitle", property = "text", initiativeSync = true)
+    public ReactiveObject<String> anotherTrackTitleText = new ReactiveObject<>(){};
+
+    @Reactive(targetUid = "anotherTrackTitle", property = "xShiftSpeed", initiativeSync = true)
+    public ReactiveObject<Float> anotherTrackTitleXShiftSpeed = new ReactiveObject<>(){};
+
+    @Reactive(targetUid = "anotherTrackAuthor", property = "text", initiativeSync = true)
+    public ReactiveObject<String> anotherTrackAuthorText = new ReactiveObject<>(){};
+
+    @Reactive(targetUid = "anotherTrackTimer", property = "text", initiativeSync = true)
+    public ReactiveObject<String> anotherTrackTimerText = new ReactiveObject<>(){};
+
+    // editButton
     @Reactive(targetUid = "editButton", property = "enabled", initiativeSync = true)
     public ReactiveObject<Boolean> editButtonEnabled = new ReactiveObject<>(){};
 
     @Reactive(targetUid = "editButton", property = "addClickListener", initiativeSync = true)
     public ReactiveObject<IMouseClickButton> editButtonAddClickListener = new ReactiveObject<>(){};
 
+    private boolean extendedLayout = false;
     private float durationMs = 0;
     private float estimatedProgressMs;
     private boolean isPlaying = false;
@@ -109,11 +155,37 @@ public class SpotifyViewModel extends ViewModel<SpotifyView>
                     durationMs = trackPlaying.durationMs;
                     estimatedProgressMs = trackPlaying.progressMs;
                     isPlaying = trackPlaying.isPlaying;
+
+                    anotherTrackTitleXShiftSpeed.set(8f);
+                    if (!anotherTrackTitleText.get().equals(trackPlaying.trackName))
+                        anotherTrackTitleText.set(trackPlaying.trackName);
+                    StringBuilder builder = new StringBuilder();
+                    for (int i = 0; i < trackPlaying.artists.size(); i++)
+                    {
+                        builder.append(trackPlaying.artists.get(i));
+                        if (i != trackPlaying.artists.size() - 1) builder.append(", ");
+                    }
+                    String authors = builder.toString();
+                    if (!anotherTrackAuthorText.get().equals(authors))
+                        anotherTrackAuthorText.set(authors);
+                    anotherTrackTimerText.set(calcTimeText(percentage));
                 }
             }
             catch (Exception ignored) { }
             return null;
         });
+    }
+    private String calcTimeText(float percentage)
+    {
+        int totalSeconds = (int)durationMs / 1000;
+        int minutes = totalSeconds / 60;
+        int seconds = totalSeconds % 60;
+        String time = String.format("%d:%02d", minutes, seconds);
+        totalSeconds = (int)(percentage * totalSeconds);
+        minutes = totalSeconds / 60;
+        seconds = totalSeconds % 60;
+        time = String.format("%d:%02d", minutes, seconds) + " / " + time;
+        return time;
     }
 
     @Override
@@ -129,11 +201,42 @@ public class SpotifyViewModel extends ViewModel<SpotifyView>
 
         albumImageUrl.set("");
         progressBarPercentage.set(0f);
-        editButtonEnabled.set(false);
+
+        trackTitleGroupEnabled.set(true);
+        albumImageGroupPadding.set(new Padding(10f, 5f, 0f, 0f));
+        albumImageWidth.set(40f);
+        albumImageHeight.set(40f);
+        albumImagePadding.set(new Padding(0f, 0f, 10f, 10f));
+        progressBarGroupPadding.set(new Padding(0f, 10f, 0f, 0f));
+        progressBarWidth.set(50f);
+        anotherTrackTitleGroupEnabled.set(false);
+
         editButtonAddClickListener.set((IMouseClickButton)(() ->
         {
-            if (Minecraft.getMinecraft().player != null)
-                Minecraft.getMinecraft().player.sendChatMessage("test");
+            if (extendedLayout)
+            {
+                extendedLayout = false;
+                trackTitleGroupEnabled.set(true);
+                albumImageGroupPadding.set(new Padding(10f, 5f, 0f, 0f));
+                albumImageWidth.set(40f);
+                albumImageHeight.set(40f);
+                albumImagePadding.set(new Padding(0f, 0f, 10f, 10f));
+                progressBarGroupPadding.set(new Padding(0f, 10f, 0f, 0f));
+                progressBarWidth.set(50f);
+                anotherTrackTitleGroupEnabled.set(false);
+            }
+            else
+            {
+                extendedLayout = true;
+                trackTitleGroupEnabled.set(false);
+                albumImageGroupPadding.set(new Padding(5f, 5f, 0f, 0f));
+                albumImageWidth.set(60f);
+                albumImageHeight.set(60f);
+                albumImagePadding.set(new Padding(0f, 0f, 5f, 5f));
+                progressBarGroupPadding.set(new Padding(0f, 5f, 0f, 0f));
+                progressBarWidth.set(115f);
+                anotherTrackTitleGroupEnabled.set(true);
+            }
         }));
 
         EventCenter.spotifyOverlayEvent.addListener((flag) ->
@@ -155,6 +258,11 @@ public class SpotifyViewModel extends ViewModel<SpotifyView>
                 trackTitleXShiftSpeed.set(20f);
                 trackTitleText.set("Please wait... And make sure you play a track on Spotify");
 
+                anotherTrackTitleXShiftSpeed.set(20f);
+                anotherTrackTitleText.set("Please wait... And make sure you play a track on Spotify");
+                anotherTrackAuthorText.set("");
+                anotherTrackTimerText.set("");
+
                 refreshTokenIfNeeded(() ->
                 {
                     try
@@ -172,6 +280,17 @@ public class SpotifyViewModel extends ViewModel<SpotifyView>
                             durationMs = trackPlaying.durationMs;
                             estimatedProgressMs = trackPlaying.progressMs;
                             isPlaying = trackPlaying.isPlaying;
+
+                            anotherTrackTitleXShiftSpeed.set(8f);
+                            anotherTrackTitleText.set(trackPlaying.trackName);
+                            StringBuilder builder = new StringBuilder();
+                            for (int i = 0; i < trackPlaying.artists.size(); i++)
+                            {
+                                builder.append(trackPlaying.artists.get(i));
+                                if (i != trackPlaying.artists.size() - 1) builder.append(", ");
+                            }
+                            anotherTrackAuthorText.set(builder.toString());
+                            anotherTrackTimerText.set(calcTimeText(percentage));
                         }
                     }
                     catch (Exception ignored) { }
@@ -271,6 +390,9 @@ public class SpotifyViewModel extends ViewModel<SpotifyView>
                 }
                 float percentage = estimatedProgressMs / durationMs;
                 progressBarPercentage.set(percentage);
+                String timeText = calcTimeText(percentage);
+                if (!anotherTrackTimerText.get().equals(timeText))
+                    anotherTrackTimerText.set(timeText);
             }
         }
     }
