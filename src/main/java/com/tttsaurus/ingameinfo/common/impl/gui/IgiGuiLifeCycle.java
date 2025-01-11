@@ -7,9 +7,12 @@ import com.tttsaurus.ingameinfo.common.api.gui.delegate.placeholder.IPlaceholder
 import com.tttsaurus.ingameinfo.common.api.function.IFunc;
 import com.tttsaurus.ingameinfo.common.impl.igievent.EventCenter;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.ResourceLocation;
+import net.minecraft.world.biome.Biome;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -36,6 +39,7 @@ public final class IgiGuiLifeCycle
     private static int estimatedFPS = 0;
     private static ScaledResolution resolution = new ScaledResolution(Minecraft.getMinecraft());
 
+    private static String lastBiomeRegistryName = "";
     private static double timer = 0.5f;
     private static void onFixedUpdate()
     {
@@ -49,14 +53,32 @@ public final class IgiGuiLifeCycle
         {
             timer -= 0.5d;
             EventCenter.igiGuiFpsEvent.trigger(estimatedFPS);
-            EventCenter.gameFpsEvent.trigger(Minecraft.getMinecraft().getDebugFPS());
+            EventCenter.gameFpsEvent.trigger(Minecraft.getDebugFPS());
             Runtime runtime = Runtime.getRuntime();
             EventCenter.gameMemoryEvent.trigger(runtime.totalMemory() - runtime.freeMemory());
+            EntityPlayerSP player = Minecraft.getMinecraft().player;
+            if (player != null)
+            {
+                Biome biome = player.world.getBiome(player.getPosition());
+                ResourceLocation rl = biome.getRegistryName();
+                if (rl != null)
+                {
+                    String biomeRegistryName = rl.toString();
+                    if (!biomeRegistryName.equals(lastBiomeRegistryName))
+                    {
+                        lastBiomeRegistryName = biomeRegistryName;
+                        EventCenter.enterBiomeEvent.trigger(biome.getBiomeName(), biomeRegistryName);
+                    }
+                }
+            }
         }
     }
     private static void onRenderUpdate()
     {
-        ItemStack heldItemMainhand = Minecraft.getMinecraft().player.getHeldItemMainhand();
+        ItemStack heldItemMainhand = null;
+        EntityPlayerSP player = Minecraft.getMinecraft().player;
+        if (player != null)
+            heldItemMainhand = player.getHeldItemMainhand();
 
         //<editor-fold desc="gui container render update">
         List<Map.Entry<String, IgiGuiContainer>> entryList = new ArrayList<>(openedGuiMap.entrySet());
@@ -75,25 +97,25 @@ public final class IgiGuiLifeCycle
             IgiGuiContainer container = entry.getValue();
             boolean display = true;
 
-            if (container.getUseHeldItemWhitelist())
+            if (heldItemMainhand != null)
             {
-                display = false;
-                for (ItemStack itemStack: container.getHeldItemWhitelist())
-                    if (itemStack.isItemEqual(heldItemMainhand))
-                        display = true;
-            }
-            if (container.getUseHeldItemBlacklist())
-            {
-                for (ItemStack itemStack: container.getHeldItemBlacklist())
-                    if (itemStack.isItemEqual(heldItemMainhand))
-                        display = false;
+                if (container.getUseHeldItemWhitelist())
+                {
+                    display = false;
+                    for (ItemStack itemStack: container.getHeldItemWhitelist())
+                        if (itemStack.isItemEqual(heldItemMainhand))
+                            display = true;
+                }
+                if (container.getUseHeldItemBlacklist())
+                {
+                    for (ItemStack itemStack: container.getHeldItemBlacklist())
+                        if (itemStack.isItemEqual(heldItemMainhand))
+                            display = false;
+                }
             }
 
             if (display)
-                if (entry.getKey().equals(firstFocused))
-                    container.onRenderUpdate(true);
-                else
-                    container.onRenderUpdate(false);
+                container.onRenderUpdate(entry.getKey().equals(firstFocused));
         }
         //</editor-fold>
     }
@@ -233,7 +255,7 @@ public final class IgiGuiLifeCycle
                 }
             }
             // open placeholder
-            else if (!isPlaceholderGuiOn && !openedGuiMap.isEmpty() && Minecraft.getMinecraft().currentScreen == null)
+            else if (!openedGuiMap.isEmpty() && Minecraft.getMinecraft().currentScreen == null)
             {
                 AtomicBoolean focus = new AtomicBoolean(false);
                 openedGuiMap.forEach((uuid, guiContainer) -> focus.set(focus.get() || (guiContainer.getFocused() && guiContainer.getActive())));
@@ -298,7 +320,7 @@ public final class IgiGuiLifeCycle
     private static boolean isPlaceholderGuiOn = false;
     private static PlaceholderMcGui placeholderGui;
 
-    private static Map<String, IgiGuiContainer> openedGuiMap = new LinkedHashMap<>();
+    private static final Map<String, IgiGuiContainer> openedGuiMap = new LinkedHashMap<>();
 
     public static String openIgiGui(IgiGuiContainer guiContainer)
     {

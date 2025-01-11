@@ -1,5 +1,6 @@
 package com.tttsaurus.ingameinfo.common.impl.mvvm.registry;
 
+import com.tttsaurus.ingameinfo.InGameInfoReborn;
 import com.tttsaurus.ingameinfo.common.api.gui.GuiLayout;
 import com.tttsaurus.ingameinfo.common.api.gui.IgiGuiContainer;
 import com.tttsaurus.ingameinfo.common.api.internal.InternalMethods;
@@ -53,9 +54,12 @@ public final class MvvmRegistry
         catch (Exception e) { return null; }
     }
 
+    // only be called under MvvmRegisterEvent
     public static boolean manualRegister(String mvvmRegistryName, Class<? extends ViewModel<?>> viewModelClass)
     {
         if (viewModelClasses.containsKey(mvvmRegistryName)) return false;
+
+        InGameInfoReborn.LOGGER.info("Currently registering " + mvvmRegistryName);
 
         viewModelClasses.put(mvvmRegistryName, viewModelClass);
         registeredReactiveObjects.put(mvvmRegistryName, RegistryUtils.findReactiveObjects(mvvmRegistryName, viewModelClass));
@@ -63,6 +67,7 @@ public final class MvvmRegistry
         return true;
     }
 
+    // only be called under MvvmRegisterEvent
     public static boolean autoRegister(String mvvmRegistryName, Class<? extends ViewModel<?>> viewModelClass)
     {
         if (!manualRegister(mvvmRegistryName, viewModelClass)) return false;
