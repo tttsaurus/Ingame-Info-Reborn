@@ -10,7 +10,7 @@ public class SpotifyView extends View
         return
                """
                <Def debug = false>
-               <VerticalGroup padding = {"top": 10, "left": 10}>
+               <VerticalGroup padding = {"top": 10, "bottom": 10, "left": 10, "right": 10} alignment = TOP_RIGHT pivot = TOP_RIGHT>
                    <VerticalGroup backgroundStyle = "roundedBoxWithOutline">
                        <HorizontalGroup uid = "albumImageGroup" padding = {"top": 10, "bottom": 5}>
                            <UrlImage uid = "albumImage" rounded = true width = 40 height = 40 padding = {"left": 10, "right": 10}>
