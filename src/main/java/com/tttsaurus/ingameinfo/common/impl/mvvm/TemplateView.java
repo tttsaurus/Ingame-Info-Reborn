@@ -9,7 +9,17 @@ public class TemplateView extends View
     {
         return
                 """
-                <Text uid = "biome">
+                <Def debug = false>
+                <VerticalGroup>
+                    <Text uid = "biome">
+                    <Text uid = "tps/mtps">
+                    <HorizontalGroup>
+                        <Text text = "Memory: ">
+                        <ProgressBar uid = "memoryBar" width = 40 height = 3 alignment = CENTER pivot = CENTER padding = {"right": 5}>
+                        <Text uid = "memory">
+                    </Group>
+                    <Text uid = "fps">
+                </Group>
                 """;
     }
 

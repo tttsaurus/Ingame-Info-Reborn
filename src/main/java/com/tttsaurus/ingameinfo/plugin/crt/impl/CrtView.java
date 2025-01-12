@@ -14,7 +14,7 @@ public final class CrtView extends View
     public String runtimeMvvm;
 
     // key: mvvm registry name
-    private static Map<String, String> ixmlFileNames = new HashMap<>();
+    private static final Map<String, String> ixmlFileNames = new HashMap<>();
 
     @ZenMethod
     public static void setIxmlFileName(String name) { ixmlFileNames.put(CrtMvvm.currentMvvm, name); }

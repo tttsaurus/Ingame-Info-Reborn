@@ -11,6 +11,7 @@ import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.item.ItemStack;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.biome.Biome;
 import net.minecraftforge.common.MinecraftForge;
@@ -52,10 +53,12 @@ public final class IgiGuiLifeCycle
         if (timer >= 0.5d)
         {
             timer -= 0.5d;
+
+            // trigger builtin igi events
             EventCenter.igiGuiFpsEvent.trigger(estimatedFPS);
             EventCenter.gameFpsEvent.trigger(Minecraft.getDebugFPS());
             Runtime runtime = Runtime.getRuntime();
-            EventCenter.gameMemoryEvent.trigger(runtime.totalMemory() - runtime.freeMemory());
+            EventCenter.gameMemoryEvent.trigger(runtime.totalMemory() - runtime.freeMemory(), runtime.totalMemory());
             EntityPlayerSP player = Minecraft.getMinecraft().player;
             if (player != null)
             {
@@ -70,6 +73,19 @@ public final class IgiGuiLifeCycle
                         EventCenter.enterBiomeEvent.trigger(biome.getBiomeName(), biomeRegistryName);
                     }
                 }
+            }
+            MinecraftServer server = FMLCommonHandler.instance().getMinecraftServerInstance();
+            if (server != null && server.isServerRunning())
+            {
+                long[] tickTimes = server.tickTimeArray;
+                double averageTickTime = 0d;
+
+                for (long tickTime : tickTimes)
+                    averageTickTime += tickTime / 1.0E6d;
+                averageTickTime /= tickTimes.length;
+
+                int tps = (int)(Math.min(1000d / averageTickTime, 20d));
+                EventCenter.gameTpsMtpsEvent.trigger(tps, averageTickTime);
             }
         }
     }
@@ -208,7 +224,7 @@ public final class IgiGuiLifeCycle
             stopwatch.start();
 
         // unit: s
-        double currentTime = stopwatch.getTime(TimeUnit.NANOSECONDS) / 1000000000d;
+        double currentTime = stopwatch.getTime(TimeUnit.NANOSECONDS) / 1.0E9d;
         if (currentTime + excessTime >= timePerFrame)
         {
             stopwatch.stop();

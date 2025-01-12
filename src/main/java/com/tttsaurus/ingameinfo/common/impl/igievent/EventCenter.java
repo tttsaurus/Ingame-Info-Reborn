@@ -5,6 +5,7 @@ public final class EventCenter
     public final static IgiGuiFpsEvent igiGuiFpsEvent = new IgiGuiFpsEvent();
     public final static GameFpsEvent gameFpsEvent = new GameFpsEvent();
     public final static GameMemoryEvent gameMemoryEvent = new GameMemoryEvent();
+    public final static GameTpsMtpsEvent gameTpsMtpsEvent = new GameTpsMtpsEvent();
     public final static EnterBiomeEvent enterBiomeEvent = new EnterBiomeEvent();
 
     // spotify

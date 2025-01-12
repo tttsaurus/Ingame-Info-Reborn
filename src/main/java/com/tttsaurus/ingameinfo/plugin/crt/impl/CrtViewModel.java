@@ -21,7 +21,7 @@ public final class CrtViewModel extends ViewModel<CrtView>
     public String runtimeMvvm;
 
     // key: mvvm registry name
-    private static Map<String, IViewModelStart> startActions = new HashMap<>();
+    private static final Map<String, IViewModelStart> startActions = new HashMap<>();
 
     @ZenMethod
     public static void setStartAction(IViewModelStart action) { startActions.put(CrtMvvm.currentMvvm, action); }

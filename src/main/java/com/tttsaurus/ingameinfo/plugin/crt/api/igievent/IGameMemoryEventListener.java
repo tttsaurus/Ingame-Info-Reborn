@@ -7,5 +7,5 @@ import stanhebben.zenscript.annotations.ZenClass;
 @ZenClass("mods.ingameinfo.igievent.GameMemoryEventListener")
 public interface IGameMemoryEventListener
 {
-    void invoke(long arg0);
+    void invoke(long arg0, long arg1);
 }
