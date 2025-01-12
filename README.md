@@ -49,10 +49,10 @@ Version Requirement: >= v1.0.0-b2
 ![Snipaste_2025-01-08_10-58-25](https://github.com/user-attachments/assets/241d10bf-3309-4ac1-9bdc-b1f33946b455)
 
 - Input the command `#spotify-oauth` to the chat to authorize your spotify app
-- After you finished the authentication, input the command `#spotify-gui true` while you're listening to sth on Spotify to open the gui overlay. `#spotify-gui false` for closing ofc
+- After you finished the authentication, input the command `#spotify-gui true` while you're listening to a track on Spotify to open the gui overlay. `#spotify-gui false` for closing ofc
 - You can always run `#spotify-gui true` again to refresh
 - Album image loading could be slow
-- Theoretically, you no longer need to run `#spotify-oauth` for the next launch and so on, but you should run `#spotify-oauth` to refresh if you encountered any issues
+- You no longer need to run `#spotify-oauth` for the next launch and so on, but you should run `#spotify-oauth` to refresh if you encountered any issues
 
 Additionally
 - You can edit `./config/ingameinfo/spotify.ixml` to create whatever layout you want
@@ -69,7 +69,7 @@ In case you want to use the latest action build
 
 ## How to use
 API is changing frequently for the current stage.
-Here's an easy example under v1.0.0-b1.
+Here's an easy example under v1.0.0-b3.
 
 `./config/ingameinfo/test.ixml`
 ```xml
@@ -106,7 +106,7 @@ public class TestViewModel extends ViewModel<TestView>
 @SubscribeEvent
 public static void onMvvmRegister(MvvmRegisterEvent event)
 {
-    MvvmRegistry.register("test", TestViewModel.class);
+    MvvmRegistry.autoRegister("test", TestViewModel.class);
 }
 ```
 ```java
@@ -121,12 +121,15 @@ Crt version is as follows (install ProbeZS and ZS IntelliSense for more api deta
 
 import mods.ingameinfo.mvvm.ViewModel;
 import mods.ingameinfo.mvvm.View;
+import mods.ingameinfo.mvvm.Mvvm;
 import mods.ingameinfo.Types;
-import mods.ingameinfo.event.EventCenter;
+import mods.ingameinfo.igievent.EventCenter;
+
+Mvvm.define("test");
 
 View.setIxmlFileName("test");
 
-ViewModel.addReactiveObject("testString", Types.String, "AAA", "text", true);
+ViewModel.registerReactiveObject("testString", Types.String, "AAA", "text", true);
 
 ViewModel.setStartAction(function()
 {
@@ -136,6 +139,19 @@ ViewModel.setStartAction(function()
     });
 });
 ```
+```zenscript
+import mods.ingameinfo.gui.IgiGuiManager;
+import mods.ingameinfo.event.IgiGuiInitEvent;
+
+events.onIgiGuiInit(function(event as IgiGuiInitEvent)
+{
+    IgiGuiManager.openGui("test");
+});
+```
+
+Extra java example:
+- [TemplateView](https://github.com/tttsaurus/Ingame-Info-Reborn/blob/master/src/main/java/com/tttsaurus/ingameinfo/common/impl/mvvm/TemplateView.java)
+- [TemplateViewModel](https://github.com/tttsaurus/Ingame-Info-Reborn/blob/master/src/main/java/com/tttsaurus/ingameinfo/common/impl/mvvm/TemplateViewModel.java)
 
 ## Credits
 - Created using [GregTechCEu's Buildscripts](https://github.com/GregTechCEu/Buildscripts)
