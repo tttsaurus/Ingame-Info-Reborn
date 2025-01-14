@@ -55,10 +55,7 @@ Version Requirement: >= v1.0.0-b2
 - You can always run `#spotify-gui true` again to refresh
 - Album image loading could be slow
 - You no longer need to run `#spotify-oauth` for the next launch and so on, but you should run `#spotify-oauth` to refresh if you encountered any issues
-
-Additionally
-- You can edit `./config/ingameinfo/spotify.ixml` to create whatever layout you want
-- Logic and layout definition are completely separated
+- Run `#spotify-gui-edit` to switch to another layout at runtime
 
 ![Snipaste_2025-01-07_21-27-57](https://github.com/user-attachments/assets/4324f4e5-481a-4a72-8658-6b65f876809c)
 
