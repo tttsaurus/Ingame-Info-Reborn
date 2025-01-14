@@ -7,6 +7,8 @@ Suggestions/PRs are welcome
 ## Overview
 This is a library mod that helps you to create in-game overlaid (or focused) gui with ease.
 
+![Snipaste_2025-01-12_12-53-07](https://github.com/user-attachments/assets/581f0727-bba8-4ff5-9780-8fdbfaf587fd)
+
 ## Todo List / Features
 - Approximate Model-View-ViewModel pattern (✔)
 - Introduce a custom gui container (✔)
