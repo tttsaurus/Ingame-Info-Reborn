@@ -2,7 +2,8 @@ package com.tttsaurus.ingameinfo.proxy;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
-import com.tttsaurus.ingameinfo.IgiConfig;
+import com.tttsaurus.ingameinfo.config.ForgeConfigWriter;
+import com.tttsaurus.ingameinfo.config.IgiConfig;
 import com.tttsaurus.ingameinfo.common.api.appcommunication.spotify.SpotifyOAuthUtils;
 import com.tttsaurus.ingameinfo.common.api.event.MvvmRegisterEvent;
 import com.tttsaurus.ingameinfo.common.api.gui.Element;
@@ -22,14 +23,17 @@ import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import org.apache.logging.log4j.Logger;
+import java.io.File;
 import java.util.Map;
 
 public class CommonProxy
 {
     public void preInit(FMLPreInitializationEvent event, Logger logger)
     {
-        IgiConfig.CONFIG = new Configuration(event.getSuggestedConfigurationFile());
+        File file = event.getSuggestedConfigurationFile();
+        IgiConfig.CONFIG = new Configuration(file);
         IgiConfig.loadConfig();
+        IgiConfig.CONFIG_WRITER = new ForgeConfigWriter(file);
 
         SpotifyOAuthUtils.CLIENT_ID = IgiConfig.SPOTIFY_CLIENT_ID;
         SpotifyOAuthUtils.CLIENT_SECRET = IgiConfig.SPOTIFY_CLIENT_SECRET;

@@ -38,7 +38,7 @@ public class TemplateViewModel extends ViewModel<TemplateView>
             int usedMb = (int)(used / 1024 / 1024);
             int totalMb = (int)(total / 1024 / 1024);
             memoryBarPercentage.set(((float)usedMb / (float)totalMb));
-            memoryText.set(usedMb + "MB / " + totalMb + " MB");
+            memoryText.set(usedMb + " MB / " + totalMb + " MB");
         });
         EventCenter.gameFpsEvent.addListener((fps) ->
         {

@@ -32,15 +32,68 @@ import java.util.concurrent.atomic.AtomicBoolean;
 @SuppressWarnings("all")
 public final class IgiGuiLifeCycle
 {
-    private static final int maxFPS = 125;
-    private static final double timePerFrame = 1d / maxFPS;
+    // fixed update limit
+    private static int maxFps_FixedUpdate = 125;
+    private static double timePerFrame_FixedUpdate = 1d / maxFps_FixedUpdate;
+    public static void setMaxFps_FixedUpdate(int fps)
+    {
+        maxFps_FixedUpdate = fps;
+        timePerFrame_FixedUpdate = 1d / maxFps_FixedUpdate;
+    }
+    private static int estimatedFps_FixedUpdate = 0;
     private static final StopWatch stopwatch = new StopWatch();
     private static double deltaTime = 0d;
     private static double excessTime = 0d;
-    private static int estimatedFPS = 0;
+
+    // todo: render update limit
+    private static int maxFps_RenderUpdate = 240;
+    private static double timePerFrame_RenderUpdate = 1d / maxFps_RenderUpdate;
+    public static void setMaxFps_RenderUpdate(int fps)
+    {
+        maxFps_RenderUpdate = fps;
+        timePerFrame_RenderUpdate = 1d / maxFps_RenderUpdate;
+    }
+
     private static ScaledResolution resolution = new ScaledResolution(Minecraft.getMinecraft());
 
     private static String lastBiomeRegistryName = "";
+    private static void triggerIgiEvents()
+    {
+        // trigger builtin igi events
+        EventCenter.igiGuiFpsEvent.trigger(estimatedFps_FixedUpdate);
+        EventCenter.gameFpsEvent.trigger(Minecraft.getDebugFPS());
+        Runtime runtime = Runtime.getRuntime();
+        EventCenter.gameMemoryEvent.trigger(runtime.totalMemory() - runtime.freeMemory(), runtime.totalMemory());
+        EntityPlayerSP player = Minecraft.getMinecraft().player;
+        if (player != null)
+        {
+            Biome biome = player.world.getBiome(player.getPosition());
+            ResourceLocation rl = biome.getRegistryName();
+            if (rl != null)
+            {
+                String biomeRegistryName = rl.toString();
+                if (!biomeRegistryName.equals(lastBiomeRegistryName))
+                {
+                    lastBiomeRegistryName = biomeRegistryName;
+                    EventCenter.enterBiomeEvent.trigger(biome.getBiomeName(), biomeRegistryName);
+                }
+            }
+        }
+        MinecraftServer server = FMLCommonHandler.instance().getMinecraftServerInstance();
+        if (server != null && server.isServerRunning())
+        {
+            long[] tickTimes = server.tickTimeArray;
+            double averageTickTime = 0d;
+
+            for (long tickTime : tickTimes)
+                averageTickTime += tickTime / 1.0E6d;
+            averageTickTime /= tickTimes.length;
+
+            int tps = (int)(Math.min(1000d / averageTickTime, 20d));
+            EventCenter.gameTpsMtpsEvent.trigger(tps, averageTickTime);
+        }
+    }
+
     private static double timer = 0.5f;
     private static void onFixedUpdate()
     {
@@ -53,40 +106,7 @@ public final class IgiGuiLifeCycle
         if (timer >= 0.5d)
         {
             timer -= 0.5d;
-
-            // trigger builtin igi events
-            EventCenter.igiGuiFpsEvent.trigger(estimatedFPS);
-            EventCenter.gameFpsEvent.trigger(Minecraft.getDebugFPS());
-            Runtime runtime = Runtime.getRuntime();
-            EventCenter.gameMemoryEvent.trigger(runtime.totalMemory() - runtime.freeMemory(), runtime.totalMemory());
-            EntityPlayerSP player = Minecraft.getMinecraft().player;
-            if (player != null)
-            {
-                Biome biome = player.world.getBiome(player.getPosition());
-                ResourceLocation rl = biome.getRegistryName();
-                if (rl != null)
-                {
-                    String biomeRegistryName = rl.toString();
-                    if (!biomeRegistryName.equals(lastBiomeRegistryName))
-                    {
-                        lastBiomeRegistryName = biomeRegistryName;
-                        EventCenter.enterBiomeEvent.trigger(biome.getBiomeName(), biomeRegistryName);
-                    }
-                }
-            }
-            MinecraftServer server = FMLCommonHandler.instance().getMinecraftServerInstance();
-            if (server != null && server.isServerRunning())
-            {
-                long[] tickTimes = server.tickTimeArray;
-                double averageTickTime = 0d;
-
-                for (long tickTime : tickTimes)
-                    averageTickTime += tickTime / 1.0E6d;
-                averageTickTime /= tickTimes.length;
-
-                int tps = (int)(Math.min(1000d / averageTickTime, 20d));
-                EventCenter.gameTpsMtpsEvent.trigger(tps, averageTickTime);
-            }
+            triggerIgiEvents();
         }
     }
     private static void onRenderUpdate()
@@ -225,18 +245,18 @@ public final class IgiGuiLifeCycle
 
         // unit: s
         double currentTime = stopwatch.getTime(TimeUnit.NANOSECONDS) / 1.0E9d;
-        if (currentTime + excessTime >= timePerFrame)
+        if (currentTime + excessTime >= timePerFrame_FixedUpdate)
         {
             stopwatch.stop();
             stopwatch.reset();
             stopwatch.start();
 
             deltaTime = currentTime;
-            estimatedFPS = ((int)(1d / (currentTime + excessTime)) + estimatedFPS) / 2;
+            estimatedFps_FixedUpdate = ((int)(1d / (currentTime + excessTime)) + estimatedFps_FixedUpdate) / 2;
 
             onFixedUpdate();
 
-            excessTime = currentTime + excessTime - timePerFrame;
+            excessTime = currentTime + excessTime - timePerFrame_FixedUpdate;
         }
 
         if (!isPlaceholderGuiOn)
@@ -352,3 +372,4 @@ public final class IgiGuiLifeCycle
 
 // todo: add button group to handle complex button setup
 // todo: optimize reCalc logic
+// todo: added fps limit to render update and apply framebuffer

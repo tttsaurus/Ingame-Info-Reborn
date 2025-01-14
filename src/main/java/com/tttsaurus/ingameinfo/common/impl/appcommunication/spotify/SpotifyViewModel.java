@@ -1,6 +1,6 @@
 package com.tttsaurus.ingameinfo.common.impl.appcommunication.spotify;
 
-import com.tttsaurus.ingameinfo.IgiConfig;
+import com.tttsaurus.ingameinfo.config.IgiConfig;
 import com.tttsaurus.ingameinfo.common.api.appcommunication.spotify.SpotifyAccessUtils;
 import com.tttsaurus.ingameinfo.common.api.appcommunication.spotify.SpotifyOAuthUtils;
 import com.tttsaurus.ingameinfo.common.api.appcommunication.spotify.SpotifyUserInfo;
@@ -85,7 +85,6 @@ public class SpotifyViewModel extends ViewModel<SpotifyView>
     @Reactive(targetUid = "editButton", property = "addClickListener", initiativeSync = true)
     public ReactiveObject<IMouseClickButton> editButtonAddClickListener = new ReactiveObject<>(){};
 
-    private boolean extendedLayout = false;
     private float durationMs = 0;
     private float estimatedProgressMs;
     private boolean isPlaying = false;
@@ -187,6 +186,31 @@ public class SpotifyViewModel extends ViewModel<SpotifyView>
         time = String.format("%d:%02d", minutes, seconds) + " / " + time;
         return time;
     }
+    private void switchLayout()
+    {
+        if (IgiConfig.SPOTIFY_EXTENDED_LAYOUT)
+        {
+            trackTitleGroupEnabled.set(false);
+            albumImageGroupPadding.set(new Padding(5f, 5f, 0f, 0f));
+            albumImageWidth.set(60f);
+            albumImageHeight.set(60f);
+            albumImagePadding.set(new Padding(0f, 0f, 5f, 5f));
+            progressBarGroupPadding.set(new Padding(0f, 5f, 0f, 0f));
+            progressBarWidth.set(115f);
+            anotherTrackTitleGroupEnabled.set(true);
+        }
+        else
+        {
+            trackTitleGroupEnabled.set(true);
+            albumImageGroupPadding.set(new Padding(10f, 5f, 0f, 0f));
+            albumImageWidth.set(40f);
+            albumImageHeight.set(40f);
+            albumImagePadding.set(new Padding(0f, 0f, 10f, 10f));
+            progressBarGroupPadding.set(new Padding(0f, 10f, 0f, 0f));
+            progressBarWidth.set(50f);
+            anotherTrackTitleGroupEnabled.set(false);
+        }
+    }
 
     @Override
     public void start()
@@ -202,40 +226,19 @@ public class SpotifyViewModel extends ViewModel<SpotifyView>
         albumImageUrl.set("");
         progressBarPercentage.set(0f);
 
-        trackTitleGroupEnabled.set(true);
-        albumImageGroupPadding.set(new Padding(10f, 5f, 0f, 0f));
-        albumImageWidth.set(40f);
-        albumImageHeight.set(40f);
-        albumImagePadding.set(new Padding(0f, 0f, 10f, 10f));
-        progressBarGroupPadding.set(new Padding(0f, 10f, 0f, 0f));
-        progressBarWidth.set(50f);
-        anotherTrackTitleGroupEnabled.set(false);
+        switchLayout();
 
         editButtonAddClickListener.set((IMouseClickButton)(() ->
         {
-            if (extendedLayout)
+            if (IgiConfig.SPOTIFY_EXTENDED_LAYOUT)
             {
-                extendedLayout = false;
-                trackTitleGroupEnabled.set(true);
-                albumImageGroupPadding.set(new Padding(10f, 5f, 0f, 0f));
-                albumImageWidth.set(40f);
-                albumImageHeight.set(40f);
-                albumImagePadding.set(new Padding(0f, 0f, 10f, 10f));
-                progressBarGroupPadding.set(new Padding(0f, 10f, 0f, 0f));
-                progressBarWidth.set(50f);
-                anotherTrackTitleGroupEnabled.set(false);
+                IgiConfig.useSpotifyExtendedLayout(false);
+                switchLayout();
             }
             else
             {
-                extendedLayout = true;
-                trackTitleGroupEnabled.set(false);
-                albumImageGroupPadding.set(new Padding(5f, 5f, 0f, 0f));
-                albumImageWidth.set(60f);
-                albumImageHeight.set(60f);
-                albumImagePadding.set(new Padding(0f, 0f, 5f, 5f));
-                progressBarGroupPadding.set(new Padding(0f, 5f, 0f, 0f));
-                progressBarWidth.set(115f);
-                anotherTrackTitleGroupEnabled.set(true);
+                IgiConfig.useSpotifyExtendedLayout(true);
+                switchLayout();
             }
         }));
 
