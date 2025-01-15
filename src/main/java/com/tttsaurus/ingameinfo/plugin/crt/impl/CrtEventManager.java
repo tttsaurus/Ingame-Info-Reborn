@@ -8,6 +8,7 @@ import crafttweaker.api.event.IEventHandle;
 import crafttweaker.api.event.IEventManager;
 import crafttweaker.util.EventList;
 import crafttweaker.util.IEventHandler;
+import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import stanhebben.zenscript.annotations.ZenClass;
 import stanhebben.zenscript.annotations.ZenExpansion;
@@ -16,14 +17,18 @@ import stanhebben.zenscript.annotations.ZenMethod;
 @ZenRegister
 @ZenClass("mods.ingameinfo.IEventManager")
 @ZenExpansion("crafttweaker.events.IEventManager")
-public class CrtEventManager
+@SuppressWarnings("all")
+public final class CrtEventManager
 {
-    private static final EventList<IIgiGuiInitEvent> igiGuiInitEventList = new EventList<>();
+    private static final boolean loaded = Loader.isModLoaded("crafttweaker");
+    private static Object igiGuiInitEventList = null;
 
     @ZenMethod
     public static IEventHandle onIgiGuiInit(IEventManager manager, IEventHandler<IIgiGuiInitEvent> event)
     {
-        return igiGuiInitEventList.add(event);
+        if (igiGuiInitEventList == null)
+            igiGuiInitEventList = new EventList<IIgiGuiInitEvent>();
+        return ((EventList<IIgiGuiInitEvent>)igiGuiInitEventList).add(event);
     }
 
     public static final class Handler
@@ -31,8 +36,11 @@ public class CrtEventManager
         @SubscribeEvent
         public static void onIgiGuiInit(IgiGuiInitEvent event)
         {
-            if (igiGuiInitEventList.hasHandlers())
-                igiGuiInitEventList.publish(new McIgiGuiInitEvent(event));
+            if (!loaded) return;
+            if (igiGuiInitEventList == null)
+                igiGuiInitEventList = new EventList<IIgiGuiInitEvent>();
+            if (((EventList<IIgiGuiInitEvent>)igiGuiInitEventList).hasHandlers())
+                ((EventList<IIgiGuiInitEvent>)igiGuiInitEventList).publish(new McIgiGuiInitEvent(event));
         }
     }
 }
