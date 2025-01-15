@@ -22,6 +22,9 @@ public class TemplateViewModel extends ViewModel<TemplateView>
     @Reactive(targetUid = "fps", property = "text", initiativeSync = true)
     public ReactiveObject<String> fpsText = new ReactiveObject<>(){};
 
+    @Reactive(targetUid = "igiFps", property = "text", initiativeSync = true)
+    public ReactiveObject<String> igiFpsText = new ReactiveObject<>(){};
+
     @Override
     public void start()
     {
@@ -43,6 +46,10 @@ public class TemplateViewModel extends ViewModel<TemplateView>
         EventCenter.gameFpsEvent.addListener((fps) ->
         {
             fpsText.set("FPS: " + fps);
+        });
+        EventCenter.igiGuiFpsEvent.addListener((fixedFps, renderFps) ->
+        {
+            igiFpsText.set("IGI GUI FPS: " + fixedFps + ", " + renderFps);
         });
     }
 

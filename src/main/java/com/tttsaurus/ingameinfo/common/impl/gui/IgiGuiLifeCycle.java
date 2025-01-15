@@ -5,11 +5,14 @@ import com.tttsaurus.ingameinfo.common.api.gui.IgiGuiContainer;
 import com.tttsaurus.ingameinfo.common.api.gui.delegate.placeholder.IPlaceholderDrawScreen;
 import com.tttsaurus.ingameinfo.common.api.gui.delegate.placeholder.IPlaceholderKeyTyped;
 import com.tttsaurus.ingameinfo.common.api.function.IFunc;
+import com.tttsaurus.ingameinfo.common.api.render.RenderUtils;
 import com.tttsaurus.ingameinfo.common.impl.igievent.EventCenter;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.renderer.OpenGlHelper;
+import net.minecraft.client.shader.Framebuffer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.ResourceLocation;
@@ -32,7 +35,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 @SuppressWarnings("all")
 public final class IgiGuiLifeCycle
 {
-    // fixed update limit
+    //<editor-fold desc="fixed update variables">
     private static int maxFps_FixedUpdate = 125;
     private static double timePerFrame_FixedUpdate = 1d / maxFps_FixedUpdate;
     public static void setMaxFps_FixedUpdate(int fps)
@@ -41,11 +44,12 @@ public final class IgiGuiLifeCycle
         timePerFrame_FixedUpdate = 1d / maxFps_FixedUpdate;
     }
     private static int estimatedFps_FixedUpdate = 0;
-    private static final StopWatch stopwatch = new StopWatch();
-    private static double deltaTime = 0d;
-    private static double excessTime = 0d;
+    private static double deltaTime_FixedUpdate = 0d;
+    private static double excessTime_FixedUpdate = 0d;
+    private static final StopWatch stopwatch_FixedUpdate = new StopWatch();
+    //</editor-fold>
 
-    // todo: render update limit
+    //<editor-fold desc="render update variables">
     private static int maxFps_RenderUpdate = 240;
     private static double timePerFrame_RenderUpdate = 1d / maxFps_RenderUpdate;
     public static void setMaxFps_RenderUpdate(int fps)
@@ -53,6 +57,18 @@ public final class IgiGuiLifeCycle
         maxFps_RenderUpdate = fps;
         timePerFrame_RenderUpdate = 1d / maxFps_RenderUpdate;
     }
+    private static int estimatedFps_RenderUpdate = 0;
+    private static double deltaTime_RenderUpdate = 0d;
+    private static double excessTime_RenderUpdate = 0d;
+    private static final StopWatch stopwatch_RenderUpdate = new StopWatch();
+
+    private static boolean enableFbo = false;
+    public static void setEnableFbo(boolean flag) { enableFbo = flag; }
+    private static boolean refreshFbo = true;
+    private static Framebuffer fbo = null;
+    private static int fboDisplayWidth;
+    private static int fboDisplayHeight;
+    //</editor-fold>
 
     private static ScaledResolution resolution = new ScaledResolution(Minecraft.getMinecraft());
 
@@ -60,7 +76,7 @@ public final class IgiGuiLifeCycle
     private static void triggerIgiEvents()
     {
         // trigger builtin igi events
-        EventCenter.igiGuiFpsEvent.trigger(estimatedFps_FixedUpdate);
+        EventCenter.igiGuiFpsEvent.trigger(estimatedFps_FixedUpdate, estimatedFps_RenderUpdate);
         EventCenter.gameFpsEvent.trigger(Minecraft.getDebugFPS());
         Runtime runtime = Runtime.getRuntime();
         EventCenter.gameMemoryEvent.trigger(runtime.totalMemory() - runtime.freeMemory(), runtime.totalMemory());
@@ -99,10 +115,10 @@ public final class IgiGuiLifeCycle
     {
         //<editor-fold desc="gui container fixed update">
         for (IgiGuiContainer container: openedGuiMap.values())
-            container.onFixedUpdate(deltaTime);
+            container.onFixedUpdate(deltaTime_FixedUpdate);
         //</editor-fold>
 
-        timer += deltaTime;
+        timer += deltaTime_FixedUpdate;
         if (timer >= 0.5d)
         {
             timer -= 0.5d;
@@ -111,12 +127,33 @@ public final class IgiGuiLifeCycle
     }
     private static void onRenderUpdate()
     {
+        boolean useFbo = enableFbo && OpenGlHelper.framebufferSupported;
+        if (useFbo)
+        {
+            // init fbo
+            if (fbo == null)
+            {
+                Minecraft minecraft = Minecraft.getMinecraft();
+                fboDisplayWidth = minecraft.displayWidth;
+                fboDisplayHeight = minecraft.displayHeight;
+                fbo = new Framebuffer(fboDisplayWidth, fboDisplayHeight, false);
+            }
+            if (!refreshFbo)
+            {
+                // render fbo
+                RenderUtils.renderFbo(resolution, fbo);
+                return;
+            }
+            refreshFbo = false;
+            fboSetupStep1();
+        }
+
+        //<editor-fold desc="gui container render update">
         ItemStack heldItemMainhand = null;
         EntityPlayerSP player = Minecraft.getMinecraft().player;
         if (player != null)
             heldItemMainhand = player.getHeldItemMainhand();
 
-        //<editor-fold desc="gui container render update">
         List<Map.Entry<String, IgiGuiContainer>> entryList = new ArrayList<>(openedGuiMap.entrySet());
         String firstFocused = "";
         for (int i = entryList.size() - 1; i >= 0; i--)
@@ -154,6 +191,32 @@ public final class IgiGuiLifeCycle
                 container.onRenderUpdate(entry.getKey().equals(firstFocused));
         }
         //</editor-fold>
+
+        if (useFbo)
+        {
+            fboSetupStep2();
+            // update & render fbo
+            RenderUtils.renderFbo(resolution, fbo);
+        }
+    }
+
+    private static void fboSetupStep1()
+    {
+        Minecraft minecraft = Minecraft.getMinecraft();
+        if (fboDisplayWidth != minecraft.displayWidth || fboDisplayHeight != minecraft.displayHeight)
+        {
+            fboDisplayWidth = minecraft.displayWidth;
+            fboDisplayHeight = minecraft.displayHeight;
+            fbo.createBindFramebuffer(fboDisplayWidth, fboDisplayHeight);
+        }
+        else
+            fbo.framebufferClear();
+
+        fbo.bindFramebuffer(false);
+    }
+    private static void fboSetupStep2()
+    {
+        Minecraft.getMinecraft().getFramebuffer().bindFramebuffer(false);
     }
 
     //<editor-fold desc="gl states">
@@ -229,8 +292,6 @@ public final class IgiGuiLifeCycle
                 container.onInit();
         //</editor-fold>
 
-        if (!isPlaceholderGuiOn) storeCommonGlStates();
-
         //<editor-fold desc="gui container resize">
         if (resolution.getScaleFactor() != event.getResolution().getScaleFactor())
         {
@@ -240,32 +301,55 @@ public final class IgiGuiLifeCycle
         }
         //</editor-fold>
 
-        if (!stopwatch.isStarted())
-            stopwatch.start();
+        //<editor-fold desc="fixed update timing">
+        if (!stopwatch_FixedUpdate.isStarted())
+            stopwatch_FixedUpdate.start();
 
         // unit: s
-        double currentTime = stopwatch.getTime(TimeUnit.NANOSECONDS) / 1.0E9d;
-        if (currentTime + excessTime >= timePerFrame_FixedUpdate)
+        double currentTime = stopwatch_FixedUpdate.getTime(TimeUnit.NANOSECONDS) / 1.0E9d;
+        if (currentTime + excessTime_FixedUpdate >= timePerFrame_FixedUpdate)
         {
-            stopwatch.stop();
-            stopwatch.reset();
-            stopwatch.start();
+            stopwatch_FixedUpdate.stop();
+            stopwatch_FixedUpdate.reset();
+            stopwatch_FixedUpdate.start();
 
-            deltaTime = currentTime;
-            estimatedFps_FixedUpdate = ((int)(1d / (currentTime + excessTime)) + estimatedFps_FixedUpdate) / 2;
+            deltaTime_FixedUpdate = currentTime;
+            estimatedFps_FixedUpdate = ((int)(1d / (currentTime + excessTime_FixedUpdate)) + estimatedFps_FixedUpdate) / 2;
 
             onFixedUpdate();
 
-            excessTime = currentTime + excessTime - timePerFrame_FixedUpdate;
+            excessTime_FixedUpdate = currentTime + excessTime_FixedUpdate - timePerFrame_FixedUpdate;
         }
+        //</editor-fold>
 
+        //<editor-fold desc="render update timing">
+        if (!stopwatch_RenderUpdate.isStarted())
+            stopwatch_RenderUpdate.start();
+
+        // unit: s
+        currentTime = stopwatch_RenderUpdate.getTime(TimeUnit.NANOSECONDS) / 1.0E9d;
+        if (currentTime + excessTime_RenderUpdate >= timePerFrame_RenderUpdate)
+        {
+            stopwatch_RenderUpdate.stop();
+            stopwatch_RenderUpdate.reset();
+            stopwatch_RenderUpdate.start();
+
+            deltaTime_RenderUpdate = currentTime;
+            estimatedFps_RenderUpdate = ((int)(1d / (currentTime + excessTime_RenderUpdate)) + estimatedFps_RenderUpdate) / 2;
+
+            refreshFbo = true;
+
+            excessTime_RenderUpdate = currentTime + excessTime_RenderUpdate - timePerFrame_RenderUpdate;
+        }
+        //</editor-fold>
+
+        //<editor-fold desc="placeholder gui">
         if (!isPlaceholderGuiOn)
         {
+            storeCommonGlStates();
             onRenderUpdate();
             restoreCommonGlStates();
         }
-
-        //<editor-fold desc="placeholder gui">
         if (FMLCommonHandler.instance().getSide().isClient())
         {
             // close placeholder
@@ -372,4 +456,3 @@ public final class IgiGuiLifeCycle
 
 // todo: add button group to handle complex button setup
 // todo: optimize reCalc logic
-// todo: added fps limit to render update and apply framebuffer

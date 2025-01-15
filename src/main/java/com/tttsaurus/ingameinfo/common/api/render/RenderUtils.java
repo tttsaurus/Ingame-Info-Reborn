@@ -8,6 +8,7 @@ import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
+import net.minecraft.client.shader.Framebuffer;
 import org.lwjgl.BufferUtils;
 import org.lwjgl.opengl.GL11;
 import java.nio.ByteBuffer;
@@ -309,6 +310,36 @@ public final class RenderUtils
         GlStateManager.scale(width/(float)((int)(width)), height/(float)((int)(height)), 0);
         Gui.drawScaledCustomSizeModalRect(0, 0, 0, 0, textureWidth, textureHeight, (int)width, (int)height, textureWidth, textureHeight);
         GlStateManager.popMatrix();
+
+        GlStateManager.bindTexture(textureID);
+    }
+
+    public static void renderFbo(ScaledResolution resolution, Framebuffer fbo)
+    {
+        GL11.glGetInteger(GL11.GL_TEXTURE_BINDING_2D, intBuffer);
+        int textureID = intBuffer.get(0);
+
+        double width = resolution.getScaledWidth_double();
+        double height = resolution.getScaledHeight_double();
+
+        GlStateManager.enableTexture2D();
+        GlStateManager.disableLighting();
+        GlStateManager.enableBlend();
+        GlStateManager.disableAlpha();
+        GlStateManager.disableDepth();
+        GlStateManager.blendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
+        GlStateManager.color(1.0f, 1.0f, 1.0f, 1.0f);
+
+        fbo.bindFramebufferTexture();
+
+        Tessellator tessellator = Tessellator.getInstance();
+        BufferBuilder buffer = tessellator.getBuffer();
+        buffer.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX);
+        buffer.pos(0, height, 0.0).tex(0, 0).endVertex();
+        buffer.pos(width, height, 0.0).tex(1, 0).endVertex();
+        buffer.pos(width, 0, 0.0).tex(1, 1).endVertex();
+        buffer.pos(0, 0, 0.0).tex(0, 1).endVertex();
+        tessellator.draw();
 
         GlStateManager.bindTexture(textureID);
     }

@@ -19,6 +19,7 @@ public class TemplateView extends View
                         <Text uid = "memory">
                     </Group>
                     <Text uid = "fps">
+                    <Text uid = "igiFps">
                 </Group>
                 """;
     }

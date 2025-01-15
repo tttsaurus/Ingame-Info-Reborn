@@ -7,5 +7,5 @@ import stanhebben.zenscript.annotations.ZenClass;
 @ZenClass("mods.ingameinfo.igievent.IgiGuiFpsEventListener")
 public interface IIgiGuiFpsEventListener
 {
-    void invoke(int arg0);
+    void invoke(int arg0, int arg1);
 }
