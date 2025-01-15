@@ -12,7 +12,7 @@ import com.tttsaurus.ingameinfo.common.api.render.RenderUtils;
 import com.tttsaurus.ingameinfo.common.impl.render.RenderMask;
 import java.awt.*;
 
-@RegisterElement
+@RegisterElement(constructable = false)
 public abstract class Element
 {
     public static int DEFAULT_COLOR_LIGHT = Color.decode("0xd2d2d2").getRGB();

@@ -20,6 +20,7 @@ import com.tttsaurus.ingameinfo.common.impl.mvvm.registry.MvvmRegisterEventHandl
 import com.tttsaurus.ingameinfo.plugin.crt.impl.CrtEventManager;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.config.Configuration;
+import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import org.apache.logging.log4j.Logger;
@@ -30,6 +31,7 @@ public class CommonProxy
 {
     public void preInit(FMLPreInitializationEvent event, Logger logger)
     {
+        // config setup
         File file = event.getSuggestedConfigurationFile();
         IgiConfig.CONFIG = new Configuration(file);
         IgiConfig.loadConfig();
@@ -50,13 +52,20 @@ public class CommonProxy
         MinecraftForge.EVENT_BUS.register(MvvmRegisterEventHandler.class);
 
         // crt support
-        MinecraftForge.EVENT_BUS.register(CrtEventManager.Handler.class);
+        if (Loader.isModLoaded("crafttweaker"))
+            MinecraftForge.EVENT_BUS.register(CrtEventManager.Handler.class);
 
         // app communication
         MinecraftForge.EVENT_BUS.register(SpotifyCommandHandler.class);
 
         String myPackage = "com.tttsaurus.ingameinfo";
         ElementRegistry.register();
+
+        logger.info("");
+        logger.info("Registered usable elements: ");
+        for (Class<? extends Element> clazz: ElementRegistry.getConstructableElements())
+            logger.info("  - " + (TypeUtils.isFromParentPackage(clazz, myPackage) ? clazz.getSimpleName() : clazz.getName()));
+        logger.info("");
 
         ImmutableList<Class<? extends Element>> elementClasses = ElementRegistry.getRegisteredElements();
         ImmutableMap<String, Map<String, IStylePropertySetter>> setters = ElementRegistry.getStylePropertySetters();
@@ -67,7 +76,9 @@ public class CommonProxy
 
         for (Class<? extends Element> clazz: elementClasses)
         {
-            logger.info("Registered element type: " + (TypeUtils.isFromParentPackage(clazz, myPackage) ? clazz.getSimpleName() : clazz.getName()));
+            String parentMsg = "";
+            if (!clazz.getSuperclass().equals(Element.class)) parentMsg = " extends " + (TypeUtils.isFromParentPackage(clazz.getSuperclass(), myPackage) ? clazz.getSuperclass().getSimpleName() : clazz.getSuperclass().getName());
+            logger.info("Element type: " + (TypeUtils.isFromParentPackage(clazz, myPackage) ? clazz.getSimpleName() : clazz.getName()) + parentMsg);
             Map<String, IStylePropertySetter> map = setters.get(clazz.getName());
             if (!map.isEmpty())
             {
@@ -86,6 +97,7 @@ public class CommonProxy
                         logger.info("    - Setter callback post: " + setterCallbacksPost.get(primaryKey).name());
                 }
             }
+            logger.info("");
         }
 
         logger.info("Starts registering mvvm.");

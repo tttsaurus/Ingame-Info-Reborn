@@ -8,7 +8,6 @@ import crafttweaker.api.event.IEventHandle;
 import crafttweaker.api.event.IEventManager;
 import crafttweaker.util.EventList;
 import crafttweaker.util.IEventHandler;
-import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import stanhebben.zenscript.annotations.ZenClass;
 import stanhebben.zenscript.annotations.ZenExpansion;
@@ -20,7 +19,6 @@ import stanhebben.zenscript.annotations.ZenMethod;
 @SuppressWarnings("all")
 public final class CrtEventManager
 {
-    private static final boolean loaded = Loader.isModLoaded("crafttweaker");
     private static Object igiGuiInitEventList = null;
 
     @ZenMethod
@@ -36,7 +34,6 @@ public final class CrtEventManager
         @SubscribeEvent
         public static void onIgiGuiInit(IgiGuiInitEvent event)
         {
-            if (!loaded) return;
             if (igiGuiInitEventList == null)
                 igiGuiInitEventList = new EventList<IIgiGuiInitEvent>();
             if (((EventList<IIgiGuiInitEvent>)igiGuiInitEventList).hasHandlers())
