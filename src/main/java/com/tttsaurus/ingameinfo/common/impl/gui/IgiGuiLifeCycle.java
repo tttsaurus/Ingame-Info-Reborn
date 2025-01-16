@@ -23,19 +23,21 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import org.apache.commons.lang3.time.StopWatch;
 import org.lwjgl.opengl.GL11;
+import org.lwjgl.opengl.GL15;
+import org.lwjgl.opengl.GL33;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
 import java.util.*;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 @SuppressWarnings("all")
 public final class IgiGuiLifeCycle
 {
     //<editor-fold desc="fixed update variables">
+    // all in second
     private static int maxFps_FixedUpdate = 125;
     private static double timePerFrame_FixedUpdate = 1d / maxFps_FixedUpdate;
     public static void setMaxFps_FixedUpdate(int fps)
@@ -49,18 +51,19 @@ public final class IgiGuiLifeCycle
     private static final StopWatch stopwatch_FixedUpdate = new StopWatch();
     //</editor-fold>
 
-    //<editor-fold desc="render update variables">
-    private static int maxFps_RenderUpdate = 240;
-    private static double timePerFrame_RenderUpdate = 1d / maxFps_RenderUpdate;
-    public static void setMaxFps_RenderUpdate(int fps)
+    //<editor-fold desc="refresh fbo variables">
+    // all in second
+    private static int maxFps_RefreshFbo = 240;
+    private static double timePerFrame_RefreshFbo = 1d / maxFps_RefreshFbo;
+    public static void setMaxFps_RefreshFbo(int fps)
     {
-        maxFps_RenderUpdate = fps;
-        timePerFrame_RenderUpdate = 1d / maxFps_RenderUpdate;
+        maxFps_RefreshFbo = fps;
+        timePerFrame_RefreshFbo = 1d / maxFps_RefreshFbo;
     }
-    private static int estimatedFps_RenderUpdate = 0;
-    private static double deltaTime_RenderUpdate = 0d;
-    private static double excessTime_RenderUpdate = 0d;
-    private static final StopWatch stopwatch_RenderUpdate = new StopWatch();
+    private static int estimatedFps_RefreshFbo = 0;
+    private static double deltaTime_RefreshFbo = 0d;
+    private static double excessTime_RefreshFbo = 0d;
+    private static final StopWatch stopwatch_RefreshFbo = new StopWatch();
     private static int estimatedUnlimitedFps = 1;
     private static float estimatedFboRefreshRate = 0f;
 
@@ -72,13 +75,25 @@ public final class IgiGuiLifeCycle
     private static int fboDisplayHeight;
     //</editor-fold>
 
+    //<editor-fold desc="render time debug">
+    // all in nanosecond
+    private static boolean renderTimeDebug = false;
+    private static final StopWatch cpuTimeStopwatch = new StopWatch();
+    private static long[] cpuTimeNanoFor50Frames = new long[50];
+    private static long[] gpuTimeNanoFor50Frames = new long[50];
+    private static int gpuTimeQueryID;
+    private static int timeNanoArrayIndex = 0;
+    private static long avgCpuTimeNano = 0;
+    private static long avgGpuTimeNano = 0;
+    //</editor-fold>
+
     private static ScaledResolution resolution = new ScaledResolution(Minecraft.getMinecraft());
 
     private static String lastBiomeRegistryName = "";
     private static void triggerIgiEvents()
     {
         // trigger builtin igi events
-        EventCenter.igiGuiFpsEvent.trigger(estimatedFps_FixedUpdate, estimatedFps_RenderUpdate);
+        EventCenter.igiGuiFpsEvent.trigger(estimatedFps_FixedUpdate, estimatedFps_RefreshFbo);
         EventCenter.igiGuiFboRefreshRateEvent.trigger(estimatedFboRefreshRate);
         EventCenter.gameFpsEvent.trigger(Minecraft.getDebugFPS());
         Runtime runtime = Runtime.getRuntime();
@@ -206,6 +221,49 @@ public final class IgiGuiLifeCycle
             RenderUtils.renderFbo(resolution, fbo);
         }
     }
+    private static void onRenderUpdateDebug()
+    {
+        gpuTimeQueryID = GL15.glGenQueries();
+        GL15.glBeginQuery(GL33.GL_TIME_ELAPSED, gpuTimeQueryID);
+        cpuTimeStopwatch.reset();
+        cpuTimeStopwatch.start();
+
+        onRenderUpdate();
+
+        cpuTimeStopwatch.stop();
+        GL15.glEndQuery(GL33.GL_TIME_ELAPSED);
+        GL15.glGetQueryObject(gpuTimeQueryID, GL15.GL_QUERY_RESULT, intBuffer);
+        long gpuTimeNano = intBuffer.get(0);
+        long cpuTimeNano = cpuTimeStopwatch.getNanoTime();
+        if (timeNanoArrayIndex == 50)
+        {
+            avgCpuTimeNano = Arrays.stream(cpuTimeNanoFor50Frames).sum() / 50l;
+            avgGpuTimeNano = Arrays.stream(gpuTimeNanoFor50Frames).sum() / 50l;
+
+            for (int i = 1; i < 50; i++)
+                cpuTimeNanoFor50Frames[i - 1] = cpuTimeNanoFor50Frames[i];
+            cpuTimeNanoFor50Frames[timeNanoArrayIndex - 1] = cpuTimeNano;
+
+            for (int i = 1; i < 50; i++)
+                gpuTimeNanoFor50Frames[i - 1] = gpuTimeNanoFor50Frames[i];
+            gpuTimeNanoFor50Frames[timeNanoArrayIndex - 1] = gpuTimeNano;
+        }
+        else
+        {
+            cpuTimeNanoFor50Frames[timeNanoArrayIndex] = cpuTimeNano;
+            gpuTimeNanoFor50Frames[timeNanoArrayIndex] = gpuTimeNano;
+            timeNanoArrayIndex++;
+        }
+    }
+    private static void onRenderUpdateWrapped()
+    {
+        storeCommonGlStates();
+        if (renderTimeDebug)
+            onRenderUpdateDebug();
+        else
+            onRenderUpdate();
+        restoreCommonGlStates();
+    }
 
     private static void fboSetupStep1()
     {
@@ -312,8 +370,8 @@ public final class IgiGuiLifeCycle
         if (!stopwatch_FixedUpdate.isStarted())
             stopwatch_FixedUpdate.start();
 
-        // unit: s
-        double currentTime = stopwatch_FixedUpdate.getTime(TimeUnit.NANOSECONDS) / 1.0E9d;
+        // unit: second
+        double currentTime = stopwatch_FixedUpdate.getNanoTime() / 1.0E9d;
         if (currentTime + excessTime_FixedUpdate >= timePerFrame_FixedUpdate)
         {
             stopwatch_FixedUpdate.stop();
@@ -329,36 +387,32 @@ public final class IgiGuiLifeCycle
         }
         //</editor-fold>
 
-        //<editor-fold desc="render update timing">
-        if (!stopwatch_RenderUpdate.isStarted())
-            stopwatch_RenderUpdate.start();
+        //<editor-fold desc="refresh fbo timing">
+        if (!stopwatch_RefreshFbo.isStarted())
+            stopwatch_RefreshFbo.start();
 
-        // unit: s
-        currentTime = stopwatch_RenderUpdate.getTime(TimeUnit.NANOSECONDS) / 1.0E9d;
+        // unit: second
+        currentTime = stopwatch_RefreshFbo.getNanoTime() / 1.0E9d;
         estimatedUnlimitedFps = ((int)(1d / currentTime) + estimatedUnlimitedFps) / 2;
-        estimatedFboRefreshRate = (Math.min(((float)estimatedFps_RenderUpdate) / ((float)estimatedUnlimitedFps), 1f) + estimatedFboRefreshRate) / 2f;
-        if (currentTime + excessTime_RenderUpdate >= timePerFrame_RenderUpdate)
+        estimatedFboRefreshRate = (Math.min(((float)estimatedFps_RefreshFbo) / ((float)estimatedUnlimitedFps), 1f) + estimatedFboRefreshRate) / 2f;
+        if (currentTime + excessTime_RefreshFbo >= timePerFrame_RefreshFbo)
         {
-            stopwatch_RenderUpdate.stop();
-            stopwatch_RenderUpdate.reset();
-            stopwatch_RenderUpdate.start();
+            stopwatch_RefreshFbo.stop();
+            stopwatch_RefreshFbo.reset();
+            stopwatch_RefreshFbo.start();
 
-            deltaTime_RenderUpdate = currentTime;
-            estimatedFps_RenderUpdate = ((int)(1d / (currentTime + excessTime_RenderUpdate)) + estimatedFps_RenderUpdate) / 2;
+            deltaTime_RefreshFbo = currentTime;
+            estimatedFps_RefreshFbo = ((int)(1d / (currentTime + excessTime_RefreshFbo)) + estimatedFps_RefreshFbo) / 2;
 
             refreshFbo = true;
 
-            excessTime_RenderUpdate = currentTime + excessTime_RenderUpdate - timePerFrame_RenderUpdate;
+            excessTime_RefreshFbo = currentTime + excessTime_RefreshFbo - timePerFrame_RefreshFbo;
         }
         //</editor-fold>
 
         //<editor-fold desc="placeholder gui">
         if (!isPlaceholderGuiOn)
-        {
-            storeCommonGlStates();
-            onRenderUpdate();
-            restoreCommonGlStates();
-        }
+            onRenderUpdateWrapped();
         if (FMLCommonHandler.instance().getSide().isClient())
         {
             // close placeholder
@@ -397,9 +451,7 @@ public final class IgiGuiLifeCycle
                         @Override
                         public void draw()
                         {
-                            storeCommonGlStates();
-                            onRenderUpdate();
-                            restoreCommonGlStates();
+                            onRenderUpdateWrapped();
                         }
                     });
                     placeholderGui.setTypeAction(new IPlaceholderKeyTyped()
