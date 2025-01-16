@@ -37,6 +37,10 @@ public class CommonProxy
         IgiConfig.loadConfig();
         IgiConfig.CONFIG_WRITER = new ForgeConfigWriter(file);
 
+        IgiGuiLifeCycle.setEnableFbo(IgiConfig.ENABLE_FRAMEBUFFER);
+        IgiGuiLifeCycle.setMaxFps_FixedUpdate(IgiConfig.FIXED_UPDATE_LIMIT);
+        IgiGuiLifeCycle.setMaxFps_RenderUpdate(IgiConfig.RENDER_UPDATE_LIMIT);
+
         SpotifyOAuthUtils.CLIENT_ID = IgiConfig.SPOTIFY_CLIENT_ID;
         SpotifyOAuthUtils.CLIENT_SECRET = IgiConfig.SPOTIFY_CLIENT_SECRET;
     }

@@ -53,6 +53,7 @@ public final class RenderUtils
         GlStateManager.disableCull();
         GlStateManager.color(r, g, b, a);
 
+        GlStateManager.glPolygonMode(GL11.GL_FRONT_AND_BACK, GL11.GL_FILL);
         GL11.glEnable(GL11.GL_POLYGON_SMOOTH);
         GL11.glHint(GL11.GL_POLYGON_SMOOTH_HINT, GL11.GL_NICEST);
 
@@ -292,7 +293,7 @@ public final class RenderUtils
         GlStateManager.popMatrix();
     }
 
-    public static void renderTexture2D(float x, float y, float width, float height, int textureWidth, int textureHeight)
+    public static void renderTexture2D(float x, float y, float width, float height, int textureWidth, int textureHeight, int textureId)
     {
         GL11.glGetInteger(GL11.GL_TEXTURE_BINDING_2D, intBuffer);
         int textureID = intBuffer.get(0);
@@ -304,6 +305,8 @@ public final class RenderUtils
         GlStateManager.disableDepth();
         GlStateManager.blendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
         GlStateManager.color(1.0f, 1.0f, 1.0f, 1.0f);
+
+        GL11.glBindTexture(GL11.GL_TEXTURE_2D, textureId);
 
         GlStateManager.pushMatrix();
         GlStateManager.translate(x, y, zLevel);

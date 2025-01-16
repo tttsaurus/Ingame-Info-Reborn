@@ -61,8 +61,10 @@ public final class IgiGuiLifeCycle
     private static double deltaTime_RenderUpdate = 0d;
     private static double excessTime_RenderUpdate = 0d;
     private static final StopWatch stopwatch_RenderUpdate = new StopWatch();
+    private static int estimatedUnlimitedFps = 1;
+    private static float estimatedFboRefreshRate = 0f;
 
-    private static boolean enableFbo = false;
+    private static boolean enableFbo = true;
     public static void setEnableFbo(boolean flag) { enableFbo = flag; }
     private static boolean refreshFbo = true;
     private static Framebuffer fbo = null;
@@ -77,6 +79,7 @@ public final class IgiGuiLifeCycle
     {
         // trigger builtin igi events
         EventCenter.igiGuiFpsEvent.trigger(estimatedFps_FixedUpdate, estimatedFps_RenderUpdate);
+        EventCenter.igiGuiFboRefreshRateEvent.trigger(estimatedFboRefreshRate);
         EventCenter.gameFpsEvent.trigger(Minecraft.getDebugFPS());
         Runtime runtime = Runtime.getRuntime();
         EventCenter.gameMemoryEvent.trigger(runtime.totalMemory() - runtime.freeMemory(), runtime.totalMemory());
@@ -136,7 +139,11 @@ public final class IgiGuiLifeCycle
                 Minecraft minecraft = Minecraft.getMinecraft();
                 fboDisplayWidth = minecraft.displayWidth;
                 fboDisplayHeight = minecraft.displayHeight;
-                fbo = new Framebuffer(fboDisplayWidth, fboDisplayHeight, false);
+                fbo = new Framebuffer(fboDisplayWidth, fboDisplayHeight, true);
+                fbo.enableStencil();
+                fbo.framebufferColor[0] = 0f;
+                fbo.framebufferColor[1] = 0f;
+                fbo.framebufferColor[2] = 0f;
             }
             if (!refreshFbo)
             {
@@ -212,11 +219,11 @@ public final class IgiGuiLifeCycle
         else
             fbo.framebufferClear();
 
-        fbo.bindFramebuffer(false);
+        fbo.bindFramebuffer(true);
     }
     private static void fboSetupStep2()
     {
-        Minecraft.getMinecraft().getFramebuffer().bindFramebuffer(false);
+        Minecraft.getMinecraft().getFramebuffer().bindFramebuffer(true);
     }
 
     //<editor-fold desc="gl states">
@@ -328,6 +335,8 @@ public final class IgiGuiLifeCycle
 
         // unit: s
         currentTime = stopwatch_RenderUpdate.getTime(TimeUnit.NANOSECONDS) / 1.0E9d;
+        estimatedUnlimitedFps = ((int)(1d / currentTime) + estimatedUnlimitedFps) / 2;
+        estimatedFboRefreshRate = (Math.min(((float)estimatedFps_RenderUpdate) / ((float)estimatedUnlimitedFps), 1f) + estimatedFboRefreshRate) / 2f;
         if (currentTime + excessTime_RenderUpdate >= timePerFrame_RenderUpdate)
         {
             stopwatch_RenderUpdate.stop();

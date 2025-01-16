@@ -92,7 +92,6 @@ public class ImageRenderer implements IRenderer
         if (texture == null) return;
         if (!texture.getIsGlBound()) return;
 
-        GL11.glBindTexture(GL11.GL_TEXTURE_2D, this.texture.getGlTextureID());
-        RenderUtils.renderTexture2D(x, y, width, height, this.texture.getWidth(), this.texture.getHeight());
+        RenderUtils.renderTexture2D(x, y, width, height, texture.getWidth(),texture.getHeight(), texture.getGlTextureID());
     }
 }

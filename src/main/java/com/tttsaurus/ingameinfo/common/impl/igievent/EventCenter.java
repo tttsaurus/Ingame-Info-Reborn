@@ -3,6 +3,7 @@ package com.tttsaurus.ingameinfo.common.impl.igievent;
 public final class EventCenter
 {
     public final static IgiGuiFpsEvent igiGuiFpsEvent = new IgiGuiFpsEvent();
+    public final static IgiGuiFboRefreshRateEvent igiGuiFboRefreshRateEvent = new IgiGuiFboRefreshRateEvent();
     public final static GameFpsEvent gameFpsEvent = new GameFpsEvent();
     public final static GameMemoryEvent gameMemoryEvent = new GameMemoryEvent();
     public final static GameTpsMtpsEvent gameTpsMtpsEvent = new GameTpsMtpsEvent();
