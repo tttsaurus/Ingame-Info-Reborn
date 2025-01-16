@@ -54,8 +54,8 @@ public final class RenderUtils
         GlStateManager.color(r, g, b, a);
 
         GlStateManager.glPolygonMode(GL11.GL_FRONT_AND_BACK, GL11.GL_FILL);
-        GL11.glEnable(GL11.GL_POLYGON_SMOOTH);
-        GL11.glHint(GL11.GL_POLYGON_SMOOTH_HINT, GL11.GL_NICEST);
+        GL11.glDisable(GL11.GL_LINE_SMOOTH);
+        GL11.glDisable(GL11.GL_POLYGON_SMOOTH);
 
         GlStateManager.pushMatrix();
         GlStateManager.translate(0, 0, zLevel);
@@ -80,8 +80,6 @@ public final class RenderUtils
         tessellator.draw();
 
         GlStateManager.popMatrix();
-
-        GL11.glDisable(GL11.GL_POLYGON_SMOOTH);
     }
 
     public static void renderRoundedRectOutline(float x, float y, float width, float height, float radius, float thickness, int color)
