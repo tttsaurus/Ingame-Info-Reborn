@@ -12,11 +12,14 @@ This is a library mod that helps you to create in-game overlaid (or focused) gui
 ![Snipaste_2025-01-12_12-53-07](https://github.com/user-attachments/assets/581f0727-bba8-4ff5-9780-8fdbfaf587fd)
 
 ## Todo List / Features
+<details>
+<summary>Click to expand</summary>
+
 - Approximate Model-View-ViewModel pattern (✔)
 - Add framebuffer to the rendering life cycle (✔)
 - Introduce a custom gui container (✔)
 - Maintain a list of custom gui containers (✔)
-- A gui container can be ingame-overlaid/focused (✔)
+- A gui container can be ingame-overlaid/focused (switchable) (✔)
 - Introduce feature-rich gui layout
   - Pivot (✔)
   - Alignment (✔)
@@ -40,12 +43,16 @@ This is a library mod that helps you to create in-game overlaid (or focused) gui
   - Slide Bar
   - Progress Bar (✔)
   - Draggable
-- A gui layout builder (✔)
 - Introduce modular animation options for controls (WIP)
 - Add crt support (✔)
 - Ingame spotify support (✔)
 
+</details>
+
 ## About Spotify Overlay
+<details>
+<summary>Click to expand</summary>
+
 Also under early stage of development
 
 Version Requirement: >= v1.0.0-b2
@@ -61,6 +68,8 @@ Version Requirement: >= v1.0.0-b2
 - Run `#spotify-gui-edit` to switch to another layout at runtime
 
 ![Snipaste_2025-01-07_21-27-57](https://github.com/user-attachments/assets/4324f4e5-481a-4a72-8658-6b65f876809c)
+
+</details>
 
 ## Latest Build
 In case you want to use the latest action build
