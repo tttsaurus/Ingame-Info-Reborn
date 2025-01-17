@@ -419,34 +419,37 @@ public final class IgiGuiLifeCycle
         //</editor-fold>
 
         //<editor-fold desc="refresh fbo timing">
-        if (!stopwatch_RefreshFbo.isStarted())
+        if (enableFbo)
         {
-            stopwatch_RefreshFbo.start();
+            if (!stopwatch_RefreshFbo.isStarted())
+            {
+                stopwatch_RefreshFbo.start();
+                stopwatch_RefreshFbo.split();
+            }
+
+            // unit: second
+            currentTime = stopwatch_RefreshFbo.getNanoTime() / 1.0E9d;
+            estimatedFboRefreshRate = (Math.min(((float)estimatedFps_RefreshFbo) / ((float)estimatedUnlimitedFps), 1f) + estimatedFboRefreshRate) / 2f;
+            double lastSplitTime = stopwatch_RefreshFbo.getSplitNanoTime() / 1.0E9d;
             stopwatch_RefreshFbo.split();
+            if (currentTime - lastSplitTime > 0d)
+                estimatedUnlimitedFps = ((int)(1d / (currentTime - lastSplitTime)) + estimatedUnlimitedFps) / 2;
+            if (currentTime + excessTime_RefreshFbo >= timePerFrame_RefreshFbo)
+            {
+                stopwatch_RefreshFbo.stop();
+                stopwatch_RefreshFbo.reset();
+                stopwatch_RefreshFbo.start();
+                stopwatch_RefreshFbo.split();
+
+                estimatedFps_RefreshFbo = ((int)(1d / (currentTime + excessTime_RefreshFbo)) + estimatedFps_RefreshFbo) / 2;
+
+                refreshFbo = true;
+
+                excessTime_RefreshFbo = currentTime + excessTime_RefreshFbo - timePerFrame_RefreshFbo;
+            }
+            if (excessTime_RefreshFbo >= timePerFrame_RefreshFbo)
+                excessTime_RefreshFbo %= timePerFrame_RefreshFbo;
         }
-
-        // unit: second
-        currentTime = stopwatch_RefreshFbo.getNanoTime() / 1.0E9d;
-        estimatedFboRefreshRate = (Math.min(((float)estimatedFps_RefreshFbo) / ((float)estimatedUnlimitedFps), 1f) + estimatedFboRefreshRate) / 2f;
-        double lastSplitTime = stopwatch_RefreshFbo.getSplitNanoTime() / 1.0E9d;
-        stopwatch_RefreshFbo.split();
-        if (currentTime - lastSplitTime > 0d)
-            estimatedUnlimitedFps = ((int)(1d / (currentTime - lastSplitTime)) + estimatedUnlimitedFps) / 2;
-        if (currentTime + excessTime_RefreshFbo >= timePerFrame_RefreshFbo)
-        {
-            stopwatch_RefreshFbo.stop();
-            stopwatch_RefreshFbo.reset();
-            stopwatch_RefreshFbo.start();
-            stopwatch_RefreshFbo.split();
-
-            estimatedFps_RefreshFbo = ((int)(1d / (currentTime + excessTime_RefreshFbo)) + estimatedFps_RefreshFbo) / 2;
-
-            refreshFbo = true;
-
-            excessTime_RefreshFbo = currentTime + excessTime_RefreshFbo - timePerFrame_RefreshFbo;
-        }
-        if (excessTime_RefreshFbo >= timePerFrame_RefreshFbo)
-            excessTime_RefreshFbo %= timePerFrame_RefreshFbo;
         //</editor-fold>
 
         //<editor-fold desc="placeholder gui">

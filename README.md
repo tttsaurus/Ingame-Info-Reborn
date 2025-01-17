@@ -11,6 +11,7 @@ This is a library mod that helps you to create in-game overlaid (or focused) gui
 
 ## Todo List / Features
 - Approximate Model-View-ViewModel pattern (✔)
+- Add framebuffer to the rendering life cycle (✔)
 - Introduce a custom gui container (✔)
 - Maintain a list of custom gui containers (✔)
 - A gui container can be ingame-overlaid/focused (✔)
