@@ -19,19 +19,19 @@ public final class InGameInfoReborn
             serverSide = "com.tttsaurus.ingameinfo.proxy.ServerProxy")
     private static CommonProxy proxy;
 
-    public static Logger LOGGER;
+    public static Logger logger;
 
     @EventHandler
     public void preInit(FMLPreInitializationEvent event)
     {
-        LOGGER = event.getModLog();
-        proxy.preInit(event, LOGGER);
+        logger = event.getModLog();
+        proxy.preInit(event, logger);
     }
 
     @EventHandler
     public void init(FMLInitializationEvent event)
     {
-        proxy.init(event, LOGGER);
-        LOGGER.info("In-Game Info Reborn initialized.");
+        proxy.init(event, logger);
+        logger.info("In-Game Info Reborn initialized.");
     }
 }

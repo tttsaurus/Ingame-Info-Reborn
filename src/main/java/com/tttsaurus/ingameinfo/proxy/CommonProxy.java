@@ -2,6 +2,7 @@ package com.tttsaurus.ingameinfo.proxy;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
+import com.tttsaurus.ingameinfo.common.impl.network.IgiNetwork;
 import com.tttsaurus.ingameinfo.config.ForgeConfigWriter;
 import com.tttsaurus.ingameinfo.config.IgiConfig;
 import com.tttsaurus.ingameinfo.common.api.appcommunication.spotify.SpotifyOAuthUtils;
@@ -50,6 +51,10 @@ public class CommonProxy
         logger.info("In-Game Info Reborn starts initializing.");
 
         InternalMethods.instance = new InternalMethods();
+        logger.info("Reflection setup finished.");
+
+        IgiNetwork.init();
+        logger.info("Network setup finished.");
 
         // core
         MinecraftForge.EVENT_BUS.register(IgiGuiLifeCycle.class);

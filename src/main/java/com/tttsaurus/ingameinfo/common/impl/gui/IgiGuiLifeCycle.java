@@ -7,6 +7,8 @@ import com.tttsaurus.ingameinfo.common.api.gui.delegate.placeholder.IPlaceholder
 import com.tttsaurus.ingameinfo.common.api.function.IFunc;
 import com.tttsaurus.ingameinfo.common.api.render.RenderUtils;
 import com.tttsaurus.ingameinfo.common.impl.igievent.EventCenter;
+import com.tttsaurus.ingameinfo.common.impl.network.IgiNetwork;
+import com.tttsaurus.ingameinfo.common.impl.network.tps.RequestTpsMtpsPacket;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.client.gui.ScaledResolution;
@@ -92,7 +94,7 @@ public final class IgiGuiLifeCycle
     private static String lastBiomeRegistryName = "";
     private static void triggerIgiEvents()
     {
-        // trigger builtin igi events
+        // works on sp client
         EventCenter.igiGuiFpsEvent.trigger(estimatedFps_FixedUpdate, estimatedFps_RefreshFbo);
         EventCenter.igiGuiFboRefreshRateEvent.trigger(estimatedFboRefreshRate);
         EventCenter.gameFpsEvent.trigger(Minecraft.getDebugFPS());
@@ -113,9 +115,19 @@ public final class IgiGuiLifeCycle
                 }
             }
         }
+
         MinecraftServer server = FMLCommonHandler.instance().getMinecraftServerInstance();
-        if (server != null && server.isServerRunning())
+        if (server == null)
         {
+            // works on mp client
+            IgiNetwork.requestTpsMtps((tps, mtps) ->
+            {
+                EventCenter.gameTpsMtpsEvent.trigger(tps, mtps);
+            });
+        }
+        else
+        {
+            // works on sp client
             long[] tickTimes = server.tickTimeArray;
             double averageTickTime = 0d;
 

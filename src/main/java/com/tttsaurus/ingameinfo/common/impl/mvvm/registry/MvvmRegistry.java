@@ -59,7 +59,7 @@ public final class MvvmRegistry
     {
         if (viewModelClasses.containsKey(mvvmRegistryName)) return false;
 
-        InGameInfoReborn.LOGGER.info("Currently registering " + mvvmRegistryName);
+        InGameInfoReborn.logger.info("Currently registering " + mvvmRegistryName);
 
         viewModelClasses.put(mvvmRegistryName, viewModelClass);
         registeredReactiveObjects.put(mvvmRegistryName, RegistryUtils.findReactiveObjects(mvvmRegistryName, viewModelClass));

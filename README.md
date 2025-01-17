@@ -1,3 +1,5 @@
+It's a spiritual successor of [InGame-Info-XML](https://github.com/Lunatrius/InGame-Info-XML), **not a fork**.
+
 If you like this project, don't forget to give it a star⭐!
 
 Currently WIP
