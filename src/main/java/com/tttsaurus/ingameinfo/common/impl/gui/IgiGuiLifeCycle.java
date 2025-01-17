@@ -8,7 +8,6 @@ import com.tttsaurus.ingameinfo.common.api.function.IFunc;
 import com.tttsaurus.ingameinfo.common.api.render.RenderUtils;
 import com.tttsaurus.ingameinfo.common.impl.igievent.EventCenter;
 import com.tttsaurus.ingameinfo.common.impl.network.IgiNetwork;
-import com.tttsaurus.ingameinfo.common.impl.network.tps.RequestTpsMtpsPacket;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.client.gui.ScaledResolution;
