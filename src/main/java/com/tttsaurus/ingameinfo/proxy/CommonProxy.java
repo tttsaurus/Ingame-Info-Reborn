@@ -81,7 +81,7 @@ public class CommonProxy
         for (Class<? extends Element> clazz: elementClasses)
         {
             String parentMsg = "";
-            if (!clazz.getSuperclass().equals(Element.class)) parentMsg = " extends " + (TypeUtils.isFromParentPackage(clazz.getSuperclass(), myPackage) ? clazz.getSuperclass().getSimpleName() : clazz.getSuperclass().getName());
+            if (!clazz.equals(Element.class)) parentMsg = " extends " + (TypeUtils.isFromParentPackage(clazz.getSuperclass(), myPackage) ? clazz.getSuperclass().getSimpleName() : clazz.getSuperclass().getName());
             logger.info("Element type: " + (TypeUtils.isFromParentPackage(clazz, myPackage) ? clazz.getSimpleName() : clazz.getName()) + parentMsg);
             Map<String, IStylePropertySetter> map = setters.get(clazz.getName());
             if (!map.isEmpty())

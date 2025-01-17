@@ -25,10 +25,12 @@ import org.apache.commons.lang3.time.StopWatch;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL15;
 import org.lwjgl.opengl.GL33;
+import java.io.RandomAccessFile;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
+import java.nio.charset.StandardCharsets;
 import java.util.*;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -61,7 +63,6 @@ public final class IgiGuiLifeCycle
         timePerFrame_RefreshFbo = 1d / maxFps_RefreshFbo;
     }
     private static int estimatedFps_RefreshFbo = 0;
-    private static double deltaTime_RefreshFbo = 0d;
     private static double excessTime_RefreshFbo = 0d;
     private static final StopWatch stopwatch_RefreshFbo = new StopWatch();
     private static int estimatedUnlimitedFps = 1;
@@ -78,13 +79,12 @@ public final class IgiGuiLifeCycle
     //<editor-fold desc="render time debug">
     // all in nanosecond
     private static boolean renderTimeDebug = false;
+    public static void setRenderTimeDebug(boolean flag) { renderTimeDebug = flag; }
     private static final StopWatch cpuTimeStopwatch = new StopWatch();
-    private static long[] cpuTimeNanoFor50Frames = new long[50];
-    private static long[] gpuTimeNanoFor50Frames = new long[50];
-    private static int gpuTimeQueryID;
+    private static final long[] cpuTimeNanoFor50Frames = new long[50];
+    private static final long[] gpuTimeNanoFor50Frames = new long[50];
     private static int timeNanoArrayIndex = 0;
-    private static long avgCpuTimeNano = 0;
-    private static long avgGpuTimeNano = 0;
+    private static RandomAccessFile renderTimeDebugFile = null;
     //</editor-fold>
 
     private static ScaledResolution resolution = new ScaledResolution(Minecraft.getMinecraft());
@@ -223,7 +223,19 @@ public final class IgiGuiLifeCycle
     }
     private static void onRenderUpdateDebug()
     {
-        gpuTimeQueryID = GL15.glGenQueries();
+        if (renderTimeDebugFile == null)
+        {
+            try
+            {
+                renderTimeDebugFile = new RandomAccessFile("ingameinfo_render_time.csv", "rw");
+                renderTimeDebugFile.setLength(0);
+                renderTimeDebugFile.seek(0);
+                renderTimeDebugFile.write("Cpu Time Nano,Gpu Time Nano,Avg Cpu Time Nano,Avg Gpu Time Nano\n".getBytes(StandardCharsets.UTF_8));
+            }
+            catch (Exception ignored) { }
+        }
+
+        int gpuTimeQueryID = GL15.glGenQueries();
         GL15.glBeginQuery(GL33.GL_TIME_ELAPSED, gpuTimeQueryID);
         cpuTimeStopwatch.reset();
         cpuTimeStopwatch.start();
@@ -237,8 +249,18 @@ public final class IgiGuiLifeCycle
         long cpuTimeNano = cpuTimeStopwatch.getNanoTime();
         if (timeNanoArrayIndex == 50)
         {
-            avgCpuTimeNano = Arrays.stream(cpuTimeNanoFor50Frames).sum() / 50l;
-            avgGpuTimeNano = Arrays.stream(gpuTimeNanoFor50Frames).sum() / 50l;
+            long avgCpuTimeNano = Arrays.stream(cpuTimeNanoFor50Frames).sum() / 50l;
+            long avgGpuTimeNano = Arrays.stream(gpuTimeNanoFor50Frames).sum() / 50l;
+
+            try
+            {
+                renderTimeDebugFile.write((
+                        cpuTimeNanoFor50Frames[timeNanoArrayIndex - 1] + "," +
+                        gpuTimeNanoFor50Frames[timeNanoArrayIndex - 1] + "," +
+                        avgCpuTimeNano + "," +
+                        avgGpuTimeNano + "\n").getBytes(StandardCharsets.UTF_8));
+            }
+            catch (Exception ignored) { }
 
             for (int i = 1; i < 50; i++)
                 cpuTimeNanoFor50Frames[i - 1] = cpuTimeNanoFor50Frames[i];
@@ -250,6 +272,13 @@ public final class IgiGuiLifeCycle
         }
         else
         {
+            try
+            {
+                renderTimeDebugFile.write((
+                        cpuTimeNano + "," +
+                        gpuTimeNano + ",0,0\n").getBytes(StandardCharsets.UTF_8));
+            }
+            catch (Exception ignored) { }
             cpuTimeNanoFor50Frames[timeNanoArrayIndex] = cpuTimeNano;
             gpuTimeNanoFor50Frames[timeNanoArrayIndex] = gpuTimeNano;
             timeNanoArrayIndex++;
@@ -385,29 +414,39 @@ public final class IgiGuiLifeCycle
 
             excessTime_FixedUpdate = currentTime + excessTime_FixedUpdate - timePerFrame_FixedUpdate;
         }
+        if (excessTime_FixedUpdate >= timePerFrame_FixedUpdate)
+            excessTime_FixedUpdate %= timePerFrame_FixedUpdate;
         //</editor-fold>
 
         //<editor-fold desc="refresh fbo timing">
         if (!stopwatch_RefreshFbo.isStarted())
+        {
             stopwatch_RefreshFbo.start();
+            stopwatch_RefreshFbo.split();
+        }
 
         // unit: second
         currentTime = stopwatch_RefreshFbo.getNanoTime() / 1.0E9d;
-        estimatedUnlimitedFps = ((int)(1d / currentTime) + estimatedUnlimitedFps) / 2;
         estimatedFboRefreshRate = (Math.min(((float)estimatedFps_RefreshFbo) / ((float)estimatedUnlimitedFps), 1f) + estimatedFboRefreshRate) / 2f;
+        double lastSplitTime = stopwatch_RefreshFbo.getSplitNanoTime() / 1.0E9d;
+        stopwatch_RefreshFbo.split();
+        if (currentTime - lastSplitTime > 0d)
+            estimatedUnlimitedFps = ((int)(1d / (currentTime - lastSplitTime)) + estimatedUnlimitedFps) / 2;
         if (currentTime + excessTime_RefreshFbo >= timePerFrame_RefreshFbo)
         {
             stopwatch_RefreshFbo.stop();
             stopwatch_RefreshFbo.reset();
             stopwatch_RefreshFbo.start();
+            stopwatch_RefreshFbo.split();
 
-            deltaTime_RefreshFbo = currentTime;
             estimatedFps_RefreshFbo = ((int)(1d / (currentTime + excessTime_RefreshFbo)) + estimatedFps_RefreshFbo) / 2;
 
             refreshFbo = true;
 
             excessTime_RefreshFbo = currentTime + excessTime_RefreshFbo - timePerFrame_RefreshFbo;
         }
+        if (excessTime_RefreshFbo >= timePerFrame_RefreshFbo)
+            excessTime_RefreshFbo %= timePerFrame_RefreshFbo;
         //</editor-fold>
 
         //<editor-fold desc="placeholder gui">
