@@ -47,15 +47,14 @@ public final class RenderUtils
         float b = (float)(color & 255) / 255.0F;
 
         GlStateManager.disableTexture2D();
-        GlStateManager.enableBlend();
-        GlStateManager.disableAlpha();
+        GlStateManager.disableBlend();
+        GlStateManager.enableAlpha();
         GlStateManager.tryBlendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO);
         GlStateManager.disableCull();
         GlStateManager.color(r, g, b, a);
 
         GlStateManager.glPolygonMode(GL11.GL_FRONT_AND_BACK, GL11.GL_FILL);
-        GL11.glDisable(GL11.GL_LINE_SMOOTH);
-        GL11.glDisable(GL11.GL_POLYGON_SMOOTH);
+        GL11.glEnable(GL11.GL_POLYGON_SMOOTH);
 
         GlStateManager.pushMatrix();
         GlStateManager.translate(0, 0, zLevel);
