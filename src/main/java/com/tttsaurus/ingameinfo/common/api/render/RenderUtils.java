@@ -79,6 +79,8 @@ public final class RenderUtils
         tessellator.draw();
 
         GlStateManager.popMatrix();
+
+        GL11.glDisable(GL11.GL_POLYGON_SMOOTH);
     }
 
     public static void renderRoundedRectOutline(float x, float y, float width, float height, float radius, float thickness, int color)
@@ -122,6 +124,8 @@ public final class RenderUtils
         tessellator.draw();
 
         GlStateManager.popMatrix();
+
+        GL11.glDisable(GL11.GL_LINE_SMOOTH);
     }
 
     private static void addArcVertices(BufferBuilder bufferbuilder, float cx, float cy, float radius, float startAngle, float endAngle, int segments)
