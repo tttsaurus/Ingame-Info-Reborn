@@ -15,6 +15,8 @@ This is a library mod that helps you to create in-game overlaid (or focused) gui
 <details>
 <summary>Click to expand</summary>
 
+https://trello.com/b/MTLHeyGn/ingameinfo
+
 - Approximate Model-View-ViewModel pattern (✔)
 - Add framebuffer to the rendering life cycle (✔)
 - Introduce a custom gui container (✔)
