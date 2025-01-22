@@ -49,7 +49,6 @@ public final class RenderUtils
         GlStateManager.disableTexture2D();
         GlStateManager.disableBlend();
         GlStateManager.enableAlpha();
-        GlStateManager.tryBlendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO);
         GlStateManager.disableCull();
         GlStateManager.color(r, g, b, a);
 

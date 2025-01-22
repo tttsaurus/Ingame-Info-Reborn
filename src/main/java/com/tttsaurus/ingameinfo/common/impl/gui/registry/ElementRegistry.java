@@ -5,10 +5,7 @@ import com.google.common.collect.ImmutableMap;
 import com.tttsaurus.ingameinfo.common.api.gui.Element;
 import com.tttsaurus.ingameinfo.common.api.gui.registry.RegisterElement;
 import com.tttsaurus.ingameinfo.common.api.gui.registry.RegistryUtils;
-import com.tttsaurus.ingameinfo.common.api.gui.style.CallbackInfo;
-import com.tttsaurus.ingameinfo.common.api.gui.style.IStylePropertyCallbackPost;
-import com.tttsaurus.ingameinfo.common.api.gui.style.IStylePropertyCallbackPre;
-import com.tttsaurus.ingameinfo.common.api.gui.style.IStylePropertySetter;
+import com.tttsaurus.ingameinfo.common.api.gui.style.*;
 import com.tttsaurus.ingameinfo.common.api.function.IAction_1Param;
 import com.tttsaurus.ingameinfo.common.api.serialization.IDeserializer;
 import javax.annotation.Nonnull;
@@ -26,6 +23,7 @@ public final class ElementRegistry
     private static final Map<IStylePropertySetter, IStylePropertyCallbackPre> stylePropertySetterCallbacksPre = new HashMap<>();
     private static final Map<IStylePropertySetter, IStylePropertyCallbackPost> stylePropertySetterCallbacksPost = new HashMap<>();
     private static final Map<IStylePropertySetter, Class<?>> stylePropertyClasses = new HashMap<>();
+    private static final Map<IStylePropertySetter, IStylePropertyGetter> stylePropertyGetters = new HashMap<>();
 
     // key: element class simple name
     private static final Map<String, Class<? extends Element>> registeredElements = new HashMap<>();
@@ -69,6 +67,11 @@ public final class ElementRegistry
     public static Class<?> getStylePropertyClass(IStylePropertySetter setter)
     {
         return stylePropertyClasses.get(setter);
+    }
+    @Nullable
+    public static IStylePropertyGetter getStylePropertyGetter(IStylePropertySetter setter)
+    {
+        return stylePropertyGetters.get(setter);
     }
     @Nullable
     public static Element newElement(String name)
@@ -140,6 +143,7 @@ public final class ElementRegistry
         stylePropertySetterCallbacksPre.clear();
         stylePropertySetterCallbacksPost.clear();
         stylePropertyClasses.clear();
+        stylePropertyGetters.clear();
 
         for (Class<? extends Element> clazz: registeredElements.values())
             stylePropertySetters.put(clazz.getName(), RegistryUtils.handleStyleProperties(
@@ -147,6 +151,7 @@ public final class ElementRegistry
                     stylePropertyDeserializers,
                     stylePropertySetterCallbacksPre,
                     stylePropertySetterCallbacksPost,
-                    stylePropertyClasses));
+                    stylePropertyClasses,
+                    stylePropertyGetters));
     }
 }

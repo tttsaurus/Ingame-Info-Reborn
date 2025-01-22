@@ -5,14 +5,17 @@ import com.tttsaurus.ingameinfo.common.api.function.IAction_2Param;
 import com.tttsaurus.ingameinfo.common.api.function.IFunc;
 import com.tttsaurus.ingameinfo.common.api.function.IFunc_1Param;
 import com.tttsaurus.ingameinfo.common.api.function.IFunc_2Param;
+import com.tttsaurus.ingameinfo.common.api.gui.Element;
 import com.tttsaurus.ingameinfo.common.api.gui.GuiLayout;
 import com.tttsaurus.ingameinfo.common.api.gui.IgiGuiContainer;
+import com.tttsaurus.ingameinfo.common.api.gui.style.IStylePropertySyncTo;
 import com.tttsaurus.ingameinfo.common.api.mvvm.view.View;
 import com.tttsaurus.ingameinfo.common.api.mvvm.viewmodel.ViewModel;
 import com.tttsaurus.ingameinfo.common.impl.gui.layout.MainGroup;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
+import java.util.Map;
 
 @SuppressWarnings("all")
 public class InternalMethods
@@ -26,6 +29,7 @@ public class InternalMethods
     public IAction_2Param<View, MainGroup> View$mainGroup$setter;
     public IFunc_2Param<GuiLayout, ViewModel, String> ViewModel$init;
     public IFunc_1Param<GuiLayout, View> View$init;
+    public IFunc_1Param<Map<String, IStylePropertySyncTo>, Element> Element$syncToMap;
 
     public InternalMethods()
     {
@@ -160,6 +164,25 @@ public class InternalMethods
         {
             View$init = null;
             InGameInfoReborn.logger.info("Reflection setup failed for View$init: " + exception.getMessage());
+        }
+
+        try
+        {
+            Field field = Element.class.getDeclaredField("syncToMap");
+            field.setAccessible(true);
+            Element$syncToMap = (arg0) ->
+            {
+                try
+                {
+                    return (Map<String, IStylePropertySyncTo>)field.get(arg0);
+                }
+                catch (Exception ignored) { return null; }
+            };
+        }
+        catch (Exception exception)
+        {
+            Element$syncToMap = null;
+            InGameInfoReborn.logger.info("Reflection setup failed for Element$syncToMap: " + exception.getMessage());
         }
     }
 }

@@ -6,10 +6,13 @@ import com.tttsaurus.ingameinfo.common.api.gui.layout.Pivot;
 import com.tttsaurus.ingameinfo.common.api.gui.layout.Rect;
 import com.tttsaurus.ingameinfo.common.api.gui.registry.RegisterElement;
 import com.tttsaurus.ingameinfo.common.api.gui.style.CallbackInfo;
+import com.tttsaurus.ingameinfo.common.api.gui.style.IStylePropertySyncTo;
 import com.tttsaurus.ingameinfo.common.api.gui.style.StylePropertyCallback;
 import com.tttsaurus.ingameinfo.common.api.gui.style.StyleProperty;
 import com.tttsaurus.ingameinfo.common.api.render.RenderUtils;
 import java.awt.*;
+import java.util.HashMap;
+import java.util.Map;
 
 @RegisterElement(constructable = false)
 public abstract class Element
@@ -36,8 +39,11 @@ public abstract class Element
     public Rect contextRect = new Rect(0f, 0f, 0f, 0f);
 
     private boolean needReCalc = false;
+
+    private Map<String, IStylePropertySyncTo> syncToMap = new HashMap<>();
     //</editor-fold>
 
+    //<editor-fold desc="style properties">
     @StylePropertyCallback
     public void requestReCalc() { needReCalc = true; }
 
@@ -68,7 +74,12 @@ public abstract class Element
     @StylePropertyCallback
     public void uidValidation(String value, CallbackInfo callbackInfo)
     {
-        if (value == null) callbackInfo.cancel = true;
+        if (value == null)
+        {
+            callbackInfo.cancel = true;
+            return;
+        }
+        if (value.isEmpty()) callbackInfo.cancel = true;
     }
     @StyleProperty(setterCallbackPre = "uidValidation")
     public String uid = "";
@@ -114,6 +125,14 @@ public abstract class Element
     }
     @StyleProperty(setterCallbackPre = "backgroundStyleValidation")
     public String backgroundStyle;
+    //</editor-fold>
+
+    // sync to not sync from
+    public final void syncTo(String stylePropertyName)
+    {
+        IStylePropertySyncTo sync = syncToMap.get(stylePropertyName);
+        if (sync != null) sync.sync();
+    }
 
     public void resetRenderInfo()
     {

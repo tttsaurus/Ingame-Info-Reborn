@@ -78,7 +78,8 @@ public final class RegistryUtils
             Map<IStylePropertySetter, IDeserializer<?>> stylePropertyDeserializers,
             Map<IStylePropertySetter, IStylePropertyCallbackPre> stylePropertySetterCallbacksPre,
             Map<IStylePropertySetter, IStylePropertyCallbackPost> stylePropertySetterCallbacksPost,
-            Map<IStylePropertySetter, Class<?>> stylePropertyClasses)
+            Map<IStylePropertySetter, Class<?>> stylePropertyClasses,
+            Map<IStylePropertySetter, IStylePropertyGetter> stylePropertyGetters)
     {
         Map<String, IStylePropertySetter> setters = new HashMap<>();
 
@@ -119,6 +120,18 @@ public final class RegistryUtils
                         };
                     }
                     setters.put(styleProperty.name().isEmpty() ? fieldName : styleProperty.name(), wrappedSetter);
+
+                    // getter
+                    MethodHandle getter = lookup.findGetter(clazz, fieldName, fieldClass);
+                    IStylePropertyGetter wrappedGetter = (target) ->
+                    {
+                        try
+                        {
+                            return getter.invoke(target);
+                        }
+                        catch (Throwable ignored) { return null; }
+                    };
+                    stylePropertyGetters.put(wrappedSetter, wrappedGetter);
 
                     // deserializer
                     boolean hasWrappedClass = false;
