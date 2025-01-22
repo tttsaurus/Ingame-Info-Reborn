@@ -81,13 +81,13 @@ In case you want to use the latest action build
 - Unzip and `ingameinfo-[version].jar` is the mod file
 
 ## How to use
-API is changing frequently for the current stage.
-Here's an easy example under v1.0.0-b3.
+API is stabilizing.
+Here's an easy example under v1.0.0-b5.
 
 `./config/ingameinfo/test.ixml`
 ```xml
 <HorizontalGroup>
-    <Text uid = "AAA" scale = 2.0f>
+    <Text uid = "myUid">
 </Group>
 ```
 `TestView.java`
@@ -102,15 +102,15 @@ public class TestView extends View
 ```java
 public class TestViewModel extends ViewModel<TestView>
 {
-    @Reactive(targetUid = "AAA", property = "text", initiativeSync = true)
-    public ReactiveObject<String> testString = new ReactiveObject<String>(){};
+    @Reactive(targetUid = "myUid", property = "text", initiativeSync = true)
+    public ReactiveObject<String> myUidText = new ReactiveObject<String>(){};
 
     @Override
     public void start()
     {
-        EventCenter.igiGuiFpsEvent.addListener((fps) ->
+        EventCenter.igiGuiFpsEvent.addListener((fixedFps, renderFps) ->
         {
-            testString.set("GUI FPS: " + fps);
+            myUidText.set("Fixed FPS: " + fixedFps + ", Render FPS: " + renderFps);
         });
     }
 }
@@ -126,7 +126,8 @@ public static void onMvvmRegister(MvvmRegisterEvent event)
 IgiGuiManager.openGui("test");
 ```
 The default alignment and pivot are the top-left corner.
-![Snipaste_2024-12-26_14-29-07](https://github.com/user-attachments/assets/5e04ff27-718f-4633-824a-f0f7e001829d)
+![Snipaste_2025-01-22_00-20-57](https://github.com/user-attachments/assets/ee9818ca-eee7-4ff2-9825-00a8cd3c1cc4)
+
 
 Crt version is as follows (install ProbeZS and ZS IntelliSense for more api details)
 ```zenscript
@@ -142,13 +143,13 @@ Mvvm.define("test");
 
 View.setIxmlFileName("test");
 
-ViewModel.registerReactiveObject("testString", Types.String, "AAA", "text", true);
+var myUidText = ViewModel.registerReactiveObject("myUidText", Types.String, "myUid", "text", true);
 
 ViewModel.setStartAction(function()
 {
-    EventCenter.addIgiGuiFpsEventListener(function(fps as int)
+    EventCenter.addIgiGuiFpsEventListener(function(fixedFps as int, renderFps as int)
     {
-        ViewModel.getReactiveObject("testString").set("GUI FPS: " ~ fps);
+        myUidText.set("Fixed FPS: " ~ fixedFps ~ ", Render FPS: " ~ renderFps);
     });
 });
 ```
