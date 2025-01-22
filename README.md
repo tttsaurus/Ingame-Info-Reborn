@@ -167,6 +167,39 @@ Extra java example:
 - [TemplateView](https://github.com/tttsaurus/Ingame-Info-Reborn/blob/master/src/main/java/com/tttsaurus/ingameinfo/common/impl/mvvm/TemplateView.java)
 - [TemplateViewModel](https://github.com/tttsaurus/Ingame-Info-Reborn/blob/master/src/main/java/com/tttsaurus/ingameinfo/common/impl/mvvm/TemplateViewModel.java)
 
+Extra Tips:
+- Go to `./logs/latest.log`
+- Find
+  ```
+  [00:18:06] [Client thread/INFO] [ingameinfo]: In-Game Info Reborn starts initializing.
+  [00:18:06] [Client thread/INFO] [ingameinfo]: Reflection setup finished.
+  [00:18:06] [Client thread/INFO] [ingameinfo]: Network setup finished.
+  [00:18:06] [Client thread/INFO] [ingameinfo]: 
+  [00:18:06] [Client thread/INFO] [ingameinfo]: Registered usable elements: 
+  [00:18:06] [Client thread/INFO] [ingameinfo]:   - UrlImage
+  [00:18:06] [Client thread/INFO] [ingameinfo]:   - SlidingText
+  [00:18:06] [Client thread/INFO] [ingameinfo]:   - Text
+  [00:18:06] [Client thread/INFO] [ingameinfo]:   - VerticalGroup
+  [00:18:06] [Client thread/INFO] [ingameinfo]:   - AnimText
+  [00:18:06] [Client thread/INFO] [ingameinfo]:   - SimpleButton
+  [00:18:06] [Client thread/INFO] [ingameinfo]:   - EmptyBlock
+  [00:18:06] [Client thread/INFO] [ingameinfo]:   - SizedGroup
+  [00:18:06] [Client thread/INFO] [ingameinfo]:   - HorizontalGroup
+  [00:18:06] [Client thread/INFO] [ingameinfo]:   - ProgressBar
+  [00:18:06] [Client thread/INFO] [ingameinfo]: 
+  [00:18:06] [Client thread/INFO] [ingameinfo]: Element type: Sized extends Element
+  [00:18:06] [Client thread/INFO] [ingameinfo]: - With style properties:
+  [00:18:06] [Client thread/INFO] [ingameinfo]:   - [float] width (with deserializer: BuiltinTypesDeserializer)
+  [00:18:06] [Client thread/INFO] [ingameinfo]:     - Setter callback pre: nonNegativeFloatValidation
+  [00:18:06] [Client thread/INFO] [ingameinfo]:     - Setter callback post: requestReCalc
+  [00:18:06] [Client thread/INFO] [ingameinfo]:   - [float] height (with deserializer: BuiltinTypesDeserializer)
+  [00:18:06] [Client thread/INFO] [ingameinfo]:     - Setter callback pre: nonNegativeFloatValidation
+  [00:18:06] [Client thread/INFO] [ingameinfo]:     - Setter callback post: requestReCalc
+  ...
+  ```
+- Then you'll know what style properties each element has
+- As a result, you can write your `ixml` file with ease
+
 ## Credits
 - Created using [GregTechCEu's Buildscripts](https://github.com/GregTechCEu/Buildscripts)
 - Inspired by [InGame-Info-XML](https://github.com/Lunatrius/InGame-Info-XML)
