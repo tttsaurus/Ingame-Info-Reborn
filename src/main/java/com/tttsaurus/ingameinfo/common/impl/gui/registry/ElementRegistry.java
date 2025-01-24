@@ -133,10 +133,7 @@ public final class ElementRegistry
         registeredElements.clear();
         elementAnnotations.clear();
 
-        for (String packageName: elementPackages)
-            registeredElements.putAll(RegistryUtils.handleRegisteredElements(
-                    packageName,
-                    elementAnnotations));
+        registeredElements.putAll(RegistryUtils.handleRegisteredElements(elementPackages, elementAnnotations));
 
         stylePropertySetters.clear();
         stylePropertyDeserializers.clear();
