@@ -1,5 +1,6 @@
 package com.tttsaurus.ingameinfo.common.api.gui.registry;
 
+import com.tttsaurus.ingameinfo.InGameInfoReborn;
 import com.tttsaurus.ingameinfo.common.api.gui.Element;
 import com.tttsaurus.ingameinfo.common.api.gui.style.*;
 import com.tttsaurus.ingameinfo.common.api.gui.style.wrapped.IWrappedStyleProperty;
@@ -7,69 +8,40 @@ import com.tttsaurus.ingameinfo.common.api.reflection.TypeUtils;
 import com.tttsaurus.ingameinfo.common.api.serialization.Deserializer;
 import com.tttsaurus.ingameinfo.common.api.serialization.IDeserializer;
 import com.tttsaurus.ingameinfo.common.impl.serialization.BuiltinTypesDeserializer;
-import java.io.IOException;
+
 import java.lang.invoke.MethodHandle;
 import java.lang.invoke.MethodHandles;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.lang.reflect.ParameterizedType;
-import java.net.URL;
 import java.util.*;
-import java.util.jar.JarEntry;
-import java.util.jar.JarFile;
 
 @SuppressWarnings("all")
 public final class RegistryUtils
 {
     public static Map<String, Class<? extends Element>> handleRegisteredElements(
-            String packageName,
+            List<String> packages,
             Map<Class<? extends Element>, RegisterElement> elementAnnotations)
     {
-        Class<RegisterElement> annotation = RegisterElement.class;
         Map<String, Class<? extends Element>> annotatedClasses = new HashMap<>();
-
-        String path = packageName.replace(".", "/");
-        URL packageURL = annotation.getClassLoader().getResource(path);
-
-        if (packageURL != null)
-        {
-            String protocol = packageURL.getProtocol();
+        InGameInfoReborn.asmDataTable.getAll(RegisterElement.class.getCanonicalName()).forEach(data -> {
+            String className = data.getClassName();
+            if (packages.stream().noneMatch(className::startsWith))
+                return;
             try
             {
-                if ("jar".equals(protocol))
+                Class<?> clazz = Class.forName(className);
+                if (Element.class.isAssignableFrom(clazz))
                 {
-                    String jarPath = packageURL.getPath().substring(5, packageURL.getPath().indexOf("!"));
-                    try (JarFile jarFile = new JarFile(jarPath))
-                    {
-                        Enumeration<JarEntry> entries = jarFile.entries();
-
-                        while (entries.hasMoreElements())
-                        {
-                            JarEntry entry = entries.nextElement();
-                            String entryName = entry.getName();
-
-                            if (entryName.endsWith(".class") && entryName.startsWith(path))
-                            {
-                                String className = entryName.replace("/", ".").substring(0, entryName.length() - 6);
-                                try
-                                {
-                                    Class<?> clazz = Class.forName(className);
-                                    if (clazz.isAnnotationPresent(annotation) && Element.class.isAssignableFrom(clazz))
-                                    {
-                                        Class<? extends Element> elementClass = (Class<? extends Element>)clazz;
-                                        annotatedClasses.put(clazz.getSimpleName(), elementClass);
-                                        elementAnnotations.put(elementClass, elementClass.getAnnotation(annotation));
-                                    }
-                                }
-                                catch (ClassNotFoundException ignored) { }
-                            }
-                        }
-                    }
+                    Class<? extends Element> elementClass = clazz.asSubclass(Element.class);
+                    annotatedClasses.put(clazz.getSimpleName(), elementClass);
+                    elementAnnotations.put(elementClass, elementClass.getAnnotation(RegisterElement.class));
                 }
             }
-            catch (IOException ignored) { }
-        }
-
+            catch (ClassNotFoundException e) {
+                InGameInfoReborn.logger.throwing(e);
+            }
+        });
         return annotatedClasses;
     }
 

@@ -3,6 +3,7 @@ package com.tttsaurus.ingameinfo;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventHandler;
 import net.minecraftforge.fml.common.SidedProxy;
+import net.minecraftforge.fml.common.discovery.ASMDataTable;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import org.apache.logging.log4j.Logger;
@@ -20,11 +21,13 @@ public final class InGameInfoReborn
     private static CommonProxy proxy;
 
     public static Logger logger;
+    public static ASMDataTable asmDataTable;
 
     @EventHandler
     public void preInit(FMLPreInitializationEvent event)
     {
         logger = event.getModLog();
+        asmDataTable = event.getAsmData();
         proxy.preInit(event, logger);
     }
 
