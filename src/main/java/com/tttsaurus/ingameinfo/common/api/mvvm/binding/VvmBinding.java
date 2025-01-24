@@ -40,7 +40,6 @@ public class VvmBinding<TView extends View>
         return guiLayout;
     }
 
-    // todo: handle the binding of passiveSync
     public <T> void bindReactiveObject(Reactive reactive, ReactiveObject<T> reactiveObject)
     {
         if (reactive.targetUid().isEmpty()) return;

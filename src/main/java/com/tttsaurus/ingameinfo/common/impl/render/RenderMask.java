@@ -2,6 +2,7 @@ package com.tttsaurus.ingameinfo.common.impl.render;
 
 import com.tttsaurus.ingameinfo.common.api.function.IAction;
 import com.tttsaurus.ingameinfo.common.api.render.RenderUtils;
+import org.lwjgl.opengl.GL11;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -11,7 +12,12 @@ public class RenderMask
     private static int nextStencilValue()
     {
         stencilValueCounter++;
-        if (stencilValueCounter > 255) stencilValueCounter = 1;
+        if (stencilValueCounter > 255)
+        {
+            stencilValueCounter = 1;
+            GL11.glClearStencil(0);
+            GL11.glClear(GL11.GL_STENCIL_BUFFER_BIT);
+        }
         return stencilValueCounter;
     }
 

@@ -13,22 +13,40 @@ public class ForgeConfigWriter
         this.file = file;
     }
 
-    // a rough impl
-    // has potential issues but good for now
+    private void replace(RandomAccessFile file, long start, long end, String str)
+    {
+        try
+        {
+            file.seek(end);
+            byte[] remainingContent = new byte[(int)(file.length() - end)];
+            file.readFully(remainingContent);
+
+            byte[] addition = (str + "\n").getBytes(StandardCharsets.UTF_8);
+            byte[] newContent = new byte[remainingContent.length + addition.length];
+            System.arraycopy(addition, 0, newContent, 0, addition.length);
+            System.arraycopy(remainingContent, 0, newContent, addition.length, remainingContent.length);
+
+            file.setLength(start);
+            file.seek(start);
+            file.write(newContent);
+        }
+        catch (Exception ignored) { }
+    }
+
     public void write(String key, String value)
     {
         try
         {
-            RandomAccessFile fileHandler = new RandomAccessFile(file, "rw");
+            RandomAccessFile file = new RandomAccessFile(this.file, "rw");
 
             long start = -1;
             long end = -1;
 
-            long pos1 = fileHandler.getFilePointer();
-            String line = fileHandler.readLine();
+            long pos1 = file.getFilePointer();
+            String line = file.readLine();
             while (line != null)
             {
-                long pos2 = fileHandler.getFilePointer();
+                long pos2 = file.getFilePointer();
 
                 int index = line.indexOf(key);
                 if (index >= 0)
@@ -40,30 +58,20 @@ public class ForgeConfigWriter
                     pos1 += index;
                     start = pos1;
                     end = pos2;
+
+                    // check category
+                    // check comment
                     break;
                 }
 
                 pos1 = pos2;
-                line = fileHandler.readLine();
+                line = file.readLine();
             }
 
             if (start != -1 && end != -1)
-            {
-                fileHandler.seek(end);
-                byte[] remainingContent = new byte[(int)(fileHandler.length() - end)];
-                fileHandler.readFully(remainingContent);
+                replace(file, start, end, value);
 
-                byte[] addition = (value + "\n").getBytes(StandardCharsets.UTF_8);
-                byte[] newContent = new byte[remainingContent.length + addition.length];
-                System.arraycopy(addition, 0, newContent, 0, addition.length);
-                System.arraycopy(remainingContent, 0, newContent, addition.length, remainingContent.length);
-
-                fileHandler.setLength(start);
-                fileHandler.seek(start);
-                fileHandler.write(newContent);
-            }
-
-            fileHandler.close();
+            file.close();
         }
         catch (Exception ignored) { }
     }

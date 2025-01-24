@@ -8,7 +8,6 @@ import com.tttsaurus.ingameinfo.common.api.reflection.TypeUtils;
 import com.tttsaurus.ingameinfo.common.api.serialization.Deserializer;
 import com.tttsaurus.ingameinfo.common.api.serialization.IDeserializer;
 import com.tttsaurus.ingameinfo.common.impl.serialization.BuiltinTypesDeserializer;
-
 import java.lang.invoke.MethodHandle;
 import java.lang.invoke.MethodHandles;
 import java.lang.reflect.Field;
@@ -24,7 +23,8 @@ public final class RegistryUtils
             Map<Class<? extends Element>, RegisterElement> elementAnnotations)
     {
         Map<String, Class<? extends Element>> annotatedClasses = new HashMap<>();
-        InGameInfoReborn.asmDataTable.getAll(RegisterElement.class.getCanonicalName()).forEach(data -> {
+        InGameInfoReborn.asmDataTable.getAll(RegisterElement.class.getCanonicalName()).forEach(data ->
+        {
             String className = data.getClassName();
             if (packages.stream().noneMatch(className::startsWith))
                 return;
@@ -38,7 +38,8 @@ public final class RegistryUtils
                     elementAnnotations.put(elementClass, elementClass.getAnnotation(RegisterElement.class));
                 }
             }
-            catch (ClassNotFoundException e) {
+            catch (ClassNotFoundException e)
+            {
                 InGameInfoReborn.logger.throwing(e);
             }
         });

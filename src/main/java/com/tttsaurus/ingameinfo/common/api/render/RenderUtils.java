@@ -27,9 +27,13 @@ public final class RenderUtils
 
     public static void renderText(String text, float x, float y, float scale, int color, boolean shadow)
     {
+        GlStateManager.disableCull();
         GlStateManager.enableTexture2D();
-        GlStateManager.enableAlpha();
-        GlStateManager.disableBlend();
+        GlStateManager.disableLighting();
+        GlStateManager.enableBlend();
+        GlStateManager.disableAlpha();
+        GlStateManager.disableDepth();
+        GlStateManager.blendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
 
         GlStateManager.pushMatrix();
         GlStateManager.translate(x, y, zLevel);
@@ -46,10 +50,10 @@ public final class RenderUtils
         float g = (float)(color >> 8 & 255) / 255.0F;
         float b = (float)(color & 255) / 255.0F;
 
+        GlStateManager.disableCull();
         GlStateManager.disableTexture2D();
         GlStateManager.disableBlend();
         GlStateManager.enableAlpha();
-        GlStateManager.disableCull();
         GlStateManager.color(r, g, b, a);
 
         GlStateManager.glPolygonMode(GL11.GL_FRONT_AND_BACK, GL11.GL_FILL);
@@ -90,6 +94,7 @@ public final class RenderUtils
         float g = (float)(color >> 8 & 255) / 255.0F;
         float b = (float)(color & 255) / 255.0F;
 
+        GlStateManager.disableCull();
         GlStateManager.disableTexture2D();
         GlStateManager.enableBlend();
         GlStateManager.disableAlpha();
