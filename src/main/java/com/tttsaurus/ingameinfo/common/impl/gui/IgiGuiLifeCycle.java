@@ -119,10 +119,7 @@ public final class IgiGuiLifeCycle
         if (server == null)
         {
             // works on mp client
-            IgiNetwork.requestTpsMtps((tps, mtps) ->
-            {
-                EventCenter.gameTpsMtpsEvent.trigger(tps, mtps);
-            });
+            IgiNetwork.requestTpsMtps(EventCenter.gameTpsMtpsEvent::trigger);
         }
         else
         {
@@ -389,8 +386,10 @@ public final class IgiGuiLifeCycle
     }
 
     @SubscribeEvent
-    public static void onRenderGameOverlay(RenderGameOverlayEvent event)
+    public static void onRenderGameOverlay(RenderGameOverlayEvent.Post event)
     {
+        if (event.getType() != RenderGameOverlayEvent.ElementType.ALL) return;
+
         //<editor-fold desc="gui container init">
         for (IgiGuiContainer container : openedGuiMap.values())
             if (!container.getInitFlag())
@@ -398,7 +397,9 @@ public final class IgiGuiLifeCycle
         //</editor-fold>
 
         //<editor-fold desc="gui container resize">
-        if (resolution.getScaleFactor() != event.getResolution().getScaleFactor())
+        if (resolution.getScaleFactor() != event.getResolution().getScaleFactor() ||
+            resolution.getScaledWidth() != event.getResolution().getScaledWidth() ||
+            resolution.getScaledHeight() != event.getResolution().getScaledHeight())
         {
             resolution = event.getResolution();
             for (IgiGuiContainer container: openedGuiMap.values())
