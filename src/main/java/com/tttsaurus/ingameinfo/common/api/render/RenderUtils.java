@@ -33,7 +33,7 @@ public final class RenderUtils
         GlStateManager.enableBlend();
         GlStateManager.disableAlpha();
         GlStateManager.disableDepth();
-        GlStateManager.blendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
+        GlStateManager.tryBlendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO);
 
         GlStateManager.pushMatrix();
         GlStateManager.translate(x, y, zLevel);
