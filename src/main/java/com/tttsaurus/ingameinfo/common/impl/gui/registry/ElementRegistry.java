@@ -29,12 +29,6 @@ public final class ElementRegistry
     private static final Map<String, Class<? extends Element>> registeredElements = new HashMap<>();
     private static final Map<Class<? extends Element>, RegisterElement> elementAnnotations = new HashMap<>();
 
-    private static final List<String> elementPackages = new ArrayList<>(Arrays.asList(
-            "com.tttsaurus.ingameinfo.common.api.gui",
-            "com.tttsaurus.ingameinfo.common.impl.gui.control",
-            "com.tttsaurus.ingameinfo.common.impl.gui.layout"
-    ));
-
     @Nullable
     public static IStylePropertySetter getStylePropertySetter(Class<? extends Element> clazz, String name)
     {
@@ -126,14 +120,12 @@ public final class ElementRegistry
         return list;
     }
 
-    public static void addElementPackage(String packageName) { elementPackages.add(packageName); }
-
     public static void register()
     {
         registeredElements.clear();
         elementAnnotations.clear();
 
-        registeredElements.putAll(RegistryUtils.handleRegisteredElements(elementPackages, elementAnnotations));
+        registeredElements.putAll(RegistryUtils.handleRegisteredElements(elementAnnotations));
 
         stylePropertySetters.clear();
         stylePropertyDeserializers.clear();

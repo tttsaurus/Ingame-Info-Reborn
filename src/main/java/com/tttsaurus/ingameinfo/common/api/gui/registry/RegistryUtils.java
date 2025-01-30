@@ -18,16 +18,12 @@ import java.util.*;
 @SuppressWarnings("all")
 public final class RegistryUtils
 {
-    public static Map<String, Class<? extends Element>> handleRegisteredElements(
-            List<String> packages,
-            Map<Class<? extends Element>, RegisterElement> elementAnnotations)
+    public static Map<String, Class<? extends Element>> handleRegisteredElements(Map<Class<? extends Element>, RegisterElement> elementAnnotations)
     {
         Map<String, Class<? extends Element>> annotatedClasses = new HashMap<>();
         InGameInfoReborn.asmDataTable.getAll(RegisterElement.class.getCanonicalName()).forEach(data ->
         {
             String className = data.getClassName();
-            if (packages.stream().noneMatch(className::startsWith))
-                return;
             try
             {
                 Class<?> clazz = Class.forName(className);

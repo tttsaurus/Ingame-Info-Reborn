@@ -32,8 +32,11 @@ public class ClientProxy extends CommonProxy
         IgiGuiLifeCycle.setMaxFps_FixedUpdate(IgiConfig.FIXED_UPDATE_LIMIT);
         IgiGuiLifeCycle.setMaxFps_RefreshFbo(IgiConfig.RENDER_UPDATE_LIMIT);
 
-        SpotifyOAuthUtils.CLIENT_ID = IgiConfig.SPOTIFY_CLIENT_ID;
-        SpotifyOAuthUtils.CLIENT_SECRET = IgiConfig.SPOTIFY_CLIENT_SECRET;
+        if (IgiConfig.ENABLE_SPOTIFY_INTEGRATION)
+        {
+            SpotifyOAuthUtils.CLIENT_ID = IgiConfig.SPOTIFY_CLIENT_ID;
+            SpotifyOAuthUtils.CLIENT_SECRET = IgiConfig.SPOTIFY_CLIENT_SECRET;
+        }
     }
 
     @Override
@@ -46,7 +49,8 @@ public class ClientProxy extends CommonProxy
         MinecraftForge.EVENT_BUS.register(MvvmRegisterEventHandler.class);
 
         // app communication
-        MinecraftForge.EVENT_BUS.register(SpotifyCommandHandler.class);
+        if (IgiConfig.ENABLE_SPOTIFY_INTEGRATION)
+            MinecraftForge.EVENT_BUS.register(SpotifyCommandHandler.class);
 
         String myPackage = "com.tttsaurus.ingameinfo";
         ElementRegistry.register();
