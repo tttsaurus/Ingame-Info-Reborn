@@ -615,6 +615,11 @@ sourceSets {
             runtimeClasspath += patchedMc.output + mcLauncher.output
         }
     }
+    main {
+        java {
+            srcDirs = ['src/main/java', 'saurus3d_temp_src/main/java']
+        }
+    }
 }
 
 test {

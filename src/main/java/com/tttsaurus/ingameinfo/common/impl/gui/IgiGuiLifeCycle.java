@@ -570,6 +570,3 @@ public final class IgiGuiLifeCycle
         openedGuiMap.remove(uuid);
     }
 }
-
-// todo: add button group to handle complex button setup
-// todo: optimize reCalc logic
