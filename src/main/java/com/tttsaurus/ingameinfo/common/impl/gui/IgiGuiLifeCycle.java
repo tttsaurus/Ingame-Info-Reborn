@@ -323,9 +323,10 @@ public final class IgiGuiLifeCycle
             fboDisplayWidth = minecraft.displayWidth;
             fboDisplayHeight = minecraft.displayHeight;
             fbo = new Framebuffer(fboDisplayWidth, fboDisplayHeight, true);
-            fbo.framebufferColor[0] = 0f;
-            fbo.framebufferColor[1] = 0f;
-            fbo.framebufferColor[2] = 0f;
+            fbo.framebufferColor[0] = 1f;
+            fbo.framebufferColor[1] = 1f;
+            fbo.framebufferColor[2] = 1f;
+            fbo.framebufferColor[3] = 0f;
             fbo.enableStencil();
         }
 
