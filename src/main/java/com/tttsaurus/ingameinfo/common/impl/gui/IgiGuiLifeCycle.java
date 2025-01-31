@@ -163,10 +163,10 @@ public final class IgiGuiLifeCycle
                 fboDisplayWidth = minecraft.displayWidth;
                 fboDisplayHeight = minecraft.displayHeight;
                 fbo = new Framebuffer(fboDisplayWidth, fboDisplayHeight, true);
-                fbo.enableStencil();
                 fbo.framebufferColor[0] = 0f;
                 fbo.framebufferColor[1] = 0f;
                 fbo.framebufferColor[2] = 0f;
+                fbo.enableStencil();
             }
             if (!refreshFbo)
             {
@@ -312,7 +312,9 @@ public final class IgiGuiLifeCycle
             fbo.createBindFramebuffer(fboDisplayWidth, fboDisplayHeight);
         }
         else
+        {
             fbo.framebufferClear();
+        }
 
         fbo.bindFramebuffer(true);
     }
@@ -524,7 +526,7 @@ public final class IgiGuiLifeCycle
                                     if (keycode == container.getExitKeyForFocusedGui())
                                     {
                                         key = entry.getKey();
-                                        exitCallback = entry.getValue().getExitCallback();
+                                        exitCallback = container.getExitCallback();
                                         break;
                                     }
                             }

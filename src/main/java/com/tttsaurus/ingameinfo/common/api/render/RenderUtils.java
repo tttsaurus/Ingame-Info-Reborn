@@ -52,19 +52,20 @@ public final class RenderUtils
 
         GlStateManager.disableCull();
         GlStateManager.disableTexture2D();
-        GlStateManager.disableBlend();
-        GlStateManager.enableAlpha();
+        GlStateManager.enableBlend();
+        GlStateManager.disableAlpha();
+        GlStateManager.tryBlendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO);
         GlStateManager.color(r, g, b, a);
 
-        GlStateManager.glPolygonMode(GL11.GL_FRONT_AND_BACK, GL11.GL_FILL);
-        GL11.glEnable(GL11.GL_POLYGON_SMOOTH);
+        //GlStateManager.glPolygonMode(GL11.GL_FRONT_AND_BACK, GL11.GL_FILL);
+        //GL11.glEnable(GL11.GL_POLYGON_SMOOTH);
 
         GlStateManager.pushMatrix();
         GlStateManager.translate(0, 0, zLevel);
 
         Tessellator tessellator = Tessellator.getInstance();
         BufferBuilder bufferbuilder = tessellator.getBuffer();
-        bufferbuilder.begin(GL11.GL_POLYGON, DefaultVertexFormats.POSITION);
+        bufferbuilder.begin(GL11.GL_TRIANGLE_FAN, DefaultVertexFormats.POSITION);
 
         addArcVertices(bufferbuilder, x + width - radius, y + radius, radius, 0, 90, segments);
         bufferbuilder.pos(x + width, y + radius, 0).endVertex();
@@ -83,7 +84,7 @@ public final class RenderUtils
 
         GlStateManager.popMatrix();
 
-        GL11.glDisable(GL11.GL_POLYGON_SMOOTH);
+        //GL11.glDisable(GL11.GL_POLYGON_SMOOTH);
     }
 
     public static void renderRoundedRectOutline(float x, float y, float width, float height, float radius, float thickness, int color)
@@ -102,8 +103,8 @@ public final class RenderUtils
         GlStateManager.glLineWidth(thickness * (float)(new ScaledResolution(Minecraft.getMinecraft())).getScaleFactor());
         GlStateManager.color(r, g, b, a);
 
-        GL11.glEnable(GL11.GL_LINE_SMOOTH);
-        GL11.glHint(GL11.GL_LINE_SMOOTH_HINT, GL11.GL_NICEST);
+        //GL11.glEnable(GL11.GL_LINE_SMOOTH);
+        //GL11.glHint(GL11.GL_LINE_SMOOTH_HINT, GL11.GL_NICEST);
 
         GlStateManager.pushMatrix();
         GlStateManager.translate(0, 0, zLevel);
@@ -129,7 +130,7 @@ public final class RenderUtils
 
         GlStateManager.popMatrix();
 
-        GL11.glDisable(GL11.GL_LINE_SMOOTH);
+        //GL11.glDisable(GL11.GL_LINE_SMOOTH);
     }
 
     private static void addArcVertices(BufferBuilder bufferbuilder, float cx, float cy, float radius, float startAngle, float endAngle, int segments)
@@ -311,7 +312,7 @@ public final class RenderUtils
         GlStateManager.blendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
         GlStateManager.color(1.0f, 1.0f, 1.0f, 1.0f);
 
-        GL11.glBindTexture(GL11.GL_TEXTURE_2D, textureId);
+        GlStateManager.bindTexture(textureId);
 
         GlStateManager.pushMatrix();
         GlStateManager.translate(x, y, zLevel);
@@ -324,8 +325,8 @@ public final class RenderUtils
 
     public static void renderFbo(ScaledResolution resolution, Framebuffer fbo)
     {
-        GL11.glGetInteger(GL11.GL_TEXTURE_BINDING_2D, intBuffer);
-        int textureID = intBuffer.get(0);
+        //GL11.glGetInteger(GL11.GL_TEXTURE_BINDING_2D, intBuffer);
+        //int textureID = intBuffer.get(0);
 
         double width = resolution.getScaledWidth_double();
         double height = resolution.getScaledHeight_double();
@@ -349,7 +350,7 @@ public final class RenderUtils
         buffer.pos(0, 0, 0.0).tex(0, 1).endVertex();
         tessellator.draw();
 
-        GlStateManager.bindTexture(textureID);
+        //GlStateManager.bindTexture(textureID);
     }
 
     public static Texture2D getInGameScreenShot(int x, int y, int width, int height)

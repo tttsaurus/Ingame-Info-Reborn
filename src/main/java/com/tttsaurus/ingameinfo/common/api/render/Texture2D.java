@@ -22,12 +22,12 @@ public class Texture2D
 
     public Texture2D(int width, int height, ByteBuffer byteBuffer)
     {
+        GL11.glGetInteger(GL11.GL_TEXTURE_BINDING_2D, intBuffer);
+        int textureID = intBuffer.get(0);
+
         glTextureID = GL11.glGenTextures();
         this.width = width;
         this.height = height;
-
-        GL11.glGetInteger(GL11.GL_TEXTURE_BINDING_2D, intBuffer);
-        int textureID = intBuffer.get(0);
 
         GL11.glBindTexture(GL11.GL_TEXTURE_2D, glTextureID);
 
