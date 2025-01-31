@@ -1,13 +1,20 @@
 package com.tttsaurus.ingameinfo.common.impl.gui;
 
+import com.tttsaurus.ingameinfo.InGameInfoReborn;
 import com.tttsaurus.ingameinfo.common.api.event.IgiGuiInitEvent;
 import com.tttsaurus.ingameinfo.common.api.gui.IgiGuiContainer;
 import com.tttsaurus.ingameinfo.common.api.gui.delegate.placeholder.IPlaceholderDrawScreen;
 import com.tttsaurus.ingameinfo.common.api.gui.delegate.placeholder.IPlaceholderKeyTyped;
 import com.tttsaurus.ingameinfo.common.api.function.IFunc;
 import com.tttsaurus.ingameinfo.common.api.render.RenderUtils;
+import com.tttsaurus.ingameinfo.common.impl.gui.control.UrlImage;
 import com.tttsaurus.ingameinfo.common.impl.igievent.EventCenter;
 import com.tttsaurus.ingameinfo.common.impl.network.IgiNetwork;
+import com.tttsaurus.ingameinfo.common.impl.render.renderer.UrlImageRenderer;
+import com.tttsaurus.saurus3d.common.api.shader.Shader;
+import com.tttsaurus.saurus3d.common.api.shader.ShaderProgram;
+import com.tttsaurus.saurus3d.common.api.shader.UniformField;
+import com.tttsaurus.saurus3d.common.impl.shader.ShaderLoader;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.client.gui.ScaledResolution;
@@ -23,9 +30,8 @@ import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import org.apache.commons.lang3.time.StopWatch;
-import org.lwjgl.opengl.GL11;
-import org.lwjgl.opengl.GL15;
-import org.lwjgl.opengl.GL33;
+import org.lwjgl.opengl.*;
+
 import java.io.RandomAccessFile;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
@@ -39,7 +45,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 @SuppressWarnings("all")
 public final class IgiGuiLifeCycle
 {
-    //<editor-fold desc="fixed update variables">
+    //<editor-fold desc="fixed update timing variables">
     // all in second
     private static int maxFps_FixedUpdate = 125;
     private static double timePerFrame_FixedUpdate = 1d / maxFps_FixedUpdate;
@@ -54,7 +60,7 @@ public final class IgiGuiLifeCycle
     private static final StopWatch stopwatch_FixedUpdate = new StopWatch();
     //</editor-fold>
 
-    //<editor-fold desc="refresh fbo variables">
+    //<editor-fold desc="refresh fbo timing variables">
     // all in second
     private static int maxFps_RefreshFbo = 240;
     private static double timePerFrame_RefreshFbo = 1d / maxFps_RefreshFbo;
@@ -68,7 +74,9 @@ public final class IgiGuiLifeCycle
     private static final StopWatch stopwatch_RefreshFbo = new StopWatch();
     private static int estimatedUnlimitedFps = 1;
     private static float estimatedFboRefreshRate = 0f;
+    //</editor-fold>
 
+    //<editor-fold desc="fbo variables">
     private static boolean enableFbo = true;
     public static void setEnableFbo(boolean flag) { enableFbo = flag; }
     private static boolean refreshFbo = true;
@@ -77,7 +85,12 @@ public final class IgiGuiLifeCycle
     private static int fboDisplayHeight;
     //</editor-fold>
 
-    //<editor-fold desc="render time debug">
+    //<editor-fold desc="shader variables">
+    private static final ShaderLoader shaderLoader = new ShaderLoader();
+    private static ShaderProgram shaderProgram = null;
+    //</editor-fold>
+
+    //<editor-fold desc="render time debug variables">
     // all in nanosecond
     private static boolean renderTimeDebug = false;
     public static void setRenderTimeDebug(boolean flag) { renderTimeDebug = flag; }
@@ -136,6 +149,7 @@ public final class IgiGuiLifeCycle
         }
     }
 
+    //<editor-fold desc="fixed & render update">
     private static double timer = 0.5f;
     private static void onFixedUpdate()
     {
@@ -156,22 +170,14 @@ public final class IgiGuiLifeCycle
         boolean useFbo = enableFbo && OpenGlHelper.framebufferSupported;
         if (useFbo)
         {
-            // init fbo
-            if (fbo == null)
-            {
-                Minecraft minecraft = Minecraft.getMinecraft();
-                fboDisplayWidth = minecraft.displayWidth;
-                fboDisplayHeight = minecraft.displayHeight;
-                fbo = new Framebuffer(fboDisplayWidth, fboDisplayHeight, true);
-                fbo.framebufferColor[0] = 0f;
-                fbo.framebufferColor[1] = 0f;
-                fbo.framebufferColor[2] = 0f;
-                fbo.enableStencil();
-            }
+            shaderSetupStep1();
             if (!refreshFbo)
             {
+                shaderSetupStep2();
                 // render fbo
                 RenderUtils.renderFbo(resolution, fbo);
+
+                shaderSetupStep3();
                 return;
             }
             refreshFbo = false;
@@ -225,8 +231,11 @@ public final class IgiGuiLifeCycle
         if (useFbo)
         {
             fboSetupStep2();
+            shaderSetupStep2();
             // update & render fbo
             RenderUtils.renderFbo(resolution, fbo);
+
+            shaderSetupStep3();
         }
     }
     private static void onRenderUpdateDebug()
@@ -301,10 +310,25 @@ public final class IgiGuiLifeCycle
             onRenderUpdate();
         restoreCommonGlStates();
     }
+    //</editor-fold>
 
+    //<editor-fold desc="fbo setup">
     private static void fboSetupStep1()
     {
         Minecraft minecraft = Minecraft.getMinecraft();
+
+        // init fbo
+        if (fbo == null)
+        {
+            fboDisplayWidth = minecraft.displayWidth;
+            fboDisplayHeight = minecraft.displayHeight;
+            fbo = new Framebuffer(fboDisplayWidth, fboDisplayHeight, true);
+            fbo.framebufferColor[0] = 0f;
+            fbo.framebufferColor[1] = 0f;
+            fbo.framebufferColor[2] = 0f;
+            fbo.enableStencil();
+        }
+
         if (fboDisplayWidth != minecraft.displayWidth || fboDisplayHeight != minecraft.displayHeight)
         {
             fboDisplayWidth = minecraft.displayWidth;
@@ -322,6 +346,35 @@ public final class IgiGuiLifeCycle
     {
         Minecraft.getMinecraft().getFramebuffer().bindFramebuffer(true);
     }
+    //</editor-fold>
+
+    //<editor-fold desc="shader setup">
+    private static void shaderSetupStep1()
+    {
+        // init shader program
+        if (shaderProgram == null)
+        {
+            Shader fxaaFrag = shaderLoader.load("ingameinfo:shaders/fxaa_frag.glsl", Shader.ShaderType.FRAGMENT);
+            Shader fxaaVertex = shaderLoader.load("ingameinfo:shaders/fxaa_vertex.glsl", Shader.ShaderType.VERTEX);
+
+            shaderProgram = new ShaderProgram(fxaaFrag, fxaaVertex);
+            shaderProgram.setup();
+        }
+    }
+    private static void shaderSetupStep2()
+    {
+        int screenTextureLoc = shaderProgram.getUniformLocation("screenTexture");
+        shaderProgram.use();
+        GL13.glActiveTexture(GL13.GL_TEXTURE1);
+        fbo.bindFramebufferTexture();
+        GL20.glUniform1i(screenTextureLoc, 1);
+        GL13.glActiveTexture(GL13.GL_TEXTURE0);
+    }
+    private static void shaderSetupStep3()
+    {
+        GL20.glUseProgram(0);
+    }
+    //</editor-fold>
 
     //<editor-fold desc="gl states">
     private static int textureID = 0;
@@ -338,6 +391,7 @@ public final class IgiGuiLifeCycle
     private static final FloatBuffer floatBuffer = ByteBuffer.allocateDirect(16 << 2).order(ByteOrder.nativeOrder()).asFloatBuffer();
     //</editor-fold>
 
+    //<editor-fold desc="gl state management">
     private static void storeCommonGlStates()
     {
         GL11.glGetInteger(GL11.GL_TEXTURE_BINDING_2D, intBuffer);
@@ -386,6 +440,7 @@ public final class IgiGuiLifeCycle
         GlStateManager.color(r, g, b, a);
         GlStateManager.bindTexture(textureID);
     }
+    //</editor-fold>
 
     @SubscribeEvent
     public static void onRenderGameOverlay(RenderGameOverlayEvent.Post event)

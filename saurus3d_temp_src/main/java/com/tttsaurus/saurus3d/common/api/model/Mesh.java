@@ -30,17 +30,6 @@ public class Mesh
     {
         this.vertices = vertices;
         this.indices = indices;
-
-        this.vertices = new float[]{
-                // Positions       // TexCoords // Normals
-                -0.5f, -0.5f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f,  // Bottom-left
-                0.5f, -0.5f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 1.0f,  // Bottom-right
-                0.0f, 0.5f, 0.0f, 0.5f, 1.0f, 0.0f, 0.0f, 1.0f   // Top
-        };
-
-        this.indices = new int[]{
-                0, 1, 2  // Triangle: Bottom-left, Bottom-right, Top
-        };
     }
 
     public void setup()
