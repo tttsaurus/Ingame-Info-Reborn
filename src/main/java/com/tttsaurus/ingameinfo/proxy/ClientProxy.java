@@ -29,6 +29,7 @@ public class ClientProxy extends CommonProxy
         super.preInit(event, logger);
 
         IgiGuiLifeCycle.setEnableFbo(IgiConfig.ENABLE_FRAMEBUFFER);
+        IgiGuiLifeCycle.setEnableShader(IgiConfig.ENABLE_POST_PROCESSING_SHADER);
         IgiGuiLifeCycle.setMaxFps_FixedUpdate(IgiConfig.FIXED_UPDATE_LIMIT);
         IgiGuiLifeCycle.setMaxFps_RefreshFbo(IgiConfig.RENDER_UPDATE_LIMIT);
 

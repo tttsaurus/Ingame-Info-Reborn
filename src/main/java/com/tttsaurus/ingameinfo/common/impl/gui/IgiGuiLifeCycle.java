@@ -1,6 +1,5 @@
 package com.tttsaurus.ingameinfo.common.impl.gui;
 
-import com.tttsaurus.ingameinfo.InGameInfoReborn;
 import com.tttsaurus.ingameinfo.common.api.event.IgiGuiInitEvent;
 import com.tttsaurus.ingameinfo.common.api.gui.IgiGuiContainer;
 import com.tttsaurus.ingameinfo.common.api.gui.delegate.placeholder.IPlaceholderDrawScreen;
@@ -82,7 +81,7 @@ public final class IgiGuiLifeCycle
     //</editor-fold>
 
     //<editor-fold desc="shader variables">
-    private static boolean enableShader = false;
+    private static boolean enableShader = true;
     public static void setEnableShader(boolean flag) { enableShader = flag; }
     private static final ShaderLoader shaderLoader = new ShaderLoader();
     private static ShaderProgram shaderProgram = null;
@@ -92,7 +91,7 @@ public final class IgiGuiLifeCycle
 
     //<editor-fold desc="render time debug variables">
     // all in nanosecond
-    private static boolean renderTimeDebug = true;
+    private static boolean renderTimeDebug = false;
     public static void setRenderTimeDebug(boolean flag) { renderTimeDebug = flag; }
     private static final StopWatch cpuTimeStopwatch = new StopWatch();
     private static final long[] cpuTimeNanoFor50Frames = new long[50];
