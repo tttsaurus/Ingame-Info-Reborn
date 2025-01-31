@@ -323,7 +323,7 @@ public final class RenderUtils
         GlStateManager.bindTexture(textureID);
     }
 
-    public static void renderFbo(ScaledResolution resolution, Framebuffer fbo)
+    public static void renderFbo(ScaledResolution resolution, Framebuffer fbo, boolean useTexture)
     {
         //GL11.glGetInteger(GL11.GL_TEXTURE_BINDING_2D, intBuffer);
         //int textureID = intBuffer.get(0);
@@ -339,11 +339,15 @@ public final class RenderUtils
         GlStateManager.blendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
         GlStateManager.color(1.0f, 1.0f, 1.0f, 1.0f);
 
-        fbo.bindFramebufferTexture();
+        if (useTexture)
+            fbo.bindFramebufferTexture();
 
         Tessellator tessellator = Tessellator.getInstance();
         BufferBuilder buffer = tessellator.getBuffer();
-        buffer.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX);
+        if (useTexture)
+            buffer.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX);
+        else
+            buffer.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION);
         buffer.pos(0, height, 0.0).tex(0, 0).endVertex();
         buffer.pos(width, height, 0.0).tex(1, 0).endVertex();
         buffer.pos(width, 0, 0.0).tex(1, 1).endVertex();

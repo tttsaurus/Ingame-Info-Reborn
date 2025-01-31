@@ -1,19 +1,15 @@
 package com.tttsaurus.ingameinfo.common.impl.gui;
 
-import com.tttsaurus.ingameinfo.InGameInfoReborn;
 import com.tttsaurus.ingameinfo.common.api.event.IgiGuiInitEvent;
 import com.tttsaurus.ingameinfo.common.api.gui.IgiGuiContainer;
 import com.tttsaurus.ingameinfo.common.api.gui.delegate.placeholder.IPlaceholderDrawScreen;
 import com.tttsaurus.ingameinfo.common.api.gui.delegate.placeholder.IPlaceholderKeyTyped;
 import com.tttsaurus.ingameinfo.common.api.function.IFunc;
 import com.tttsaurus.ingameinfo.common.api.render.RenderUtils;
-import com.tttsaurus.ingameinfo.common.impl.gui.control.UrlImage;
 import com.tttsaurus.ingameinfo.common.impl.igievent.EventCenter;
 import com.tttsaurus.ingameinfo.common.impl.network.IgiNetwork;
-import com.tttsaurus.ingameinfo.common.impl.render.renderer.UrlImageRenderer;
 import com.tttsaurus.saurus3d.common.api.shader.Shader;
 import com.tttsaurus.saurus3d.common.api.shader.ShaderProgram;
-import com.tttsaurus.saurus3d.common.api.shader.UniformField;
 import com.tttsaurus.saurus3d.common.impl.shader.ShaderLoader;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;
@@ -31,7 +27,6 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import org.apache.commons.lang3.time.StopWatch;
 import org.lwjgl.opengl.*;
-
 import java.io.RandomAccessFile;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
@@ -86,6 +81,7 @@ public final class IgiGuiLifeCycle
     //</editor-fold>
 
     //<editor-fold desc="shader variables">
+    private static boolean enableShader = false;
     private static final ShaderLoader shaderLoader = new ShaderLoader();
     private static ShaderProgram shaderProgram = null;
     //</editor-fold>
@@ -175,7 +171,7 @@ public final class IgiGuiLifeCycle
             {
                 shaderSetupStep2();
                 // render fbo
-                RenderUtils.renderFbo(resolution, fbo);
+                RenderUtils.renderFbo(resolution, fbo, !enableShader);
 
                 shaderSetupStep3();
                 return;
@@ -233,7 +229,7 @@ public final class IgiGuiLifeCycle
             fboSetupStep2();
             shaderSetupStep2();
             // update & render fbo
-            RenderUtils.renderFbo(resolution, fbo);
+            RenderUtils.renderFbo(resolution, fbo, !enableShader);
 
             shaderSetupStep3();
         }
@@ -351,6 +347,8 @@ public final class IgiGuiLifeCycle
     //<editor-fold desc="shader setup">
     private static void shaderSetupStep1()
     {
+        if (!enableShader) return;
+
         // init shader program
         if (shaderProgram == null)
         {
@@ -363,6 +361,8 @@ public final class IgiGuiLifeCycle
     }
     private static void shaderSetupStep2()
     {
+        if (!enableShader) return;
+
         int screenTextureLoc = shaderProgram.getUniformLocation("screenTexture");
         shaderProgram.use();
         GL13.glActiveTexture(GL13.GL_TEXTURE1);
@@ -372,7 +372,10 @@ public final class IgiGuiLifeCycle
     }
     private static void shaderSetupStep3()
     {
+        if (!enableShader) return;
+
         GL20.glUseProgram(0);
+        //Display.update();
     }
     //</editor-fold>
 
