@@ -78,6 +78,8 @@ public final class IgiGuiLifeCycle
     private static Framebuffer fbo = null;
     private static int fboDisplayWidth;
     private static int fboDisplayHeight;
+    private static int mcFboDisplayWidth;
+    private static int mcFboDisplayHeight;
     //</editor-fold>
 
     //<editor-fold desc="shader variables">
@@ -172,11 +174,7 @@ public final class IgiGuiLifeCycle
             shaderSetupStep1();
             if (!refreshFbo)
             {
-                shaderSetupStep2();
-
-                RenderUtils.renderFbo(resolution, fbo, !enableShader);
-
-                shaderSetupStep3();
+                RenderUtils.renderFbo(resolution, fbo, true);
                 return;
             }
             refreshFbo = false;
@@ -229,13 +227,21 @@ public final class IgiGuiLifeCycle
 
         if (useFbo)
         {
-            fboSetupStep2();
-            shaderSetupStep2();
-            fboSetupStep3();
+            if (enableShader)
+            {
+                shaderSetupStep2();
+                RenderUtils.renderFbo(resolution, fbo, false);
+                shaderSetupStep3();
 
-            RenderUtils.renderFbo(resolution, fbo, !enableShader);
+                fboSetupStep2();
 
-            shaderSetupStep3();
+                RenderUtils.renderFbo(resolution, fbo, true);
+            }
+            else
+            {
+                fboSetupStep2();
+                RenderUtils.renderFbo(resolution, fbo, true);
+            }
         }
     }
     private static void onRenderUpdateDebug()
@@ -322,6 +328,8 @@ public final class IgiGuiLifeCycle
         {
             fboDisplayWidth = minecraft.displayWidth;
             fboDisplayHeight = minecraft.displayHeight;
+            mcFboDisplayWidth = minecraft.displayWidth;
+            mcFboDisplayHeight = minecraft.displayHeight;
             fbo = new Framebuffer(fboDisplayWidth, fboDisplayHeight, true);
             fbo.framebufferColor[0] = 1f;
             fbo.framebufferColor[1] = 1f;
@@ -346,9 +354,16 @@ public final class IgiGuiLifeCycle
     private static void fboSetupStep2()
     {
         fbo.unbindFramebuffer();
-    }
-    private static void fboSetupStep3()
-    {
+
+        Minecraft minecraft = Minecraft.getMinecraft();
+
+        if (mcFboDisplayWidth != minecraft.displayWidth || mcFboDisplayHeight != minecraft.displayHeight)
+        {
+            mcFboDisplayWidth = minecraft.displayWidth;
+            mcFboDisplayHeight = minecraft.displayHeight;
+            minecraft.getFramebuffer().createBindFramebuffer(mcFboDisplayWidth, mcFboDisplayHeight);
+        }
+
         Minecraft.getMinecraft().getFramebuffer().bindFramebuffer(true);
     }
     //</editor-fold>
@@ -400,7 +415,8 @@ public final class IgiGuiLifeCycle
         GlStateManager.setActiveTexture(texUnit);
 
         GL20.glUseProgram(programID);
-        Display.update();
+        //GL11.glFlush();
+        //GL11.glFinish();
     }
     //</editor-fold>
 
