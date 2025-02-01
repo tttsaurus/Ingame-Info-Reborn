@@ -409,8 +409,6 @@ public final class IgiGuiLifeCycle
     //<editor-fold desc="shader methods">
     private static void shaderCompile()
     {
-        if (!enableShader) return;
-
         // init shader program
         if (shaderProgram == null)
         {
@@ -423,8 +421,6 @@ public final class IgiGuiLifeCycle
     }
     private static void shaderActivate()
     {
-        if (!enableShader) return;
-
         programID = GL11.glGetInteger(GL20.GL_CURRENT_PROGRAM);
 
         int screenTextureLoc = shaderProgram.getUniformLocation("screenTexture");
@@ -443,8 +439,6 @@ public final class IgiGuiLifeCycle
     }
     private static void shaderDeactivate()
     {
-        if (!enableShader) return;
-
         GL11.glGetInteger(GL13.GL_ACTIVE_TEXTURE, intBuffer);
         int texUnit = intBuffer.get(0);
 
@@ -453,8 +447,6 @@ public final class IgiGuiLifeCycle
         GlStateManager.setActiveTexture(texUnit);
 
         GL20.glUseProgram(programID);
-        //GL11.glFlush();
-        //GL11.glFinish();
     }
     //</editor-fold>
 
