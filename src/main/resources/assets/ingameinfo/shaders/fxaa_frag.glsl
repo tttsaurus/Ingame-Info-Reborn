@@ -8,12 +8,12 @@ out vec4 FragColor;
 void main()
 {
     // params
-    float FXAA_SPAN_MAX = 12.0;
-    float FXAA_REDUCE_MUL = 1.0 / 6.0;
-    float FXAA_REDUCE_MIN = 1.0 / 100.0;
+    float FXAA_SPAN_MAX = 5.0;
+    float FXAA_REDUCE_MUL = 1.0 / 4.0;
+    float FXAA_REDUCE_MIN = 1.0 / 64.0;
 
     bool EDGE_SMOOTHING = true;
-    float ALPHA_EDGE_STRENGTH = 0.5;
+    float EDGE_ALPHA_VALUE = 0.75;
 
     vec2 size = 1.0 / textureSize(screenTexture, 0);
 
@@ -28,6 +28,12 @@ void main()
     float alphaDown = texture(screenTexture, TexCoords - vec2(1.0, 0.0) * size).a;
     float alphaRight = texture(screenTexture, TexCoords + vec2(0.0, 1.0) * size).a;
     float alphaLeft = texture(screenTexture, TexCoords - vec2(0.0, 1.0) * size).a;
+
+    if (alpha != 0.0 && (alphaUp == 0.0 || alphaDown == 0.0 || alphaRight == 0.0 || alphaLeft == 0.0))
+    {
+        FragColor = vec4(color, alpha);
+        return;
+    }
 
     if (alpha == 0.0 && EDGE_SMOOTHING)
     {
@@ -63,7 +69,15 @@ void main()
                 mixedColor += mixColors[i];
             }
             mixedColor /= float(index);
-            color = mixedColor;
+
+            float alphaDifference = max(max(abs(alpha - alphaLeft), abs(alpha - alphaRight)), max(abs(alpha - alphaUp), abs(alpha - alphaDown)));
+
+            if (alphaDifference != 0)
+            {
+                alpha = alphaDifference * EDGE_ALPHA_VALUE;
+                FragColor = vec4(mixedColor, alpha);
+                return;
+            }
         }
     }
 
@@ -80,16 +94,6 @@ void main()
 
     vec3 result = color + (colorUp + colorDown + colorRight + colorLeft - 4.0 * color) * FXAA_REDUCE_MUL;
     result = mix(color, result, step(FXAA_REDUCE_MIN, edge));
-
-    if (alpha == 0.00 && EDGE_SMOOTHING)
-    {
-        float alphaDifference = max(max(abs(alpha - alphaLeft), abs(alpha - alphaRight)), max(abs(alpha - alphaUp), abs(alpha - alphaDown)));
-
-        if (alphaDifference != 0)
-        {
-            alpha = alphaDifference * ALPHA_EDGE_STRENGTH;
-        }
-    }
 
     FragColor = vec4(result, alpha);
 }
