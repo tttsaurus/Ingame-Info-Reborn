@@ -339,9 +339,9 @@ public final class IgiGuiLifeCycle
             shaderFboDisplayWidth = minecraft.displayWidth;
             shaderFboDisplayHeight = minecraft.displayHeight;
             shaderFbo = new Framebuffer(fboDisplayWidth, fboDisplayHeight, true);
-            shaderFbo.framebufferColor[0] = 1f;
-            shaderFbo.framebufferColor[1] = 1f;
-            shaderFbo.framebufferColor[2] = 1f;
+            shaderFbo.framebufferColor[0] = 0f;
+            shaderFbo.framebufferColor[1] = 0f;
+            shaderFbo.framebufferColor[2] = 0f;
             shaderFbo.framebufferColor[3] = 0f;
             shaderFbo.enableStencil();
         }
@@ -371,9 +371,9 @@ public final class IgiGuiLifeCycle
             mcFboDisplayWidth = minecraft.displayWidth;
             mcFboDisplayHeight = minecraft.displayHeight;
             fbo = new Framebuffer(fboDisplayWidth, fboDisplayHeight, true);
-            fbo.framebufferColor[0] = 1f;
-            fbo.framebufferColor[1] = 1f;
-            fbo.framebufferColor[2] = 1f;
+            fbo.framebufferColor[0] = 0f;
+            fbo.framebufferColor[1] = 0f;
+            fbo.framebufferColor[2] = 0f;
             fbo.framebufferColor[3] = 0f;
             fbo.enableStencil();
         }
@@ -412,8 +412,8 @@ public final class IgiGuiLifeCycle
         // init shader program
         if (shaderProgram == null)
         {
-            Shader fxaaFrag = shaderLoader.load("ingameinfo:shaders/fxaa_frag.glsl", Shader.ShaderType.FRAGMENT);
-            Shader fxaaVertex = shaderLoader.load("ingameinfo:shaders/fxaa_vertex.glsl", Shader.ShaderType.VERTEX);
+            Shader fxaaFrag = shaderLoader.load("ingameinfo:shaders/post_processing_frag.glsl", Shader.ShaderType.FRAGMENT);
+            Shader fxaaVertex = shaderLoader.load("ingameinfo:shaders/post_processing_vertex.glsl", Shader.ShaderType.VERTEX);
 
             shaderProgram = new ShaderProgram(fxaaFrag, fxaaVertex);
             shaderProgram.setup();
