@@ -76,8 +76,13 @@ public final class IgiGuiLifeCycle
     public static void setEnableFbo(boolean flag) { enableFbo = flag; }
     private static boolean refreshFbo = true;
     private static Framebuffer fbo = null;
+    private static Framebuffer shaderFbo = null;
     private static int fboDisplayWidth;
     private static int fboDisplayHeight;
+    private static int shaderFboDisplayWidth;
+    private static int shaderFboDisplayHeight;
+    private static int mcFboDisplayWidth;
+    private static int mcFboDisplayHeight;
     //</editor-fold>
 
     //<editor-fold desc="shader variables">
@@ -169,18 +174,17 @@ public final class IgiGuiLifeCycle
         boolean useFbo = enableFbo && OpenGlHelper.framebufferSupported;
         if (useFbo)
         {
-            shaderSetupStep1();
+            shaderCompile();
             if (!refreshFbo)
             {
-                shaderSetupStep2();
-
-                RenderUtils.renderFbo(resolution, fbo, !enableShader);
-
-                shaderSetupStep3();
+                if (enableShader)
+                    RenderUtils.renderFbo(resolution, shaderFbo, true);
+                else
+                    RenderUtils.renderFbo(resolution, fbo, true);
                 return;
             }
             refreshFbo = false;
-            fboSetupStep1();
+            fboBind();
         }
 
         //<editor-fold desc="gui container render update">
@@ -229,13 +233,25 @@ public final class IgiGuiLifeCycle
 
         if (useFbo)
         {
-            fboSetupStep2();
-            shaderSetupStep2();
-            fboSetupStep3();
+            if (enableShader)
+            {
+                fbo.unbindFramebuffer();
+                shaderFboBind();
+                shaderActivate();
+                RenderUtils.renderFbo(resolution, fbo, false);
+                shaderDeactivate();
+                shaderFbo.unbindFramebuffer();
+                mcFboBind();
 
-            RenderUtils.renderFbo(resolution, fbo, !enableShader);
+                RenderUtils.renderFbo(resolution, shaderFbo, true);
+            }
+            else
+            {
+                fbo.unbindFramebuffer();
+                mcFboBind();
 
-            shaderSetupStep3();
+                RenderUtils.renderFbo(resolution, fbo, true);
+            }
         }
     }
     private static void onRenderUpdateDebug()
@@ -312,8 +328,38 @@ public final class IgiGuiLifeCycle
     }
     //</editor-fold>
 
-    //<editor-fold desc="fbo setup">
-    private static void fboSetupStep1()
+    //<editor-fold desc="fbo methods">
+    private static void shaderFboBind()
+    {
+        Minecraft minecraft = Minecraft.getMinecraft();
+
+        // init fbo
+        if (shaderFbo == null)
+        {
+            shaderFboDisplayWidth = minecraft.displayWidth;
+            shaderFboDisplayHeight = minecraft.displayHeight;
+            shaderFbo = new Framebuffer(fboDisplayWidth, fboDisplayHeight, true);
+            shaderFbo.framebufferColor[0] = 1f;
+            shaderFbo.framebufferColor[1] = 1f;
+            shaderFbo.framebufferColor[2] = 1f;
+            shaderFbo.framebufferColor[3] = 0f;
+            shaderFbo.enableStencil();
+        }
+
+        if (shaderFboDisplayWidth != minecraft.displayWidth || shaderFboDisplayHeight != minecraft.displayHeight)
+        {
+            shaderFboDisplayWidth = minecraft.displayWidth;
+            shaderFboDisplayHeight = minecraft.displayHeight;
+            shaderFbo.createBindFramebuffer(shaderFboDisplayWidth, shaderFboDisplayHeight);
+        }
+        else
+        {
+            shaderFbo.framebufferClear();
+        }
+
+        shaderFbo.bindFramebuffer(true);
+    }
+    private static void fboBind()
     {
         Minecraft minecraft = Minecraft.getMinecraft();
 
@@ -322,10 +368,13 @@ public final class IgiGuiLifeCycle
         {
             fboDisplayWidth = minecraft.displayWidth;
             fboDisplayHeight = minecraft.displayHeight;
+            mcFboDisplayWidth = minecraft.displayWidth;
+            mcFboDisplayHeight = minecraft.displayHeight;
             fbo = new Framebuffer(fboDisplayWidth, fboDisplayHeight, true);
-            fbo.framebufferColor[0] = 0f;
-            fbo.framebufferColor[1] = 0f;
-            fbo.framebufferColor[2] = 0f;
+            fbo.framebufferColor[0] = 1f;
+            fbo.framebufferColor[1] = 1f;
+            fbo.framebufferColor[2] = 1f;
+            fbo.framebufferColor[3] = 0f;
             fbo.enableStencil();
         }
 
@@ -342,18 +391,23 @@ public final class IgiGuiLifeCycle
 
         fbo.bindFramebuffer(true);
     }
-    private static void fboSetupStep2()
+    private static void mcFboBind()
     {
-        fbo.unbindFramebuffer();
-    }
-    private static void fboSetupStep3()
-    {
+        Minecraft minecraft = Minecraft.getMinecraft();
+
+        if (mcFboDisplayWidth != minecraft.displayWidth || mcFboDisplayHeight != minecraft.displayHeight)
+        {
+            mcFboDisplayWidth = minecraft.displayWidth;
+            mcFboDisplayHeight = minecraft.displayHeight;
+            minecraft.getFramebuffer().createBindFramebuffer(mcFboDisplayWidth, mcFboDisplayHeight);
+        }
+
         Minecraft.getMinecraft().getFramebuffer().bindFramebuffer(true);
     }
     //</editor-fold>
 
-    //<editor-fold desc="shader setup">
-    private static void shaderSetupStep1()
+    //<editor-fold desc="shader methods">
+    private static void shaderCompile()
     {
         if (!enableShader) return;
 
@@ -367,7 +421,7 @@ public final class IgiGuiLifeCycle
             shaderProgram.setup();
         }
     }
-    private static void shaderSetupStep2()
+    private static void shaderActivate()
     {
         if (!enableShader) return;
 
@@ -387,7 +441,7 @@ public final class IgiGuiLifeCycle
 
         GL20.glUniform1i(screenTextureLoc, 1);
     }
-    private static void shaderSetupStep3()
+    private static void shaderDeactivate()
     {
         if (!enableShader) return;
 
@@ -399,7 +453,8 @@ public final class IgiGuiLifeCycle
         GlStateManager.setActiveTexture(texUnit);
 
         GL20.glUseProgram(programID);
-        Display.update();
+        //GL11.glFlush();
+        //GL11.glFinish();
     }
     //</editor-fold>
 
