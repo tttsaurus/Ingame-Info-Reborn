@@ -127,7 +127,7 @@ public abstract class Element
     public String backgroundStyle;
     //</editor-fold>
 
-    // sync to view model not sync from
+    // sync to view model, not sync from
     public final void sync(String stylePropertyName)
     {
         IStylePropertySyncTo sync = syncToMap.get(stylePropertyName);

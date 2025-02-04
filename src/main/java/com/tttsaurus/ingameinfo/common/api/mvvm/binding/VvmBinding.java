@@ -62,6 +62,7 @@ public class VvmBinding<TView extends View>
             // whether type matches
             if (!TypeUtils.looseTypeCheck(reactiveObjectParameter, stylePropertyClass)) continue;
 
+            // viewmodel to view sync
             if (reactive.initiativeSync())
             {
                 IStylePropertyCallbackPre setterCallbackPre = ElementRegistry.getStylePropertySetterCallbackPre(stylePropertySetter);
@@ -76,6 +77,7 @@ public class VvmBinding<TView extends View>
                     action.invoke(value);
                 });
             }
+            // view to viewmodel sync
             if (reactive.passiveSync())
             {
                 Map<String, IStylePropertySyncTo> syncToMap = InternalMethods.instance.Element$syncToMap.invoke(element);

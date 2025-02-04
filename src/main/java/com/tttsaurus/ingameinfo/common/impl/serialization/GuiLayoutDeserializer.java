@@ -30,12 +30,32 @@ public class GuiLayoutDeserializer implements IDeserializer<GuiLayout>
                     List<Tuple<String, String>> defs = RawIxmlUtils.splitParams(pair.getSecond());
                     for (Tuple<String, String> def: defs)
                     {
-                        if (def.getFirst().equals("debug"))
-                            guiLayout.setDebug(Boolean.parseBoolean(def.getSecond()));
-                        else if (def.getFirst().equals("exitKey"))
-                            try { guiLayout.setExitKeyForFocusedGui(Integer.parseInt(def.getSecond())); }
+                        String field = def.getFirst();
+                        String value = def.getSecond();
+                        if (field.equals("debug"))
+                            guiLayout.setDebug(Boolean.parseBoolean(value));
+                        else if (field.equals("exitKey"))
+                            try { guiLayout.setExitKeyForFocusedGui(Integer.parseInt(value)); }
                             catch (Exception ignored) { }
-                        // and so on
+                        else if (field.equals("focused"))
+                            guiLayout.setFocused(Boolean.parseBoolean(value));
+                        else if (field.equals("hasFocusBg"))
+                            guiLayout.setHasFocusBackground(Boolean.parseBoolean(value));
+                        else if (field.equals("bgColor"))
+                            try { guiLayout.setBackgroundColor(Integer.parseInt(value)); }
+                            catch (Exception ignored) { }
+                        else if (field.equals("useHeldItemWhitelist"))
+                            guiLayout.setHasFocusBackground(Boolean.parseBoolean(value));
+                        else if (field.equals("useHeldItemBlacklist"))
+                            guiLayout.setHasFocusBackground(Boolean.parseBoolean(value));
+                        else if (field.equals("heldItemWhitelist"))
+                        {
+
+                        }
+                        else if (field.equals("heldItemBlacklist"))
+                        {
+
+                        }
                     }
                 }
                 else if (pair.getFirst().equals("/Group"))
