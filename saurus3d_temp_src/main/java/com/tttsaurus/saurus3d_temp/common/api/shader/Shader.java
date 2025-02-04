@@ -1,4 +1,4 @@
-package com.tttsaurus.saurus3d.common.api.shader;
+package com.tttsaurus.saurus3d_temp.common.api.shader;
 
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL20;

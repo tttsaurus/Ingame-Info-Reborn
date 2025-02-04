@@ -7,8 +7,12 @@ out vec4 FragColor;
 
 void main()
 {
+    vec4 finalFragColor;
+
     if (texture(screenTexture, TexCoords).a == 0.0)
-        FragColor = vec4(texture(screenTexture, TexCoords).rgb, 0.0);
+        finalFragColor = vec4(texture(screenTexture, TexCoords).rgb, 0.0);
     else
-        FragColor = vec4(texture(screenTexture, TexCoords).rgb, 0.5);
+        finalFragColor = vec4(texture(screenTexture, TexCoords).rgb, 0.5);
+
+    FragColor = finalFragColor;
 }

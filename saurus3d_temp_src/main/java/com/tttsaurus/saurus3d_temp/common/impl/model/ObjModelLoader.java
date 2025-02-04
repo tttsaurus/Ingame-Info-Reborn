@@ -1,8 +1,8 @@
-package com.tttsaurus.saurus3d.common.impl.model;
+package com.tttsaurus.saurus3d_temp.common.impl.model;
 
-import com.tttsaurus.saurus3d.common.api.model.IModelLoader;
-import com.tttsaurus.saurus3d.common.api.model.Mesh;
-import com.tttsaurus.saurus3d.common.reader.RlReaderUtils;
+import com.tttsaurus.saurus3d_temp.common.api.model.IModelLoader;
+import com.tttsaurus.saurus3d_temp.common.api.model.Mesh;
+import com.tttsaurus.saurus3d_temp.common.api.reader.RlReaderUtils;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;

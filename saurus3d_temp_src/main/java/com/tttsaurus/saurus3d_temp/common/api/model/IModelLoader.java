@@ -1,4 +1,4 @@
-package com.tttsaurus.saurus3d.common.api.model;
+package com.tttsaurus.saurus3d_temp.common.api.model;
 
 import javax.annotation.Nullable;
 
