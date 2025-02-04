@@ -8,6 +8,7 @@ import com.tttsaurus.ingameinfo.common.api.function.IFunc;
 import com.tttsaurus.ingameinfo.common.api.render.RenderUtils;
 import com.tttsaurus.ingameinfo.common.impl.igievent.EventCenter;
 import com.tttsaurus.ingameinfo.common.impl.network.IgiNetwork;
+import com.tttsaurus.ingameinfo.config.IgiConfig;
 import com.tttsaurus.saurus3d_temp.common.api.shader.Shader;
 import com.tttsaurus.saurus3d_temp.common.api.shader.ShaderProgram;
 import com.tttsaurus.saurus3d_temp.common.impl.shader.ShaderLoader;
@@ -92,6 +93,7 @@ public final class IgiGuiLifeCycle
     private static ShaderProgram shaderProgram = null;
     private static int programID;
     private static int texUnit1TextureID;
+    private static boolean uniformsPassed = false;
     //</editor-fold>
 
     //<editor-fold desc="render time debug variables">
@@ -423,7 +425,6 @@ public final class IgiGuiLifeCycle
     {
         programID = GL11.glGetInteger(GL20.GL_CURRENT_PROGRAM);
 
-        int screenTextureLoc = shaderProgram.getUniformLocation("screenTexture");
         shaderProgram.use();
 
         GL11.glGetInteger(GL13.GL_ACTIVE_TEXTURE, intBuffer);
@@ -433,9 +434,19 @@ public final class IgiGuiLifeCycle
         GL11.glGetInteger(GL11.GL_TEXTURE_BINDING_2D, intBuffer);
         texUnit1TextureID = intBuffer.get(0);
         fbo.bindFramebufferTexture();
+
         GlStateManager.setActiveTexture(texUnit);
 
-        GL20.glUniform1i(screenTextureLoc, 1);
+        if (!uniformsPassed)
+        {
+            uniformsPassed = true;
+            int screenTextureLoc = shaderProgram.getUniformLocation("screenTexture");
+            GL20.glUniform1i(screenTextureLoc, 1);
+            int enableAlphaLoc = shaderProgram.getUniformLocation("enableAlpha");
+            int alphaLoc = shaderProgram.getUniformLocation("alpha");
+            GL20.glUniform1i(enableAlphaLoc, IgiConfig.ENABLE_PP_ALPHA ? 1 : 0);
+            GL20.glUniform1f(alphaLoc, IgiConfig.PP_ALPHA);
+        }
     }
     private static void shaderDeactivate()
     {
@@ -444,6 +455,7 @@ public final class IgiGuiLifeCycle
 
         GlStateManager.setActiveTexture(GL13.GL_TEXTURE1);
         GlStateManager.bindTexture(texUnit1TextureID);
+
         GlStateManager.setActiveTexture(texUnit);
 
         GL20.glUseProgram(programID);
