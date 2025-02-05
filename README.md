@@ -11,6 +11,9 @@ This is a library mod that helps you to create in-game overlaid (or focused) gui
 
 ![Snipaste_2025-01-12_12-53-07](https://github.com/user-attachments/assets/581f0727-bba8-4ff5-9780-8fdbfaf587fd)
 
+## Wiki
+- [Wiki Link](https://tttsaurus.github.io/Ingame-Info-Reborn-Wiki/)
+
 ## Todo List / Features
 <details>
 <summary>Click to expand</summary>
