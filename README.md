@@ -1,3 +1,8 @@
+<div align="center">
+  <img src="logo.png" alt="Your Image" width="300"/>
+  <h1>InGame Info Reborn</h1>
+</div>
+
 This is a spiritual successor of [InGame-Info-XML](https://github.com/Lunatrius/InGame-Info-XML), **not a fork**.
 
 If you like this project, don't forget to give it a star⭐!
