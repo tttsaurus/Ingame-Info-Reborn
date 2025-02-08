@@ -20,6 +20,9 @@ public final class InGameInfoReborn
             serverSide = "com.tttsaurus.ingameinfo.proxy.ServerProxy")
     private static CommonProxy proxy;
 
+    public static boolean crafttweakerLoaded;
+    public static boolean bloodmagicLoaded;
+
     public static Logger logger;
     public static ASMDataTable asmDataTable;
 

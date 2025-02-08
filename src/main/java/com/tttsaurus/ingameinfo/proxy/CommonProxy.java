@@ -1,5 +1,6 @@
 package com.tttsaurus.ingameinfo.proxy;
 
+import com.tttsaurus.ingameinfo.InGameInfoReborn;
 import com.tttsaurus.ingameinfo.common.impl.network.IgiNetwork;
 import com.tttsaurus.ingameinfo.config.ForgeConfigWriter;
 import com.tttsaurus.ingameinfo.config.IgiConfig;
@@ -35,8 +36,11 @@ public class CommonProxy
         IgiNetwork.init();
         logger.info("Network setup finished.");
 
+        InGameInfoReborn.crafttweakerLoaded = Loader.isModLoaded("crafttweaker");
+        InGameInfoReborn.bloodmagicLoaded = Loader.isModLoaded("bloodmagic");
+
         // crt support
-        if (Loader.isModLoaded("crafttweaker"))
+        if (InGameInfoReborn.crafttweakerLoaded)
             MinecraftForge.EVENT_BUS.register(CrtEventManager.Handler.class);
     }
 }

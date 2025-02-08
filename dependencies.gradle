@@ -51,6 +51,11 @@ dependencies {
     compileOnly "curse.maven:zenutils-401178:4394263"
     runtimeOnly "curse.maven:zenutils-401178:4394263"
 
+    // crafttweaker
     compileOnly "CraftTweaker2:CraftTweaker2-MC1120-Main:1.12-${crafttweakerVersion}"
     runtimeOnly "CraftTweaker2:CraftTweaker2-MC1120-Main:1.12-${crafttweakerVersion}"
+
+    // bloodmagic
+    compileOnly "curse.maven:blood-magic-224791:2822288"
+    runtimeOnly "curse.maven:blood-magic-224791:2822288"
 }

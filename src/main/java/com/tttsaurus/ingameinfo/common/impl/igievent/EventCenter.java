@@ -9,6 +9,9 @@ public final class EventCenter
     public final static GameTpsMtpsEvent gameTpsMtpsEvent = new GameTpsMtpsEvent();
     public final static EnterBiomeEvent enterBiomeEvent = new EnterBiomeEvent();
 
+    // bloodmagic
+    public final static BloodMagicEvent bloodMagicEvent = new BloodMagicEvent();
+
     // spotify
     public final static SpotifyOverlayEvent spotifyOverlayEvent = new SpotifyOverlayEvent();
     public final static SpotifyOverlayEditEvent spotifyOverlayEditEvent = new SpotifyOverlayEditEvent();

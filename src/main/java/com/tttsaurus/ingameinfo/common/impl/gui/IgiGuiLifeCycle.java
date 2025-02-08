@@ -1,5 +1,6 @@
 package com.tttsaurus.ingameinfo.common.impl.gui;
 
+import com.tttsaurus.ingameinfo.InGameInfoReborn;
 import com.tttsaurus.ingameinfo.common.api.event.IgiGuiInitEvent;
 import com.tttsaurus.ingameinfo.common.api.gui.IgiGuiContainer;
 import com.tttsaurus.ingameinfo.common.api.gui.delegate.placeholder.IPlaceholderDrawScreen;
@@ -41,6 +42,8 @@ import java.util.concurrent.atomic.AtomicBoolean;
 @SuppressWarnings("all")
 public final class IgiGuiLifeCycle
 {
+    private static ScaledResolution resolution = new ScaledResolution(Minecraft.getMinecraft());
+
     //<editor-fold desc="fixed update timing variables">
     // all in second
     private static int maxFps_FixedUpdate = 125;
@@ -107,8 +110,7 @@ public final class IgiGuiLifeCycle
     private static RandomAccessFile renderTimeDebugFile = null;
     //</editor-fold>
 
-    private static ScaledResolution resolution = new ScaledResolution(Minecraft.getMinecraft());
-
+    //<editor-fold desc="igi event calls">
     private static String lastBiomeRegistryName = "";
     private static void triggerIgiEvents()
     {
@@ -153,9 +155,20 @@ public final class IgiGuiLifeCycle
             int tps = (int)(Math.min(1000d / averageTickTime, 20d));
             EventCenter.gameTpsMtpsEvent.trigger(tps, averageTickTime);
         }
-    }
 
-    //<editor-fold desc="fixed & render update">
+        if (InGameInfoReborn.bloodmagicLoaded)
+        {
+            IgiNetwork.requestBloodMagicNbt((nbt) ->
+            {
+                int lp = nbt.getInteger("CurrentEssence");
+                int orbTier = nbt.getInteger("OrbTier");
+                EventCenter.bloodMagicEvent.trigger(lp, orbTier);
+            });
+        }
+    }
+    //</editor-fold>
+
+    //<editor-fold desc="fixed & render updates">
     private static double timer = 0.5f;
     private static void onFixedUpdate()
     {
