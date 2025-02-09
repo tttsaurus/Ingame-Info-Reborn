@@ -22,6 +22,7 @@ public final class InGameInfoReborn
 
     public static boolean crafttweakerLoaded;
     public static boolean bloodmagicLoaded;
+    public static boolean sereneseasonsLoaded;
 
     public static Logger logger;
     public static ASMDataTable asmDataTable;

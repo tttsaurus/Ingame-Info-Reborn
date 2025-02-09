@@ -38,6 +38,7 @@ public class CommonProxy
 
         InGameInfoReborn.crafttweakerLoaded = Loader.isModLoaded("crafttweaker");
         InGameInfoReborn.bloodmagicLoaded = Loader.isModLoaded("bloodmagic");
+        InGameInfoReborn.sereneseasonsLoaded = Loader.isModLoaded("sereneseasons");
 
         // crt support
         if (InGameInfoReborn.crafttweakerLoaded)

@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 // supports 0~2 args as input
+@SuppressWarnings("all")
 public abstract class EventBase<T> implements IEvent<T>
 {
     private final List<Object> listeners = new ArrayList<>();

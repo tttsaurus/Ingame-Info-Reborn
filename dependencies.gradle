@@ -58,4 +58,8 @@ dependencies {
     // bloodmagic
     compileOnly "curse.maven:blood-magic-224791:2822288"
     runtimeOnly "curse.maven:blood-magic-224791:2822288"
+
+    // sereneseasons
+    compileOnly "curse.maven:serene-seasons-291874:2799213"
+    runtimeOnly "curse.maven:serene-seasons-291874:2799213"
 }
