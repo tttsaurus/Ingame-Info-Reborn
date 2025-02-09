@@ -518,12 +518,12 @@ configurations {
     testRuntimeClasspath.extendsFrom(runtimeOnlyNonPublishable)
 }
 
-String mixinProviderSpec = 'zone.rong:mixinbooter:9.1'
+String mixinProviderSpec = 'zone.rong:mixinbooter:10.0'
 dependencies {
     if (usesMixins.toBoolean()) {
         annotationProcessor 'org.ow2.asm:asm-debug-all:5.2'
         // should use 24.1.1 but 30.0+ has a vulnerability fix
-        annotationProcessor 'com.google.guava:guava:30.0-jre'
+        annotationProcessor 'com.google.guava:guava:32.1.2-jre'
         // should use 2.8.6 but 2.8.9+ has a vulnerability fix
         annotationProcessor 'com.google.code.gson:gson:2.8.9'
 

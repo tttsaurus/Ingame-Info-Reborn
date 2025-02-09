@@ -447,7 +447,7 @@ public final class IgiGuiLifeCycle
             int screenTextureLoc = shaderProgram.getUniformLocation("screenTexture");
             GL20.glUniform1i(screenTextureLoc, 1);
             int enableAlphaLoc = shaderProgram.getUniformLocation("enableAlpha");
-            int alphaLoc = shaderProgram.getUniformLocation("alpha");
+            int alphaLoc = shaderProgram.getUniformLocation("targetAlpha");
             GL20.glUniform1i(enableAlphaLoc, IgiConfig.ENABLE_PP_ALPHA ? 1 : 0);
             GL20.glUniform1f(alphaLoc, IgiConfig.PP_ALPHA);
         }

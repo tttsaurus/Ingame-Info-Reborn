@@ -12,7 +12,8 @@ import com.tttsaurus.ingameinfo.proxy.CommonProxy;
 @Mod(modid = Tags.MODID,
      name = Tags.MODNAME,
      version = Tags.VERSION,
-     dependencies = "")
+     acceptedMinecraftVersions = "[1.12.2]",
+     dependencies = "required-after:mixinbooter@[10.0,)")
 public final class InGameInfoReborn
 {
     @SidedProxy(
