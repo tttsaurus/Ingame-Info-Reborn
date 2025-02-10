@@ -9,6 +9,7 @@ import com.tttsaurus.ingameinfo.common.api.gui.style.IStylePropertyCallbackPost;
 import com.tttsaurus.ingameinfo.common.api.gui.style.IStylePropertyCallbackPre;
 import com.tttsaurus.ingameinfo.common.api.gui.style.IStylePropertySetter;
 import com.tttsaurus.ingameinfo.common.api.reflection.TypeUtils;
+import com.tttsaurus.ingameinfo.common.api.render.RenderHints;
 import com.tttsaurus.ingameinfo.common.api.serialization.IDeserializer;
 import com.tttsaurus.ingameinfo.common.impl.appcommunication.spotify.SpotifyCommandHandler;
 import com.tttsaurus.ingameinfo.common.impl.gui.IgiGuiLifeCycle;
@@ -32,6 +33,8 @@ public class ClientProxy extends CommonProxy
         IgiGuiLifeCycle.setEnableShader(IgiConfig.ENABLE_POST_PROCESSING_SHADER);
         IgiGuiLifeCycle.setMaxFps_FixedUpdate(IgiConfig.FIXED_UPDATE_LIMIT);
         IgiGuiLifeCycle.setMaxFps_RefreshFbo(IgiConfig.RENDER_UPDATE_LIMIT);
+        IgiGuiLifeCycle.setEnableMultisampleOnFbo(false);
+        RenderHints.fboSampleNum(4);
 
         if (IgiConfig.ENABLE_SPOTIFY_INTEGRATION)
         {

@@ -1,5 +1,7 @@
 package com.tttsaurus.ingameinfo.common.api.render;
 
+import com.tttsaurus.ingameinfo.common.impl.gui.IgiGuiLifeCycle;
+
 public final class RenderHints
 {
     public static class GlStateManager
@@ -46,4 +48,7 @@ public final class RenderHints
     public static GlStateManager.BindTextureHint getGlStateManagerBindTextureHint() { return glStateManagerBindTextureHint; }
     public static Framebuffer.CreateFramebufferHint getFramebufferCreateFramebufferHint() { return framebufferCreateFramebufferHint; }
     public static int getFramebufferSampleNum() { return framebufferSampleNum; }
+
+    public static boolean getLineSmoothHint() { return !IgiGuiLifeCycle.getIsFboRunning() || IgiGuiLifeCycle.getEnableMultisampleOnFbo(); }
+    public static boolean getPolygonSmoothHint() { return !IgiGuiLifeCycle.getIsFboRunning() || IgiGuiLifeCycle.getEnableMultisampleOnFbo(); }
 }

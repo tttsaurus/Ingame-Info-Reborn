@@ -81,15 +81,12 @@ public final class IgiGuiLifeCycle
     private static boolean refreshFbo = true;
     private static Framebuffer fbo = null;
     private static Framebuffer shaderFbo = null;
-    private static int fboDisplayWidth;
-    private static int fboDisplayHeight;
-    private static int shaderFboDisplayWidth;
-    private static int shaderFboDisplayHeight;
-    private static int mcFboDisplayWidth;
-    private static int mcFboDisplayHeight;
     private static boolean enableMultisampleOnFbo = true;
     public static void setEnableMultisampleOnFbo(boolean flag) { enableMultisampleOnFbo = flag; }
+    public static boolean getEnableMultisampleOnFbo() { return enableMultisampleOnFbo; }
     private static Framebuffer resolvedFbo = null;
+    private static boolean isFboRunning = false;
+    public static boolean getIsFboRunning() { return isFboRunning; }
     //</editor-fold>
 
     //<editor-fold desc="shader variables">
@@ -181,8 +178,8 @@ public final class IgiGuiLifeCycle
     }
     private static void onRenderUpdate()
     {
-        boolean useFbo = enableFbo && OpenGlHelper.framebufferSupported;
-        if (useFbo)
+        isFboRunning = enableFbo && OpenGlHelper.framebufferSupported;
+        if (isFboRunning)
         {
             shaderCompile();
             if (!refreshFbo)
@@ -204,7 +201,7 @@ public final class IgiGuiLifeCycle
                 return;
             }
             refreshFbo = false;
-            fboBind();
+            bindFbo();
         }
 
         //<editor-fold desc="gui container render update">
@@ -251,18 +248,18 @@ public final class IgiGuiLifeCycle
         }
         //</editor-fold>
 
-        if (useFbo)
+        if (isFboRunning)
         {
             if (enableShader)
             {
                 fbo.unbindFramebuffer();
-                shaderFboBind();
+                bindShaderFbo();
                 shaderActivate();
                 RenderUtils.renderFbo(resolution, fbo, false);
                 shaderDeactivate();
                 shaderFbo.unbindFramebuffer();
                 if (enableMultisampleOnFbo) resolveMultisampledFbo();
-                mcFboBind();
+                bindMcFbo();
 
                 if (enableMultisampleOnFbo)
                     RenderUtils.renderFbo(resolution, resolvedFbo, true);
@@ -273,7 +270,7 @@ public final class IgiGuiLifeCycle
             {
                 fbo.unbindFramebuffer();
                 if (enableMultisampleOnFbo) resolveMultisampledFbo();
-                mcFboBind();
+                bindMcFbo();
 
                 if (enableMultisampleOnFbo)
                     RenderUtils.renderFbo(resolution, resolvedFbo, true);
@@ -359,26 +356,23 @@ public final class IgiGuiLifeCycle
     //<editor-fold desc="fbo methods">
     private static void resolveMultisampledFbo()
     {
+        Minecraft minecraft = Minecraft.getMinecraft();
+
         // init resolvedFbo
         if (resolvedFbo == null)
         {
-            resolvedFbo = new Framebuffer(fboDisplayWidth, fboDisplayHeight, true);
+            resolvedFbo = new Framebuffer(minecraft.displayWidth, minecraft.displayHeight, true);
             resolvedFbo.framebufferColor[0] = 0f;
             resolvedFbo.framebufferColor[1] = 0f;
             resolvedFbo.framebufferColor[2] = 0f;
             resolvedFbo.framebufferColor[3] = 0f;
             resolvedFbo.enableStencil();
-            resolvedFbo.framebufferClear();
         }
 
-        if (resolvedFbo.framebufferWidth != fboDisplayWidth || resolvedFbo.framebufferHeight != fboDisplayHeight)
-        {
-            resolvedFbo.createBindFramebuffer(fboDisplayWidth, fboDisplayHeight);
-        }
+        if (resolvedFbo.framebufferWidth != minecraft.displayWidth || resolvedFbo.framebufferHeight != minecraft.displayHeight)
+            resolvedFbo.createBindFramebuffer(minecraft.displayWidth, minecraft.displayHeight);
         else
-        {
             resolvedFbo.framebufferClear();
-        }
 
         if (enableShader)
             OpenGlHelper.glBindFramebuffer(GL30.GL_READ_FRAMEBUFFER, shaderFbo.framebufferObject);
@@ -390,88 +384,71 @@ public final class IgiGuiLifeCycle
         GL30.glBlitFramebuffer(0, 0, resolvedFbo.framebufferWidth, resolvedFbo.framebufferHeight, 0, 0, resolvedFbo.framebufferWidth, resolvedFbo.framebufferHeight, GL11.GL_COLOR_BUFFER_BIT, GL11.GL_NEAREST);
         resolvedFbo.unbindFramebuffer();
     }
-    private static void shaderFboBind()
+    private static void bindShaderFbo()
     {
-        if (enableMultisampleOnFbo) RenderHints.multisampleFbo(true);
-
         Minecraft minecraft = Minecraft.getMinecraft();
 
         // init shaderFbo
         if (shaderFbo == null)
         {
-            shaderFboDisplayWidth = minecraft.displayWidth;
-            shaderFboDisplayHeight = minecraft.displayHeight;
-            shaderFbo = new Framebuffer(shaderFboDisplayWidth, shaderFboDisplayHeight, true);
+            if (enableMultisampleOnFbo) RenderHints.multisampleFbo(true);
+            shaderFbo = new Framebuffer(minecraft.displayWidth, minecraft.displayHeight, true);
             shaderFbo.framebufferColor[0] = 0f;
             shaderFbo.framebufferColor[1] = 0f;
             shaderFbo.framebufferColor[2] = 0f;
             shaderFbo.framebufferColor[3] = 0f;
             shaderFbo.enableStencil();
+            if (enableMultisampleOnFbo) RenderHints.multisampleFbo(false);
         }
 
-        if (shaderFboDisplayWidth != minecraft.displayWidth || shaderFboDisplayHeight != minecraft.displayHeight)
+        if (shaderFbo.framebufferWidth != minecraft.displayWidth || shaderFbo.framebufferHeight != minecraft.displayHeight)
         {
-            shaderFboDisplayWidth = minecraft.displayWidth;
-            shaderFboDisplayHeight = minecraft.displayHeight;
-            shaderFbo.createBindFramebuffer(shaderFboDisplayWidth, shaderFboDisplayHeight);
+            if (enableMultisampleOnFbo) RenderHints.multisampleFbo(true);
+            shaderFbo.createBindFramebuffer(minecraft.displayWidth, minecraft.displayHeight);
+            if (enableMultisampleOnFbo) RenderHints.multisampleFbo(false);
         }
         else
-        {
             shaderFbo.framebufferClear();
-        }
 
         shaderFbo.bindFramebuffer(true);
-
-        if (enableMultisampleOnFbo) RenderHints.multisampleFbo(false);
     }
-    private static void fboBind()
+    private static void bindFbo()
     {
-        if (enableMultisampleOnFbo) RenderHints.multisampleFbo(true);
-
         Minecraft minecraft = Minecraft.getMinecraft();
 
         // init fbo
         if (fbo == null)
         {
-            fboDisplayWidth = minecraft.displayWidth;
-            fboDisplayHeight = minecraft.displayHeight;
-            mcFboDisplayWidth = minecraft.displayWidth;
-            mcFboDisplayHeight = minecraft.displayHeight;
-            fbo = new Framebuffer(fboDisplayWidth, fboDisplayHeight, true);
+            if (enableMultisampleOnFbo) RenderHints.multisampleFbo(true);
+            fbo = new Framebuffer(minecraft.displayWidth, minecraft.displayHeight, true);
             fbo.framebufferColor[0] = 0f;
             fbo.framebufferColor[1] = 0f;
             fbo.framebufferColor[2] = 0f;
             fbo.framebufferColor[3] = 0f;
             fbo.enableStencil();
+            if (enableMultisampleOnFbo) RenderHints.multisampleFbo(false);
         }
 
-        if (fboDisplayWidth != minecraft.displayWidth || fboDisplayHeight != minecraft.displayHeight)
+        if (fbo.framebufferWidth != minecraft.displayWidth || fbo.framebufferHeight != minecraft.displayHeight)
         {
-            fboDisplayWidth = minecraft.displayWidth;
-            fboDisplayHeight = minecraft.displayHeight;
-            fbo.createBindFramebuffer(fboDisplayWidth, fboDisplayHeight);
+            if (enableMultisampleOnFbo) RenderHints.multisampleFbo(true);
+            fbo.createBindFramebuffer(minecraft.displayWidth, minecraft.displayHeight);
+            if (enableMultisampleOnFbo) RenderHints.multisampleFbo(false);
         }
         else
-        {
             fbo.framebufferClear();
-        }
 
         fbo.bindFramebuffer(true);
-
-        if (enableMultisampleOnFbo) RenderHints.multisampleFbo(false);
     }
-    private static void mcFboBind()
+    private static void bindMcFbo()
     {
         Minecraft minecraft = Minecraft.getMinecraft();
+        Framebuffer mcFbo = minecraft.getFramebuffer();
 
-        if (mcFboDisplayWidth != minecraft.displayWidth || mcFboDisplayHeight != minecraft.displayHeight)
-        {
-            mcFboDisplayWidth = minecraft.displayWidth;
-            mcFboDisplayHeight = minecraft.displayHeight;
-            minecraft.getFramebuffer().createBindFramebuffer(mcFboDisplayWidth, mcFboDisplayHeight);
-        }
+        if (mcFbo.framebufferWidth != minecraft.displayWidth || mcFbo.framebufferHeight != minecraft.displayHeight)
+            mcFbo.createBindFramebuffer(minecraft.displayWidth, minecraft.displayHeight);
 
-        Minecraft.getMinecraft().getFramebuffer().bindFramebuffer(true);
+        mcFbo.bindFramebuffer(true);
     }
     //</editor-fold>
 

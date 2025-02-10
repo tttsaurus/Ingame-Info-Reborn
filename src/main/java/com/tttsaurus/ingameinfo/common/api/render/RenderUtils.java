@@ -57,8 +57,11 @@ public final class RenderUtils
         GlStateManager.tryBlendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO);
         GlStateManager.color(r, g, b, a);
 
-        //GlStateManager.glPolygonMode(GL11.GL_FRONT_AND_BACK, GL11.GL_FILL);
-        //GL11.glEnable(GL11.GL_POLYGON_SMOOTH);
+        if (RenderHints.getPolygonSmoothHint())
+        {
+            GlStateManager.glPolygonMode(GL11.GL_FRONT_AND_BACK, GL11.GL_FILL);
+            GL11.glEnable(GL11.GL_POLYGON_SMOOTH);
+        }
 
         GlStateManager.pushMatrix();
         GlStateManager.translate(0, 0, zLevel);
@@ -84,7 +87,7 @@ public final class RenderUtils
 
         GlStateManager.popMatrix();
 
-        //GL11.glDisable(GL11.GL_POLYGON_SMOOTH);
+        if (RenderHints.getPolygonSmoothHint()) GL11.glDisable(GL11.GL_POLYGON_SMOOTH);
     }
 
     public static void renderRoundedRectOutline(float x, float y, float width, float height, float radius, float thickness, int color)
@@ -103,8 +106,11 @@ public final class RenderUtils
         GlStateManager.glLineWidth(thickness * (float)(new ScaledResolution(Minecraft.getMinecraft())).getScaleFactor());
         GlStateManager.color(r, g, b, a);
 
-        GL11.glEnable(GL11.GL_LINE_SMOOTH);
-        GL11.glHint(GL11.GL_LINE_SMOOTH_HINT, GL11.GL_NICEST);
+        if (RenderHints.getLineSmoothHint())
+        {
+            GL11.glEnable(GL11.GL_LINE_SMOOTH);
+            GL11.glHint(GL11.GL_LINE_SMOOTH_HINT, GL11.GL_NICEST);
+        }
 
         GlStateManager.pushMatrix();
         GlStateManager.translate(0, 0, zLevel);
@@ -130,7 +136,7 @@ public final class RenderUtils
 
         GlStateManager.popMatrix();
 
-        GL11.glDisable(GL11.GL_LINE_SMOOTH);
+        if (RenderHints.getLineSmoothHint()) GL11.glDisable(GL11.GL_LINE_SMOOTH);
     }
 
     private static void addArcVertices(BufferBuilder bufferbuilder, float cx, float cy, float radius, float startAngle, float endAngle, int segments)
