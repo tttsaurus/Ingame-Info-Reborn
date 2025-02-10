@@ -103,8 +103,8 @@ public final class RenderUtils
         GlStateManager.glLineWidth(thickness * (float)(new ScaledResolution(Minecraft.getMinecraft())).getScaleFactor());
         GlStateManager.color(r, g, b, a);
 
-        //GL11.glEnable(GL11.GL_LINE_SMOOTH);
-        //GL11.glHint(GL11.GL_LINE_SMOOTH_HINT, GL11.GL_NICEST);
+        GL11.glEnable(GL11.GL_LINE_SMOOTH);
+        GL11.glHint(GL11.GL_LINE_SMOOTH_HINT, GL11.GL_NICEST);
 
         GlStateManager.pushMatrix();
         GlStateManager.translate(0, 0, zLevel);
@@ -130,7 +130,7 @@ public final class RenderUtils
 
         GlStateManager.popMatrix();
 
-        //GL11.glDisable(GL11.GL_LINE_SMOOTH);
+        GL11.glDisable(GL11.GL_LINE_SMOOTH);
     }
 
     private static void addArcVertices(BufferBuilder bufferbuilder, float cx, float cy, float radius, float startAngle, float endAngle, int segments)

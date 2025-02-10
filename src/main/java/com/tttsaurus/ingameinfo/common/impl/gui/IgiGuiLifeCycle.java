@@ -5,6 +5,7 @@ import com.tttsaurus.ingameinfo.common.api.gui.IgiGuiContainer;
 import com.tttsaurus.ingameinfo.common.api.gui.delegate.placeholder.IPlaceholderDrawScreen;
 import com.tttsaurus.ingameinfo.common.api.gui.delegate.placeholder.IPlaceholderKeyTyped;
 import com.tttsaurus.ingameinfo.common.api.function.IFunc;
+import com.tttsaurus.ingameinfo.common.api.render.RenderHints;
 import com.tttsaurus.ingameinfo.common.api.render.RenderUtils;
 import com.tttsaurus.ingameinfo.common.impl.igievent.EventCenter;
 import com.tttsaurus.ingameinfo.common.impl.network.IgiNetwork;
@@ -86,6 +87,9 @@ public final class IgiGuiLifeCycle
     private static int shaderFboDisplayHeight;
     private static int mcFboDisplayWidth;
     private static int mcFboDisplayHeight;
+    private static boolean enableMultisampleOnFbo = true;
+    public static void setEnableMultisampleOnFbo(boolean flag) { enableMultisampleOnFbo = flag; }
+    private static Framebuffer resolvedFbo = null;
     //</editor-fold>
 
     //<editor-fold desc="shader variables">
@@ -184,9 +188,19 @@ public final class IgiGuiLifeCycle
             if (!refreshFbo)
             {
                 if (enableShader)
-                    RenderUtils.renderFbo(resolution, shaderFbo, true);
+                {
+                    if (enableMultisampleOnFbo)
+                        RenderUtils.renderFbo(resolution, resolvedFbo, true);
+                    else
+                        RenderUtils.renderFbo(resolution, shaderFbo, true);
+                }
                 else
-                    RenderUtils.renderFbo(resolution, fbo, true);
+                {
+                    if (enableMultisampleOnFbo)
+                        RenderUtils.renderFbo(resolution, resolvedFbo, true);
+                    else
+                        RenderUtils.renderFbo(resolution, fbo, true);
+                }
                 return;
             }
             refreshFbo = false;
@@ -247,16 +261,24 @@ public final class IgiGuiLifeCycle
                 RenderUtils.renderFbo(resolution, fbo, false);
                 shaderDeactivate();
                 shaderFbo.unbindFramebuffer();
+                if (enableMultisampleOnFbo) resolveMultisampledFbo();
                 mcFboBind();
 
-                RenderUtils.renderFbo(resolution, shaderFbo, true);
+                if (enableMultisampleOnFbo)
+                    RenderUtils.renderFbo(resolution, resolvedFbo, true);
+                else
+                    RenderUtils.renderFbo(resolution, shaderFbo, true);
             }
             else
             {
                 fbo.unbindFramebuffer();
+                if (enableMultisampleOnFbo) resolveMultisampledFbo();
                 mcFboBind();
 
-                RenderUtils.renderFbo(resolution, fbo, true);
+                if (enableMultisampleOnFbo)
+                    RenderUtils.renderFbo(resolution, resolvedFbo, true);
+                else
+                    RenderUtils.renderFbo(resolution, fbo, true);
             }
         }
     }
@@ -335,16 +357,51 @@ public final class IgiGuiLifeCycle
     //</editor-fold>
 
     //<editor-fold desc="fbo methods">
+    private static void resolveMultisampledFbo()
+    {
+        // init resolvedFbo
+        if (resolvedFbo == null)
+        {
+            resolvedFbo = new Framebuffer(fboDisplayWidth, fboDisplayHeight, true);
+            resolvedFbo.framebufferColor[0] = 0f;
+            resolvedFbo.framebufferColor[1] = 0f;
+            resolvedFbo.framebufferColor[2] = 0f;
+            resolvedFbo.framebufferColor[3] = 0f;
+            resolvedFbo.enableStencil();
+            resolvedFbo.framebufferClear();
+        }
+
+        if (resolvedFbo.framebufferWidth != fboDisplayWidth || resolvedFbo.framebufferHeight != fboDisplayHeight)
+        {
+            resolvedFbo.createBindFramebuffer(fboDisplayWidth, fboDisplayHeight);
+        }
+        else
+        {
+            resolvedFbo.framebufferClear();
+        }
+
+        if (enableShader)
+            OpenGlHelper.glBindFramebuffer(GL30.GL_READ_FRAMEBUFFER, shaderFbo.framebufferObject);
+        else
+            OpenGlHelper.glBindFramebuffer(GL30.GL_READ_FRAMEBUFFER, fbo.framebufferObject);
+
+        OpenGlHelper.glBindFramebuffer(GL30.GL_DRAW_FRAMEBUFFER, resolvedFbo.framebufferObject);
+
+        GL30.glBlitFramebuffer(0, 0, resolvedFbo.framebufferWidth, resolvedFbo.framebufferHeight, 0, 0, resolvedFbo.framebufferWidth, resolvedFbo.framebufferHeight, GL11.GL_COLOR_BUFFER_BIT, GL11.GL_NEAREST);
+        resolvedFbo.unbindFramebuffer();
+    }
     private static void shaderFboBind()
     {
+        if (enableMultisampleOnFbo) RenderHints.multisampleFbo(true);
+
         Minecraft minecraft = Minecraft.getMinecraft();
 
-        // init fbo
+        // init shaderFbo
         if (shaderFbo == null)
         {
             shaderFboDisplayWidth = minecraft.displayWidth;
             shaderFboDisplayHeight = minecraft.displayHeight;
-            shaderFbo = new Framebuffer(fboDisplayWidth, fboDisplayHeight, true);
+            shaderFbo = new Framebuffer(shaderFboDisplayWidth, shaderFboDisplayHeight, true);
             shaderFbo.framebufferColor[0] = 0f;
             shaderFbo.framebufferColor[1] = 0f;
             shaderFbo.framebufferColor[2] = 0f;
@@ -364,9 +421,13 @@ public final class IgiGuiLifeCycle
         }
 
         shaderFbo.bindFramebuffer(true);
+
+        if (enableMultisampleOnFbo) RenderHints.multisampleFbo(false);
     }
     private static void fboBind()
     {
+        if (enableMultisampleOnFbo) RenderHints.multisampleFbo(true);
+
         Minecraft minecraft = Minecraft.getMinecraft();
 
         // init fbo
@@ -396,6 +457,8 @@ public final class IgiGuiLifeCycle
         }
 
         fbo.bindFramebuffer(true);
+
+        if (enableMultisampleOnFbo) RenderHints.multisampleFbo(false);
     }
     private static void mcFboBind()
     {
