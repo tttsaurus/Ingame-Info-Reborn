@@ -185,10 +185,7 @@ public final class IgiGuiLifeCycle
             {
                 if (enableShader)
                 {
-                    if (enableMultisampleOnFbo)
-                        RenderUtils.renderFbo(resolution, resolvedFbo, true);
-                    else
-                        RenderUtils.renderFbo(resolution, shaderFbo, true);
+                    RenderUtils.renderFbo(resolution, shaderFbo, true);
                 }
                 else
                 {
@@ -255,13 +252,9 @@ public final class IgiGuiLifeCycle
                 activateShader();
                 RenderUtils.renderFbo(resolution, fbo, false);
                 deactivateShader();
-                if (enableMultisampleOnFbo) resolveMultisampledFbo();
                 bindMcFbo();
 
-                if (enableMultisampleOnFbo)
-                    RenderUtils.renderFbo(resolution, resolvedFbo, true);
-                else
-                    RenderUtils.renderFbo(resolution, shaderFbo, true);
+                RenderUtils.renderFbo(resolution, shaderFbo, true);
             }
             else
             {
@@ -372,11 +365,7 @@ public final class IgiGuiLifeCycle
             resolvedFbo.unbindFramebuffer();
         }
 
-        if (enableShader)
-            OpenGlHelper.glBindFramebuffer(GL30.GL_READ_FRAMEBUFFER, shaderFbo.framebufferObject);
-        else
-            OpenGlHelper.glBindFramebuffer(GL30.GL_READ_FRAMEBUFFER, fbo.framebufferObject);
-
+        OpenGlHelper.glBindFramebuffer(GL30.GL_READ_FRAMEBUFFER, fbo.framebufferObject);
         OpenGlHelper.glBindFramebuffer(GL30.GL_DRAW_FRAMEBUFFER, resolvedFbo.framebufferObject);
 
         GL30.glBlitFramebuffer(0, 0, resolvedFbo.framebufferWidth, resolvedFbo.framebufferHeight, 0, 0, resolvedFbo.framebufferWidth, resolvedFbo.framebufferHeight, GL11.GL_COLOR_BUFFER_BIT, GL11.GL_NEAREST);
@@ -388,38 +377,18 @@ public final class IgiGuiLifeCycle
         // init shaderFbo
         if (shaderFbo == null)
         {
-            if (enableMultisampleOnFbo)
-            {
-                RenderHints.multisampleTexBind();
-                RenderHints.multisampleFbo();
-            }
             shaderFbo = new Framebuffer(minecraft.displayWidth, minecraft.displayHeight, true);
             shaderFbo.framebufferColor[0] = 0f;
             shaderFbo.framebufferColor[1] = 0f;
             shaderFbo.framebufferColor[2] = 0f;
             shaderFbo.framebufferColor[3] = 0f;
             shaderFbo.enableStencil();
-            if (enableMultisampleOnFbo)
-            {
-                RenderHints.normalTexBind();
-                RenderHints.normalFbo();
-            }
             shaderFbo.bindFramebuffer(true);
         }
 
         if (shaderFbo.framebufferWidth != minecraft.displayWidth || shaderFbo.framebufferHeight != minecraft.displayHeight)
         {
-            if (enableMultisampleOnFbo)
-            {
-                RenderHints.multisampleTexBind();
-                RenderHints.multisampleFbo();
-            }
             shaderFbo.createBindFramebuffer(minecraft.displayWidth, minecraft.displayHeight);
-            if (enableMultisampleOnFbo)
-            {
-                RenderHints.normalTexBind();
-                RenderHints.normalFbo();
-            }
             shaderFbo.bindFramebuffer(true);
         }
         else
