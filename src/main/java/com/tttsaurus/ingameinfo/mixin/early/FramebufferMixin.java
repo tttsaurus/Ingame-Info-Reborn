@@ -89,4 +89,20 @@ public class FramebufferMixin
         else if (RenderHints.getFramebufferCreateFramebufferHint() == RenderHints.Framebuffer.CreateFramebufferHint.TEXTURE_2D_MULTISAMPLE)
             GL30.glRenderbufferStorageMultisample(GL30.GL_RENDERBUFFER, RenderHints.getFramebufferSampleNum(), EXTPackedDepthStencil.GL_DEPTH24_STENCIL8_EXT, width, height);
     }
+
+    @WrapOperation(
+            method = "framebufferClear",
+            at = @At(
+                    value = "INVOKE",
+                    target = "Lnet/minecraft/client/shader/Framebuffer;unbindFramebuffer()V"
+            ))
+    public void mixin_framebufferClear_Framebuffer$unbindFramebuffer(Framebuffer instance, Operation<Void> original)
+    {
+        if (RenderHints.getFramebufferClearHint() == RenderHints.Framebuffer.FramebufferClearHint.UNBIND_FBO)
+            original.call(instance);
+        else if (RenderHints.getFramebufferClearHint() == RenderHints.Framebuffer.FramebufferClearHint.DONT_UNBIND_FBO)
+        {
+            // don't unbind
+        }
+    }
 }

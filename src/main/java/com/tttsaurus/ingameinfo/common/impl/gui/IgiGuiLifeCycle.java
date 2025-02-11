@@ -371,8 +371,6 @@ public final class IgiGuiLifeCycle
             resolvedFbo.createBindFramebuffer(minecraft.displayWidth, minecraft.displayHeight);
             resolvedFbo.unbindFramebuffer();
         }
-        else
-            resolvedFbo.framebufferClear();
 
         if (enableShader)
             OpenGlHelper.glBindFramebuffer(GL30.GL_READ_FRAMEBUFFER, shaderFbo.framebufferObject);
@@ -406,6 +404,7 @@ public final class IgiGuiLifeCycle
                 RenderHints.normalTexBind();
                 RenderHints.normalFbo();
             }
+            shaderFbo.bindFramebuffer(true);
         }
 
         if (shaderFbo.framebufferWidth != minecraft.displayWidth || shaderFbo.framebufferHeight != minecraft.displayHeight)
@@ -421,11 +420,14 @@ public final class IgiGuiLifeCycle
                 RenderHints.normalTexBind();
                 RenderHints.normalFbo();
             }
+            shaderFbo.bindFramebuffer(true);
         }
         else
+        {
+            RenderHints.clearFboWithoutUnbind();
             shaderFbo.framebufferClear();
-
-        shaderFbo.bindFramebuffer(true);
+            RenderHints.clearFboWithUnbind();
+        }
     }
     private static void bindFbo()
     {
@@ -450,6 +452,7 @@ public final class IgiGuiLifeCycle
                 RenderHints.normalTexBind();
                 RenderHints.normalFbo();
             }
+            fbo.bindFramebuffer(true);
         }
 
         if (fbo.framebufferWidth != minecraft.displayWidth || fbo.framebufferHeight != minecraft.displayHeight)
@@ -465,11 +468,14 @@ public final class IgiGuiLifeCycle
                 RenderHints.normalTexBind();
                 RenderHints.normalFbo();
             }
+            fbo.bindFramebuffer(true);
         }
         else
+        {
+            RenderHints.clearFboWithoutUnbind();
             fbo.framebufferClear();
-
-        fbo.bindFramebuffer(true);
+            RenderHints.clearFboWithUnbind();
+        }
     }
     private static void bindMcFbo()
     {

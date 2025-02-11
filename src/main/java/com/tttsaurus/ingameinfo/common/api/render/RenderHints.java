@@ -20,6 +20,11 @@ public final class RenderHints
             TEXTURE_2D,
             TEXTURE_2D_MULTISAMPLE
         }
+        public enum FramebufferClearHint
+        {
+            UNBIND_FBO,
+            DONT_UNBIND_FBO
+        }
     }
 
     private static boolean glVersionParsed = false;
@@ -29,6 +34,7 @@ public final class RenderHints
 
     private static GlStateManager.BindTextureHint glStateManagerBindTextureHint = GlStateManager.BindTextureHint.TEXTURE_2D;
     private static Framebuffer.CreateFramebufferHint framebufferCreateFramebufferHint = Framebuffer.CreateFramebufferHint.TEXTURE_2D;
+    private static Framebuffer.FramebufferClearHint framebufferClearHint = Framebuffer.FramebufferClearHint.UNBIND_FBO;
     private static int framebufferSampleNum = 2;
 
     public static void multisampleTexBind()
@@ -47,6 +53,14 @@ public final class RenderHints
     {
         framebufferCreateFramebufferHint = Framebuffer.CreateFramebufferHint.TEXTURE_2D;
     }
+    public static void clearFboWithoutUnbind()
+    {
+        framebufferClearHint = Framebuffer.FramebufferClearHint.DONT_UNBIND_FBO;
+    }
+    public static void clearFboWithUnbind()
+    {
+        framebufferClearHint = Framebuffer.FramebufferClearHint.UNBIND_FBO;
+    }
     public static void fboSampleNum(int num)
     {
         if (num < 1) num = 1;
@@ -56,6 +70,7 @@ public final class RenderHints
 
     public static GlStateManager.BindTextureHint getGlStateManagerBindTextureHint() { return glStateManagerBindTextureHint; }
     public static Framebuffer.CreateFramebufferHint getFramebufferCreateFramebufferHint() { return framebufferCreateFramebufferHint; }
+    public static Framebuffer.FramebufferClearHint getFramebufferClearHint() { return framebufferClearHint; }
     public static int getFramebufferSampleNum() { return framebufferSampleNum; }
 
     public static boolean getLineSmoothHint() { return !IgiGuiLifeCycle.getEnableFbo() || IgiGuiLifeCycle.getEnableMultisampleOnFbo(); }
