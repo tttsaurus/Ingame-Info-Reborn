@@ -25,18 +25,21 @@ public final class RenderHints
     private static Framebuffer.CreateFramebufferHint framebufferCreateFramebufferHint = Framebuffer.CreateFramebufferHint.TEXTURE_2D;
     private static int framebufferSampleNum = 2;
 
-    public static void multisampleFbo(boolean flag)
+    public static void multisampleTexBind()
     {
-        if (flag)
-        {
-            glStateManagerBindTextureHint = RenderHints.GlStateManager.BindTextureHint.TEXTURE_2D_MULTISAMPLE;
-            framebufferCreateFramebufferHint = RenderHints.Framebuffer.CreateFramebufferHint.TEXTURE_2D_MULTISAMPLE;
-        }
-        else
-        {
-            glStateManagerBindTextureHint = RenderHints.GlStateManager.BindTextureHint.TEXTURE_2D;
-            framebufferCreateFramebufferHint = RenderHints.Framebuffer.CreateFramebufferHint.TEXTURE_2D;
-        }
+        glStateManagerBindTextureHint = GlStateManager.BindTextureHint.TEXTURE_2D_MULTISAMPLE;
+    }
+    public static void normalTexBind()
+    {
+        glStateManagerBindTextureHint = GlStateManager.BindTextureHint.TEXTURE_2D;
+    }
+    public static void multisampleFbo()
+    {
+        framebufferCreateFramebufferHint = Framebuffer.CreateFramebufferHint.TEXTURE_2D_MULTISAMPLE;
+    }
+    public static void normalFbo()
+    {
+        framebufferCreateFramebufferHint = Framebuffer.CreateFramebufferHint.TEXTURE_2D;
     }
     public static void fboSampleNum(int num)
     {

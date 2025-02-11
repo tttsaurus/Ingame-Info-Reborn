@@ -181,7 +181,7 @@ public final class IgiGuiLifeCycle
         isFboRunning = enableFbo && OpenGlHelper.framebufferSupported;
         if (isFboRunning)
         {
-            shaderCompile();
+            compileShader();
             if (!refreshFbo)
             {
                 if (enableShader)
@@ -254,9 +254,9 @@ public final class IgiGuiLifeCycle
             {
                 fbo.unbindFramebuffer();
                 bindShaderFbo();
-                shaderActivate();
+                activateShader();
                 RenderUtils.renderFbo(resolution, fbo, false);
-                shaderDeactivate();
+                deactivateShader();
                 shaderFbo.unbindFramebuffer();
                 if (enableMultisampleOnFbo) resolveMultisampledFbo();
                 bindMcFbo();
@@ -391,21 +391,37 @@ public final class IgiGuiLifeCycle
         // init shaderFbo
         if (shaderFbo == null)
         {
-            if (enableMultisampleOnFbo) RenderHints.multisampleFbo(true);
+            if (enableMultisampleOnFbo)
+            {
+                RenderHints.multisampleTexBind();
+                RenderHints.multisampleFbo();
+            }
             shaderFbo = new Framebuffer(minecraft.displayWidth, minecraft.displayHeight, true);
             shaderFbo.framebufferColor[0] = 0f;
             shaderFbo.framebufferColor[1] = 0f;
             shaderFbo.framebufferColor[2] = 0f;
             shaderFbo.framebufferColor[3] = 0f;
             shaderFbo.enableStencil();
-            if (enableMultisampleOnFbo) RenderHints.multisampleFbo(false);
+            if (enableMultisampleOnFbo)
+            {
+                RenderHints.normalTexBind();
+                RenderHints.normalFbo();
+            }
         }
 
         if (shaderFbo.framebufferWidth != minecraft.displayWidth || shaderFbo.framebufferHeight != minecraft.displayHeight)
         {
-            if (enableMultisampleOnFbo) RenderHints.multisampleFbo(true);
+            if (enableMultisampleOnFbo)
+            {
+                RenderHints.multisampleTexBind();
+                RenderHints.multisampleFbo();
+            }
             shaderFbo.createBindFramebuffer(minecraft.displayWidth, minecraft.displayHeight);
-            if (enableMultisampleOnFbo) RenderHints.multisampleFbo(false);
+            if (enableMultisampleOnFbo)
+            {
+                RenderHints.normalTexBind();
+                RenderHints.normalFbo();
+            }
         }
         else
             shaderFbo.framebufferClear();
@@ -419,21 +435,37 @@ public final class IgiGuiLifeCycle
         // init fbo
         if (fbo == null)
         {
-            if (enableMultisampleOnFbo) RenderHints.multisampleFbo(true);
+            if (enableMultisampleOnFbo)
+            {
+                RenderHints.multisampleTexBind();
+                RenderHints.multisampleFbo();
+            }
             fbo = new Framebuffer(minecraft.displayWidth, minecraft.displayHeight, true);
             fbo.framebufferColor[0] = 0f;
             fbo.framebufferColor[1] = 0f;
             fbo.framebufferColor[2] = 0f;
             fbo.framebufferColor[3] = 0f;
             fbo.enableStencil();
-            if (enableMultisampleOnFbo) RenderHints.multisampleFbo(false);
+            if (enableMultisampleOnFbo)
+            {
+                RenderHints.normalTexBind();
+                RenderHints.normalFbo();
+            }
         }
 
         if (fbo.framebufferWidth != minecraft.displayWidth || fbo.framebufferHeight != minecraft.displayHeight)
         {
-            if (enableMultisampleOnFbo) RenderHints.multisampleFbo(true);
+            if (enableMultisampleOnFbo)
+            {
+                RenderHints.multisampleTexBind();
+                RenderHints.multisampleFbo();
+            }
             fbo.createBindFramebuffer(minecraft.displayWidth, minecraft.displayHeight);
-            if (enableMultisampleOnFbo) RenderHints.multisampleFbo(false);
+            if (enableMultisampleOnFbo)
+            {
+                RenderHints.normalTexBind();
+                RenderHints.normalFbo();
+            }
         }
         else
             fbo.framebufferClear();
@@ -453,7 +485,7 @@ public final class IgiGuiLifeCycle
     //</editor-fold>
 
     //<editor-fold desc="shader methods">
-    private static void shaderCompile()
+    private static void compileShader()
     {
         // init shader program
         if (shaderProgram == null)
@@ -465,7 +497,7 @@ public final class IgiGuiLifeCycle
             shaderProgram.setup();
         }
     }
-    private static void shaderActivate()
+    private static void activateShader()
     {
         programID = GL11.glGetInteger(GL20.GL_CURRENT_PROGRAM);
 
@@ -477,7 +509,10 @@ public final class IgiGuiLifeCycle
         GlStateManager.setActiveTexture(GL13.GL_TEXTURE1);
         GL11.glGetInteger(GL11.GL_TEXTURE_BINDING_2D, intBuffer);
         texUnit1TextureID = intBuffer.get(0);
+
+        if (enableMultisampleOnFbo) RenderHints.multisampleTexBind();
         fbo.bindFramebufferTexture();
+        if (enableMultisampleOnFbo) RenderHints.normalTexBind();
 
         GlStateManager.setActiveTexture(texUnit);
 
@@ -491,8 +526,14 @@ public final class IgiGuiLifeCycle
             GL20.glUniform1i(enableAlphaLoc, IgiConfig.ENABLE_PP_ALPHA ? 1 : 0);
             GL20.glUniform1f(alphaLoc, IgiConfig.PP_ALPHA);
         }
+
+        if (enableMultisampleOnFbo)
+        {
+            GL11.glEnable(GL40.GL_SAMPLE_SHADING);
+            GL40.glMinSampleShading(1f);
+        }
     }
-    private static void shaderDeactivate()
+    private static void deactivateShader()
     {
         GL11.glGetInteger(GL13.GL_ACTIVE_TEXTURE, intBuffer);
         int texUnit = intBuffer.get(0);

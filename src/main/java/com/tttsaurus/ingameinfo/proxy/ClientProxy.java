@@ -33,7 +33,7 @@ public class ClientProxy extends CommonProxy
         IgiGuiLifeCycle.setEnableShader(IgiConfig.ENABLE_POST_PROCESSING_SHADER);
         IgiGuiLifeCycle.setMaxFps_FixedUpdate(IgiConfig.FIXED_UPDATE_LIMIT);
         IgiGuiLifeCycle.setMaxFps_RefreshFbo(IgiConfig.RENDER_UPDATE_LIMIT);
-        IgiGuiLifeCycle.setEnableMultisampleOnFbo(false);
+        IgiGuiLifeCycle.setEnableMultisampleOnFbo(true);
         RenderHints.fboSampleNum(4);
 
         if (IgiConfig.ENABLE_SPOTIFY_INTEGRATION)
