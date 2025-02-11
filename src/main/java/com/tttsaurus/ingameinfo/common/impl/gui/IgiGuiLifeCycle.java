@@ -531,18 +531,20 @@ public final class IgiGuiLifeCycle
         if (!uniformsPassed)
         {
             uniformsPassed = true;
+
             int screenTextureLoc = shaderProgram.getUniformLocation("screenTexture");
             GL20.glUniform1i(screenTextureLoc, 1);
+
+            if (enableMultisampleOnFbo)
+            {
+                int sampleNumLoc = shaderProgram.getUniformLocation("sampleNum");
+                GL20.glUniform1i(sampleNumLoc, RenderHints.getFramebufferSampleNum());
+            }
+
             int enableAlphaLoc = shaderProgram.getUniformLocation("enableAlpha");
             int alphaLoc = shaderProgram.getUniformLocation("targetAlpha");
             GL20.glUniform1i(enableAlphaLoc, IgiConfig.ENABLE_PP_ALPHA ? 1 : 0);
             GL20.glUniform1f(alphaLoc, IgiConfig.PP_ALPHA);
-        }
-
-        if (enableMultisampleOnFbo)
-        {
-            GL11.glEnable(GL40.GL_SAMPLE_SHADING);
-            GL40.glMinSampleShading(1f);
         }
     }
     private static void deactivateShader()

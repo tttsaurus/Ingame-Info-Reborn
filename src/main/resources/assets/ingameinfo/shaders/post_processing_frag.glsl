@@ -1,5 +1,6 @@
 #if USE_MULTISAMPLE
     uniform sampler2DMS screenTexture;
+    uniform int sampleNum;
 #else
     uniform sampler2D screenTexture;
 #endif
@@ -19,10 +20,17 @@ void main()
 #if USE_MULTISAMPLE
     ivec2 texelPos = ivec2(gl_FragCoord.xy);
 
-    int sampleIndex = 0;
+    float alphas = 0f;
+    vec3 colors = vec3(0f, 0f, 0f);
 
-    alpha = texelFetch(screenTexture, texelPos, sampleIndex).a;
-    color = texelFetch(screenTexture, texelPos, sampleIndex).rgb;
+    for (int i = 0; i < sampleNum; i++)
+    {
+        alphas += texelFetch(screenTexture, texelPos, i).a;
+        colors += texelFetch(screenTexture, texelPos, i).rgb;
+    }
+
+    alpha = alphas / float(sampleNum);
+    color = colors / float(sampleNum);
 #else
     alpha = texture(screenTexture, TexCoords).a;
     color = texture(screenTexture, TexCoords).rgb;
