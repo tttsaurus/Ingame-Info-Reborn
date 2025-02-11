@@ -10,6 +10,7 @@ import com.tttsaurus.ingameinfo.common.api.render.RenderUtils;
 import com.tttsaurus.ingameinfo.common.impl.igievent.EventCenter;
 import com.tttsaurus.ingameinfo.common.impl.network.IgiNetwork;
 import com.tttsaurus.ingameinfo.config.IgiConfig;
+import com.tttsaurus.saurus3d_temp.common.api.reader.RlReaderUtils;
 import com.tttsaurus.saurus3d_temp.common.api.shader.Shader;
 import com.tttsaurus.saurus3d_temp.common.api.shader.ShaderProgram;
 import com.tttsaurus.saurus3d_temp.common.impl.shader.ShaderLoader;
@@ -488,10 +489,23 @@ public final class IgiGuiLifeCycle
         // init shader program
         if (shaderProgram == null)
         {
-            Shader fxaaFrag = shaderLoader.load("ingameinfo:shaders/post_processing_frag.glsl", Shader.ShaderType.FRAGMENT);
-            Shader fxaaVertex = shaderLoader.load("ingameinfo:shaders/post_processing_vertex.glsl", Shader.ShaderType.VERTEX);
+            String rawFrag = RlReaderUtils.read("ingameinfo:shaders/post_processing_frag.glsl", true);
+            StringBuilder rawFragBuilder = new StringBuilder();
 
-            shaderProgram = new ShaderProgram(fxaaFrag, fxaaVertex);
+            if (enableMultisampleOnFbo)
+                rawFragBuilder
+                        .append("#version 400 core\n")
+                        .append("#define USE_MULTISAMPLE 1\n");
+            else
+                rawFragBuilder
+                        .append("#version 330 core\n")
+                        .append("#define USE_MULTISAMPLE 0\n");
+            rawFragBuilder.append(rawFrag);
+
+            Shader frag = new Shader(rawFragBuilder.toString(), Shader.ShaderType.FRAGMENT);
+            Shader vertex = shaderLoader.load("ingameinfo:shaders/post_processing_vertex.glsl", Shader.ShaderType.VERTEX);
+
+            shaderProgram = new ShaderProgram(frag, vertex);
             shaderProgram.setup();
         }
     }

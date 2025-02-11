@@ -20,15 +20,11 @@ import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.apache.logging.log4j.Logger;
 import java.util.Map;
 
 public class ClientProxy extends CommonProxy
 {
-    private static final Log log = LogFactory.getLog(ClientProxy.class);
-
     @Override
     public void preInit(FMLPreInitializationEvent event, Logger logger)
     {
@@ -47,8 +43,8 @@ public class ClientProxy extends CommonProxy
         boolean enableFbo = IgiConfig.ENABLE_FRAMEBUFFER && OpenGlHelper.framebufferSupported && majorGlVersion >= 3;
         // at least gl 33
         boolean enablePostProcessing = IgiConfig.ENABLE_POST_PROCESSING_SHADER && ((majorGlVersion == 3 && minorGlVersion >= 3) || majorGlVersion > 3);
-        // at least gl 43
-        boolean enableMsfbo = ((majorGlVersion == 4 && minorGlVersion >= 3) || majorGlVersion > 4);
+        // at least gl 40
+        boolean enableMsfbo = IgiConfig.ENABLE_MSFRAMEBUFFER && (majorGlVersion >= 4);
 
         // framebuffer is the prerequisite
         enablePostProcessing = enableFbo && enablePostProcessing;
@@ -56,12 +52,12 @@ public class ClientProxy extends CommonProxy
 
         logger.info("[Render Feature] Framebuffer is " + (enableFbo ? "ON" : "OFF") + " (requires GL30)");
         logger.info("[Render Feature] Post-Processing on framebuffer is " + (enablePostProcessing ? "ON" : "OFF") + " (requires GL33 and framebuffer)");
-        logger.info("[Render Feature] Multisampling on framebuffer is " + (enableMsfbo ? "ON" : "OFF") + " (requires GL43 and framebuffer)");
+        logger.info("[Render Feature] Multisampling on framebuffer is " + (enableMsfbo ? "ON" : "OFF") + " (requires GL40 and framebuffer)");
 
         IgiGuiLifeCycle.setEnableFbo(enableFbo);
         IgiGuiLifeCycle.setEnableShader(enablePostProcessing);
         IgiGuiLifeCycle.setEnableMultisampleOnFbo(enableMsfbo);
-        RenderHints.fboSampleNum(4);
+        RenderHints.fboSampleNum(IgiConfig.FRAMEBUFFER_SAMPLE_NUM);
 
         IgiGuiLifeCycle.setMaxFps_FixedUpdate(IgiConfig.FIXED_UPDATE_LIMIT);
         IgiGuiLifeCycle.setMaxFps_RefreshFbo(IgiConfig.RENDER_UPDATE_LIMIT);

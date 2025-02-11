@@ -1,6 +1,9 @@
-#version 400 core
+#if USE_MULTISAMPLE
+    uniform sampler2DMS screenTexture;
+#else
+    uniform sampler2D screenTexture;
+#endif
 
-uniform sampler2DMS screenTexture;
 uniform bool enableAlpha;
 uniform float targetAlpha;
 
@@ -9,14 +12,23 @@ out vec4 FragColor;
 
 void main()
 {
+    float alpha;
+    vec3 color;
+    vec4 finalFragColor;
+
+#if USE_MULTISAMPLE
     ivec2 texelPos = ivec2(gl_FragCoord.xy);
 
     int sampleIndex = 0;
 
-    float alpha = texelFetch(screenTexture, texelPos, sampleIndex).a;
-    vec3 color = texelFetch(screenTexture, texelPos, sampleIndex).rgb;
+    alpha = texelFetch(screenTexture, texelPos, sampleIndex).a;
+    color = texelFetch(screenTexture, texelPos, sampleIndex).rgb;
+#else
+    alpha = texture(screenTexture, TexCoords).a;
+    color = texture(screenTexture, TexCoords).rgb;
+#endif
 
-    vec4 finalFragColor = vec4(color, alpha);
+    finalFragColor = vec4(color, alpha);
 
     if (enableAlpha)
     {

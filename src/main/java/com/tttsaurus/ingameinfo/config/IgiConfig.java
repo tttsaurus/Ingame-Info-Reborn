@@ -8,6 +8,9 @@ public class IgiConfig
     public static boolean ENABLE_FRAMEBUFFER;
     public static int RENDER_UPDATE_LIMIT;
 
+    public static boolean ENABLE_MSFRAMEBUFFER;
+    public static int FRAMEBUFFER_SAMPLE_NUM;
+
     public static boolean ENABLE_POST_PROCESSING_SHADER;
     public static boolean ENABLE_PP_ALPHA;
     public static float PP_ALPHA;
@@ -33,11 +36,14 @@ public class IgiConfig
         {
             CONFIG.load();
 
-            FIXED_UPDATE_LIMIT = CONFIG.getInt("Gui Fixed Update Limit", "igi", 125, 30, 300, "It represents how many updates will be called per second \nand this limit is for animation calculations & such \"fixed\" calculations \nNotice: this limit should be smaller than or equal to \"Gui Render Update Limit\" \nand becomes meaningless when it's greater than \"Gui Render Update Limit\" \nRecommended values: 30, 60, 125, 240");
-            ENABLE_FRAMEBUFFER = CONFIG.getBoolean("Enable Framebuffer", "igi", true, "Reminder: framebuffer may fail on old devices \nEven if it failed, nothing will crash and everything still works fine");
-            RENDER_UPDATE_LIMIT = CONFIG.getInt("Gui Render Update Limit", "igi", 240, 30, 320, "It represents how many render updates (render to framebuffer) will be called per second \nand framebuffer is the prerequisite for it to work \nNotice: you don't want this limit to exceed your screen refresh rate because that's meaningless \nRecommended values: 30, 60, 165, 240");
+            FIXED_UPDATE_LIMIT = CONFIG.getInt("Gui Fixed Update Limit", "igi", 30, 30, 300, "It represents how many updates will be called per second \nand this limit is for animation calculations & such \"fixed\" calculations \nNotice: this limit should be smaller than or equal to \"Gui Render Update Limit\" \nand becomes meaningless when it's greater than \"Gui Render Update Limit\" \nRecommended values: 30, 60, 125, 240");
+            ENABLE_FRAMEBUFFER = CONFIG.getBoolean("Enable Framebuffer", "igi", true, "Reminder: framebuffer may fail on old devices (requires GL30 support) \nEven if it failed, nothing will crash and everything still works fine");
+            RENDER_UPDATE_LIMIT = CONFIG.getInt("Gui Render Update Limit", "igi", 30, 30, 320, "It represents how many render updates (render to framebuffer) will be called per second \nand framebuffer is the prerequisite for it to work \nNotice: you don't want this limit to exceed your screen refresh rate because that's meaningless \nRecommended values: 30, 60, 165, 240");
 
-            ENABLE_POST_PROCESSING_SHADER = CONFIG.getBoolean("Enable Post Processing Shaders", "igi.post_processing", false, "Whether to enable the post-processing on the framebuffer \nand, of course, framebuffer is the prerequisite for it to work");
+            ENABLE_MSFRAMEBUFFER = CONFIG.getBoolean("Enable Multisample Framebuffer", "igi.multisampling", false, "Whether to enable multisampling on framebuffer (requires GL40 support) \nand framebuffer is the prerequisite for it to work\nNotice: it's the prerequisite for multisample anti-aliasing");
+            FRAMEBUFFER_SAMPLE_NUM = CONFIG.getInt("Multisample Framebuffer Sample Number", "igi.multisampling", 4, 1, 4, "Number of samples a multisampled framebuffer has");
+
+            ENABLE_POST_PROCESSING_SHADER = CONFIG.getBoolean("Enable Post Processing Shaders", "igi.post_processing", false, "Whether to enable post-processing on framebuffer (requires GL33 support) \nand framebuffer is the prerequisite for it to work");
             ENABLE_PP_ALPHA = CONFIG.getBoolean("Enable Alpha Module", "igi.post_processing.alpha", false, "Make the whole gui overlay transparent");
             PP_ALPHA = CONFIG.getFloat("Alpha Value", "igi.post_processing.alpha", 0.5f, 0f, 1f, "0.0 for full transparency; 1.0 for full opacity");
 
