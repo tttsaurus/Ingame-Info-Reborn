@@ -16,25 +16,55 @@ import com.tttsaurus.ingameinfo.common.impl.gui.IgiGuiLifeCycle;
 import com.tttsaurus.ingameinfo.common.impl.gui.registry.ElementRegistry;
 import com.tttsaurus.ingameinfo.common.impl.mvvm.registry.MvvmRegisterEventHandler;
 import com.tttsaurus.ingameinfo.config.IgiConfig;
+import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.apache.logging.log4j.Logger;
 import java.util.Map;
 
 public class ClientProxy extends CommonProxy
 {
+    private static final Log log = LogFactory.getLog(ClientProxy.class);
+
     @Override
     public void preInit(FMLPreInitializationEvent event, Logger logger)
     {
         super.preInit(event, logger);
 
-        IgiGuiLifeCycle.setEnableFbo(IgiConfig.ENABLE_FRAMEBUFFER);
-        IgiGuiLifeCycle.setEnableShader(IgiConfig.ENABLE_POST_PROCESSING_SHADER);
+        int majorGlVersion = RenderHints.getMajorGlVersion();
+        int minorGlVersion = RenderHints.getMinorGlVersion();
+
+        logger.info("Raw OpenGl version: " + RenderHints.getRawGlVersion());
+        if (majorGlVersion == -1 || minorGlVersion == -1)
+            logger.info("Error: Can't parse OpenGl version");
+        else
+            logger.info(String.format("OpenGl version: %d.%d", majorGlVersion, minorGlVersion));
+
+        // at least gl 30
+        boolean enableFbo = IgiConfig.ENABLE_FRAMEBUFFER && OpenGlHelper.framebufferSupported && majorGlVersion >= 3;
+        // at least gl 33
+        boolean enablePostProcessing = IgiConfig.ENABLE_POST_PROCESSING_SHADER && ((majorGlVersion == 3 && minorGlVersion >= 3) || majorGlVersion > 3);
+        // at least gl 43
+        boolean enableMsfbo = ((majorGlVersion == 4 && minorGlVersion >= 3) || majorGlVersion > 4);
+
+        // framebuffer is the prerequisite
+        enablePostProcessing = enableFbo && enablePostProcessing;
+        enableMsfbo = enableFbo && enableMsfbo;
+
+        logger.info("[Render Feature] Framebuffer is " + (enableFbo ? "ON" : "OFF") + " (requires GL30)");
+        logger.info("[Render Feature] Post-Processing on framebuffer is " + (enablePostProcessing ? "ON" : "OFF") + " (requires GL33 and framebuffer)");
+        logger.info("[Render Feature] Multisampling on framebuffer is " + (enableMsfbo ? "ON" : "OFF") + " (requires GL43 and framebuffer)");
+
+        IgiGuiLifeCycle.setEnableFbo(enableFbo);
+        IgiGuiLifeCycle.setEnableShader(enablePostProcessing);
+        IgiGuiLifeCycle.setEnableMultisampleOnFbo(enableMsfbo);
+        RenderHints.fboSampleNum(4);
+
         IgiGuiLifeCycle.setMaxFps_FixedUpdate(IgiConfig.FIXED_UPDATE_LIMIT);
         IgiGuiLifeCycle.setMaxFps_RefreshFbo(IgiConfig.RENDER_UPDATE_LIMIT);
-        IgiGuiLifeCycle.setEnableMultisampleOnFbo(true);
-        RenderHints.fboSampleNum(4);
 
         if (IgiConfig.ENABLE_SPOTIFY_INTEGRATION)
         {

@@ -78,6 +78,7 @@ public final class IgiGuiLifeCycle
     //<editor-fold desc="fbo variables">
     private static boolean enableFbo = true;
     public static void setEnableFbo(boolean flag) { enableFbo = flag; }
+    public static boolean getEnableFbo() { return enableFbo; }
     private static boolean refreshFbo = true;
     private static Framebuffer fbo = null;
     private static Framebuffer shaderFbo = null;
@@ -85,8 +86,6 @@ public final class IgiGuiLifeCycle
     public static void setEnableMultisampleOnFbo(boolean flag) { enableMultisampleOnFbo = flag; }
     public static boolean getEnableMultisampleOnFbo() { return enableMultisampleOnFbo; }
     private static Framebuffer resolvedFbo = null;
-    private static boolean isFboRunning = false;
-    public static boolean getIsFboRunning() { return isFboRunning; }
     //</editor-fold>
 
     //<editor-fold desc="shader variables">
@@ -178,8 +177,7 @@ public final class IgiGuiLifeCycle
     }
     private static void onRenderUpdate()
     {
-        isFboRunning = enableFbo && OpenGlHelper.framebufferSupported;
-        if (isFboRunning)
+        if (enableFbo)
         {
             compileShader();
             if (!refreshFbo)
@@ -248,16 +246,14 @@ public final class IgiGuiLifeCycle
         }
         //</editor-fold>
 
-        if (isFboRunning)
+        if (enableFbo)
         {
             if (enableShader)
             {
-                fbo.unbindFramebuffer();
                 bindShaderFbo();
                 activateShader();
                 RenderUtils.renderFbo(resolution, fbo, false);
                 deactivateShader();
-                shaderFbo.unbindFramebuffer();
                 if (enableMultisampleOnFbo) resolveMultisampledFbo();
                 bindMcFbo();
 
@@ -268,7 +264,6 @@ public final class IgiGuiLifeCycle
             }
             else
             {
-                fbo.unbindFramebuffer();
                 if (enableMultisampleOnFbo) resolveMultisampledFbo();
                 bindMcFbo();
 
@@ -367,10 +362,14 @@ public final class IgiGuiLifeCycle
             resolvedFbo.framebufferColor[2] = 0f;
             resolvedFbo.framebufferColor[3] = 0f;
             resolvedFbo.enableStencil();
+            resolvedFbo.unbindFramebuffer();
         }
 
         if (resolvedFbo.framebufferWidth != minecraft.displayWidth || resolvedFbo.framebufferHeight != minecraft.displayHeight)
+        {
             resolvedFbo.createBindFramebuffer(minecraft.displayWidth, minecraft.displayHeight);
+            resolvedFbo.unbindFramebuffer();
+        }
         else
             resolvedFbo.framebufferClear();
 
@@ -382,7 +381,6 @@ public final class IgiGuiLifeCycle
         OpenGlHelper.glBindFramebuffer(GL30.GL_DRAW_FRAMEBUFFER, resolvedFbo.framebufferObject);
 
         GL30.glBlitFramebuffer(0, 0, resolvedFbo.framebufferWidth, resolvedFbo.framebufferHeight, 0, 0, resolvedFbo.framebufferWidth, resolvedFbo.framebufferHeight, GL11.GL_COLOR_BUFFER_BIT, GL11.GL_NEAREST);
-        resolvedFbo.unbindFramebuffer();
     }
     private static void bindShaderFbo()
     {
