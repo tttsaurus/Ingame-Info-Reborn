@@ -179,30 +179,30 @@ Extra Tips:
 - Go to `./logs/latest.log`
 - Find
   ```
-  [00:18:06] [Client thread/INFO] [ingameinfo]: In-Game Info Reborn starts initializing.
-  [00:18:06] [Client thread/INFO] [ingameinfo]: Reflection setup finished.
-  [00:18:06] [Client thread/INFO] [ingameinfo]: Network setup finished.
-  [00:18:06] [Client thread/INFO] [ingameinfo]: 
-  [00:18:06] [Client thread/INFO] [ingameinfo]: Registered usable elements: 
-  [00:18:06] [Client thread/INFO] [ingameinfo]:   - UrlImage
-  [00:18:06] [Client thread/INFO] [ingameinfo]:   - SlidingText
-  [00:18:06] [Client thread/INFO] [ingameinfo]:   - Text
-  [00:18:06] [Client thread/INFO] [ingameinfo]:   - VerticalGroup
-  [00:18:06] [Client thread/INFO] [ingameinfo]:   - AnimText
-  [00:18:06] [Client thread/INFO] [ingameinfo]:   - SimpleButton
-  [00:18:06] [Client thread/INFO] [ingameinfo]:   - EmptyBlock
-  [00:18:06] [Client thread/INFO] [ingameinfo]:   - SizedGroup
-  [00:18:06] [Client thread/INFO] [ingameinfo]:   - HorizontalGroup
-  [00:18:06] [Client thread/INFO] [ingameinfo]:   - ProgressBar
-  [00:18:06] [Client thread/INFO] [ingameinfo]: 
-  [00:18:06] [Client thread/INFO] [ingameinfo]: Element type: Sized extends Element
-  [00:18:06] [Client thread/INFO] [ingameinfo]: - With style properties:
-  [00:18:06] [Client thread/INFO] [ingameinfo]:   - [float] width (with deserializer: BuiltinTypesDeserializer)
-  [00:18:06] [Client thread/INFO] [ingameinfo]:     - Setter callback pre: nonNegativeFloatValidation
-  [00:18:06] [Client thread/INFO] [ingameinfo]:     - Setter callback post: requestReCalc
-  [00:18:06] [Client thread/INFO] [ingameinfo]:   - [float] height (with deserializer: BuiltinTypesDeserializer)
-  [00:18:06] [Client thread/INFO] [ingameinfo]:     - Setter callback pre: nonNegativeFloatValidation
-  [00:18:06] [Client thread/INFO] [ingameinfo]:     - Setter callback post: requestReCalc
+  [17:03:34] [Client thread/INFO] [ingameinfo]: Registered serviceable elements: 
+  [17:03:34] [Client thread/INFO] [ingameinfo]:   - UrlImage
+  [17:03:34] [Client thread/INFO] [ingameinfo]:   - SlidingText
+  [17:03:34] [Client thread/INFO] [ingameinfo]:   - Text
+  [17:03:34] [Client thread/INFO] [ingameinfo]:   - VerticalGroup
+  [17:03:34] [Client thread/INFO] [ingameinfo]:   - AnimText
+  [17:03:34] [Client thread/INFO] [ingameinfo]:   - SimpleButton
+  [17:03:34] [Client thread/INFO] [ingameinfo]:   - EmptyBlock
+  [17:03:34] [Client thread/INFO] [ingameinfo]:   - SizedGroup
+  [17:03:34] [Client thread/INFO] [ingameinfo]:   - HorizontalGroup
+  [17:03:34] [Client thread/INFO] [ingameinfo]:   - ProgressBar
+  [17:03:34] [Client thread/INFO] [ingameinfo]:
+  [17:03:34] [Client thread/INFO] [ingameinfo]: Notice:
+  [17:03:34] [Client thread/INFO] [ingameinfo]: 1. Elements marked with * below are unserviceable in ixml.
+  [17:03:34] [Client thread/INFO] [ingameinfo]: 2. You can access style properties from parent elements.
+  [17:03:34] [Client thread/INFO] [ingameinfo]:
+  [17:03:34] [Client thread/INFO] [ingameinfo]: Element type: Sized* extends Element*
+  [17:03:34] [Client thread/INFO] [ingameinfo]: - With style properties:
+  [17:03:34] [Client thread/INFO] [ingameinfo]:   - [float] width (with deserializer: BuiltinTypesDeserializer)
+  [17:03:34] [Client thread/INFO] [ingameinfo]:     - Setter callback pre: nonNegativeFloatValidation
+  [17:03:34] [Client thread/INFO] [ingameinfo]:     - Setter callback post: requestReCalc
+  [17:03:34] [Client thread/INFO] [ingameinfo]:   - [float] height (with deserializer: BuiltinTypesDeserializer)
+  [17:03:34] [Client thread/INFO] [ingameinfo]:     - Setter callback pre: nonNegativeFloatValidation
+  [17:03:34] [Client thread/INFO] [ingameinfo]:     - Setter callback post: requestReCalc
   ...
   ```
 - Then you'll know what style properties each element has

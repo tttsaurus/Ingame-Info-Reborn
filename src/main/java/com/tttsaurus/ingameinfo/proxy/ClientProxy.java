@@ -21,6 +21,7 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import org.apache.logging.log4j.Logger;
+import java.util.List;
 import java.util.Map;
 
 public class ClientProxy extends CommonProxy
@@ -86,9 +87,15 @@ public class ClientProxy extends CommonProxy
         ElementRegistry.register();
 
         logger.info("");
-        logger.info("Registered usable elements: ");
-        for (Class<? extends Element> clazz: ElementRegistry.getConstructableElements())
+        logger.info("Registered serviceable elements: ");
+        List<Class<? extends Element>> constructableElements = ElementRegistry.getConstructableElements();
+        for (Class<? extends Element> clazz: constructableElements)
             logger.info("  - " + (TypeUtils.isFromParentPackage(clazz, myPackage) ? clazz.getSimpleName() : clazz.getName()));
+
+        logger.info("");
+        logger.info("Notice:");
+        logger.info("1. Elements marked with * below are unserviceable in ixml.");
+        logger.info("2. You can access style properties from parent elements.");
         logger.info("");
 
         ImmutableList<Class<? extends Element>> elementClasses = ElementRegistry.getRegisteredElements();
@@ -101,8 +108,16 @@ public class ClientProxy extends CommonProxy
         for (Class<? extends Element> clazz: elementClasses)
         {
             String parentMsg = "";
-            if (!clazz.equals(Element.class)) parentMsg = " extends " + (TypeUtils.isFromParentPackage(clazz.getSuperclass(), myPackage) ? clazz.getSuperclass().getSimpleName() : clazz.getSuperclass().getName());
-            logger.info("Element type: " + (TypeUtils.isFromParentPackage(clazz, myPackage) ? clazz.getSimpleName() : clazz.getName()) + parentMsg);
+            if (!clazz.equals(Element.class))
+                parentMsg =
+                    " extends " +
+                    (TypeUtils.isFromParentPackage(clazz.getSuperclass(), myPackage) ? clazz.getSuperclass().getSimpleName() : clazz.getSuperclass().getName()) +
+                    (constructableElements.contains(clazz.getSuperclass()) ? "" : "*");
+            logger.info("Element type: " +
+                    (TypeUtils.isFromParentPackage(clazz, myPackage) ? clazz.getSimpleName() : clazz.getName()) +
+                    (constructableElements.contains(clazz) ? "" : "*") +
+                    parentMsg);
+
             Map<String, IStylePropertySetter> map = setters.get(clazz.getName());
             if (!map.isEmpty())
             {
@@ -121,6 +136,7 @@ public class ClientProxy extends CommonProxy
                         logger.info("    - Setter callback post: " + setterCallbacksPost.get(primaryKey).name());
                 }
             }
+
             logger.info("");
         }
 
