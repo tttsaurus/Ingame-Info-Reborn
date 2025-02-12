@@ -2,6 +2,9 @@ package com.tttsaurus.ingameinfo.common.impl.igievent.modcompat;
 
 import com.tttsaurus.ingameinfo.common.api.function.IAction_1Param;
 import com.tttsaurus.ingameinfo.common.api.igievent.EventBase;
+import crafttweaker.annotations.ZenRegister;
+import stanhebben.zenscript.annotations.ZenClass;
+import stanhebben.zenscript.annotations.ZenMethod;
 
 public final class SereneSeasonsEvent extends EventBase<IAction_1Param<SereneSeasonsEvent.SereneSeasonsData>>
 {
@@ -11,6 +14,8 @@ public final class SereneSeasonsEvent extends EventBase<IAction_1Param<SereneSea
         addListenerInternal(listener);
     }
 
+    @ZenRegister
+    @ZenClass("mods.ingameinfo.compat.sereneseasons.SereneSeasonsData")
     public static class SereneSeasonsData
     {
         private final int dayDuration;
@@ -57,18 +62,31 @@ public final class SereneSeasonsEvent extends EventBase<IAction_1Param<SereneSea
             this.dayOfSeason = dayOfSeason;
         }
 
+        @ZenMethod
         public int getDayDuration() { return dayDuration; }
+        @ZenMethod
         public int getSubSeasonDuration() { return subSeasonDuration; }
+        @ZenMethod
         public int getSeasonDuration() { return seasonDuration; }
+        @ZenMethod
         public int getCycleDuration() { return cycleDuration; }
+        @ZenMethod
         public int getSeasonCycleTicks() { return seasonCycleTicks; }
+        @ZenMethod
         public int getDay() { return day; }
+        @ZenMethod
         public String getSeasonName() { return seasonName; }
+        @ZenMethod
         public String getSubSeasonName() { return subSeasonName; }
+        @ZenMethod
         public String getTropicalSeasonName() { return tropicalSeasonName; }
+        @ZenMethod
         public int getSeasonOrdinal() { return seasonOrdinal; }
+        @ZenMethod
         public int getSubSeasonOrdinal() { return subSeasonOrdinal;}
+        @ZenMethod
         public int getTropicalSeasonOrdinal() { return tropicalSeasonOrdinal; }
+        @ZenMethod
         public int getDayOfSeason() { return dayOfSeason; }
     }
 }

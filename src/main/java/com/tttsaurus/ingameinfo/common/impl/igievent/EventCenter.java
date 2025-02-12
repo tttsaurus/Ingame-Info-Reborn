@@ -19,7 +19,6 @@ public final class EventCenter
     public final static SpotifyOverlayEditEvent spotifyOverlayEditEvent = new SpotifyOverlayEditEvent();
 
     //<editor-fold desc="mod compat">
-
     public final static BloodMagicEvent bloodMagicEvent = new BloodMagicEvent();
     public final static SereneSeasonsEvent sereneSeasonsEvent = new SereneSeasonsEvent();
 

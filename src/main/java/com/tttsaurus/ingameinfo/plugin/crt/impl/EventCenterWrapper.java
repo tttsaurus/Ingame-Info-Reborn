@@ -40,4 +40,15 @@ public final class EventCenterWrapper
     {
         EventCenter.enterBiomeEvent.addListener(listener::invoke);
     }
+
+    @ZenMethod
+    public static void addBloodMagicEventListener(IBloodMagicEventListener listener)
+    {
+        EventCenter.bloodMagicEvent.addListener(listener::invoke);
+    }
+    @ZenMethod
+    public static void addSereneSeasonsEventListener(ISereneSeasonsEventListener listener)
+    {
+        EventCenter.sereneSeasonsEvent.addListener(listener::invoke);
+    }
 }
