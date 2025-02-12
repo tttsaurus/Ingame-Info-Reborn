@@ -1,4 +1,4 @@
-package com.tttsaurus.saurus3d_temp.common.api.shader;
+package com.tttsaurus.saurus3d_snippet.common.api.shader;
 
 public class UniformField
 {
