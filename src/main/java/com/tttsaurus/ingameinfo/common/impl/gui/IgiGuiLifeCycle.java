@@ -43,6 +43,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 @SuppressWarnings("all")
 public final class IgiGuiLifeCycle
 {
+    private static Minecraft minecraft = Minecraft.getMinecraft();
     private static ScaledResolution resolution = new ScaledResolution(Minecraft.getMinecraft());
 
     //<editor-fold desc="fixed update timing variables">
@@ -120,7 +121,7 @@ public final class IgiGuiLifeCycle
         EventCenter.gameFpsEvent.trigger(Minecraft.getDebugFPS());
         Runtime runtime = Runtime.getRuntime();
         EventCenter.gameMemoryEvent.trigger(runtime.totalMemory() - runtime.freeMemory(), runtime.totalMemory());
-        EntityPlayerSP player = Minecraft.getMinecraft().player;
+        EntityPlayerSP player = minecraft.player;
         if (player != null)
         {
             Biome biome = player.world.getBiome(player.getPosition());
@@ -202,7 +203,7 @@ public final class IgiGuiLifeCycle
 
         //<editor-fold desc="gui container render update">
         ItemStack heldItemMainhand = null;
-        EntityPlayerSP player = Minecraft.getMinecraft().player;
+        EntityPlayerSP player = minecraft.player;
         if (player != null)
             heldItemMainhand = player.getHeldItemMainhand();
 
@@ -345,8 +346,6 @@ public final class IgiGuiLifeCycle
     //<editor-fold desc="fbo methods">
     private static void resolveMultisampledFbo()
     {
-        Minecraft minecraft = Minecraft.getMinecraft();
-
         // init resolvedFbo
         if (resolvedFbo == null)
         {
@@ -372,8 +371,6 @@ public final class IgiGuiLifeCycle
     }
     private static void bindShaderFbo()
     {
-        Minecraft minecraft = Minecraft.getMinecraft();
-
         // init shaderFbo
         if (shaderFbo == null)
         {
@@ -400,8 +397,6 @@ public final class IgiGuiLifeCycle
     }
     private static void bindFbo()
     {
-        Minecraft minecraft = Minecraft.getMinecraft();
-
         // init fbo
         if (fbo == null)
         {
@@ -448,7 +443,6 @@ public final class IgiGuiLifeCycle
     }
     private static void bindMcFbo()
     {
-        Minecraft minecraft = Minecraft.getMinecraft();
         Framebuffer mcFbo = minecraft.getFramebuffer();
 
         if (mcFbo.framebufferWidth != minecraft.displayWidth || mcFbo.framebufferHeight != minecraft.displayHeight)
@@ -693,7 +687,7 @@ public final class IgiGuiLifeCycle
                 {
                     isPlaceholderGuiOn = false;
                     placeholderGui = null;
-                    Minecraft.getMinecraft().displayGuiScreen(null);
+                    minecraft.displayGuiScreen(null);
                 }
                 else
                 {
@@ -704,12 +698,12 @@ public final class IgiGuiLifeCycle
                     {
                         isPlaceholderGuiOn = false;
                         placeholderGui = null;
-                        Minecraft.getMinecraft().displayGuiScreen(null);
+                        minecraft.displayGuiScreen(null);
                     }
                 }
             }
             // open placeholder
-            else if (!openedGuiMap.isEmpty() && Minecraft.getMinecraft().currentScreen == null)
+            else if (!openedGuiMap.isEmpty() && minecraft.currentScreen == null)
             {
                 AtomicBoolean focus = new AtomicBoolean(false);
                 openedGuiMap.forEach((uuid, guiContainer) -> focus.set(focus.get() || (guiContainer.getFocused() && guiContainer.getActive())));
@@ -752,7 +746,7 @@ public final class IgiGuiLifeCycle
                             }
                         }
                     });
-                    Minecraft.getMinecraft().displayGuiScreen(placeholderGui);
+                    minecraft.displayGuiScreen(placeholderGui);
                     isPlaceholderGuiOn = true;
                 }
             }
