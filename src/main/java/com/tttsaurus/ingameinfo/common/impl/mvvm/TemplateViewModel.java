@@ -35,9 +35,9 @@ public class TemplateViewModel extends ViewModel<TemplateView>
         {
             biomeText.set("Biome: " + biomeName + ", " + registryName);
         });
-        EventCenter.gameTpsMtpsEvent.addListener((tps, mtps) ->
+        EventCenter.gameTpsMsptEvent.addListener((tps, mspt) ->
         {
-            tpsMtpsText.set(String.format("TPS: %d, MTPS: %.3f ms/t", tps, mtps));
+            tpsMtpsText.set(String.format("TPS: %d, MSPT: %.3f ms/t", tps, mspt));
         });
         EventCenter.gameMemoryEvent.addListener((used, total) ->
         {

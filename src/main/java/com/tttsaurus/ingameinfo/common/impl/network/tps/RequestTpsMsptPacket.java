@@ -8,9 +8,9 @@ import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 
-public class RequestTpsMtpsPacket implements IMessage
+public class RequestTpsMsptPacket implements IMessage
 {
-    public RequestTpsMtpsPacket() { }
+    public RequestTpsMsptPacket() { }
 
     @Override
     public void fromBytes(ByteBuf buf) { }
@@ -18,10 +18,10 @@ public class RequestTpsMtpsPacket implements IMessage
     @Override
     public void toBytes(ByteBuf buf) { }
 
-    public static class Handler implements IMessageHandler<RequestTpsMtpsPacket, IMessage>
+    public static class Handler implements IMessageHandler<RequestTpsMsptPacket, IMessage>
     {
         @Override
-        public IMessage onMessage(RequestTpsMtpsPacket message, MessageContext ctx)
+        public IMessage onMessage(RequestTpsMsptPacket message, MessageContext ctx)
         {
             if (!ctx.side.isServer()) return null;
 
@@ -41,7 +41,7 @@ public class RequestTpsMtpsPacket implements IMessage
 
                 int tps = (int)(Math.min(1000d / averageTickTime, 20d));
 
-                IgiNetwork.NETWORK.sendTo(new RespondTpsMtpsPacket(tps, averageTickTime), player);
+                IgiNetwork.NETWORK.sendTo(new RespondTpsMsptPacket(tps, averageTickTime), player);
             });
 
             return null;

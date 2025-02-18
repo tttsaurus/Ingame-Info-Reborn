@@ -6,7 +6,7 @@ import com.tttsaurus.ingameinfo.common.api.render.renderer.IRenderer;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.IResource;
 import net.minecraft.util.ResourceLocation;
-import org.lwjgl.opengl.GL11;
+import org.lwjgl.BufferUtils;
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
@@ -37,17 +37,13 @@ public class ImageRenderer implements IRenderer
     public void setHeight(float height) { this.height = height; }
     //</editor-fold>
 
-    protected ImageRenderer() { }
+    public ImageRenderer() { }
     public ImageRenderer(Texture2D texture)
     {
         this.texture = texture;
     }
     public ImageRenderer(ResourceLocation resourceLocation)
     {
-        ByteBuffer byteBuffer = null;
-        int width = 0;
-        int height = 0;
-
         try
         {
             IResource resource = Minecraft.getMinecraft().getResourceManager().getResource(resourceLocation);
@@ -55,36 +51,40 @@ public class ImageRenderer implements IRenderer
 
             BufferedImage bufferedImage = ImageIO.read(inputStream);
 
-            width = bufferedImage.getWidth();
-            height = bufferedImage.getHeight();
+            texture = createTexture(bufferedImage);
+        }
+        catch (IOException ignored) { }
+    }
+    public void updateRl()
+    {
+        
+    }
 
-            byteBuffer = ByteBuffer.allocateDirect(4 * width * height);
+    protected Texture2D createTexture(BufferedImage image)
+    {
+        int width = image.getWidth();
+        int height = image.getHeight();
+        if (width == 0 || height == 0) return null;
 
-            int[] pixels = new int[width * height];
-            bufferedImage.getRGB(0, 0, width, height, pixels, 0, width);
+        ByteBuffer byteBuffer = BufferUtils.createByteBuffer(width * height * 4);
 
-            for (int y = 0; y < height; y++)
+        int[] pixels = new int[width * height];
+        image.getRGB(0, 0, width, height, pixels, 0, width);
+
+        for (int y = 0; y < height; y++)
+        {
+            for (int x = 0; x < width; x++)
             {
-                for (int x = 0; x < width; x++)
-                {
-                    int pixel = pixels[y * width + x];
-                    byteBuffer.put((byte) ((pixel >> 16) & 0xFF));  // r
-                    byteBuffer.put((byte) ((pixel >> 8) & 0xFF));   // g
-                    byteBuffer.put((byte) (pixel & 0xFF));          // b
-                    byteBuffer.put((byte) ((pixel >> 24) & 0xFF));  // a
-                }
+                int pixel = pixels[y * width + x];
+                byteBuffer.put((byte) ((pixel >> 16) & 0xFF));  // r
+                byteBuffer.put((byte) ((pixel >> 8) & 0xFF));   // g
+                byteBuffer.put((byte) (pixel & 0xFF));          // b
+                byteBuffer.put((byte) ((pixel >> 24) & 0xFF));  // a
             }
-            byteBuffer.flip();
         }
-        catch (IOException ignored)
-        {
+        byteBuffer.flip();
 
-        }
-        finally
-        {
-            if (byteBuffer != null && width != 0 && height != 0)
-                texture = new Texture2D(width, height, byteBuffer);
-        }
+        return new Texture2D(width, height, byteBuffer);
     }
 
     public void render()

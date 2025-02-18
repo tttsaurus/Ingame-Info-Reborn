@@ -6,43 +6,43 @@ import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 
-public class RespondTpsMtpsPacket implements IMessage
+public class RespondTpsMsptPacket implements IMessage
 {
     public static IAction_2Param<Integer, Double> callback;
 
     private int tps;
-    private double mtps;
+    private double mspt;
 
-    public RespondTpsMtpsPacket() { }
+    public RespondTpsMsptPacket() { }
 
-    public RespondTpsMtpsPacket(int tps, double mtps)
+    public RespondTpsMsptPacket(int tps, double mspt)
     {
         this.tps = tps;
-        this.mtps = mtps;
+        this.mspt = mspt;
     }
 
     @Override
     public void fromBytes(ByteBuf buf)
     {
         tps = buf.readInt();
-        mtps = buf.readDouble();
+        mspt = buf.readDouble();
     }
 
     @Override
     public void toBytes(ByteBuf buf)
     {
         buf.writeInt(tps);
-        buf.writeDouble(mtps);
+        buf.writeDouble(mspt);
     }
 
-    public static class Handler implements IMessageHandler<RespondTpsMtpsPacket, IMessage>
+    public static class Handler implements IMessageHandler<RespondTpsMsptPacket, IMessage>
     {
         @Override
-        public IMessage onMessage(RespondTpsMtpsPacket message, MessageContext ctx)
+        public IMessage onMessage(RespondTpsMsptPacket message, MessageContext ctx)
         {
             if (!ctx.side.isClient()) return null;
 
-            callback.invoke(message.tps, message.mtps);
+            callback.invoke(message.tps, message.mspt);
 
             return null;
         }

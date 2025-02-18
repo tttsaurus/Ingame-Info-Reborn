@@ -1,12 +1,9 @@
 package com.tttsaurus.ingameinfo.common.impl.render.renderer;
 
-import com.tttsaurus.ingameinfo.common.api.render.Texture2D;
-import org.lwjgl.BufferUtils;
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.InputStream;
 import java.net.URL;
-import java.nio.ByteBuffer;
 import java.util.concurrent.CompletableFuture;
 
 public class UrlImageRenderer extends ImageRenderer
@@ -77,32 +74,5 @@ public class UrlImageRenderer extends ImageRenderer
         {
             return null;
         }
-    }
-
-    private Texture2D createTexture(BufferedImage image)
-    {
-        int width = image.getWidth();
-        int height = image.getHeight();
-        if (width == 0 || height == 0) return null;
-
-        ByteBuffer byteBuffer = BufferUtils.createByteBuffer(width * height * 4);
-
-        int[] pixels = new int[width * height];
-        image.getRGB(0, 0, width, height, pixels, 0, width);
-
-        for (int y = 0; y < height; y++)
-        {
-            for (int x = 0; x < width; x++)
-            {
-                int pixel = pixels[y * width + x];
-                byteBuffer.put((byte) ((pixel >> 16) & 0xFF));  // r
-                byteBuffer.put((byte) ((pixel >> 8) & 0xFF));   // g
-                byteBuffer.put((byte) (pixel & 0xFF));          // b
-                byteBuffer.put((byte) ((pixel >> 24) & 0xFF));  // a
-            }
-        }
-        byteBuffer.flip();
-
-        return new Texture2D(width, height, byteBuffer);
     }
 }

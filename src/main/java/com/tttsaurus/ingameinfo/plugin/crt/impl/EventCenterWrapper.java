@@ -31,9 +31,9 @@ public final class EventCenterWrapper
         EventCenter.gameMemoryEvent.addListener(listener::invoke);
     }
     @ZenMethod
-    public static void addGameTpsMtpsEventListener(IGameTpsMtpsEventListener listener)
+    public static void addGameTpsMsptEventListener(IGameTpsMsptEventListener listener)
     {
-        EventCenter.gameTpsMtpsEvent.addListener(listener::invoke);
+        EventCenter.gameTpsMsptEvent.addListener(listener::invoke);
     }
     @ZenMethod
     public static void addEnterBiomeEventListener(IEnterBiomeEventListener listener)

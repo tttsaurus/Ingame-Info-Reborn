@@ -5,7 +5,7 @@ import stanhebben.zenscript.annotations.ZenClass;
 
 @ZenRegister
 @ZenClass("mods.ingameinfo.igievent.GameTpsMtpsEventListener")
-public interface IGameTpsMtpsEventListener
+public interface IGameTpsMsptEventListener
 {
     void invoke(int arg0, double arg1);
 }

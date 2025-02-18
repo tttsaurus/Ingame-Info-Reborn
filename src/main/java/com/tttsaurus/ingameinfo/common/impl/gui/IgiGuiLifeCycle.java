@@ -141,7 +141,7 @@ public final class IgiGuiLifeCycle
         if (server == null)
         {
             // works on mp client
-            IgiNetwork.requestTpsMtps(EventCenter.gameTpsMtpsEvent::trigger);
+            IgiNetwork.requestTpsMspt(EventCenter.gameTpsMsptEvent::trigger);
         }
         else
         {
@@ -154,7 +154,7 @@ public final class IgiGuiLifeCycle
             averageTickTime /= tickTimes.length;
 
             int tps = (int)(Math.min(1000d / averageTickTime, 20d));
-            EventCenter.gameTpsMtpsEvent.trigger(tps, averageTickTime);
+            EventCenter.gameTpsMsptEvent.trigger(tps, averageTickTime);
         }
 
         EventCenter.triggerModCompatEvents();

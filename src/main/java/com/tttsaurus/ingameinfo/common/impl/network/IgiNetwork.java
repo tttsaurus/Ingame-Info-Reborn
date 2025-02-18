@@ -5,8 +5,8 @@ import com.tttsaurus.ingameinfo.common.api.function.IAction_1Param;
 import com.tttsaurus.ingameinfo.common.api.function.IAction_2Param;
 import com.tttsaurus.ingameinfo.common.impl.network.bloodmagic.RequestBloodMagicNbtPacket;
 import com.tttsaurus.ingameinfo.common.impl.network.common.RespondNbtPacket;
-import com.tttsaurus.ingameinfo.common.impl.network.tps.RequestTpsMtpsPacket;
-import com.tttsaurus.ingameinfo.common.impl.network.tps.RespondTpsMtpsPacket;
+import com.tttsaurus.ingameinfo.common.impl.network.tps.RequestTpsMsptPacket;
+import com.tttsaurus.ingameinfo.common.impl.network.tps.RespondTpsMsptPacket;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
 import net.minecraftforge.fml.common.network.simpleimpl.SimpleNetworkWrapper;
@@ -42,10 +42,10 @@ public class IgiNetwork
         nbtResponseConsumers.put(responseKey, consumer);
     }
 
-    public static void requestTpsMtps(IAction_2Param<Integer, Double> callback)
+    public static void requestTpsMspt(IAction_2Param<Integer, Double> callback)
     {
-        RespondTpsMtpsPacket.callback = callback;
-        NETWORK.sendToServer(new RequestTpsMtpsPacket());
+        RespondTpsMsptPacket.callback = callback;
+        NETWORK.sendToServer(new RequestTpsMsptPacket());
     }
     public static void requestBloodMagicNbt(IAction_1Param<NBTTagCompound> callback)
     {
@@ -59,8 +59,8 @@ public class IgiNetwork
 
         NETWORK.registerMessage(RespondNbtPacket.Handler.class, RespondNbtPacket.class, index++, Side.CLIENT);
 
-        NETWORK.registerMessage(RequestTpsMtpsPacket.Handler.class, RequestTpsMtpsPacket.class, index++, Side.SERVER);
-        NETWORK.registerMessage(RespondTpsMtpsPacket.Handler.class, RespondTpsMtpsPacket.class, index++, Side.CLIENT);
+        NETWORK.registerMessage(RequestTpsMsptPacket.Handler.class, RequestTpsMsptPacket.class, index++, Side.SERVER);
+        NETWORK.registerMessage(RespondTpsMsptPacket.Handler.class, RespondTpsMsptPacket.class, index++, Side.CLIENT);
 
         NETWORK.registerMessage(RequestBloodMagicNbtPacket.Handler.class, RequestBloodMagicNbtPacket.class, index++, Side.SERVER);
     }

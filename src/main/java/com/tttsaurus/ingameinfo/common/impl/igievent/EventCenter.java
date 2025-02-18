@@ -11,7 +11,7 @@ public final class EventCenter
     public final static IgiGuiFboRefreshRateEvent igiGuiFboRefreshRateEvent = new IgiGuiFboRefreshRateEvent();
     public final static GameFpsEvent gameFpsEvent = new GameFpsEvent();
     public final static GameMemoryEvent gameMemoryEvent = new GameMemoryEvent();
-    public final static GameTpsMtpsEvent gameTpsMtpsEvent = new GameTpsMtpsEvent();
+    public final static GameTpsMsptEvent gameTpsMsptEvent = new GameTpsMsptEvent();
     public final static EnterBiomeEvent enterBiomeEvent = new EnterBiomeEvent();
 
     // spotify
