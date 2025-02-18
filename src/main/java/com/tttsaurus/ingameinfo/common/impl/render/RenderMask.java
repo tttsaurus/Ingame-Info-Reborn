@@ -38,7 +38,7 @@ public class RenderMask
 
     private final Map<MaskShape, Boolean> init = new HashMap<>();
 
-    private int stencilValue;
+    private final int stencilValue;
     private float x;
     private float y;
     private float width;

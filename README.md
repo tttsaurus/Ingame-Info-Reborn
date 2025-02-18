@@ -47,7 +47,7 @@ https://trello.com/b/MTLHeyGn/ingameinfo
   - Simple Button (✔)
   - Checkbox
   - Input Field
-  - Image
+  - Image (✔)
   - Url Image (✔)
   - GIF
   - Slide Bar

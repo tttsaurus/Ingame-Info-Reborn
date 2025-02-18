@@ -38,6 +38,7 @@ public class ImageRenderer implements IRenderer
     //</editor-fold>
 
     public ImageRenderer() { }
+
     public ImageRenderer(Texture2D texture)
     {
         this.texture = texture;
@@ -55,9 +56,18 @@ public class ImageRenderer implements IRenderer
         }
         catch (IOException ignored) { }
     }
-    public void updateRl()
+    public void updateRl(ResourceLocation resourceLocation)
     {
-        
+        try
+        {
+            IResource resource = Minecraft.getMinecraft().getResourceManager().getResource(resourceLocation);
+            InputStream inputStream = resource.getInputStream();
+
+            BufferedImage bufferedImage = ImageIO.read(inputStream);
+
+            texture = createTexture(bufferedImage);
+        }
+        catch (IOException ignored) { }
     }
 
     protected Texture2D createTexture(BufferedImage image)
