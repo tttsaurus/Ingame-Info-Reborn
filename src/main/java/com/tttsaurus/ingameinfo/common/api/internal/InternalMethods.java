@@ -12,6 +12,8 @@ import com.tttsaurus.ingameinfo.common.api.gui.style.IStylePropertySyncTo;
 import com.tttsaurus.ingameinfo.common.api.mvvm.view.View;
 import com.tttsaurus.ingameinfo.common.api.mvvm.viewmodel.ViewModel;
 import com.tttsaurus.ingameinfo.common.impl.gui.layout.MainGroup;
+import java.lang.invoke.MethodHandle;
+import java.lang.invoke.MethodHandles;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
@@ -25,25 +27,28 @@ public class InternalMethods
     public IFunc<GuiLayout> GuiLayout$constructor;
     public IFunc_1Param<MainGroup, GuiLayout> GuiLayout$mainGroup$getter;
     public IFunc_1Param<IgiGuiContainer, GuiLayout> GuiLayout$igiGuiContainer$getter;
+    public IFunc_1Param<Map<String, IStylePropertySyncTo>, Element> Element$syncToMap$getter;
     public IAction_2Param<IgiGuiContainer, ViewModel> IgiGuiContainer$viewModel$setter;
     public IAction_2Param<View, MainGroup> View$mainGroup$setter;
     public IFunc_2Param<GuiLayout, ViewModel, String> ViewModel$init;
     public IFunc_1Param<GuiLayout, View> View$init;
-    public IFunc_1Param<Map<String, IStylePropertySyncTo>, Element> Element$syncToMap;
 
     public InternalMethods()
     {
+        MethodHandles.Lookup lookup = MethodHandles.lookup();
+
         try
         {
             Constructor<GuiLayout> constructor = GuiLayout.class.getDeclaredConstructor(new Class[0]);
             constructor.setAccessible(true);
+            MethodHandle handle = lookup.unreflectConstructor(constructor);
             GuiLayout$constructor = () ->
             {
                 try
                 {
-                    return constructor.newInstance();
+                    return (GuiLayout)handle.invoke();
                 }
-                catch (Exception ignored) { return null; }
+                catch (Throwable ignored) { return null; }
             };
         }
         catch (Exception exception)
@@ -56,13 +61,14 @@ public class InternalMethods
         {
             Field field = GuiLayout.class.getDeclaredField("mainGroup");
             field.setAccessible(true);
+            MethodHandle handle = lookup.unreflectGetter(field);
             GuiLayout$mainGroup$getter = (arg0) ->
             {
                 try
                 {
-                    return (MainGroup)field.get(arg0);
+                    return (MainGroup)handle.invoke(arg0);
                 }
-                catch (Exception ignored) { return null; }
+                catch (Throwable ignored) { return null; }
             };
         }
         catch (Exception exception)
@@ -75,13 +81,14 @@ public class InternalMethods
         {
             Field field = GuiLayout.class.getDeclaredField("igiGuiContainer");
             field.setAccessible(true);
+            MethodHandle handle = lookup.unreflectGetter(field);
             GuiLayout$igiGuiContainer$getter = (arg0) ->
             {
                 try
                 {
-                    return (IgiGuiContainer)field.get(arg0);
+                    return (IgiGuiContainer)handle.invoke(arg0);
                 }
-                catch (Exception ignored) { return null; }
+                catch (Throwable ignored) { return null; }
             };
         }
         catch (Exception exception)
@@ -92,15 +99,36 @@ public class InternalMethods
 
         try
         {
+            Field field = Element.class.getDeclaredField("syncToMap");
+            field.setAccessible(true);
+            MethodHandle handle = lookup.unreflectGetter(field);
+            Element$syncToMap$getter = (arg0) ->
+            {
+                try
+                {
+                    return (Map<String, IStylePropertySyncTo>)handle.invoke(arg0);
+                }
+                catch (Throwable ignored) { return null; }
+            };
+        }
+        catch (Exception exception)
+        {
+            Element$syncToMap$getter = null;
+            InGameInfoReborn.logger.info("Reflection setup failed for Element$syncToMap$getter: " + exception.getMessage());
+        }
+
+        try
+        {
             Field field = IgiGuiContainer.class.getDeclaredField("viewModel");
             field.setAccessible(true);
+            MethodHandle handle = lookup.unreflectSetter(field);
             IgiGuiContainer$viewModel$setter = (arg0, arg1) ->
             {
                 try
                 {
-                    field.set(arg0, arg1);
+                    handle.invoke(arg0, arg1);
                 }
-                catch (Exception ignored) { }
+                catch (Throwable ignored) { }
             };
         }
         catch (Exception exception)
@@ -113,13 +141,14 @@ public class InternalMethods
         {
             Field field = View.class.getDeclaredField("mainGroup");
             field.setAccessible(true);
+            MethodHandle handle = lookup.unreflectSetter(field);
             View$mainGroup$setter = (arg0, arg1) ->
             {
                 try
                 {
-                    field.set(arg0, arg1);
+                    handle.invoke(arg0, arg1);
                 }
-                catch (Exception ignored) { }
+                catch (Throwable ignored) { }
             };
         }
         catch (Exception exception)
@@ -132,13 +161,14 @@ public class InternalMethods
         {
             Method method = ViewModel.class.getDeclaredMethod("init", String.class);
             method.setAccessible(true);
+            MethodHandle handle = lookup.unreflect(method);
             ViewModel$init = (arg0, arg1) ->
             {
                 try
                 {
-                    return (GuiLayout)method.invoke(arg0, arg1);
+                    return (GuiLayout)handle.invoke(arg0, arg1);
                 }
-                catch (Exception ignored) { return null; }
+                catch (Throwable ignored) { return null; }
             };
         }
         catch (Exception exception)
@@ -151,38 +181,20 @@ public class InternalMethods
         {
             Method method = View.class.getDeclaredMethod("init", new Class[0]);
             method.setAccessible(true);
+            MethodHandle handle = lookup.unreflect(method);
             View$init = (arg0) ->
             {
                 try
                 {
-                    return (GuiLayout)method.invoke(arg0, new Object[0]);
+                    return (GuiLayout)handle.invoke(arg0);
                 }
-                catch (Exception ignored) { return null; }
+                catch (Throwable ignored) { return null; }
             };
         }
         catch (Exception exception)
         {
             View$init = null;
             InGameInfoReborn.logger.info("Reflection setup failed for View$init: " + exception.getMessage());
-        }
-
-        try
-        {
-            Field field = Element.class.getDeclaredField("syncToMap");
-            field.setAccessible(true);
-            Element$syncToMap = (arg0) ->
-            {
-                try
-                {
-                    return (Map<String, IStylePropertySyncTo>)field.get(arg0);
-                }
-                catch (Exception ignored) { return null; }
-            };
-        }
-        catch (Exception exception)
-        {
-            Element$syncToMap = null;
-            InGameInfoReborn.logger.info("Reflection setup failed for Element$syncToMap: " + exception.getMessage());
         }
     }
 }

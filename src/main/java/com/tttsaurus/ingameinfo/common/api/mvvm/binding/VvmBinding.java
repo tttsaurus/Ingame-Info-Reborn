@@ -80,7 +80,7 @@ public class VvmBinding<TView extends View>
             // view to viewmodel sync
             if (reactive.passiveSync())
             {
-                Map<String, IStylePropertySyncTo> syncToMap = InternalMethods.instance.Element$syncToMap.invoke(element);
+                Map<String, IStylePropertySyncTo> syncToMap = InternalMethods.instance.Element$syncToMap$getter.invoke(element);
                 IStylePropertyGetter getter = ElementRegistry.getStylePropertyGetter(stylePropertySetter);
                 if (getter != null)
                 {
