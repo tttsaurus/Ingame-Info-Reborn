@@ -51,4 +51,9 @@ public final class EventCenterWrapper
     {
         EventCenter.sereneSeasonsEvent.addListener(listener::invoke);
     }
+    @ZenMethod
+    public static void addThaumcraftEventListener(IThaumcraftEventListener listener)
+    {
+        EventCenter.thaumcraftEvent.addListener(listener::invoke);
+    }
 }

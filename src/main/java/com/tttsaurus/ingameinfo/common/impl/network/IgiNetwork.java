@@ -3,8 +3,9 @@ package com.tttsaurus.ingameinfo.common.impl.network;
 import com.tttsaurus.ingameinfo.Tags;
 import com.tttsaurus.ingameinfo.common.api.function.IAction_1Param;
 import com.tttsaurus.ingameinfo.common.api.function.IAction_2Param;
-import com.tttsaurus.ingameinfo.common.impl.network.bloodmagic.RequestBloodMagicNbtPacket;
 import com.tttsaurus.ingameinfo.common.impl.network.common.RespondNbtPacket;
+import com.tttsaurus.ingameinfo.common.impl.network.modcompat.bloodmagic.RequestBloodMagicNbtPacket;
+import com.tttsaurus.ingameinfo.common.impl.network.modcompat.thaumcraft.RequestThaumcraftNbtPacket;
 import com.tttsaurus.ingameinfo.common.impl.network.tps.RequestTpsMsptPacket;
 import com.tttsaurus.ingameinfo.common.impl.network.tps.RespondTpsMsptPacket;
 import net.minecraft.nbt.NBTTagCompound;
@@ -52,6 +53,11 @@ public class IgiNetwork
         addNbtResponseConsumer(RequestBloodMagicNbtPacket.RESPONSE_KEY, callback);
         NETWORK.sendToServer(new RequestBloodMagicNbtPacket());
     }
+    public static void requestThaumcraftNbt(IAction_1Param<NBTTagCompound> callback)
+    {
+        addNbtResponseConsumer(RequestThaumcraftNbtPacket.RESPONSE_KEY, callback);
+        NETWORK.sendToServer(new RequestThaumcraftNbtPacket());
+    }
 
     public static void init()
     {
@@ -63,5 +69,7 @@ public class IgiNetwork
         NETWORK.registerMessage(RespondTpsMsptPacket.Handler.class, RespondTpsMsptPacket.class, index++, Side.CLIENT);
 
         NETWORK.registerMessage(RequestBloodMagicNbtPacket.Handler.class, RequestBloodMagicNbtPacket.class, index++, Side.SERVER);
+
+        NETWORK.registerMessage(RequestThaumcraftNbtPacket.Handler.class, RequestThaumcraftNbtPacket.class, index++, Side.SERVER);
     }
 }

@@ -8,5 +8,5 @@ import stanhebben.zenscript.annotations.ZenClass;
 @ZenClass("mods.ingameinfo.igievent.SereneSeasonsEventListener")
 public interface ISereneSeasonsEventListener
 {
-    void invoke(SereneSeasonsEvent.SereneSeasonsData data);
+    void invoke(SereneSeasonsEvent.SereneSeasonsData arg0);
 }

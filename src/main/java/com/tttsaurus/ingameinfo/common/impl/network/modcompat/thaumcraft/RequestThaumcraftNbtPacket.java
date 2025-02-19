@@ -1,7 +1,5 @@
-package com.tttsaurus.ingameinfo.common.impl.network.bloodmagic;
+package com.tttsaurus.ingameinfo.common.impl.network.modcompat.thaumcraft;
 
-import WayofTime.bloodmagic.core.data.SoulNetwork;
-import WayofTime.bloodmagic.util.helper.NetworkHelper;
 import com.tttsaurus.ingameinfo.common.impl.network.IgiNetwork;
 import com.tttsaurus.ingameinfo.common.impl.network.common.RespondNbtPacket;
 import io.netty.buffer.ByteBuf;
@@ -11,12 +9,13 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
+import thaumcraft.api.aura.AuraHelper;
 
-public class RequestBloodMagicNbtPacket implements IMessage
+public class RequestThaumcraftNbtPacket implements IMessage
 {
-    public static final String RESPONSE_KEY = "BloodMagicNbt";
+    public static final String RESPONSE_KEY = "ThaumcraftNbt";
 
-    public RequestBloodMagicNbtPacket() { }
+    public RequestThaumcraftNbtPacket() { }
 
     @Override
     public void fromBytes(ByteBuf buf) { }
@@ -24,10 +23,10 @@ public class RequestBloodMagicNbtPacket implements IMessage
     @Override
     public void toBytes(ByteBuf buf) { }
 
-    public static class Handler implements IMessageHandler<RequestBloodMagicNbtPacket, IMessage>
+    public static class Handler implements IMessageHandler<RequestThaumcraftNbtPacket, IMessage>
     {
         @Override
-        public IMessage onMessage(RequestBloodMagicNbtPacket message, MessageContext ctx)
+        public IMessage onMessage(RequestThaumcraftNbtPacket message, MessageContext ctx)
         {
             if (!ctx.side.isServer()) return null;
 
@@ -40,9 +39,9 @@ public class RequestBloodMagicNbtPacket implements IMessage
             EntityPlayerMP player = ctx.getServerHandler().player;
             server.addScheduledTask(() ->
             {
-                SoulNetwork soulNetwork = NetworkHelper.getSoulNetwork(player);
-                nbt.setInteger("CurrentEssence", soulNetwork.getCurrentEssence());
-                nbt.setInteger("OrbTier", soulNetwork.getOrbTier());
+                nbt.setFloat("LocalVis", AuraHelper.getVis(player.world, player.getPosition()));
+                nbt.setFloat("LocalFlux", AuraHelper.getFlux(player.world, player.getPosition()));
+                nbt.setInteger("LocalAuraBase", AuraHelper.getAuraBase(player.world, player.getPosition()));
                 IgiNetwork.NETWORK.sendTo(new RespondNbtPacket(nbt), player);
             });
 

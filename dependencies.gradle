@@ -62,4 +62,8 @@ dependencies {
     // sereneseasons
     compileOnly "curse.maven:serene-seasons-291874:2799213"
     runtimeOnly "curse.maven:serene-seasons-291874:2799213"
+
+    // thaumcraft
+    compileOnly "curse.maven:thaumcraft-223628:2629023"
+    runtimeOnly "curse.maven:thaumcraft-223628:2629023"
 }
