@@ -57,12 +57,15 @@ public final class RegistryUtils
             {
                 StyleProperty styleProperty = field.getAnnotation(StyleProperty.class);
                 MethodHandles.Lookup lookup = MethodHandles.lookup();
+
+                Class<?> fieldClass = field.getType();
+                String fieldName = field.getName();
+                // setter is the primary key
+                IStylePropertySetter wrappedSetter = null;
+
+                //<editor-fold desc="setter">
                 try
                 {
-                    // setter
-                    Class<?> fieldClass = field.getType();
-                    String fieldName = field.getName();
-                    IStylePropertySetter wrappedSetter;
                     if (IWrappedStyleProperty.class.isAssignableFrom(fieldClass))
                     {
                         MethodHandle getter = lookup.findGetter(clazz, fieldName, fieldClass);
@@ -89,8 +92,13 @@ public final class RegistryUtils
                         };
                     }
                     setters.put(styleProperty.name().isEmpty() ? fieldName : styleProperty.name(), wrappedSetter);
+                }
+                catch (Exception ignored) { }
+                //</editor-fold>
 
-                    // getter
+                //<editor-fold desc="getter">
+                try
+                {
                     MethodHandle getter = lookup.findGetter(clazz, fieldName, fieldClass);
                     IStylePropertyGetter wrappedGetter = (target) ->
                     {
@@ -101,62 +109,78 @@ public final class RegistryUtils
                         catch (Throwable ignored) { return null; }
                     };
                     stylePropertyGetters.put(wrappedSetter, wrappedGetter);
+                }
+                catch (Exception ignored) { }
+                //</editor-fold>
 
-                    // deserializer
-                    boolean hasWrappedClass = false;
-                    boolean isWrappedClassPrimitive = false;
-                    Class<?> wrappedClass = null;
-                    if (IWrappedStyleProperty.class.isAssignableFrom(fieldClass))
-                    {
-                        hasWrappedClass = true;
-                        wrappedClass = (Class<?>)((ParameterizedType)fieldClass.getGenericSuperclass()).getActualTypeArguments()[0];
-                        if (TypeUtils.isPrimitiveOrWrappedPrimitive(wrappedClass) || wrappedClass.equals(String.class)) isWrappedClassPrimitive = true;
-                    }
+                //<editor-fold desc="deserializer">
+                boolean hasWrappedClass = false;
+                boolean isWrappedClassPrimitive = false;
+                Class<?> wrappedClass = null;
 
-                    if (hasWrappedClass && isWrappedClassPrimitive)
-                        stylePropertyDeserializers.put(wrappedSetter, new BuiltinTypesDeserializer<>(wrappedClass));
-                    else if (hasWrappedClass && wrappedClass.isAnnotationPresent(Deserializer.class))
+                if (IWrappedStyleProperty.class.isAssignableFrom(fieldClass))
+                {
+                    hasWrappedClass = true;
+                    wrappedClass = (Class<?>)((ParameterizedType)fieldClass.getGenericSuperclass()).getActualTypeArguments()[0];
+                    if (TypeUtils.isPrimitiveOrWrappedPrimitive(wrappedClass) || wrappedClass.equals(String.class)) isWrappedClassPrimitive = true;
+                }
+
+                if (hasWrappedClass && isWrappedClassPrimitive)
+                    stylePropertyDeserializers.put(wrappedSetter, new BuiltinTypesDeserializer<>(wrappedClass));
+                else if (hasWrappedClass && wrappedClass.isAnnotationPresent(Deserializer.class))
+                {
+                    Deserializer deserializer = wrappedClass.getAnnotation(Deserializer.class);
+                    try
                     {
-                        Deserializer deserializer = wrappedClass.getAnnotation(Deserializer.class);
                         stylePropertyDeserializers.put(wrappedSetter, deserializer.value().newInstance());
                     }
-                    else if (TypeUtils.isPrimitiveOrWrappedPrimitive(fieldClass) || fieldClass.equals(String.class))
-                        stylePropertyDeserializers.put(wrappedSetter, new BuiltinTypesDeserializer<>(fieldClass));
-                    else if (fieldClass.isAnnotationPresent(Deserializer.class))
+                    catch (Exception ignored) { }
+                }
+                else if (TypeUtils.isPrimitiveOrWrappedPrimitive(fieldClass) || fieldClass.equals(String.class))
+                    stylePropertyDeserializers.put(wrappedSetter, new BuiltinTypesDeserializer<>(fieldClass));
+                else if (fieldClass.isAnnotationPresent(Deserializer.class))
+                {
+                    Deserializer deserializer = fieldClass.getAnnotation(Deserializer.class);
+                    try
                     {
-                        Deserializer deserializer = fieldClass.getAnnotation(Deserializer.class);
                         stylePropertyDeserializers.put(wrappedSetter, deserializer.value().newInstance());
                     }
+                    catch (Exception ignored) { }
+                }
+                //</editor-fold>
 
-                    // setter callback pre
-                    String setterCallbackPreName = styleProperty.setterCallbackPre();
-                    if (!setterCallbackPreName.isEmpty())
+                //<editor-fold desc="setter callback pre">
+                String setterCallbackPreName = styleProperty.setterCallbackPre();
+                if (!setterCallbackPreName.isEmpty())
+                {
+                    boolean hasInputValue = false;
+                    Method setterCallbackPre = null;
+                    try
                     {
-                        boolean hasInputValue = false;
-                        Method setterCallbackPre = null;
+                        setterCallbackPre = clazz.getMethod(setterCallbackPreName, CallbackInfo.class);
+                        hasInputValue = false;
+                    }
+                    catch (Exception ignored) { }
+                    if (setterCallbackPre == null)
                         try
                         {
-                            setterCallbackPre = clazz.getMethod(setterCallbackPreName, CallbackInfo.class);
-                            hasInputValue = false;
+                            if (hasWrappedClass)
+                                setterCallbackPre = clazz.getMethod(setterCallbackPreName, wrappedClass, CallbackInfo.class);
+                            else
+                                setterCallbackPre = clazz.getMethod(setterCallbackPreName, fieldClass, CallbackInfo.class);
+                            hasInputValue = true;
                         }
-                        catch (Exception ignored) { }
-                        if (setterCallbackPre == null)
+                    catch (Exception ignored) { }
+
+                    if (setterCallbackPre != null)
+                    {
+                        if (setterCallbackPre.isAnnotationPresent(StylePropertyCallback.class) && setterCallbackPre.getReturnType().equals(void.class))
+                        {
+                            boolean finalHasInputValue = hasInputValue;
+                            Method finalSetterCallbackPre = setterCallbackPre;
                             try
                             {
-                                if (hasWrappedClass)
-                                    setterCallbackPre = clazz.getMethod(setterCallbackPreName, wrappedClass, CallbackInfo.class);
-                                else
-                                    setterCallbackPre = clazz.getMethod(setterCallbackPreName, fieldClass, CallbackInfo.class);
-                                hasInputValue = true;
-                            }
-                            catch (Exception ignored) { }
-
-                        if (setterCallbackPre != null)
-                        {
-                            if (setterCallbackPre.isAnnotationPresent(StylePropertyCallback.class) && setterCallbackPre.getReturnType().equals(void.class))
-                            {
-                                boolean finalHasInputValue = hasInputValue;
-                                Method finalSetterCallbackPre = setterCallbackPre;
+                                MethodHandle handle = lookup.unreflect(finalSetterCallbackPre);
                                 stylePropertySetterCallbacksPre.put(wrappedSetter, new IStylePropertyCallbackPre()
                                 {
                                     @Override
@@ -165,49 +189,55 @@ public final class RegistryUtils
                                         try
                                         {
                                             if (finalHasInputValue)
-                                                finalSetterCallbackPre.invoke(target, value, callbackInfo);
+                                                handle.invoke(target, value, callbackInfo);
                                             else
-                                                finalSetterCallbackPre.invoke(target, callbackInfo);
+                                                handle.invoke(target, callbackInfo);
                                         }
-                                        catch (Exception ignored) { }
+                                        catch (Throwable ignored) { }
                                     }
 
                                     @Override
                                     public String name() { return setterCallbackPreName; }
                                 });
                             }
+                            catch (Exception ignored) { }
                         }
                     }
+                }
+                //</editor-fold>
 
-                    // setter callback post
-                    String setterCallbackPostName = styleProperty.setterCallbackPost();
-                    if (!setterCallbackPostName.isEmpty())
+                //<editor-fold desc="setter callback post">
+                String setterCallbackPostName = styleProperty.setterCallbackPost();
+                if (!setterCallbackPostName.isEmpty())
+                {
+                    boolean hasInputValue = false;
+                    Method setterCallbackPost = null;
+                    try
                     {
-                        boolean hasInputValue = false;
-                        Method setterCallbackPost = null;
+                        setterCallbackPost = clazz.getMethod(setterCallbackPostName);
+                        hasInputValue = false;
+                    }
+                    catch (Exception ignored) { }
+                    if (setterCallbackPost == null)
                         try
                         {
-                            setterCallbackPost = clazz.getMethod(setterCallbackPostName);
-                            hasInputValue = false;
+                            if (hasWrappedClass)
+                                setterCallbackPost = clazz.getMethod(setterCallbackPostName, wrappedClass);
+                            else
+                                setterCallbackPost = clazz.getMethod(setterCallbackPostName, fieldClass);
+                            hasInputValue = true;
                         }
-                        catch (Exception ignored) { }
-                        if (setterCallbackPost == null)
+                    catch (Exception ignored) { }
+
+                    if (setterCallbackPost != null)
+                    {
+                        if (setterCallbackPost.isAnnotationPresent(StylePropertyCallback.class) && setterCallbackPost.getReturnType().equals(void.class))
+                        {
+                            boolean finalHasInputValue = hasInputValue;
+                            Method finalSetterCallbackPost = setterCallbackPost;
                             try
                             {
-                                if (hasWrappedClass)
-                                    setterCallbackPost = clazz.getMethod(setterCallbackPostName, wrappedClass);
-                                else
-                                    setterCallbackPost = clazz.getMethod(setterCallbackPostName, fieldClass);
-                                hasInputValue = true;
-                            }
-                            catch (Exception ignored) { }
-
-                        if (setterCallbackPost != null)
-                        {
-                            if (setterCallbackPost.isAnnotationPresent(StylePropertyCallback.class) && setterCallbackPost.getReturnType().equals(void.class))
-                            {
-                                boolean finalHasInputValue = hasInputValue;
-                                Method finalSetterCallbackPost = setterCallbackPost;
+                                MethodHandle handle = lookup.unreflect(finalSetterCallbackPost);
                                 stylePropertySetterCallbacksPost.put(wrappedSetter, new IStylePropertyCallbackPost()
                                 {
                                     @Override
@@ -216,24 +246,26 @@ public final class RegistryUtils
                                         try
                                         {
                                             if (finalHasInputValue)
-                                                finalSetterCallbackPost.invoke(target, value);
+                                                handle.invoke(target, value);
                                             else
-                                                finalSetterCallbackPost.invoke(target, new Object[0]);
+                                                handle.invoke(target);
                                         }
-                                        catch (Exception ignored) { }
+                                        catch (Throwable ignored) { }
                                     }
 
                                     @Override
                                     public String name() { return setterCallbackPostName; }
                                 });
                             }
+                            catch (Exception ignored) { }
                         }
                     }
-
-                    // class
-                    stylePropertyClasses.put(wrappedSetter, hasWrappedClass ? wrappedClass : fieldClass);
                 }
-                catch (Exception ignored) { }
+                //</editor-fold>
+
+                //<editor-fold desc="class">
+                stylePropertyClasses.put(wrappedSetter, hasWrappedClass ? wrappedClass : fieldClass);
+                //</editor-fold>
             }
 
         return setters;
