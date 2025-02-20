@@ -71,4 +71,9 @@ public final class EventCenterWrapper
     {
         EventCenter.toughasnailsEvent.addListener(listener::invoke);
     }
+    @ZenMethod
+    public static void addSimpleDifficultyEventListener(ISimpleDifficultyEventListener listener)
+    {
+        EventCenter.simpledifficultyEvent.addListener(listener::invoke);
+    }
 }

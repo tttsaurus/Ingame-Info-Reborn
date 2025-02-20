@@ -23,6 +23,7 @@ public final class EventCenter
     public final static RfToolsDimEvent rftoolsdimEvent = new RfToolsDimEvent();
     public final static DeepResonanceEvent deepresonanceEvent = new DeepResonanceEvent();
     public final static ToughAsNailsEvent toughasnailsEvent = new ToughAsNailsEvent();
+    public final static SimpleDifficultyEvent simpledifficultyEvent = new SimpleDifficultyEvent();
 
     public static void triggerModCompatEvents()
     {

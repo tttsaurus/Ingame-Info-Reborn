@@ -1,5 +1,8 @@
 package com.tttsaurus.ingameinfo.common.impl.igievent.modcompat;
 
+import com.charles445.simpledifficulty.api.SDCapabilities;
+import com.charles445.simpledifficulty.api.temperature.ITemperatureCapability;
+import com.charles445.simpledifficulty.capability.TemperatureCapability;
 import com.tttsaurus.ingameinfo.InGameInfoReborn;
 import com.tttsaurus.ingameinfo.common.impl.igievent.EventCenter;
 import com.tttsaurus.ingameinfo.common.impl.network.IgiNetwork;
@@ -188,6 +191,26 @@ public final class Helper
         }
     }
 
+    private static void simpledifficultyCompat()
+    {
+        if (InGameInfoReborn.simpledifficultyLoaded)
+        {
+            int temp = 0;
+
+            EntityPlayerSP player = Minecraft.getMinecraft().player;
+            if (player != null)
+            {
+                TemperatureCapability tempCap = (TemperatureCapability)player.getCapability(SDCapabilities.TEMPERATURE, player.getHorizontalFacing());
+                if (tempCap != null)
+                {
+                    temp = tempCap.getTemperatureLevel();
+                }
+            }
+
+            EventCenter.simpledifficultyEvent.trigger(temp);
+        }
+    }
+
     public static void triggerModCompatEvents()
     {
         bloodmagicCompat();
@@ -196,5 +219,6 @@ public final class Helper
         rftoolsdimCompat();
         deepresonanceCompat();
         toughasnailsCompat();
+        simpledifficultyCompat();
     }
 }
