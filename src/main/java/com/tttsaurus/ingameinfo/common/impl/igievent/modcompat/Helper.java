@@ -13,6 +13,8 @@ import sereneseasons.api.season.ISeasonState;
 import sereneseasons.api.season.SeasonHelper;
 import thaumcraft.api.capabilities.IPlayerWarp;
 import thaumcraft.api.capabilities.ThaumcraftCapabilities;
+import toughasnails.api.TANCapabilities;
+import toughasnails.temperature.TemperatureHandler;
 
 public final class Helper
 {
@@ -164,6 +166,28 @@ public final class Helper
         }
     }
 
+    private static void toughasnailsCompat()
+    {
+        if (InGameInfoReborn.toughasnailsLoaded)
+        {
+            int currentTemp = 0;
+            int targetTemp = 0;
+
+            EntityPlayerSP player = Minecraft.getMinecraft().player;
+            if (player != null)
+            {
+                TemperatureHandler tempStats = (TemperatureHandler)player.getCapability(TANCapabilities.TEMPERATURE, player.getHorizontalFacing());
+                if (tempStats != null)
+                {
+                    currentTemp = tempStats.getTemperature().getRawValue();
+                    targetTemp = tempStats.debugger.targetTemperature;
+                }
+            }
+
+            EventCenter.toughasnailsEvent.trigger(currentTemp, targetTemp);
+        }
+    }
+
     public static void triggerModCompatEvents()
     {
         bloodmagicCompat();
@@ -171,5 +195,6 @@ public final class Helper
         thaumcraftCompat();
         rftoolsdimCompat();
         deepresonanceCompat();
+        toughasnailsCompat();
     }
 }

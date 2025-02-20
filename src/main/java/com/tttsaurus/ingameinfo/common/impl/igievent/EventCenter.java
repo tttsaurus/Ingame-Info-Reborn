@@ -22,6 +22,7 @@ public final class EventCenter
     public final static ThaumcraftEvent thaumcraftEvent = new ThaumcraftEvent();
     public final static RfToolsDimEvent rftoolsdimEvent = new RfToolsDimEvent();
     public final static DeepResonanceEvent deepresonanceEvent = new DeepResonanceEvent();
+    public final static ToughAsNailsEvent toughasnailsEvent = new ToughAsNailsEvent();
 
     public static void triggerModCompatEvents()
     {

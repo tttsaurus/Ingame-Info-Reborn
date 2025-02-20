@@ -66,4 +66,9 @@ public final class EventCenterWrapper
     {
         EventCenter.deepresonanceEvent.addListener(listener::invoke);
     }
+    @ZenMethod
+    public static void addToughAsNailsEventListener(IToughAsNailsEventListener listener)
+    {
+        EventCenter.toughasnailsEvent.addListener(listener::invoke);
+    }
 }
