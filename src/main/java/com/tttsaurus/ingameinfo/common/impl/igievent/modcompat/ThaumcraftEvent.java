@@ -6,7 +6,7 @@ import crafttweaker.annotations.ZenRegister;
 import stanhebben.zenscript.annotations.ZenClass;
 import stanhebben.zenscript.annotations.ZenMethod;
 
-public class ThaumcraftEvent extends EventBase<IAction_1Param<ThaumcraftEvent.ThaumcraftData>>
+public final class ThaumcraftEvent extends EventBase<IAction_1Param<ThaumcraftEvent.ThaumcraftData>>
 {
     @Override
     public void addListener(IAction_1Param<ThaumcraftData> listener)

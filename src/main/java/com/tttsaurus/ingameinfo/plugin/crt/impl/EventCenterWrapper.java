@@ -61,4 +61,9 @@ public final class EventCenterWrapper
     {
         EventCenter.rftoolsdimEvent.addListener(listener::invoke);
     }
+    @ZenMethod
+    public static void addDeepResonanceEventListener(IDeepResonanceEventListener listener)
+    {
+        EventCenter.deepresonanceEvent.addListener(listener::invoke);
+    }
 }

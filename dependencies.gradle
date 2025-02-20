@@ -74,4 +74,16 @@ dependencies {
     // mcjtylib
     compileOnly "curse.maven:mcjtylib-233105:2745846"
     runtimeOnly "curse.maven:mcjtylib-233105:2745846"
+
+    // deepresonance
+    compileOnly "curse.maven:deep-resonance-233398:2704397"
+    runtimeOnly "curse.maven:deep-resonance-233398:2704397"
+
+    // toughasnails
+    compileOnly "curse.maven:tough-as-nails-246391:2644652"
+    runtimeOnly "curse.maven:tough-as-nails-246391:2644652"
+
+    // simpledifficulty
+    compileOnly "curse.maven:simpledifficulty-360779:3613814"
+    runtimeOnly "curse.maven:simpledifficulty-360779:3613814"
 }

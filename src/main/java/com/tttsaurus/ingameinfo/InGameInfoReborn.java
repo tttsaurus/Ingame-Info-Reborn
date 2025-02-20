@@ -26,6 +26,9 @@ public final class InGameInfoReborn
     public static boolean sereneseasonsLoaded;
     public static boolean thaumcraftLoaded;
     public static boolean rftoolsdimLoaded;
+    public static boolean deepresonanceLoaded;
+    public static boolean toughasnailsLoaded;
+    public static boolean simpledifficultyLoaded;
 
     public static Logger logger;
     public static ASMDataTable asmDataTable;

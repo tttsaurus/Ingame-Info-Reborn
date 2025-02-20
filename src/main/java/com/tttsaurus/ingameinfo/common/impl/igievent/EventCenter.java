@@ -21,6 +21,7 @@ public final class EventCenter
     public final static SereneSeasonsEvent sereneSeasonsEvent = new SereneSeasonsEvent();
     public final static ThaumcraftEvent thaumcraftEvent = new ThaumcraftEvent();
     public final static RfToolsDimEvent rftoolsdimEvent = new RfToolsDimEvent();
+    public final static DeepResonanceEvent deepresonanceEvent = new DeepResonanceEvent();
 
     public static void triggerModCompatEvents()
     {

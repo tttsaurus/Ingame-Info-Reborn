@@ -41,6 +41,9 @@ public class CommonProxy
         InGameInfoReborn.sereneseasonsLoaded = Loader.isModLoaded("sereneseasons");
         InGameInfoReborn.thaumcraftLoaded = Loader.isModLoaded("thaumcraft");
         InGameInfoReborn.rftoolsdimLoaded = Loader.isModLoaded("rftoolsdim");
+        InGameInfoReborn.deepresonanceLoaded = Loader.isModLoaded("deepresonance");
+        InGameInfoReborn.toughasnailsLoaded = Loader.isModLoaded("toughasnails");
+        InGameInfoReborn.simpledifficultyLoaded = Loader.isModLoaded("simpledifficulty");
 
         // crt support
         if (InGameInfoReborn.crafttweakerLoaded)

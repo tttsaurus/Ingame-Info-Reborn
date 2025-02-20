@@ -3,6 +3,7 @@ package com.tttsaurus.ingameinfo.common.impl.igievent.modcompat;
 import com.tttsaurus.ingameinfo.InGameInfoReborn;
 import com.tttsaurus.ingameinfo.common.impl.igievent.EventCenter;
 import com.tttsaurus.ingameinfo.common.impl.network.IgiNetwork;
+import mcjty.deepresonance.items.RadiationMonitorItem;
 import mcjty.rftoolsdim.dimensions.DimensionInformation;
 import mcjty.rftoolsdim.dimensions.DimensionStorage;
 import mcjty.rftoolsdim.dimensions.RfToolsDimensionManager;
@@ -146,11 +147,29 @@ public final class Helper
         }
     }
 
+    private static void deepresonanceCompat()
+    {
+        if (InGameInfoReborn.deepresonanceLoaded)
+        {
+            float radiation = 0;
+
+            EntityPlayerSP player = Minecraft.getMinecraft().player;
+            if (player != null)
+            {
+                RadiationMonitorItem.fetchRadiation(player);
+                radiation = RadiationMonitorItem.radiationStrength;
+            }
+
+            EventCenter.deepresonanceEvent.trigger(radiation);
+        }
+    }
+
     public static void triggerModCompatEvents()
     {
         bloodmagicCompat();
         sereneseasonsCompat();
         thaumcraftCompat();
         rftoolsdimCompat();
+        deepresonanceCompat();
     }
 }

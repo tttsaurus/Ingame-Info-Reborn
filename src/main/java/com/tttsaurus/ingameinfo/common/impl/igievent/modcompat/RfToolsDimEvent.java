@@ -6,7 +6,7 @@ import crafttweaker.annotations.ZenRegister;
 import stanhebben.zenscript.annotations.ZenClass;
 import stanhebben.zenscript.annotations.ZenMethod;
 
-public class RfToolsDimEvent extends EventBase<IAction_1Param<RfToolsDimEvent.RfToolsDimData>>
+public final class RfToolsDimEvent extends EventBase<IAction_1Param<RfToolsDimEvent.RfToolsDimData>>
 {
     @Override
     public void addListener(IAction_1Param<RfToolsDimData> listener)
