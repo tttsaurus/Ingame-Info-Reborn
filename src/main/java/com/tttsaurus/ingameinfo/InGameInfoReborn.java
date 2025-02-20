@@ -25,6 +25,7 @@ public final class InGameInfoReborn
     public static boolean bloodmagicLoaded;
     public static boolean sereneseasonsLoaded;
     public static boolean thaumcraftLoaded;
+    public static boolean rftoolsdimLoaded;
 
     public static Logger logger;
     public static ASMDataTable asmDataTable;

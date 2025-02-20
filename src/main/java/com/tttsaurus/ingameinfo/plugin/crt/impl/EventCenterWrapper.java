@@ -56,4 +56,9 @@ public final class EventCenterWrapper
     {
         EventCenter.thaumcraftEvent.addListener(listener::invoke);
     }
+    @ZenMethod
+    public static void addRfToolsDimEventListener(IRfToolsDimEventListener listener)
+    {
+        EventCenter.rftoolsdimEvent.addListener(listener::invoke);
+    }
 }

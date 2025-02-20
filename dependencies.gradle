@@ -66,4 +66,12 @@ dependencies {
     // thaumcraft
     compileOnly "curse.maven:thaumcraft-223628:2629023"
     runtimeOnly "curse.maven:thaumcraft-223628:2629023"
+
+    // rftoolsdim
+    compileOnly "curse.maven:rftools-dimensions-240950:2707390"
+    runtimeOnly "curse.maven:rftools-dimensions-240950:2707390"
+
+    // mcjtylib
+    compileOnly "curse.maven:mcjtylib-233105:2745846"
+    runtimeOnly "curse.maven:mcjtylib-233105:2745846"
 }

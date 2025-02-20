@@ -1,9 +1,6 @@
 package com.tttsaurus.ingameinfo.common.impl.igievent;
 
-import com.tttsaurus.ingameinfo.common.impl.igievent.modcompat.BloodMagicEvent;
-import com.tttsaurus.ingameinfo.common.impl.igievent.modcompat.Helper;
-import com.tttsaurus.ingameinfo.common.impl.igievent.modcompat.SereneSeasonsEvent;
-import com.tttsaurus.ingameinfo.common.impl.igievent.modcompat.ThaumcraftEvent;
+import com.tttsaurus.ingameinfo.common.impl.igievent.modcompat.*;
 
 public final class EventCenter
 {
@@ -23,6 +20,7 @@ public final class EventCenter
     public final static BloodMagicEvent bloodMagicEvent = new BloodMagicEvent();
     public final static SereneSeasonsEvent sereneSeasonsEvent = new SereneSeasonsEvent();
     public final static ThaumcraftEvent thaumcraftEvent = new ThaumcraftEvent();
+    public final static RfToolsDimEvent rftoolsdimEvent = new RfToolsDimEvent();
 
     public static void triggerModCompatEvents()
     {

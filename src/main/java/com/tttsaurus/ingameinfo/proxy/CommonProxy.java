@@ -40,6 +40,7 @@ public class CommonProxy
         InGameInfoReborn.bloodmagicLoaded = Loader.isModLoaded("bloodmagic");
         InGameInfoReborn.sereneseasonsLoaded = Loader.isModLoaded("sereneseasons");
         InGameInfoReborn.thaumcraftLoaded = Loader.isModLoaded("thaumcraft");
+        InGameInfoReborn.rftoolsdimLoaded = Loader.isModLoaded("rftoolsdim");
 
         // crt support
         if (InGameInfoReborn.crafttweakerLoaded)

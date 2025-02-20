@@ -3,6 +3,9 @@ package com.tttsaurus.ingameinfo.common.impl.igievent.modcompat;
 import com.tttsaurus.ingameinfo.InGameInfoReborn;
 import com.tttsaurus.ingameinfo.common.impl.igievent.EventCenter;
 import com.tttsaurus.ingameinfo.common.impl.network.IgiNetwork;
+import mcjty.rftoolsdim.dimensions.DimensionInformation;
+import mcjty.rftoolsdim.dimensions.DimensionStorage;
+import mcjty.rftoolsdim.dimensions.RfToolsDimensionManager;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;
 import sereneseasons.api.season.ISeasonState;
@@ -12,7 +15,7 @@ import thaumcraft.api.capabilities.ThaumcraftCapabilities;
 
 public final class Helper
 {
-    public static void triggerModCompatEvents()
+    private static void bloodmagicCompat()
     {
         if (InGameInfoReborn.bloodmagicLoaded)
         {
@@ -23,6 +26,14 @@ public final class Helper
                 EventCenter.bloodMagicEvent.trigger(lp, orbTier);
             });
         }
+    }
+
+    private static int sereneseasonsCounter = 5;
+    private static void sereneseasonsCompat()
+    {
+        if (sereneseasonsCounter++ < 5) return;
+        sereneseasonsCounter = 0;
+
         if (InGameInfoReborn.sereneseasonsLoaded)
         {
             ISeasonState state = SeasonHelper.dataProvider.getClientSeasonState();
@@ -55,6 +66,10 @@ public final class Helper
                     dayOfSeason
             ));
         }
+    }
+
+    private static void thaumcraftCompat()
+    {
         if (InGameInfoReborn.thaumcraftLoaded)
         {
             IgiNetwork.requestThaumcraftNbt((nbt) ->
@@ -66,6 +81,7 @@ public final class Helper
                 int permanentWarp = 0;
                 int normalWarp = 0;
                 int temporaryWarp = 0;
+
                 EntityPlayerSP player = Minecraft.getMinecraft().player;
                 IPlayerWarp warp = null;
                 if (player != null)
@@ -87,5 +103,54 @@ public final class Helper
                 ));
             });
         }
+    }
+
+    private static int rftoolsdimCounter = 4;
+    private static void rftoolsdimCompat()
+    {
+        if (rftoolsdimCounter++ < 5) return;
+        rftoolsdimCounter = 0;
+
+        if (InGameInfoReborn.rftoolsdimLoaded)
+        {
+            boolean isRfToolsDim = false;
+            long dimPower = 0;
+            int dimRfCost = 0;
+            String dimName = "";
+            String dimOwnerName = "";
+
+            EntityPlayerSP player = Minecraft.getMinecraft().player;
+            if (player != null)
+            {
+                int id = player.world.provider.getDimension();
+                RfToolsDimensionManager dimManager = RfToolsDimensionManager.getDimensionManager(player.world);
+                DimensionInformation dimInfo = dimManager.getDimensionInformation(id);
+                isRfToolsDim = dimInfo != null;
+                if (isRfToolsDim)
+                {
+                    dimName = dimInfo.getName();
+                    dimOwnerName = dimInfo.getOwnerName();
+                    dimRfCost = dimInfo.getActualRfCost();
+                    DimensionStorage storage = DimensionStorage.getDimensionStorage(player.getEntityWorld());
+                    dimPower = storage != null ? storage.getEnergyLevel(id) : 0;
+                }
+            }
+
+            EventCenter.rftoolsdimEvent.trigger(new RfToolsDimEvent.RfToolsDimData(
+                    isRfToolsDim,
+                    dimPower,
+                    dimRfCost,
+                    dimName,
+                    dimOwnerName
+            ));
+        }
+    }
+
+    public static void triggerModCompatEvents()
+    {
+        bloodmagicCompat();
+        sereneseasonsCompat();
+        thaumcraftCompat();
+        rftoolsdimCompat();
     }
 }
