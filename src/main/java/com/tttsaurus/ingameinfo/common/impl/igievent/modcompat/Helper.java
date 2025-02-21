@@ -1,7 +1,6 @@
 package com.tttsaurus.ingameinfo.common.impl.igievent.modcompat;
 
 import com.charles445.simpledifficulty.api.SDCapabilities;
-import com.charles445.simpledifficulty.api.temperature.ITemperatureCapability;
 import com.charles445.simpledifficulty.capability.TemperatureCapability;
 import com.tttsaurus.ingameinfo.InGameInfoReborn;
 import com.tttsaurus.ingameinfo.common.impl.igievent.EventCenter;

@@ -157,7 +157,7 @@ public final class RenderUtils
         }
     }
 
-    public static void initStencilStep1(int stencilValue)
+    public static void prepareStencilToWrite(int stencilValue)
     {
         if (!Minecraft.getMinecraft().getFramebuffer().isStencilEnabled())
             Minecraft.getMinecraft().getFramebuffer().enableStencil();
@@ -166,8 +166,6 @@ public final class RenderUtils
         GlStateManager.disableCull();
 
         GL11.glEnable(GL11.GL_STENCIL_TEST);
-        //GL11.glClearStencil(0);
-        //GL11.glClear(GL11.GL_STENCIL_BUFFER_BIT);
 
         GlStateManager.depthMask(false);
         GlStateManager.colorMask(false, false, false, false);
@@ -177,61 +175,55 @@ public final class RenderUtils
         // mask area
         GL11.glStencilMask(0xFF);
     }
-    public static void initStencilStep2(int stencilValue, boolean exclude)
+    public static void prepareStencilToRender(int stencilValue)
     {
         GL11.glStencilMask(0x00);
 
         GlStateManager.depthMask(true);
         GlStateManager.colorMask(true, true, true, true);
-        if (exclude)
-            GL11.glStencilFunc(GL11.GL_NOTEQUAL, stencilValue, 0xFF);
-        else
-            GL11.glStencilFunc(GL11.GL_EQUAL, stencilValue, 0xFF);
+        GL11.glStencilFunc(GL11.GL_EQUAL, stencilValue, 0xFF);
         GL11.glStencilOp(GL11.GL_KEEP, GL11.GL_KEEP, GL11.GL_KEEP);
     }
-
-    public static void startRoundedRectStencil(float x, float y, float stencilWidth, float stencilHeight, int stencilValue, boolean exclude, float radius)
+    public static void prepareStencilToDecrease(int stencilValue)
     {
-        initStencilStep1(stencilValue);
+        GL11.glStencilFunc(GL11.GL_EQUAL, stencilValue, 0xFF);
+        GL11.glStencilOp(GL11.GL_DECR, GL11.GL_DECR, GL11.GL_DECR);
+    }
+    public static void endStencil()
+    {
+        GL11.glDisable(GL11.GL_STENCIL_TEST);
+    }
 
+    public static void drawRoundedRectStencilArea(float x, float y, float width, float height, float radius)
+    {
         int segments = Math.max(3, (int)(radius / 2f));
         Tessellator tessellator = Tessellator.getInstance();
         BufferBuilder bufferbuilder = tessellator.getBuffer();
         bufferbuilder.begin(GL11.GL_POLYGON, DefaultVertexFormats.POSITION);
 
-        addArcVertices(bufferbuilder, x + stencilWidth - radius, y + radius, radius, 0, 90, segments);
-        bufferbuilder.pos(x + stencilWidth, y + radius, 0).endVertex();
-        bufferbuilder.pos(x + stencilWidth, y + stencilHeight - radius, 0).endVertex();
-        addArcVertices(bufferbuilder, x + stencilWidth - radius, y + stencilHeight - radius, radius, 90, 180, segments);
-        bufferbuilder.pos(x + stencilWidth - radius, y + stencilHeight, 0).endVertex();
-        bufferbuilder.pos(x + radius, y + stencilHeight, 0).endVertex();
-        addArcVertices(bufferbuilder, x + radius, y + stencilHeight - radius, radius, 180, 270, segments);
-        bufferbuilder.pos(x, y + stencilHeight - radius, 0).endVertex();
+        addArcVertices(bufferbuilder, x + width - radius, y + radius, radius, 0, 90, segments);
+        bufferbuilder.pos(x + width, y + radius, 0).endVertex();
+        bufferbuilder.pos(x + width, y + height - radius, 0).endVertex();
+        addArcVertices(bufferbuilder, x + width - radius, y + height - radius, radius, 90, 180, segments);
+        bufferbuilder.pos(x + width - radius, y + height, 0).endVertex();
+        bufferbuilder.pos(x + radius, y + height, 0).endVertex();
+        addArcVertices(bufferbuilder, x + radius, y + height - radius, radius, 180, 270, segments);
+        bufferbuilder.pos(x, y + height - radius, 0).endVertex();
         bufferbuilder.pos(x, y + radius, 0).endVertex();
         addArcVertices(bufferbuilder, x + radius, y + radius, radius, 270, 360, segments);
         bufferbuilder.pos(x + radius, y, 0).endVertex();
-        bufferbuilder.pos(x + stencilWidth - radius, y, 0).endVertex();
+        bufferbuilder.pos(x + width - radius, y, 0).endVertex();
 
         tessellator.draw();
-
-        initStencilStep2(stencilValue, exclude);
     }
-    public static void startRectStencil(float x, float y, float stencilWidth, float stencilHeight, int stencilValue, boolean exclude)
+    public static void drawRectStencilArea(float x, float y, float width, float height)
     {
-        initStencilStep1(stencilValue);
-
         GL11.glBegin(GL11.GL_QUADS);
         GL11.glVertex2f(x, y);
-        GL11.glVertex2f(x + stencilWidth, y);
-        GL11.glVertex2f(x + stencilWidth, y + stencilHeight);
-        GL11.glVertex2f(x, y + stencilHeight);
+        GL11.glVertex2f(x + width, y);
+        GL11.glVertex2f(x + width, y + height);
+        GL11.glVertex2f(x, y + height);
         GL11.glEnd();
-
-        initStencilStep2(stencilValue, exclude);
-    }
-    public static void endStencil()
-    {
-        GL11.glDisable(GL11.GL_STENCIL_TEST);
     }
 
     public static void renderRect(float x, float y, float width, float height, int color)

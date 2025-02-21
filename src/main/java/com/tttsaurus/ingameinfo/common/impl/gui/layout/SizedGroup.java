@@ -7,11 +7,27 @@ import com.tttsaurus.ingameinfo.common.api.gui.registry.RegisterElement;
 import com.tttsaurus.ingameinfo.common.api.gui.style.CallbackInfo;
 import com.tttsaurus.ingameinfo.common.api.gui.style.StyleProperty;
 import com.tttsaurus.ingameinfo.common.api.gui.style.StylePropertyCallback;
+import com.tttsaurus.ingameinfo.common.impl.render.RenderMask;
 
 @RegisterElement
 public class SizedGroup extends ElementGroup
 {
     // pivot doesn't change how the layout is calculated
+
+    private final RenderMask mask = new RenderMask(RenderMask.MaskShape.RECT);
+
+    @StyleProperty
+    public boolean useMask = true;
+
+    public void setIsMaskRoundedCallback()
+    {
+        if (isMaskRounded)
+            mask.maskShape = RenderMask.MaskShape.ROUNDED_RECT;
+        else
+            mask.maskShape = RenderMask.MaskShape.RECT;
+    }
+    @StyleProperty(setterCallbackPost = "setIsMaskRoundedCallback")
+    public boolean isMaskRounded = false;
 
     @StylePropertyCallback
     public void nonNegativeFloatValidation(float value, CallbackInfo callbackInfo)
@@ -40,6 +56,11 @@ public class SizedGroup extends ElementGroup
             if (element.pivot.horizontal == 1 || element.pivot.horizontal == 0.5f) element.rect.y -= element.padding.bottom;
             element.calcRenderPos(rect);
         }
+
+        if (isMaskRounded)
+            mask.setRoundedRectMask(rect.x, rect.y, rect.width, rect.height, 3f);
+        else
+            mask.setRectMask(rect.x, rect.y, rect.width, rect.height);
     }
 
     @Override
@@ -48,5 +69,15 @@ public class SizedGroup extends ElementGroup
         super.calcWidthHeight();
         rect.width = width;
         rect.height = height;
+    }
+
+    @Override
+    public void onRenderUpdate(boolean focused)
+    {
+        if (useMask)
+            mask.startMasking();
+        super.onRenderUpdate(focused);
+        if (useMask)
+            mask.endMasking();
     }
 }

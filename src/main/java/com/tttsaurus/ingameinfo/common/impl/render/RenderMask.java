@@ -3,11 +3,11 @@ package com.tttsaurus.ingameinfo.common.impl.render;
 import com.tttsaurus.ingameinfo.common.api.function.IAction;
 import com.tttsaurus.ingameinfo.common.api.render.RenderUtils;
 import org.lwjgl.opengl.GL11;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 public class RenderMask
 {
+    private static final Stack<RenderMask> maskStack = new Stack<>();
     private static int stencilValueCounter = 0;
     private static int nextStencilValue()
     {
@@ -27,15 +27,8 @@ public class RenderMask
         ROUNDED_RECT,
         CUSTOM
     }
-    public enum MaskMode
-    {
-        INCLUDE,
-        EXCLUDE
-    }
 
     public MaskShape maskShape;
-    public MaskMode maskMode = MaskMode.INCLUDE;
-
     private final Map<MaskShape, Boolean> init = new HashMap<>();
 
     private final int stencilValue;
@@ -54,19 +47,9 @@ public class RenderMask
         init.put(MaskShape.CUSTOM, false);
         stencilValue = nextStencilValue();
     }
-    public RenderMask(MaskShape maskShape, MaskMode maskMode)
-    {
-        this.maskShape = maskShape;
-        this.maskMode = maskMode;
-        init.put(MaskShape.RECT, false);
-        init.put(MaskShape.ROUNDED_RECT, false);
-        init.put(MaskShape.CUSTOM, false);
-        stencilValue = nextStencilValue();
-    }
 
     public void setRectMask(float x, float y, float width, float height)
     {
-        if (maskShape != MaskShape.RECT) return;
         init.put(MaskShape.RECT, true);
         this.x = x;
         this.y = y;
@@ -75,7 +58,6 @@ public class RenderMask
     }
     public void setRoundedRectMask(float x, float y, float width, float height, float radius)
     {
-        if (maskShape != MaskShape.ROUNDED_RECT) return;
         init.put(MaskShape.ROUNDED_RECT, true);
         this.x = x;
         this.y = y;
@@ -85,39 +67,66 @@ public class RenderMask
     }
     public void setCustomMask(IAction drawMask)
     {
-        if (maskShape != MaskShape.CUSTOM) return;
         init.put(MaskShape.CUSTOM, true);
         this.drawMask = drawMask;
     }
 
-    public void startMasking()
+    private static void drawStencilArea(RenderMask mask)
     {
-        switch (maskShape)
+        switch (mask.maskShape)
         {
             case RECT ->
             {
-                if (init.get(MaskShape.RECT))
-                    RenderUtils.startRectStencil(x, y, width, height, stencilValue, maskMode == MaskMode.EXCLUDE);
+                if (mask.init.get(MaskShape.RECT))
+                    RenderUtils.drawRectStencilArea(mask.x, mask.y, mask.width, mask.height);
             }
             case ROUNDED_RECT ->
             {
-                if (init.get(MaskShape.ROUNDED_RECT))
-                    RenderUtils.startRoundedRectStencil(x, y, width, height, stencilValue, maskMode == MaskMode.EXCLUDE, radius);
+                if (mask.init.get(MaskShape.ROUNDED_RECT))
+                    RenderUtils.drawRoundedRectStencilArea(mask.x, mask.y, mask.width, mask.height, mask.radius);
             }
             case CUSTOM ->
             {
-                if (init.get(MaskShape.CUSTOM))
-                    if (drawMask != null)
-                    {
-                        RenderUtils.initStencilStep1(stencilValue);
-                        drawMask.invoke();
-                        RenderUtils.initStencilStep2(stencilValue, maskMode == MaskMode.EXCLUDE);
-                    }
+                if (mask.init.get(MaskShape.CUSTOM))
+                    if (mask.drawMask != null)
+                        mask.drawMask.invoke();
             }
         }
+    }
+
+    public void startMasking()
+    {
+        if (maskStack.isEmpty())
+            maskStack.push(this);
+        else if (maskStack.peek() != this)
+        {
+            maskStack.push(this);
+            RenderUtils.endStencil();
+        }
+
+        RenderUtils.prepareStencilToWrite(stencilValue);
+        drawStencilArea(this);
+
+        int sv = stencilValue;
+        if (maskStack.size() > 1)
+        {
+            ListIterator<RenderMask> iterator = maskStack.listIterator(maskStack.size());
+            iterator.previous();
+            while (iterator.hasPrevious())
+            {
+                RenderMask prevMask = iterator.previous();
+                RenderUtils.prepareStencilToDecrease(sv--);
+                drawStencilArea(prevMask);
+            }
+        }
+
+        RenderUtils.prepareStencilToRender(sv);
     }
     public void endMasking()
     {
         RenderUtils.endStencil();
+        maskStack.pop();
+        if (!maskStack.isEmpty())
+            maskStack.peek().startMasking();
     }
 }
