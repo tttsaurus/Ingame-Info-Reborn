@@ -5,6 +5,8 @@ import com.tttsaurus.ingameinfo.common.api.gui.IgiGuiContainer;
 import com.tttsaurus.ingameinfo.common.api.gui.delegate.placeholder.IPlaceholderDrawScreen;
 import com.tttsaurus.ingameinfo.common.api.gui.delegate.placeholder.IPlaceholderKeyTyped;
 import com.tttsaurus.ingameinfo.common.api.function.IFunc;
+import com.tttsaurus.ingameinfo.common.api.render.GlResourceManager;
+import com.tttsaurus.ingameinfo.common.api.render.IGlDisposable;
 import com.tttsaurus.ingameinfo.common.api.render.RenderHints;
 import com.tttsaurus.ingameinfo.common.api.render.RenderUtils;
 import com.tttsaurus.ingameinfo.common.impl.igievent.EventCenter;
@@ -356,6 +358,7 @@ public final class IgiGuiLifeCycle
             resolvedFbo.framebufferColor[3] = 0f;
             resolvedFbo.enableStencil();
             resolvedFbo.unbindFramebuffer();
+            GlResourceManager.addDisposable((IGlDisposable)resolvedFbo);
         }
 
         if (resolvedFbo.framebufferWidth != minecraft.displayWidth || resolvedFbo.framebufferHeight != minecraft.displayHeight)
@@ -381,6 +384,7 @@ public final class IgiGuiLifeCycle
             shaderFbo.framebufferColor[3] = 0f;
             shaderFbo.enableStencil();
             shaderFbo.bindFramebuffer(true);
+            GlResourceManager.addDisposable((IGlDisposable)shaderFbo);
         }
 
         if (shaderFbo.framebufferWidth != minecraft.displayWidth || shaderFbo.framebufferHeight != minecraft.displayHeight)
@@ -417,6 +421,7 @@ public final class IgiGuiLifeCycle
                 RenderHints.normalFbo();
             }
             fbo.bindFramebuffer(true);
+            GlResourceManager.addDisposable((IGlDisposable)fbo);
         }
 
         if (fbo.framebufferWidth != minecraft.displayWidth || fbo.framebufferHeight != minecraft.displayHeight)

@@ -2,6 +2,7 @@ package com.tttsaurus.ingameinfo.mixin.early;
 
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
+import com.tttsaurus.ingameinfo.common.api.render.IGlDisposable;
 import com.tttsaurus.ingameinfo.common.api.render.RenderHints;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.OpenGlHelper;
@@ -12,8 +13,15 @@ import org.spongepowered.asm.mixin.injection.At;
 import java.nio.IntBuffer;
 
 @Mixin(Framebuffer.class)
-public class FramebufferMixin
+public class FramebufferMixin implements IGlDisposable
 {
+    @SuppressWarnings("all")
+    @Override
+    public void dispose()
+    {
+        ((Framebuffer)(Object)this).deleteFramebuffer();
+    }
+
     @WrapOperation(
             method = "createFramebuffer",
             at = @At(
