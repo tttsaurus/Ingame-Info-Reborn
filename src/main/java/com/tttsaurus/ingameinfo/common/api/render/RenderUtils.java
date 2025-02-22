@@ -293,12 +293,14 @@ public final class RenderUtils
     }
     public static void drawRectStencilArea(float x, float y, float width, float height)
     {
-        GL11.glBegin(GL11.GL_QUADS);
-        GL11.glVertex2f(x, y);
-        GL11.glVertex2f(x + width, y);
-        GL11.glVertex2f(x + width, y + height);
-        GL11.glVertex2f(x, y + height);
-        GL11.glEnd();
+        Tessellator tessellator = Tessellator.getInstance();
+        BufferBuilder bufferbuilder = tessellator.getBuffer();
+        bufferbuilder.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION);
+        bufferbuilder.pos(x, y, 0d).endVertex();
+        bufferbuilder.pos(x + width, y, 0d).endVertex();
+        bufferbuilder.pos(x + width, y + height, 0d).endVertex();
+        bufferbuilder.pos(x, y + height, 0d).endVertex();
+        tessellator.draw();
     }
     //</editor-fold>
 
