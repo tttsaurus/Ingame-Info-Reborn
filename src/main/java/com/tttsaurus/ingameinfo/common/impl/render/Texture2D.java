@@ -20,7 +20,7 @@ public final class Texture2D implements IGlDisposable
     public int getGlTextureID() { return glTextureID; }
     public int getWidth() { return width; }
     public int getHeight() { return height; }
-    public boolean getIsGlBound() { return isGlBounded; }
+    public boolean getIsGlBounded() { return isGlBounded; }
 
     public Texture2D(int width, int height, ByteBuffer byteBuffer)
     {
