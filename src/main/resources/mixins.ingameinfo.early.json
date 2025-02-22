@@ -7,7 +7,8 @@
   "mixins": [],
   "client": [
     "FramebufferMixin",
-    "GlStateManagerMixin"
+    "GlStateManagerMixin",
+    "MinecraftMixin"
   ],
   "server": []
 }

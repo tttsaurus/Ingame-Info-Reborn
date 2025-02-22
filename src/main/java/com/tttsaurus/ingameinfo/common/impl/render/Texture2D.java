@@ -1,24 +1,26 @@
-package com.tttsaurus.ingameinfo.common.api.render;
+package com.tttsaurus.ingameinfo.common.impl.render;
 
+import com.tttsaurus.ingameinfo.common.api.render.GlResourceManager;
+import com.tttsaurus.ingameinfo.common.api.render.IGlDisposable;
 import net.minecraft.client.renderer.GlStateManager;
 import org.lwjgl.opengl.GL11;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.IntBuffer;
 
-public final class Texture2D
+public final class Texture2D implements IGlDisposable
 {
     private static final IntBuffer intBuffer = ByteBuffer.allocateDirect(16 << 2).order(ByteOrder.nativeOrder()).asIntBuffer();
 
     private int glTextureID = 0;
     private final int width;
     private final int height;
-    private boolean isGlBound;
+    private boolean isGlBounded;
 
     public int getGlTextureID() { return glTextureID; }
     public int getWidth() { return width; }
     public int getHeight() { return height; }
-    public boolean getIsGlBound() { return isGlBound; }
+    public boolean getIsGlBound() { return isGlBounded; }
 
     public Texture2D(int width, int height, ByteBuffer byteBuffer)
     {
@@ -38,15 +40,18 @@ public final class Texture2D
 
         GL11.glTexImage2D(GL11.GL_TEXTURE_2D, 0, GL11.GL_RGBA8, width, height, 0, GL11.GL_RGBA, GL11.GL_UNSIGNED_BYTE, byteBuffer);
 
-        isGlBound = true;
+        isGlBounded = true;
 
         GlStateManager.bindTexture(textureID);
+
+        GlResourceManager.addDisposable(this);
     }
 
     public void dispose()
     {
         if (glTextureID != 0) GL11.glDeleteTextures(glTextureID);
         glTextureID = 0;
-        isGlBound = false;
+        isGlBounded = false;
+        GlResourceManager.removeDisposable(this);
     }
 }

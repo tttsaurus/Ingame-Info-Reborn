@@ -9,13 +9,16 @@ import com.tttsaurus.ingameinfo.common.api.gui.style.IStylePropertyCallbackPost;
 import com.tttsaurus.ingameinfo.common.api.gui.style.IStylePropertyCallbackPre;
 import com.tttsaurus.ingameinfo.common.api.gui.style.IStylePropertySetter;
 import com.tttsaurus.ingameinfo.common.api.reflection.TypeUtils;
+import com.tttsaurus.ingameinfo.common.api.render.GlResourceManager;
 import com.tttsaurus.ingameinfo.common.api.render.RenderHints;
 import com.tttsaurus.ingameinfo.common.api.serialization.IDeserializer;
+import com.tttsaurus.ingameinfo.common.api.shutdown.ShutdownHooks;
 import com.tttsaurus.ingameinfo.common.impl.appcommunication.spotify.SpotifyCommandHandler;
 import com.tttsaurus.ingameinfo.common.impl.gui.IgiGuiLifeCycle;
 import com.tttsaurus.ingameinfo.common.impl.gui.registry.ElementRegistry;
 import com.tttsaurus.ingameinfo.common.impl.mvvm.registry.MvvmRegisterEventHandler;
 import com.tttsaurus.ingameinfo.config.IgiConfig;
+import net.minecraft.client.gui.GuiMainMenu;
 import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
@@ -45,7 +48,7 @@ public class ClientProxy extends CommonProxy
         // at least gl 33
         boolean enablePostProcessing = IgiConfig.ENABLE_POST_PROCESSING_SHADER && ((majorGlVersion == 3 && minorGlVersion >= 3) || majorGlVersion > 3);
         // at least gl 40
-        boolean enableMsfbo = IgiConfig.ENABLE_MSFRAMEBUFFER && (majorGlVersion >= 4);
+        boolean enableMsfbo = IgiConfig.ENABLE_MSFRAMEBUFFER && majorGlVersion >= 4;
 
         // framebuffer is the prerequisite
         enablePostProcessing = enableFbo && enablePostProcessing;
@@ -74,6 +77,14 @@ public class ClientProxy extends CommonProxy
     public void init(FMLInitializationEvent event, Logger logger)
     {
         super.init(event, logger);
+
+        // shutdown hook
+        ShutdownHooks.hooks.add(() ->
+        {
+            logger.info("Starts disposing OpenGL resources");
+            GlResourceManager.disposeAll(logger);
+            logger.info("OpenGL resources disposed");
+        });
 
         // core
         MinecraftForge.EVENT_BUS.register(IgiGuiLifeCycle.class);

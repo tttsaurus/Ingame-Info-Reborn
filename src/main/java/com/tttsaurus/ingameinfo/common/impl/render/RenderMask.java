@@ -5,7 +5,7 @@ import com.tttsaurus.ingameinfo.common.api.render.RenderUtils;
 import org.lwjgl.opengl.GL11;
 import java.util.*;
 
-public class RenderMask
+public final class RenderMask
 {
     private static final Stack<RenderMask> maskStack = new Stack<>();
     private static int stencilValueCounter = 0;

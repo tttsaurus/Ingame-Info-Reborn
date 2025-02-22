@@ -1,5 +1,6 @@
 package com.tttsaurus.ingameinfo.common.api.render;
 
+import com.tttsaurus.ingameinfo.common.impl.render.Texture2D;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.Gui;
