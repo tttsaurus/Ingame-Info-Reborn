@@ -56,8 +56,11 @@ public class ImageRenderer implements IRenderer
         }
         catch (IOException ignored) { }
     }
+
     public void updateRl(ResourceLocation resourceLocation)
     {
+        if (resourceLocation == null) return;
+        if (texture != null) texture.dispose();
         try
         {
             IResource resource = Minecraft.getMinecraft().getResourceManager().getResource(resourceLocation);

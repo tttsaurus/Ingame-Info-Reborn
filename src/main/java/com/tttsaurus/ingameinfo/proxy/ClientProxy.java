@@ -16,9 +16,9 @@ import com.tttsaurus.ingameinfo.common.api.shutdown.ShutdownHooks;
 import com.tttsaurus.ingameinfo.common.impl.appcommunication.spotify.SpotifyCommandHandler;
 import com.tttsaurus.ingameinfo.common.impl.gui.IgiGuiLifeCycle;
 import com.tttsaurus.ingameinfo.common.impl.gui.registry.ElementRegistry;
+import com.tttsaurus.ingameinfo.common.impl.minecraft.WorldLoadingScreenOverhaul;
 import com.tttsaurus.ingameinfo.common.impl.mvvm.registry.MvvmRegisterEventHandler;
 import com.tttsaurus.ingameinfo.config.IgiConfig;
-import net.minecraft.client.gui.GuiMainMenu;
 import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
@@ -89,6 +89,8 @@ public class ClientProxy extends CommonProxy
         // core
         MinecraftForge.EVENT_BUS.register(IgiGuiLifeCycle.class);
         MinecraftForge.EVENT_BUS.register(MvvmRegisterEventHandler.class);
+
+        MinecraftForge.EVENT_BUS.register(WorldLoadingScreenOverhaul.class);
 
         // app communication
         if (IgiConfig.ENABLE_SPOTIFY_INTEGRATION)
