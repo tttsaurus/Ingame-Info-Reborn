@@ -1,5 +1,6 @@
 package com.tttsaurus.ingameinfo.common.impl.render.renderer;
 
+import com.tttsaurus.ingameinfo.common.api.render.RenderUtils;
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.InputStream;
@@ -13,7 +14,7 @@ public class UrlImageRenderer extends ImageRenderer
     public UrlImageRenderer(String url)
     {
         BufferedImage image = downloadImage(url);
-        if (image != null) texture = createTexture(image);
+        if (image != null) texture = RenderUtils.createTexture2D(image);
     }
 
     private BufferedImage asyncImage = null;
@@ -45,7 +46,7 @@ public class UrlImageRenderer extends ImageRenderer
         if (asyncImage != null)
         {
             if (texture != null) texture.dispose();
-            texture = createTexture(asyncImage);
+            texture = RenderUtils.createTexture2D(asyncImage);
             asyncImage = null;
         }
         super.render();
@@ -58,7 +59,7 @@ public class UrlImageRenderer extends ImageRenderer
         if (image != null)
         {
             if (texture != null) texture.dispose();
-            texture = createTexture(image);
+            texture = RenderUtils.createTexture2D(image);
         }
     }
 

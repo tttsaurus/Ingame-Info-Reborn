@@ -12,7 +12,6 @@ import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.client.shader.Framebuffer;
 import org.lwjgl.BufferUtils;
 import org.lwjgl.opengl.GL11;
-
 import javax.annotation.Nullable;
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
@@ -509,32 +508,40 @@ public final class RenderUtils
         if (!png.exists()) return null;
         try
         {
-            BufferedImage bufferedImage = ImageIO.read(png);
-
-            int width = bufferedImage.getWidth();
-            int height = bufferedImage.getHeight();
-
-            ByteBuffer buffer = BufferUtils.createByteBuffer(width * height * 4);
-
-            int[] pixels = new int[width * height];
-            bufferedImage.getRGB(0, 0, width, height, pixels, 0, width);
-
-            for (int y = 0; y < height; y++)
-            {
-                for (int x = 0; x < width; x++)
-                {
-                    int pixel = pixels[y * width + x];
-                    buffer.put((byte) ((pixel >> 16) & 0xFF));  // r
-                    buffer.put((byte) ((pixel >> 8) & 0xFF));   // g
-                    buffer.put((byte) (pixel & 0xFF));          // b
-                    buffer.put((byte) ((pixel >> 24) & 0xFF));  // a
-                }
-            }
-            buffer.flip();
-
-            return new Texture2D(width, height, buffer);
+            return createTexture2D(ImageIO.read(png));
         }
         catch (IOException ignored) { return null; }
+    }
+    //</editor-fold>
+
+    //<editor-fold desc="texture">
+    @Nullable
+    public static Texture2D createTexture2D(BufferedImage bufferedImage)
+    {
+        int width = bufferedImage.getWidth();
+        int height = bufferedImage.getHeight();
+
+        if (width == 0 || height == 0) return null;
+
+        ByteBuffer buffer = BufferUtils.createByteBuffer(width * height * 4);
+
+        int[] pixels = new int[width * height];
+        bufferedImage.getRGB(0, 0, width, height, pixels, 0, width);
+
+        for (int y = 0; y < height; y++)
+        {
+            for (int x = 0; x < width; x++)
+            {
+                int pixel = pixels[y * width + x];
+                buffer.put((byte) ((pixel >> 16) & 0xFF));  // r
+                buffer.put((byte) ((pixel >> 8) & 0xFF));   // g
+                buffer.put((byte) (pixel & 0xFF));          // b
+                buffer.put((byte) ((pixel >> 24) & 0xFF));  // a
+            }
+        }
+        buffer.flip();
+
+        return new Texture2D(width, height, buffer);
     }
     //</editor-fold>
 }

@@ -6,12 +6,10 @@ import com.tttsaurus.ingameinfo.common.api.render.renderer.IRenderer;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.IResource;
 import net.minecraft.util.ResourceLocation;
-import org.lwjgl.BufferUtils;
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.InputStream;
-import java.nio.ByteBuffer;
 
 public class ImageRenderer implements IRenderer
 {
@@ -52,7 +50,7 @@ public class ImageRenderer implements IRenderer
 
             BufferedImage bufferedImage = ImageIO.read(inputStream);
 
-            texture = createTexture(bufferedImage);
+            texture = RenderUtils.createTexture2D(bufferedImage);
         }
         catch (IOException ignored) { }
     }
@@ -68,36 +66,9 @@ public class ImageRenderer implements IRenderer
 
             BufferedImage bufferedImage = ImageIO.read(inputStream);
 
-            texture = createTexture(bufferedImage);
+            texture = RenderUtils.createTexture2D(bufferedImage);
         }
         catch (IOException ignored) { }
-    }
-
-    protected Texture2D createTexture(BufferedImage image)
-    {
-        int width = image.getWidth();
-        int height = image.getHeight();
-        if (width == 0 || height == 0) return null;
-
-        ByteBuffer byteBuffer = BufferUtils.createByteBuffer(width * height * 4);
-
-        int[] pixels = new int[width * height];
-        image.getRGB(0, 0, width, height, pixels, 0, width);
-
-        for (int y = 0; y < height; y++)
-        {
-            for (int x = 0; x < width; x++)
-            {
-                int pixel = pixels[y * width + x];
-                byteBuffer.put((byte) ((pixel >> 16) & 0xFF));  // r
-                byteBuffer.put((byte) ((pixel >> 8) & 0xFF));   // g
-                byteBuffer.put((byte) (pixel & 0xFF));          // b
-                byteBuffer.put((byte) ((pixel >> 24) & 0xFF));  // a
-            }
-        }
-        byteBuffer.flip();
-
-        return new Texture2D(width, height, byteBuffer);
     }
 
     public void render()
