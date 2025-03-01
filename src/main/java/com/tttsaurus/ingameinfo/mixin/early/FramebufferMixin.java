@@ -62,9 +62,10 @@ public class FramebufferMixin implements IGlDisposable
             original.call(instance, framebufferFilterIn);
         else if (RenderHints.getFramebufferCreateFramebufferHint() == RenderHints.Framebuffer.CreateFramebufferHint.TEXTURE_2D_MULTISAMPLE)
         {
-            GlStateManager.bindTexture(instance.framebufferTexture);
-            GlStateManager.glTexParameteri(GL32.GL_TEXTURE_2D_MULTISAMPLE, GL11.GL_TEXTURE_WRAP_S, GL12.GL_CLAMP_TO_EDGE);
-            GlStateManager.glTexParameteri(GL32.GL_TEXTURE_2D_MULTISAMPLE, GL11.GL_TEXTURE_WRAP_T, GL12.GL_CLAMP_TO_EDGE);
+            // no need to set param to multisample texture
+//            GlStateManager.bindTexture(instance.framebufferTexture);
+//            GlStateManager.glTexParameteri(GL32.GL_TEXTURE_2D_MULTISAMPLE, GL11.GL_TEXTURE_WRAP_S, GL12.GL_CLAMP_TO_EDGE);
+//            GlStateManager.glTexParameteri(GL32.GL_TEXTURE_2D_MULTISAMPLE, GL11.GL_TEXTURE_WRAP_T, GL12.GL_CLAMP_TO_EDGE);
         }
     }
 
