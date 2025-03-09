@@ -99,10 +99,7 @@ public final class RenderMask
         if (maskStack.isEmpty())
             maskStack.push(this);
         else if (maskStack.peek() != this)
-        {
             maskStack.push(this);
-            RenderUtils.endStencil();
-        }
 
         RenderUtils.prepareStencilToWrite(stencilValue);
         drawStencilArea(this);

@@ -74,6 +74,7 @@ public class SizedGroup extends ElementGroup
     @Override
     public void onRenderUpdate(boolean focused)
     {
+        if (!enabled) return;
         if (useMask)
             mask.startMasking();
         super.onRenderUpdate(focused);

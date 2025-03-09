@@ -4,7 +4,6 @@ import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import com.tttsaurus.ingameinfo.common.api.render.IGlDisposable;
 import com.tttsaurus.ingameinfo.common.api.render.RenderHints;
-import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.shader.Framebuffer;
 import org.lwjgl.opengl.*;
@@ -63,9 +62,6 @@ public class FramebufferMixin implements IGlDisposable
         else if (RenderHints.getFramebufferCreateFramebufferHint() == RenderHints.Framebuffer.CreateFramebufferHint.TEXTURE_2D_MULTISAMPLE)
         {
             // no need to set param to multisample texture
-//            GlStateManager.bindTexture(instance.framebufferTexture);
-//            GlStateManager.glTexParameteri(GL32.GL_TEXTURE_2D_MULTISAMPLE, GL11.GL_TEXTURE_WRAP_S, GL12.GL_CLAMP_TO_EDGE);
-//            GlStateManager.glTexParameteri(GL32.GL_TEXTURE_2D_MULTISAMPLE, GL11.GL_TEXTURE_WRAP_T, GL12.GL_CLAMP_TO_EDGE);
         }
     }
 
