@@ -1,6 +1,8 @@
 package com.tttsaurus.saurus3d_snippet.common.api.shader;
 
 import com.tttsaurus.ingameinfo.common.api.reflection.TypeUtils;
+import com.tttsaurus.ingameinfo.common.api.render.GlResourceManager;
+import com.tttsaurus.ingameinfo.common.api.render.IGlDisposable;
 import com.tttsaurus.saurus3d_snippet.common.api.CommonBuffers;
 import com.tttsaurus.saurus3d_snippet.common.api.shader.uniform.UniformField;
 import com.tttsaurus.saurus3d_snippet.common.api.shader.uniform.UniformType;
@@ -14,7 +16,7 @@ import java.nio.FloatBuffer;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
-public class ShaderProgram implements Comparable<ShaderProgram>
+public class ShaderProgram implements Comparable<ShaderProgram>, IGlDisposable
 {
     private double cpuTimeMs;
     private double gpuTimeMs;
@@ -138,6 +140,8 @@ public class ShaderProgram implements Comparable<ShaderProgram>
         GL15.glEndQuery(GL33.GL_TIME_ELAPSED);
         GL15.glGetQueryObject(gpuTimeQueryID, GL15.GL_QUERY_RESULT, CommonBuffers.intBuffer);
         gpuTimeMs = CommonBuffers.intBuffer.get(0) / 1.0E6d;
+
+        GlResourceManager.addDisposable(this);
     }
 
     public int getUniformLocation(UniformField field)
