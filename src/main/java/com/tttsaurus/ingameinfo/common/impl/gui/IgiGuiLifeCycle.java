@@ -1,5 +1,6 @@
 package com.tttsaurus.ingameinfo.common.impl.gui;
 
+import com.tttsaurus.ingameinfo.InGameInfoReborn;
 import com.tttsaurus.ingameinfo.common.api.event.IgiGuiInitEvent;
 import com.tttsaurus.ingameinfo.common.api.gui.IgiGuiContainer;
 import com.tttsaurus.ingameinfo.common.api.gui.delegate.placeholder.IPlaceholderDrawScreen;
@@ -97,7 +98,6 @@ public final class IgiGuiLifeCycle
     public static void setEnableShader(boolean flag) { enableShader = flag; }
     private static final ShaderLoader shaderLoader = new ShaderLoader();
     private static ShaderProgram shaderProgram = null;
-    private static int programID;
     private static int texUnit1TextureID;
     private static boolean uniformsPassed = false;
     //</editor-fold>
@@ -481,12 +481,12 @@ public final class IgiGuiLifeCycle
 
             shaderProgram = new ShaderProgram(frag, vertex);
             shaderProgram.setup();
+
+            InGameInfoReborn.logger.info(shaderProgram.getSetupDebugReport());
         }
     }
     private static void activateShader()
     {
-        programID = GL11.glGetInteger(GL20.GL_CURRENT_PROGRAM);
-
         shaderProgram.use();
 
         GL11.glGetInteger(GL13.GL_ACTIVE_TEXTURE, intBuffer);
@@ -505,20 +505,11 @@ public final class IgiGuiLifeCycle
         if (!uniformsPassed)
         {
             uniformsPassed = true;
-
-            int screenTextureLoc = shaderProgram.getUniformLocation("screenTexture");
-            GL20.glUniform1i(screenTextureLoc, 1);
-
+            shaderProgram.setUniform("screenTexture", 1);
             if (enableMultisampleOnFbo)
-            {
-                int sampleNumLoc = shaderProgram.getUniformLocation("sampleNum");
-                GL20.glUniform1i(sampleNumLoc, RenderHints.getFramebufferSampleNum());
-            }
-
-            int enableAlphaLoc = shaderProgram.getUniformLocation("enableAlpha");
-            int alphaLoc = shaderProgram.getUniformLocation("targetAlpha");
-            GL20.glUniform1i(enableAlphaLoc, IgiConfig.ENABLE_PP_ALPHA ? 1 : 0);
-            GL20.glUniform1f(alphaLoc, IgiConfig.PP_ALPHA);
+                shaderProgram.setUniform("sampleNum", RenderHints.getFramebufferSampleNum());
+            shaderProgram.setUniform("enableAlpha", IgiConfig.ENABLE_PP_ALPHA);
+            shaderProgram.setUniform("targetAlpha", IgiConfig.PP_ALPHA);
         }
     }
     private static void deactivateShader()
@@ -531,7 +522,7 @@ public final class IgiGuiLifeCycle
 
         GlStateManager.setActiveTexture(texUnit);
 
-        GL20.glUseProgram(programID);
+        shaderProgram.unuse();
     }
     //</editor-fold>
 
