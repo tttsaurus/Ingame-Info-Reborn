@@ -476,7 +476,7 @@ public final class IgiGuiLifeCycle
                         .append("#define USE_MULTISAMPLE 0\n");
             rawFragBuilder.append(rawFrag);
 
-            Shader frag = new Shader(rawFragBuilder.toString(), Shader.ShaderType.FRAGMENT);
+            Shader frag = new Shader("ingameinfo:shaders/post_processing_frag.glsl", rawFragBuilder.toString(), Shader.ShaderType.FRAGMENT);
             Shader vertex = shaderLoader.load("ingameinfo:shaders/post_processing_vertex.glsl", Shader.ShaderType.VERTEX);
 
             shaderProgram = new ShaderProgram(frag, vertex);

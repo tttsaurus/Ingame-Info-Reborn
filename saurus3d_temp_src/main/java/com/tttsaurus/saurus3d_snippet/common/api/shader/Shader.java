@@ -1,7 +1,10 @@
 package com.tttsaurus.saurus3d_snippet.common.api.shader;
 
+import com.tttsaurus.saurus3d_snippet.common.api.shader.uniform.UniformField;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL20;
+import org.lwjgl.opengl.GL40;
+
 import java.util.List;
 
 public class Shader
@@ -9,7 +12,9 @@ public class Shader
     public enum ShaderType
     {
         VERTEX(GL20.GL_VERTEX_SHADER),
-        FRAGMENT(GL20.GL_FRAGMENT_SHADER);
+        FRAGMENT(GL20.GL_FRAGMENT_SHADER),
+        TESS_CONTROL(GL40.GL_TESS_CONTROL_SHADER),
+        TESS_EVALUATION(GL40.GL_TESS_EVALUATION_SHADER);
 
         public final int glValue;
         ShaderType(int glValue)
@@ -25,15 +30,18 @@ public class Shader
     private boolean valid = true;
     private String errorLog;
     private final List<UniformField> uniformFields;
+    private final String fileName;
 
     public int getShaderID() { return shaderID; }
     public ShaderType getShaderType() { return shaderType; }
+    public String getFileName() { return fileName; }
     protected boolean getValidity() { return valid; }
     protected String getErrorLog() { return errorLog; }
     protected List<UniformField> getUniformFields() { return uniformFields; }
 
-    public Shader(String shaderSource, ShaderType shaderType)
+    public Shader(String fileName, String shaderSource, ShaderType shaderType)
     {
+        this.fileName = fileName;
         this.shaderSource = shaderSource;
         this.shaderType = shaderType;
 

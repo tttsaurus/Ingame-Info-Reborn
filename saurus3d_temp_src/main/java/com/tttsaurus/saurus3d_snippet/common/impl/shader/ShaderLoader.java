@@ -12,6 +12,6 @@ public class ShaderLoader implements IShaderLoader
         String raw = RlReaderUtils.read(rl, true);
         if (raw.isEmpty()) return null;
 
-        return new Shader(raw, shaderType);
+        return new Shader(rl, raw, shaderType);
     }
 }
