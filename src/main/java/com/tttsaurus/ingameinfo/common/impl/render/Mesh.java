@@ -1,5 +1,7 @@
 package com.tttsaurus.ingameinfo.common.impl.render;
 
+import com.tttsaurus.ingameinfo.common.api.render.GlResourceManager;
+import com.tttsaurus.ingameinfo.common.api.render.IGlDisposable;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL15;
 import org.lwjgl.opengl.GL20;
@@ -9,7 +11,7 @@ import java.nio.ByteOrder;
 import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
 
-public final class Mesh
+public final class Mesh implements IGlDisposable
 {
     private final float[] vertices;
     private final int[] indices;
@@ -72,8 +74,7 @@ public final class Mesh
         GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, prevVbo);
         GL15.glBindBuffer(GL15.GL_ELEMENT_ARRAY_BUFFER, prevEbo);
 
-        //vertices = null;
-        //indices = null;
+        GlResourceManager.addDisposable(this);
     }
 
     public void render()
