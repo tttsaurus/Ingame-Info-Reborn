@@ -13,8 +13,14 @@ import java.nio.IntBuffer;
 
 public final class Mesh implements IGlDisposable
 {
-    private final float[] vertices;
-    private final int[] indices;
+    private float[] vertices;
+    private int[] indices;
+
+    private ByteBuffer vertexBuffer;
+    private ByteBuffer indexBuffer;
+
+    private boolean setup;
+    private int renderIndicesOffset;
 
     private final int verticesLength;
     private final int indicesLength;
@@ -27,6 +33,8 @@ public final class Mesh implements IGlDisposable
     public int getVao() { return vao; }
     public int getVbo() { return vbo; }
     public int getEbo() { return ebo; }
+    public boolean getSetup() { return setup; }
+    public void setRenderIndicesOffset(int offset) { renderIndicesOffset = offset; }
 
     public Mesh(float[] vertices, int[] indices)
     {
@@ -34,10 +42,14 @@ public final class Mesh implements IGlDisposable
         this.indices = indices;
         verticesLength = vertices.length;
         indicesLength = indices.length;
+        setup = false;
+        renderIndicesOffset = 0;
     }
 
     public void setup()
     {
+        if (setup) return;
+
         int prevVao = GL11.glGetInteger(GL30.GL_VERTEX_ARRAY_BINDING);
         int prevVbo = GL11.glGetInteger(GL15.GL_ARRAY_BUFFER_BINDING);
         int prevEbo = GL11.glGetInteger(GL15.GL_ELEMENT_ARRAY_BUFFER_BINDING);
@@ -45,13 +57,11 @@ public final class Mesh implements IGlDisposable
         vao = GL30.glGenVertexArrays();
         GL30.glBindVertexArray(vao);
 
-        FloatBuffer vertexBuffer = ByteBuffer.allocateDirect(vertices.length * Float.BYTES)
-                .order(ByteOrder.nativeOrder()).asFloatBuffer();
-        vertexBuffer.put(vertices).flip();
+        vertexBuffer = ByteBuffer.allocateDirect(vertices.length * Float.BYTES).order(ByteOrder.nativeOrder());
+        vertexBuffer.asFloatBuffer().put(vertices).flip();
 
-        IntBuffer indexBuffer = ByteBuffer.allocateDirect(indices.length * Integer.BYTES)
-                .order(ByteOrder.nativeOrder()).asIntBuffer();
-        indexBuffer.put(indices).flip();
+        indexBuffer = ByteBuffer.allocateDirect(indices.length * Integer.BYTES).order(ByteOrder.nativeOrder());
+        indexBuffer.asIntBuffer().put(indices).flip();
 
         vbo = GL15.glGenBuffers();
         GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, vbo);
@@ -74,18 +84,104 @@ public final class Mesh implements IGlDisposable
         GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, prevVbo);
         GL15.glBindBuffer(GL15.GL_ELEMENT_ARRAY_BUFFER, prevEbo);
 
+        vertices = null;
+        indices = null;
+
+        setup = true;
+
         GlResourceManager.addDisposable(this);
+    }
+
+    public void updateVerticesByMappedBuffer(float[] newVertices)
+    {
+        if (!setup)
+            throw new IllegalArgumentException("This mesh isn't set up so you can't update");
+        if (newVertices.length != verticesLength)
+            throw new IllegalArgumentException("New vertex array length must match existing length");
+
+        int prevVbo = GL11.glGetInteger(GL15.GL_ARRAY_BUFFER_BINDING);
+        GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, vbo);
+
+        ByteBuffer mappedBuffer = GL30.glMapBufferRange(GL15.GL_ARRAY_BUFFER, 0, (long) verticesLength * Float.BYTES, GL30.GL_MAP_WRITE_BIT | GL30.GL_MAP_UNSYNCHRONIZED_BIT, vertexBuffer);
+
+        if (mappedBuffer != null)
+        {
+            mappedBuffer.order(ByteOrder.nativeOrder()).asFloatBuffer().put(newVertices);
+            GL15.glUnmapBuffer(GL15.GL_ARRAY_BUFFER);
+        }
+        else
+            throw new RuntimeException("Failed to map buffer");
+
+        GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, prevVbo);
+    }
+    public void updateVerticesByBufferSubData(float[] newVertices)
+    {
+        if (!setup)
+            throw new IllegalArgumentException("This mesh isn't set up so you can't update");
+        if (newVertices.length != verticesLength)
+            throw new IllegalArgumentException("New vertex array length must match existing length");
+
+        FloatBuffer vertexBuffer = ByteBuffer.allocateDirect(newVertices.length * Float.BYTES)
+                .order(ByteOrder.nativeOrder()).asFloatBuffer();
+        vertexBuffer.put(newVertices).flip();
+
+        int prevVbo = GL11.glGetInteger(GL15.GL_ARRAY_BUFFER_BINDING);
+        GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, vbo);
+        GL15.glBufferSubData(GL15.GL_ARRAY_BUFFER, 0, vertexBuffer);
+        GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, prevVbo);
+    }
+    public void updateIndicesByMappedBuffer(int[] newIndices)
+    {
+        if (!setup)
+            throw new IllegalArgumentException("This mesh isn't set up so you can't update");
+        if (newIndices.length != indicesLength)
+            throw new IllegalArgumentException("New index array length must match existing length");
+
+        int prevEbo = GL11.glGetInteger(GL15.GL_ELEMENT_ARRAY_BUFFER_BINDING);
+        GL15.glBindBuffer(GL15.GL_ELEMENT_ARRAY_BUFFER, ebo);
+
+        ByteBuffer mappedBuffer = GL30.glMapBufferRange(GL15.GL_ELEMENT_ARRAY_BUFFER, 0, (long) indicesLength * Integer.BYTES, GL30.GL_MAP_WRITE_BIT | GL30.GL_MAP_UNSYNCHRONIZED_BIT, indexBuffer);
+
+        if (mappedBuffer != null)
+        {
+            mappedBuffer.order(ByteOrder.nativeOrder()).asIntBuffer().put(newIndices);
+            GL15.glUnmapBuffer(GL15.GL_ELEMENT_ARRAY_BUFFER);
+        }
+        else
+            throw new RuntimeException("Failed to map buffer");
+
+        GL15.glBindBuffer(GL15.GL_ELEMENT_ARRAY_BUFFER, prevEbo);
+    }
+    public void updateIndicesByBufferSubData(int[] newIndices)
+    {
+        if (!setup)
+            throw new IllegalArgumentException("This mesh isn't set up so you can't update");
+        if (newIndices.length != indicesLength)
+            throw new IllegalArgumentException("New index array length must match existing length");
+
+        IntBuffer indexBuffer = ByteBuffer.allocateDirect(newIndices.length * Integer.BYTES)
+                .order(ByteOrder.nativeOrder()).asIntBuffer();
+        indexBuffer.put(newIndices).flip();
+
+        int prevEbo = GL11.glGetInteger(GL15.GL_ELEMENT_ARRAY_BUFFER_BINDING);
+        GL15.glBindBuffer(GL15.GL_ELEMENT_ARRAY_BUFFER, ebo);
+        GL15.glBufferSubData(GL15.GL_ELEMENT_ARRAY_BUFFER, 0, indexBuffer);
+        GL15.glBindBuffer(GL15.GL_ELEMENT_ARRAY_BUFFER, prevEbo);
     }
 
     public void render()
     {
+        if (!setup) return;
+
         int prevVao = GL11.glGetInteger(GL30.GL_VERTEX_ARRAY_BINDING);
+        int prevEbo = GL11.glGetInteger(GL15.GL_ELEMENT_ARRAY_BUFFER_BINDING);
 
         GL30.glBindVertexArray(vao);
         GL15.glBindBuffer(GL15.GL_ELEMENT_ARRAY_BUFFER, ebo);
 
-        GL11.glDrawElements(GL11.GL_TRIANGLES, indicesLength, GL11.GL_UNSIGNED_INT, 0);
+        GL11.glDrawElements(GL11.GL_TRIANGLES, indicesLength, GL11.GL_UNSIGNED_INT, renderIndicesOffset);
 
+        GL15.glBindBuffer(GL15.GL_ELEMENT_ARRAY_BUFFER, prevEbo);
         GL30.glBindVertexArray(prevVao);
     }
 
@@ -94,5 +190,8 @@ public final class Mesh implements IGlDisposable
         GL30.glDeleteVertexArrays(vao);
         GL15.glDeleteBuffers(vbo);
         GL15.glDeleteBuffers(ebo);
+        vertexBuffer = null;
+        indexBuffer = null;
+        setup = false;
     }
 }
