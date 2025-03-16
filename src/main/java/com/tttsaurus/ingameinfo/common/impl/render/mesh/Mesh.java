@@ -1,4 +1,4 @@
-package com.tttsaurus.ingameinfo.common.impl.render;
+package com.tttsaurus.ingameinfo.common.impl.render.mesh;
 
 import com.tttsaurus.ingameinfo.common.api.render.GlResourceManager;
 import com.tttsaurus.ingameinfo.common.api.render.IGlDisposable;
@@ -11,7 +11,7 @@ import java.nio.ByteOrder;
 import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
 
-public final class Mesh implements IGlDisposable
+public class Mesh implements IGlDisposable
 {
     private float[] vertices;
     private int[] indices;
