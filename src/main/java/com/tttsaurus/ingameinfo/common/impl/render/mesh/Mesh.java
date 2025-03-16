@@ -20,7 +20,7 @@ public class Mesh implements IGlDisposable
     private ByteBuffer indexBuffer;
 
     private boolean setup;
-    private int renderIndicesOffset;
+    private int eboIndexOffset;
 
     private final int verticesLength;
     private final int indicesLength;
@@ -34,7 +34,8 @@ public class Mesh implements IGlDisposable
     public int getVbo() { return vbo; }
     public int getEbo() { return ebo; }
     public boolean getSetup() { return setup; }
-    public void setRenderIndicesOffset(int offset) { renderIndicesOffset = offset; }
+    protected int getEboIndexOffset() { return eboIndexOffset; }
+    protected void setEboIndexOffset(int offset) { eboIndexOffset = offset; }
 
     public Mesh(float[] vertices, int[] indices)
     {
@@ -43,7 +44,7 @@ public class Mesh implements IGlDisposable
         verticesLength = vertices.length;
         indicesLength = indices.length;
         setup = false;
-        renderIndicesOffset = 0;
+        eboIndexOffset = 0;
     }
 
     public void setup()
@@ -179,7 +180,7 @@ public class Mesh implements IGlDisposable
         GL30.glBindVertexArray(vao);
         GL15.glBindBuffer(GL15.GL_ELEMENT_ARRAY_BUFFER, ebo);
 
-        GL11.glDrawElements(GL11.GL_TRIANGLES, indicesLength, GL11.GL_UNSIGNED_INT, renderIndicesOffset);
+        GL11.glDrawElements(GL11.GL_TRIANGLES, indicesLength, GL11.GL_UNSIGNED_INT, eboIndexOffset);
 
         GL15.glBindBuffer(GL15.GL_ELEMENT_ARRAY_BUFFER, prevEbo);
         GL30.glBindVertexArray(prevVao);
