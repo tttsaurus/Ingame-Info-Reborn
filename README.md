@@ -3,16 +3,14 @@
   <h1>InGame Info Reborn</h1>
 </div>
 
-This is a spiritual successor of [InGame-Info-XML](https://github.com/Lunatrius/InGame-Info-XML), **not a fork**.
+This is a spiritual successor of [InGame-Info-XML](https://github.com/Lunatrius/InGame-Info-XML), **not a fork**. Moreover, this is growing into a general-purpose HUD/GUI lib for both java and zenscript users.
 
 If you like this project, don't forget to give it a star⭐!
-
-Currently WIP
 
 Suggestions/PRs are welcome
 
 ## Overview
-This is a library mod that helps you to create in-game overlaid (or focused) gui with ease.
+This is a library mod that helps you to create in-game overlaid (or focused) GUI with ease.
 
 ![Snipaste_2025-01-12_12-53-07](https://github.com/user-attachments/assets/581f0727-bba8-4ff5-9780-8fdbfaf587fd)
 
@@ -23,14 +21,16 @@ This is a library mod that helps you to create in-game overlaid (or focused) gui
 <details>
 <summary>Click to expand</summary>
 
-https://trello.com/b/MTLHeyGn/ingameinfo
+My Detailed Todo List:
+- https://trello.com/b/MTLHeyGn/ingameinfo
 
+Feature Overview:
 - Approximate Model-View-ViewModel pattern (✔)
-- Add framebuffer to the rendering life cycle (✔)
-- Introduce a custom gui container (✔)
-- Maintain a list of custom gui containers (✔)
-- A gui container can be ingame-overlaid/focused (switchable) (✔)
-- Introduce feature-rich gui layout
+- Add framebuffer to the GUI rendering life cycle (✔)
+- Introduce a custom GUI container (✔)
+- Maintain a list of custom GUI containers so that GUIs can stack together (✔)
+- A GUI container can be ingame-overlaid/focused (runtime switchable) (✔)
+- Introduce feature-rich GUI layout
   - Pivot (✔)
   - Alignment (✔)
   - Padding (✔)
@@ -40,6 +40,7 @@ https://trello.com/b/MTLHeyGn/ingameinfo
   - Nesting Groups (group in group) (✔)
   - Adaptive Group (fit elements into it adaptively)
   - Foldout Group
+  - Draggable Group
 - Add controls like text, button, input field, etc.
   - Text (✔)
   - Sliding Text (✔)
@@ -52,45 +53,17 @@ https://trello.com/b/MTLHeyGn/ingameinfo
   - GIF
   - Slide Bar
   - Progress Bar (✔)
-  - Draggable
-- Introduce modular animation options for controls (WIP)
-- Add crt support (✔)
-- Ingame spotify support (✔)
+- Introduce modular animation options for controls
+- Add CrT/Zenscript support (✔)
+- Ingame spotify support (go to wiki for details) (✔)
 
 </details>
 
-## About Spotify Overlay
+## How to use
 <details>
 <summary>Click to expand</summary>
 
-Also under early stage of development
-
-Version Requirement: >= v1.0.0-b2
-- It depends on the Spotify Web API, so it only works when you are connected to the Internet
-- You have to register your own spotify app first and then input the client id & secret to the config file to allow the Web API to function ([About Spotify App](https://developer.spotify.com/documentation/web-api/concepts/apps). Btw, Redirect URI should be set to http://localhost:8888 for this mod to listen)<br><br>Specific spotify app config is as follows
-![Snipaste_2025-01-08_10-58-25](https://github.com/user-attachments/assets/241d10bf-3309-4ac1-9bdc-b1f33946b455)
-
-- Input the command `#spotify-oauth` to the chat to authorize your spotify app
-- After you finished the authentication, input the command `#spotify-gui true` while you're listening to a track on Spotify to open the gui overlay. `#spotify-gui false` for closing ofc
-- You can always run `#spotify-gui true` again to refresh
-- Album image loading could be slow
-- You no longer need to run `#spotify-oauth` for the next launch and so on, but you should run `#spotify-oauth` to refresh if you encountered any issues
-- Run `#spotify-gui-edit` to switch to another layout at runtime
-
-![Snipaste_2025-01-07_21-27-57](https://github.com/user-attachments/assets/4324f4e5-481a-4a72-8658-6b65f876809c)
-
-</details>
-
-## Latest Build
-In case you want to use the latest action build
-- Go to [GitHub Actions](https://github.com/tttsaurus/Ingame-Info-Reborn/actions)
-- Click on the latest workflow
-- Scroll down to the bottom and download the `Artifacts`
-- Unzip and `ingameinfo-[version].jar` is the mod file
-
-## How to use
-API is stabilizing.
-Here's an easy example under v1.0.0-b5.
+Here's an easy example (requirement: version >= 1.0.0-b5).
 
 `./config/ingameinfo/test.ixml`
 ```xml
@@ -137,7 +110,7 @@ The default alignment and pivot are the top-left corner.
 ![Snipaste_2025-01-22_00-20-57](https://github.com/user-attachments/assets/ee9818ca-eee7-4ff2-9825-00a8cd3c1cc4)
 
 
-Crt version is as follows (install ProbeZS and ZS IntelliSense for more api details)
+Zenscript version is as follows (install ProbeZS and ZS IntelliSense for more api details)
 ```zenscript
 #loader preinit
 
@@ -206,7 +179,16 @@ Extra Tips:
   ...
   ```
 - Then you'll know what style properties each element has
-- As a result, you can write your `ixml` file with ease
+- As a result, you can write your `ixml` files with ease
+
+</details>
+
+## Latest Build
+In case you want to use the latest action build
+- Go to [GitHub Actions](https://github.com/tttsaurus/Ingame-Info-Reborn/actions)
+- Click on the latest workflow
+- Scroll down to the bottom and download the `Artifacts`
+- Unzip and `ingameinfo-[version].jar` is the mod file
 
 ## Credits
 - Created using [GregTechCEu's Buildscripts](https://github.com/GregTechCEu/Buildscripts)
