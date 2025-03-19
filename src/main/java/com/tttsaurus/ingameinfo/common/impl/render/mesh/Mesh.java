@@ -180,7 +180,7 @@ public class Mesh implements IGlDisposable
         GL30.glBindVertexArray(vao);
         GL15.glBindBuffer(GL15.GL_ELEMENT_ARRAY_BUFFER, ebo);
 
-        GL11.glDrawElements(GL11.GL_TRIANGLES, indicesLength, GL11.GL_UNSIGNED_INT, eboIndexOffset);
+        GL11.glDrawElements(GL11.GL_TRIANGLES, indicesLength, GL11.GL_UNSIGNED_INT, (long) eboIndexOffset * Integer.BYTES);
 
         GL15.glBindBuffer(GL15.GL_ELEMENT_ARRAY_BUFFER, prevEbo);
         GL30.glBindVertexArray(prevVao);
