@@ -101,6 +101,11 @@ public abstract class Element
     public Pivot pivot = Pivot.TOP_LEFT;
 
     @StylePropertyCallback
+    public void paddingValidation(Padding value, CallbackInfo callbackInfo)
+    {
+        if (value == null) callbackInfo.cancel = true;
+    }
+    @StylePropertyCallback
     public void setPaddingCallbackPre(Padding value, CallbackInfo callbackInfo)
     {
         if (value == null)
