@@ -25,6 +25,7 @@ public final class ScaledRes2NdcUtils
         float resWidth = (float)resolution.getScaledWidth_double();
         return (width / resWidth) * 2f;
     }
+    // output height here will be negative
     public static float toNdcHeight(float height)
     {
         ScaledResolution resolution = new ScaledResolution(minecraft);
