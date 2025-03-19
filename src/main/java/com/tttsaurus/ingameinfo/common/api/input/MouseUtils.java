@@ -6,20 +6,20 @@ import org.lwjgl.input.Mouse;
 
 public final class MouseUtils
 {
-    // under Minecraft scaled resolution
+    // under Minecraft's scaled resolution coordinate system
+
+    private static final Minecraft minecraft = Minecraft.getMinecraft();
 
     public static int getMouseX()
     {
-        Minecraft mc = Minecraft.getMinecraft();
-        ScaledResolution resolution = new ScaledResolution(mc);
+        ScaledResolution resolution = new ScaledResolution(minecraft);
         int mouseX = Mouse.getX();
         return mouseX / resolution.getScaleFactor();
     }
     public static int getMouseY()
     {
-        Minecraft mc = Minecraft.getMinecraft();
-        ScaledResolution resolution = new ScaledResolution(mc);
-        int mouseY = mc.displayHeight - Mouse.getY() - 1;
+        ScaledResolution resolution = new ScaledResolution(minecraft);
+        int mouseY = minecraft.displayHeight - Mouse.getY() - 1;
         return mouseY / resolution.getScaleFactor();
     }
     public static boolean isMouseDownLeft()

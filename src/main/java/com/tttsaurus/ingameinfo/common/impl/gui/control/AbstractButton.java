@@ -86,7 +86,7 @@ public abstract class AbstractButton extends Sized
         int x = MouseUtils.getMouseX();
         int y = MouseUtils.getMouseY();
 
-        if (x >= rect.x && x <= (rect.x + rect.width) && y >= rect.y && y <= (rect.y + rect.height))
+        if (rect.contains(x, y))
         {
             if (!hover)
             {
