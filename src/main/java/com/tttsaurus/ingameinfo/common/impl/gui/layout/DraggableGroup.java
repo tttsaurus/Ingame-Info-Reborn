@@ -11,14 +11,17 @@ import com.tttsaurus.ingameinfo.common.api.input.MouseUtils;
 @RegisterElement
 public class DraggableGroup extends DraggableContainerGroup
 {
-    public float overrideX;
-    public float overrideY;
+    protected float overrideX;
+    protected float overrideY;
 
     private float startDragPosX = 0f;
     private float startDragPosY = 0f;
     private boolean unlockDragging = false;
     // stores the actual pos (top-left) and size of draggable area
     private Rect dragArea = new Rect(0, 0, 0, 0);
+
+    @StyleProperty
+    public boolean restrictiveDragging = true;
 
     @StyleProperty(setterCallbackPre = "nonNegativeFloatValidation")
     public float dragAreaWidth = 0f;

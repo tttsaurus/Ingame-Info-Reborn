@@ -16,6 +16,17 @@ public class DraggableContainerGroup extends SizedGroup
             if (element instanceof DraggableGroup draggableGroup)
             {
                 element.resetRenderInfo();
+                if (draggableGroup.restrictiveDragging)
+                {
+                    if (draggableGroup.overrideX < rect.x)
+                        draggableGroup.overrideX = rect.x;
+                    if (draggableGroup.overrideY < rect.y)
+                        draggableGroup.overrideY = rect.y;
+                    if (draggableGroup.overrideX + draggableGroup.rect.width > rect.x + rect.width)
+                        draggableGroup.overrideX = rect.x + rect.width - draggableGroup.rect.width;
+                    if (draggableGroup.overrideY + draggableGroup.rect.height > rect.y + rect.height)
+                        draggableGroup.overrideY = rect.y + rect.height - draggableGroup.rect.height;
+                }
                 element.rect.x = draggableGroup.overrideX;
                 element.rect.y = draggableGroup.overrideY;
                 element.calcWidthHeight();
