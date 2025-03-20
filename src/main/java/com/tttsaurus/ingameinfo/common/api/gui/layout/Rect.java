@@ -29,16 +29,20 @@ public class Rect
     {
         return x >= this.x && x <= (this.x + width) && y >= this.y && y <= (this.y + height);
     }
+    public boolean contains(Rect rect)
+    {
+        return rect.x >= x && (rect.x + rect.width) <= (x + width) && rect.y >= y && (rect.y + rect.height) <= (y + height);
+    }
 
     @Nullable
-    public static Rect intersect(Rect rect1, Rect rect2)
+    public Rect intersect(Rect rect2)
     {
-        if (rect1 == null || rect2 == null) return null;
+        if (rect2 == null) return null;
 
-        float x1 = Math.max(rect1.x, rect2.x);
-        float y1 = Math.max(rect1.y, rect2.y);
-        float x2 = Math.min(rect1.x + rect1.width, rect2.x + rect2.width);
-        float y2 = Math.min(rect1.y + rect1.height, rect2.y + rect2.height);
+        float x1 = Math.max(this.x, rect2.x);
+        float y1 = Math.max(this.y, rect2.y);
+        float x2 = Math.min(this.x + this.width, rect2.x + rect2.width);
+        float y2 = Math.min(this.y + this.height, rect2.y + rect2.height);
 
         float width = x2 - x1;
         float height = y2 - y1;
