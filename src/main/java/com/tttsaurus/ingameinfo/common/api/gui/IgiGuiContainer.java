@@ -1,6 +1,7 @@
 package com.tttsaurus.ingameinfo.common.api.gui;
 
 import com.tttsaurus.ingameinfo.common.api.function.IFunc;
+import com.tttsaurus.ingameinfo.common.api.internal.InternalMethods;
 import com.tttsaurus.ingameinfo.common.api.mvvm.viewmodel.ViewModel;
 import com.tttsaurus.ingameinfo.common.impl.gui.layout.MainGroup;
 import com.tttsaurus.ingameinfo.common.api.render.RenderUtils;
@@ -54,11 +55,11 @@ public class IgiGuiContainer
         mainGroup.calcRenderPos(mainGroup.rect);
         mainGroup.finishReCalc();
 
-        viewModel.isActiveGetter = () -> { return isActive; };
-        viewModel.isActiveSetter = (flag) -> { isActive = flag; };
-        viewModel.exitCallbackSetter = (callback) -> { exitCallback = callback; };
-        viewModel.isFocusedGetter = () -> { return isFocused; };
-        viewModel.isFocusedSetter = (focused) -> { isFocused = focused; };
+        InternalMethods.instance.ViewModel$isActiveGetter$setter.invoke(viewModel, () -> isActive);
+        InternalMethods.instance.ViewModel$isActiveSetter$setter.invoke(viewModel, (flag) -> isActive = flag);
+        InternalMethods.instance.ViewModel$exitCallbackSetter$setter.invoke(viewModel, (callback) -> exitCallback = callback);
+        InternalMethods.instance.ViewModel$isFocusedGetter$setter.invoke(viewModel, () -> isFocused);
+        InternalMethods.instance.ViewModel$isFocusedSetter$setter.invoke(viewModel, (focused) -> isFocused = focused);
         viewModel.start();
     }
     public void onScaledResolutionResize()

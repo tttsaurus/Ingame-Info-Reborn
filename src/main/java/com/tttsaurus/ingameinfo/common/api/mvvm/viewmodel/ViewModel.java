@@ -11,17 +11,43 @@ import com.tttsaurus.ingameinfo.common.impl.mvvm.registry.MvvmRegistry;
 import java.util.Map;
 
 // only do one inheritance; don't do nested inheritance
-// ofc T can't be View
+// ofc T can't be View itself
 @SuppressWarnings("all")
 public abstract class ViewModel<T extends View>
 {
-    // getters & setters
+    // getters & setters for communication with gui container
     // will be init before start()
-    public IAction_1Param<Boolean> isActiveSetter;
-    public IFunc<Boolean> isActiveGetter;
-    public IAction_1Param<IFunc<Boolean>> exitCallbackSetter;
-    public IAction_1Param<Boolean> isFocusedSetter;
-    public IFunc<Boolean> isFocusedGetter;
+    private IAction_1Param<Boolean> isActiveSetter = null;
+    private IFunc<Boolean> isActiveGetter = null;
+    private IAction_1Param<IFunc<Boolean>> exitCallbackSetter = null;
+    private IAction_1Param<Boolean> isFocusedSetter = null;
+    private IFunc<Boolean> isFocusedGetter = null;
+
+    public void setActive(boolean flag)
+    {
+        if (isActiveSetter == null) return;
+        isActiveSetter.invoke(flag);
+    }
+    public boolean getActive()
+    {
+        if (isActiveGetter == null) return false;
+        return isActiveGetter.invoke();
+    }
+    public void setExitCallback(IFunc<Boolean> callback)
+    {
+        if (exitCallbackSetter == null) return;
+        exitCallbackSetter.invoke(callback);
+    }
+    public void setFocused(boolean flag)
+    {
+        if (isFocusedSetter == null) return;
+        isFocusedSetter.invoke(flag);
+    }
+    public boolean getFocused()
+    {
+        if (isFocusedGetter == null) return false;
+        return isFocusedGetter.invoke();
+    }
 
     private VvmBinding<T> binding = new VvmBinding<>();
 

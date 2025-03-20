@@ -215,11 +215,11 @@ public class SpotifyViewModel extends ViewModel<SpotifyView>
     @Override
     public void start()
     {
-        isActiveSetter.invoke(false);
-        exitCallbackSetter.invoke(() ->
+        setActive(false);
+        setExitCallback(() ->
         {
             editButtonEnabled.set(false);
-            isFocusedSetter.invoke(false);
+            setFocused(false);
             return false;
         });
 
@@ -257,7 +257,7 @@ public class SpotifyViewModel extends ViewModel<SpotifyView>
                     return;
                 }
 
-                isActiveSetter.invoke(true);
+                setActive(true);
                 trackTitleXShiftSpeed.set(20f);
                 trackTitleText.set("Please wait... And make sure you play a track on Spotify");
 
@@ -300,15 +300,15 @@ public class SpotifyViewModel extends ViewModel<SpotifyView>
                 });
             }
             else
-                isActiveSetter.invoke(false);
+                setActive(false);
         });
 
         EventCenter.spotifyOverlayEditEvent.addListener(() ->
         {
-            if (isActiveGetter.invoke())
+            if (getActive())
             {
                 editButtonEnabled.set(true);
-                isFocusedSetter.invoke(true);
+                setFocused(true);
             }
         });
 

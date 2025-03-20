@@ -1,10 +1,7 @@
 package com.tttsaurus.ingameinfo.common.api.internal;
 
 import com.tttsaurus.ingameinfo.InGameInfoReborn;
-import com.tttsaurus.ingameinfo.common.api.function.IAction_2Param;
-import com.tttsaurus.ingameinfo.common.api.function.IFunc;
-import com.tttsaurus.ingameinfo.common.api.function.IFunc_1Param;
-import com.tttsaurus.ingameinfo.common.api.function.IFunc_2Param;
+import com.tttsaurus.ingameinfo.common.api.function.*;
 import com.tttsaurus.ingameinfo.common.api.gui.Element;
 import com.tttsaurus.ingameinfo.common.api.gui.GuiLayout;
 import com.tttsaurus.ingameinfo.common.api.gui.IgiGuiContainer;
@@ -25,11 +22,19 @@ public class InternalMethods
     public static InternalMethods instance;
 
     public IFunc<GuiLayout> GuiLayout$constructor;
+
     public IFunc_1Param<MainGroup, GuiLayout> GuiLayout$mainGroup$getter;
     public IFunc_1Param<IgiGuiContainer, GuiLayout> GuiLayout$igiGuiContainer$getter;
     public IFunc_1Param<Map<String, IStylePropertySyncTo>, Element> Element$syncToMap$getter;
+
     public IAction_2Param<IgiGuiContainer, ViewModel> IgiGuiContainer$viewModel$setter;
     public IAction_2Param<View, MainGroup> View$mainGroup$setter;
+    public IAction_2Param<ViewModel, IAction_1Param<Boolean>> ViewModel$isActiveSetter$setter;
+    public IAction_2Param<ViewModel, IFunc<Boolean>> ViewModel$isActiveGetter$setter;
+    public IAction_2Param<ViewModel, IAction_1Param<IFunc<Boolean>>> ViewModel$exitCallbackSetter$setter;
+    public IAction_2Param<ViewModel, IAction_1Param<Boolean>> ViewModel$isFocusedSetter$setter;
+    public IAction_2Param<ViewModel, IFunc<Boolean>> ViewModel$isFocusedGetter$setter;
+
     public IFunc_2Param<GuiLayout, ViewModel, String> ViewModel$init;
     public IFunc_1Param<GuiLayout, View> View$init;
 
@@ -155,6 +160,106 @@ public class InternalMethods
         {
             View$mainGroup$setter = null;
             InGameInfoReborn.logger.info("Reflection setup failed for View$mainGroup$setter: " + exception.getMessage());
+        }
+
+        try
+        {
+            Field field = ViewModel.class.getDeclaredField("isActiveSetter");
+            field.setAccessible(true);
+            MethodHandle handle = lookup.unreflectSetter(field);
+            ViewModel$isActiveSetter$setter = (arg0, arg1) ->
+            {
+                try
+                {
+                    handle.invoke(arg0, arg1);
+                }
+                catch (Throwable ignored) { }
+            };
+        }
+        catch (Exception exception)
+        {
+            ViewModel$isActiveSetter$setter = null;
+            InGameInfoReborn.logger.info("Reflection setup failed for ViewModel$isActiveSetter$setter: " + exception.getMessage());
+        }
+
+        try
+        {
+            Field field = ViewModel.class.getDeclaredField("isActiveGetter");
+            field.setAccessible(true);
+            MethodHandle handle = lookup.unreflectSetter(field);
+            ViewModel$isActiveGetter$setter = (arg0, arg1) ->
+            {
+                try
+                {
+                    handle.invoke(arg0, arg1);
+                }
+                catch (Throwable ignored) { }
+            };
+        }
+        catch (Exception exception)
+        {
+            ViewModel$isActiveGetter$setter = null;
+            InGameInfoReborn.logger.info("Reflection setup failed for ViewModel$isActiveGetter$setter: " + exception.getMessage());
+        }
+
+        try
+        {
+            Field field = ViewModel.class.getDeclaredField("exitCallbackSetter");
+            field.setAccessible(true);
+            MethodHandle handle = lookup.unreflectSetter(field);
+            ViewModel$exitCallbackSetter$setter = (arg0, arg1) ->
+            {
+                try
+                {
+                    handle.invoke(arg0, arg1);
+                }
+                catch (Throwable ignored) { }
+            };
+        }
+        catch (Exception exception)
+        {
+            ViewModel$exitCallbackSetter$setter = null;
+            InGameInfoReborn.logger.info("Reflection setup failed for ViewModel$exitCallbackSetter$setter: " + exception.getMessage());
+        }
+
+        try
+        {
+            Field field = ViewModel.class.getDeclaredField("isFocusedSetter");
+            field.setAccessible(true);
+            MethodHandle handle = lookup.unreflectSetter(field);
+            ViewModel$isFocusedSetter$setter = (arg0, arg1) ->
+            {
+                try
+                {
+                    handle.invoke(arg0, arg1);
+                }
+                catch (Throwable ignored) { }
+            };
+        }
+        catch (Exception exception)
+        {
+            ViewModel$isFocusedSetter$setter = null;
+            InGameInfoReborn.logger.info("Reflection setup failed for ViewModel$isFocusedSetter$setter: " + exception.getMessage());
+        }
+
+        try
+        {
+            Field field = ViewModel.class.getDeclaredField("isFocusedGetter");
+            field.setAccessible(true);
+            MethodHandle handle = lookup.unreflectSetter(field);
+            ViewModel$isFocusedGetter$setter = (arg0, arg1) ->
+            {
+                try
+                {
+                    handle.invoke(arg0, arg1);
+                }
+                catch (Throwable ignored) { }
+            };
+        }
+        catch (Exception exception)
+        {
+            ViewModel$isFocusedGetter$setter = null;
+            InGameInfoReborn.logger.info("Reflection setup failed for ViewModel$isFocusedGetter$setter: " + exception.getMessage());
         }
 
         try
