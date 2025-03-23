@@ -1,9 +1,11 @@
 package com.tttsaurus.ingameinfo.common.impl.render.mesh;
 
 import com.tttsaurus.ingameinfo.common.api.render.ScaledRes2NdcUtils;
+import com.tttsaurus.ingameinfo.common.api.render.VertexIndexUtils;
 
 public class LineMesh extends Mesh
 {
+    private boolean formLoop = false;
     private float lineWidth;
     private final int maxLineNum;
     private int lineNum;
@@ -12,14 +14,22 @@ public class LineMesh extends Mesh
 
     public LineMesh(int lineNum, float lineWidth)
     {
-        super(new float[(lineNum + 1) * 2 * 8], new int[lineNum * 6]);
+        super(new float[(lineNum + 1) * 2 * 8], new int[lineNum * 6 + 9]);
         this.maxLineNum = lineNum;
         this.lineNum = lineNum;
         this.vertexNum = lineNum + 1;
         this.vertices = new float[vertexNum * 2];
         this.lineWidth = lineWidth;
+        // 9 spare indicies to form loop
+        setEboIndexOffset(9);
     }
 
+    public LineMesh setFormLoop(boolean flag)
+    {
+        formLoop = flag;
+        setEboIndexOffset((maxLineNum - lineNum) * 6 + (formLoop ? 0 : 9));
+        return this;
+    }
     public LineMesh setLineWidth(float lineWidth)
     {
         this.lineWidth = lineWidth;
@@ -35,7 +45,7 @@ public class LineMesh extends Mesh
         this.lineNum = lineNum;
         this.vertexNum = lineNum + 1;
 
-        setEboIndexOffset((maxLineNum - lineNum) * 6);
+        setEboIndexOffset((maxLineNum - lineNum) * 6 + (formLoop ? 0 : 9));
         return this;
     }
     // under minecraft's scaled resolution coordinate system
@@ -166,12 +176,61 @@ public class LineMesh extends Mesh
         for (int i = 0; i < lineNum; i++)
         {
             int offset = maxLineNum - lineNum;
-            newIndices[(i + offset) * 6] = i * 2;
-            newIndices[(i + offset) * 6 + 1] = i * 2 + 2;
-            newIndices[(i + offset) * 6 + 2] = i * 2 + 1;
-            newIndices[(i + offset) * 6 + 3] = i * 2 + 2;
-            newIndices[(i + offset) * 6 + 4] = i * 2 + 3;
-            newIndices[(i + offset) * 6 + 5] = i * 2 + 1;
+            newIndices[9 + (i + offset) * 6] = i * 2;
+            newIndices[9 + (i + offset) * 6 + 1] = i * 2 + 2;
+            newIndices[9 + (i + offset) * 6 + 2] = i * 2 + 1;
+            newIndices[9 + (i + offset) * 6 + 3] = i * 2 + 2;
+            newIndices[9 + (i + offset) * 6 + 4] = i * 2 + 3;
+            newIndices[9 + (i + offset) * 6 + 5] = i * 2 + 1;
+        }
+
+        if (formLoop)
+        {
+            int i1 = 0;
+            int i2 = 1;
+            int i3 = vertexNum * 2 - 2;
+            int i4 = vertexNum * 2 - 1;
+            float x1 = newVertices[i1 * 8], y1 = newVertices[i1 * 8 + 1];
+            float x2 = newVertices[i2 * 8], y2 = newVertices[i2 * 8 + 1];
+            float x3 = newVertices[i3 * 8], y3 = newVertices[i3 * 8 + 1];
+            float x4 = newVertices[i4 * 8], y4 = newVertices[i4 * 8 + 1];
+
+            if (VertexIndexUtils.isCcw(x1, y1, x2, y2, x3, y3))
+            {
+                newIndices[0] = i1;
+                newIndices[1] = i2;
+                newIndices[2] = i3;
+            }
+            else
+            {
+                newIndices[0] = i1;
+                newIndices[1] = i3;
+                newIndices[2] = i2;
+            }
+            if (VertexIndexUtils.isCcw(x3, y3, x2, y2, x4, y4))
+            {
+                newIndices[3] = i3;
+                newIndices[4] = i2;
+                newIndices[5] = i4;
+            }
+            else
+            {
+                newIndices[3] = i3;
+                newIndices[4] = i4;
+                newIndices[5] = i2;
+            }
+            if (VertexIndexUtils.isCcw(x1, y1, x4, y4, x3, y3))
+            {
+                newIndices[6] = i1;
+                newIndices[7] = i4;
+                newIndices[8] = i3;
+            }
+            else
+            {
+                newIndices[6] = i1;
+                newIndices[7] = i3;
+                newIndices[8] = i4;
+            }
         }
 
         updateVerticesByBufferSubData(newVertices);
