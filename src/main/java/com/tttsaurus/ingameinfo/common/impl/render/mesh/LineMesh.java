@@ -53,51 +53,93 @@ public class LineMesh extends Mesh
     {
         float[] newVertices = new float[getVerticesLength()];
 
-        float[] normDxNs = new float[vertexNum];
-        float[] normDyNs = new float[vertexNum];
+        // line segment normal
+        float[] lineNormalX = new float[vertexNum];
+        float[] lineNormalY = new float[vertexNum];
         for (int i = 0; i < vertexNum - 1; i++)
         {
-            float x1 = ScaledRes2NdcUtils.toNdcX(vertices[i * 2]);
-            float y1 = ScaledRes2NdcUtils.toNdcY(vertices[i * 2 + 1]);
-            float x2 = ScaledRes2NdcUtils.toNdcX(vertices[(i + 1) * 2]);
-            float y2 = ScaledRes2NdcUtils.toNdcY(vertices[(i + 1) * 2 + 1]);
+            float x1 = vertices[i * 2];
+            float y1 = vertices[i * 2 + 1];
+            float x2 = vertices[(i + 1) * 2];
+            float y2 = vertices[(i + 1) * 2 + 1];
             float dxN = -(y2 - y1);
             float dyN = x2 - x1;
             float len = (float) Math.sqrt(dxN * dxN + dyN * dyN);
-            normDxNs[i] = dxN / len;
-            normDyNs[i] = dyN / len;
+            lineNormalX[i] = dxN / len;
+            lineNormalY[i] = dyN / len;
         }
-        normDxNs[vertexNum - 1] = normDxNs[vertexNum - 2];
-        normDyNs[vertexNum - 1] = normDyNs[vertexNum - 2];
+        // duplicate the last normal
+        lineNormalX[vertexNum - 1] = lineNormalX[vertexNum - 2];
+        lineNormalY[vertexNum - 1] = lineNormalY[vertexNum - 2];
 
+        // vertex normal
+        float[] vertexNormalX = new float[vertexNum * 2];
+        float[] vertexNormalY = new float[vertexNum * 2];
         for (int i = 0; i < vertexNum; i++)
         {
-            float x = ScaledRes2NdcUtils.toNdcX(vertices[i * 2]);
-            float y = ScaledRes2NdcUtils.toNdcY(vertices[i * 2 + 1]);
-            float normDxN;
-            float normDyN;
+            float normalX1;
+            float normalY1;
+            float normalX2;
+            float normalY2;
 
             if (i == 0 || i == vertexNum - 1)
             {
-                normDxN = normDxNs[i];
-                normDyN = normDyNs[i];
+                normalX1 = lineNormalX[i] * lineWidth / 2f;
+                normalY1 = lineNormalY[i] * lineWidth / 2f;
+                normalX2 = -normalX1;
+                normalY2 = -normalY1;
             }
             else
             {
-                float dx1 = normDxNs[i - 1];
-                float dx2 = normDxNs[i];
-                float dy1 = normDyNs[i - 1];
-                float dy2 = normDyNs[i];
+                float dx1 = lineNormalX[i - 1];
+                float dx2 = lineNormalX[i];
+                float dy1 = lineNormalY[i - 1];
+                float dy2 = lineNormalY[i];
                 float dx = (dx1 + dx2) / 2f;
                 float dy = (dy1 + dy2) / 2f;
-                float len = (float) Math.sqrt(dx * dx + dy * dy);
-                normDxN = dx / len;
-                normDyN = dy / len;
+
+                float prevNormalX = vertexNormalX[(i - 1) * 2];
+                float prevNormalY = vertexNormalY[(i - 1) * 2];
+
+                float x1 = vertices[(i - 1) * 2];
+                float y1 = vertices[(i - 1) * 2 + 1];
+                float x2 = vertices[i * 2];
+                float y2 = vertices[i * 2 + 1];
+
+                float k = (y2 - y1) / (x2 - x1 == 0 ? 1E-6f : x2 - x1);
+                float c = y1 + prevNormalY - (x1 + prevNormalX) * k;
+
+                float normalK = dy / (dx == 0 ? 1E-6f : dx);
+                float normalC = y2 - x2 * normalK;
+
+                float intersectX = (c - normalC) / (normalK - k);
+                float intersectY = normalK * intersectX + normalC;
+
+                normalX1 = intersectX - x2;
+                normalY1 = intersectY - y2;
+
+                prevNormalX = vertexNormalX[(i - 1) * 2 + 1];
+                prevNormalY = vertexNormalY[(i - 1) * 2 + 1];
+
+                c = y1 + prevNormalY - (x1 + prevNormalX) * k;
+
+                intersectX = (c - normalC) / (normalK - k);
+                intersectY = normalK * intersectX + normalC;
+
+                normalX2 = intersectX - x2;
+                normalY2 = intersectY - y2;
             }
+            vertexNormalX[i * 2] = normalX1;
+            vertexNormalY[i * 2] = normalY1;
+            vertexNormalX[i * 2 + 1] = normalX2;
+            vertexNormalY[i * 2 + 1] = normalY2;
+
+            float x = vertices[i * 2];
+            float y = vertices[i * 2 + 1];
 
             // pos
-            newVertices[i * 2 * 8] = x + ScaledRes2NdcUtils.toNdcWidth(normDxN * lineWidth / 2f);
-            newVertices[i * 2 * 8 + 1] = y - ScaledRes2NdcUtils.toNdcHeight(normDyN * lineWidth / 2f);
+            newVertices[i * 2 * 8] = ScaledRes2NdcUtils.toNdcX(x + normalX1);
+            newVertices[i * 2 * 8 + 1] = ScaledRes2NdcUtils.toNdcY(y + normalY1);
             newVertices[i * 2 * 8 + 2] = 0f;
             // texcoord
             newVertices[i * 2 * 8 + 3] = 0f;
@@ -108,8 +150,8 @@ public class LineMesh extends Mesh
             newVertices[i * 2 * 8 + 7] = 1f;
 
             // pos
-            newVertices[(i * 2 + 1) * 8] = x - ScaledRes2NdcUtils.toNdcWidth(normDxN * lineWidth / 2f);
-            newVertices[(i * 2 + 1) * 8 + 1] = y + ScaledRes2NdcUtils.toNdcHeight(normDyN * lineWidth / 2f);
+            newVertices[(i * 2 + 1) * 8] = ScaledRes2NdcUtils.toNdcX(x + normalX2);
+            newVertices[(i * 2 + 1) * 8 + 1] = ScaledRes2NdcUtils.toNdcY(y + normalY2);
             newVertices[(i * 2 + 1) * 8 + 2] = 0f;
             // texcoord
             newVertices[(i * 2 + 1) * 8 + 3] = 0f;
@@ -125,11 +167,11 @@ public class LineMesh extends Mesh
         {
             int offset = maxLineNum - lineNum;
             newIndices[(i + offset) * 6] = i * 2;
-            newIndices[(i + offset) * 6 + 1] = i * 2 + 1;
-            newIndices[(i + offset) * 6 + 2] = i * 2 + 2;
+            newIndices[(i + offset) * 6 + 1] = i * 2 + 2;
+            newIndices[(i + offset) * 6 + 2] = i * 2 + 1;
             newIndices[(i + offset) * 6 + 3] = i * 2 + 2;
-            newIndices[(i + offset) * 6 + 4] = i * 2 + 1;
-            newIndices[(i + offset) * 6 + 5] = i * 2 + 3;
+            newIndices[(i + offset) * 6 + 4] = i * 2 + 3;
+            newIndices[(i + offset) * 6 + 5] = i * 2 + 1;
         }
 
         updateVerticesByBufferSubData(newVertices);
