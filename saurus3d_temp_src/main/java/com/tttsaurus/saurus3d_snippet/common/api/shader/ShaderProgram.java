@@ -18,6 +18,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 public class ShaderProgram implements Comparable<ShaderProgram>, IGlDisposable
 {
+    private boolean setup;
     private double cpuTimeMs;
     private double gpuTimeMs;
     private int prevProgramID;
@@ -26,6 +27,7 @@ public class ShaderProgram implements Comparable<ShaderProgram>, IGlDisposable
     private final List<Integer> shaderIDs = new ArrayList<>();
     private final List<Shader> shaders = new ArrayList<>();
 
+    public boolean getSetup() { return setup; }
     public int getProgramID() { return programID; }
 
     // call after setup()
@@ -85,10 +87,13 @@ public class ShaderProgram implements Comparable<ShaderProgram>, IGlDisposable
     public ShaderProgram(Shader... shaders)
     {
         this.shaders.addAll(Arrays.asList(shaders));
+        setup = false;
     }
 
     public void setup()
     {
+        if (setup) return;
+
         int gpuTimeQueryID = GL15.glGenQueries();
         GL15.glBeginQuery(GL33.GL_TIME_ELAPSED, gpuTimeQueryID);
 
@@ -140,6 +145,8 @@ public class ShaderProgram implements Comparable<ShaderProgram>, IGlDisposable
         GL15.glEndQuery(GL33.GL_TIME_ELAPSED);
         GL15.glGetQueryObject(gpuTimeQueryID, GL15.GL_QUERY_RESULT, CommonBuffers.intBuffer);
         gpuTimeMs = CommonBuffers.intBuffer.get(0) / 1.0E6d;
+
+        setup = true;
 
         GlResourceManager.addDisposable(this);
     }
