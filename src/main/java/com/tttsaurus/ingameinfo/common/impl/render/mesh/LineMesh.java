@@ -122,7 +122,7 @@ public class LineMesh extends Mesh
                 float normalK = dy / (dx == 0 ? 1E-6f : dx);
                 float normalC = y2 - x2 * normalK;
 
-                float intersectX = (c - normalC) / (normalK - k);
+                float intersectX = (c - normalC) / (normalK - k == 0 ? 1E-6f : normalK - k);
                 float intersectY = normalK * intersectX + normalC;
 
                 normalX1 = intersectX - x2;
@@ -133,7 +133,7 @@ public class LineMesh extends Mesh
 
                 c = y1 + prevNormalY - (x1 + prevNormalX) * k;
 
-                intersectX = (c - normalC) / (normalK - k);
+                intersectX = (c - normalC) / (normalK - k == 0 ? 1E-6f : normalK - k);
                 intersectY = normalK * intersectX + normalC;
 
                 normalX2 = intersectX - x2;
