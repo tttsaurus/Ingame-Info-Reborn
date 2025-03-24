@@ -298,6 +298,20 @@ public final class RenderUtils
         GL11.glStencilFunc(GL11.GL_EQUAL, stencilValue, 0xFF);
         GL11.glStencilOp(GL11.GL_KEEP, GL11.GL_KEEP, GL11.GL_DECR);
     }
+    public static void prepareStencilToIncrease(int stencilValue)
+    {
+        GL11.glStencilMask(0xFF);
+
+        GL11.glStencilFunc(GL11.GL_EQUAL, stencilValue, 0xFF);
+        GL11.glStencilOp(GL11.GL_KEEP, GL11.GL_KEEP, GL11.GL_INCR);
+    }
+    public static void prepareStencilToZero(int stencilValue)
+    {
+        GL11.glStencilMask(0xFF);
+
+        GL11.glStencilFunc(GL11.GL_EQUAL, stencilValue, 0xFF);
+        GL11.glStencilOp(GL11.GL_KEEP, GL11.GL_KEEP, GL11.GL_ZERO);
+    }
     public static void endStencil()
     {
         GL11.glDisable(GL11.GL_STENCIL_TEST);

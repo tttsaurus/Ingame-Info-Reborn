@@ -12,7 +12,7 @@ public final class RenderMask
     private static int nextStencilValue()
     {
         stencilValueCounter++;
-        if (stencilValueCounter > 255)
+        if (stencilValueCounter > 254)
         {
             stencilValueCounter = 1;
             GL11.glClearStencil(0);
@@ -104,7 +104,6 @@ public final class RenderMask
         RenderUtils.prepareStencilToWrite(stencilValue);
         drawStencilArea(this);
 
-        int sv = stencilValue;
         if (maskStack.size() > 1)
         {
             ListIterator<RenderMask> iterator = maskStack.listIterator(maskStack.size());
@@ -112,12 +111,16 @@ public final class RenderMask
             while (iterator.hasPrevious())
             {
                 RenderMask prevMask = iterator.previous();
-                RenderUtils.prepareStencilToDecrease(sv--);
+                RenderUtils.prepareStencilToIncrease(stencilValue);
                 drawStencilArea(prevMask);
+                RenderUtils.prepareStencilToZero(stencilValue);
+                drawStencilArea(this);
+                RenderUtils.prepareStencilToDecrease(stencilValue + 1);
+                drawStencilArea(this);
             }
         }
 
-        RenderUtils.prepareStencilToRender(sv);
+        RenderUtils.prepareStencilToRender(stencilValue);
     }
     public void endMasking()
     {
