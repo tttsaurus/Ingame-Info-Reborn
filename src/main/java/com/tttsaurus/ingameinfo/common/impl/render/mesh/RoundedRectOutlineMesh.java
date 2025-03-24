@@ -13,17 +13,17 @@ public class RoundedRectOutlineMesh extends LineMesh
 
     public RoundedRectOutlineMesh(int maxCornerSegment, float lineWidth)
     {
-        super(maxCornerSegment * 4 + 5, lineWidth);
+        super(maxCornerSegment * 4 + 3, lineWidth);
         this.maxCornerSegment = maxCornerSegment;
         cornerSegment = maxCornerSegment;
-        //setFormLoop(true);
+        setFormLoop(true);
     }
 
     public RoundedRectOutlineMesh setCornerRadius(float radius)
     {
         cornerRadius = radius;
         cornerSegment = Math.min(maxCornerSegment, Math.max(3, (int)(cornerRadius / 2f)));
-        setLineNum(cornerSegment * 4 + 5);
+        setLineNum(cornerSegment * 4 + 3);
         return this;
     }
     public RoundedRectOutlineMesh setRect(float x, float y, float width, float height)
@@ -53,12 +53,10 @@ public class RoundedRectOutlineMesh extends LineMesh
     {
         vertexIndex = 0;
 
-        setVertex(vertexIndex++, x + width / 2f - cornerRadius, y);
         addArcVertices(x + width - cornerRadius, y + cornerRadius, 0, 90, cornerSegment);
         addArcVertices(x + width - cornerRadius, y + height - cornerRadius, 90, 180, cornerSegment);
         addArcVertices(x + cornerRadius, y + height - cornerRadius, 180, 270, cornerSegment);
         addArcVertices(x + cornerRadius, y + cornerRadius, 270, 360, cornerSegment);
-        setVertex(vertexIndex++, x + width / 2f - cornerRadius, y);
 
         super.update();
     }
