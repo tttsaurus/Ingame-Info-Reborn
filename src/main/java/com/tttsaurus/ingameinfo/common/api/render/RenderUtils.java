@@ -293,8 +293,10 @@ public final class RenderUtils
     }
     public static void prepareStencilToDecrease(int stencilValue)
     {
+        GL11.glStencilMask(0xFF);
+
         GL11.glStencilFunc(GL11.GL_EQUAL, stencilValue, 0xFF);
-        GL11.glStencilOp(GL11.GL_DECR, GL11.GL_DECR, GL11.GL_DECR);
+        GL11.glStencilOp(GL11.GL_KEEP, GL11.GL_KEEP, GL11.GL_DECR);
     }
     public static void endStencil()
     {
