@@ -75,8 +75,8 @@ public class LineMesh extends Mesh
             float dxN = -(y2 - y1);
             float dyN = x2 - x1;
             float len = (float) Math.sqrt(dxN * dxN + dyN * dyN);
-            lineNormalX[i] = dxN / len;
-            lineNormalY[i] = dyN / len;
+            lineNormalX[i] = dxN / (len == 0 ? 1E-6f : len);
+            lineNormalY[i] = dyN / (len == 0 ? 1E-6f : len);
         }
         // duplicate the last normal
         lineNormalX[vertexNum - 1] = lineNormalX[vertexNum - 2];
@@ -101,6 +101,11 @@ public class LineMesh extends Mesh
             }
             else
             {
+                float x1 = vertices[(i - 1) * 2];
+                float y1 = vertices[(i - 1) * 2 + 1];
+                float x2 = vertices[i * 2];
+                float y2 = vertices[i * 2 + 1];
+
                 float dx1 = lineNormalX[i - 1];
                 float dx2 = lineNormalX[i];
                 float dy1 = lineNormalY[i - 1];
@@ -110,11 +115,6 @@ public class LineMesh extends Mesh
 
                 float prevNormalX = vertexNormalX[(i - 1) * 2];
                 float prevNormalY = vertexNormalY[(i - 1) * 2];
-
-                float x1 = vertices[(i - 1) * 2];
-                float y1 = vertices[(i - 1) * 2 + 1];
-                float x2 = vertices[i * 2];
-                float y2 = vertices[i * 2 + 1];
 
                 float k = (y2 - y1) / (x2 - x1 == 0 ? 1E-6f : x2 - x1);
                 float c = y1 + prevNormalY - (x1 + prevNormalX) * k;
