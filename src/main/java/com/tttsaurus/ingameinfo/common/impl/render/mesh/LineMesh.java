@@ -12,6 +12,8 @@ public class LineMesh extends Mesh
     private int vertexNum;
     private final float[] vertices;
 
+    public int getLineNum() { return lineNum; }
+
     public LineMesh(int lineNum, float lineWidth)
     {
         super(new float[(lineNum + 1) * 2 * 8], new int[lineNum * 6 + 9]);
@@ -49,6 +51,7 @@ public class LineMesh extends Mesh
         return this;
     }
     // under minecraft's scaled resolution coordinate system
+    // shouldn't have adjacent overlapping vertices
     public LineMesh setVertex(int index, float x, float y)
     {
         if (index < 0 || index > vertexNum - 1)
@@ -176,12 +179,36 @@ public class LineMesh extends Mesh
         for (int i = 0; i < lineNum; i++)
         {
             int offset = maxLineNum - lineNum;
-            newIndices[9 + (i + offset) * 6] = i * 2;
-            newIndices[9 + (i + offset) * 6 + 1] = i * 2 + 2;
-            newIndices[9 + (i + offset) * 6 + 2] = i * 2 + 1;
-            newIndices[9 + (i + offset) * 6 + 3] = i * 2 + 2;
-            newIndices[9 + (i + offset) * 6 + 4] = i * 2 + 3;
-            newIndices[9 + (i + offset) * 6 + 5] = i * 2 + 1;
+
+            float x1 = newVertices[i * 2 * 8], y1 = newVertices[i * 2 * 8 + 1];
+            float x2 = newVertices[(i * 2 + 1) * 8], y2 = newVertices[(i * 2 + 1) * 8 + 1];
+            float x3 = newVertices[(i + 1) * 2 * 8], y3 = newVertices[(i + 1) * 2 * 8 + 1];
+            float x4 = newVertices[((i + 1) * 2 + 1) * 8], y4 = newVertices[((i + 1) * 2 + 1) * 8 + 1];
+
+            if (VertexIndexUtils.isCcw(x1, y1, x3, y3, x2, y2))
+            {
+                newIndices[9 + (i + offset) * 6] = i * 2;
+                newIndices[9 + (i + offset) * 6 + 1] = i * 2 + 2;
+                newIndices[9 + (i + offset) * 6 + 2] = i * 2 + 1;
+            }
+            else
+            {
+                newIndices[9 + (i + offset) * 6] = i * 2;
+                newIndices[9 + (i + offset) * 6 + 1] = i * 2 + 1;
+                newIndices[9 + (i + offset) * 6 + 2] = i * 2 + 2;
+            }
+            if (VertexIndexUtils.isCcw(x3, y3, x4, y4, x2, y2))
+            {
+                newIndices[9 + (i + offset) * 6 + 3] = i * 2 + 2;
+                newIndices[9 + (i + offset) * 6 + 4] = i * 2 + 3;
+                newIndices[9 + (i + offset) * 6 + 5] = i * 2 + 1;
+            }
+            else
+            {
+                newIndices[9 + (i + offset) * 6 + 3] = i * 2 + 2;
+                newIndices[9 + (i + offset) * 6 + 4] = i * 2 + 1;
+                newIndices[9 + (i + offset) * 6 + 5] = i * 2 + 3;
+            }
         }
 
         if (formLoop)
