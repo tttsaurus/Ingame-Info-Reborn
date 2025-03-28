@@ -4,6 +4,7 @@ import com.tttsaurus.ingameinfo.common.api.gui.Element;
 import com.tttsaurus.ingameinfo.common.api.gui.GuiLayout;
 import com.tttsaurus.ingameinfo.common.api.gui.layout.ElementGroup;
 import com.tttsaurus.ingameinfo.common.api.internal.InternalMethods;
+import com.tttsaurus.ingameinfo.common.api.serialization.ixml.RawIxmlUtils;
 import com.tttsaurus.ingameinfo.common.impl.gui.layout.MainGroup;
 import com.tttsaurus.ingameinfo.common.impl.serialization.GuiLayoutDeserializer;
 import java.io.File;
@@ -76,10 +77,7 @@ public abstract class View
 
             file.close();
 
-            GuiLayoutDeserializer deserializer = new GuiLayoutDeserializer();
-            GuiLayout guiLayout = deserializer.deserialize(builder.toString(), "ixml");
-
-            return guiLayout;
+            return (new GuiLayoutDeserializer()).deserialize(RawIxmlUtils.deleteComments(builder.toString()), "ixml");
         }
         catch (Exception ignored) { return InternalMethods.instance.GuiLayout$constructor.invoke(); }
     }

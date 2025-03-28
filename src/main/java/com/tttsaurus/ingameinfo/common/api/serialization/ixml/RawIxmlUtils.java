@@ -116,4 +116,42 @@ public final class RawIxmlUtils
 
         return list;
     }
+
+    public static String deleteComments(String ixml)
+    {
+        ixml = ixml.trim();
+
+        List<Integer> startIndices = new ArrayList<>();
+        List<Integer> endIndices = new ArrayList<>();
+
+        int layer = 0;
+        int index = 0;
+        while (index < ixml.length())
+        {
+            if (ixml.startsWith("<!--", index) && layer == 0)
+            {
+                startIndices.add(index);
+                layer++;
+            }
+            if (ixml.startsWith("-->", index) && layer == 1)
+            {
+                endIndices.add(index + 2);
+                layer--;
+            }
+            index++;
+        }
+
+        int offset = 0;
+        String res = ixml;
+        for (int i = 0; i < startIndices.size(); i++)
+        {
+            if (i + 1 <= endIndices.size())
+            {
+                res = res.substring(0, startIndices.get(i) - offset) + res.substring(endIndices.get(i) + 1 - offset);
+                offset += endIndices.get(i) - startIndices.get(i) + 1;
+            }
+        }
+
+        return res;
+    }
 }
