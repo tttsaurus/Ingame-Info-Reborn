@@ -42,8 +42,7 @@ public class ClientProxy extends CommonProxy
         else
             logger.info(String.format("OpenGl version: %d.%d", majorGlVersion, minorGlVersion));
 
-        // at least gl 30
-        boolean enableFbo = IgiConfig.ENABLE_FRAMEBUFFER && OpenGlHelper.framebufferSupported && majorGlVersion >= 3;
+        boolean enableFbo = IgiConfig.ENABLE_FRAMEBUFFER && OpenGlHelper.framebufferSupported;
         // at least gl 33
         boolean enablePostProcessing = IgiConfig.ENABLE_POST_PROCESSING_SHADER && ((majorGlVersion == 3 && minorGlVersion >= 3) || majorGlVersion > 3);
         // at least gl 40
@@ -53,7 +52,7 @@ public class ClientProxy extends CommonProxy
         enablePostProcessing = enableFbo && enablePostProcessing;
         enableMsfbo = enableFbo && enableMsfbo;
 
-        logger.info("[Render Feature] Framebuffer is " + (enableFbo ? "ON" : "OFF") + " (requires GL30)");
+        logger.info("[Render Feature] Framebuffer is " + (enableFbo ? "ON" : "OFF"));
         logger.info("[Render Feature] Post-Processing on framebuffer is " + (enablePostProcessing ? "ON" : "OFF") + " (requires GL33 and framebuffer)");
         logger.info("[Render Feature] Multisampling on framebuffer is " + (enableMsfbo ? "ON" : "OFF") + " (requires GL40 and framebuffer)");
 

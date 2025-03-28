@@ -37,7 +37,7 @@ public class IgiConfig
             CONFIG.load();
 
             FIXED_UPDATE_LIMIT = CONFIG.getInt("Gui Fixed Update Limit", "igi", 30, 30, 300, "It represents how many updates will be called per second \nand this limit is for animation calculations & such \"fixed\" calculations \nNotice: this limit should be smaller than or equal to \"Gui Render Update Limit\" \nand becomes meaningless when it's greater than \"Gui Render Update Limit\" \nRecommended values: 30, 60, 125, 240");
-            ENABLE_FRAMEBUFFER = CONFIG.getBoolean("Enable Framebuffer", "igi", true, "Reminder: framebuffer may fail on old devices (requires GL30 support) \nEven if it failed, nothing will crash and everything still works fine");
+            ENABLE_FRAMEBUFFER = CONFIG.getBoolean("Enable Framebuffer", "igi", true, "Reminder: framebuffer may fail on old devices \nEven if it failed, nothing will crash and everything still works fine");
             RENDER_UPDATE_LIMIT = CONFIG.getInt("Gui Render Update Limit", "igi", 30, 30, 320, "It represents how many render updates (render to framebuffer) will be called per second \nand framebuffer is the prerequisite for it to work \nNotice: you don't want this limit to exceed your screen refresh rate because that's meaningless \nRecommended values: 30, 60, 165, 240");
 
             ENABLE_MSFRAMEBUFFER = CONFIG.getBoolean("Enable Multisample Framebuffer", "igi.multisampling", false, "Whether to enable multisampling on framebuffer (requires GL40 support) \nand framebuffer is the prerequisite for it to work\nNotice: it's the prerequisite for multisample anti-aliasing");
