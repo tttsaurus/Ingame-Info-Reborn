@@ -27,11 +27,6 @@ public class MeshRenderer implements IRenderer
         this.shaderProgram = shaderProgram;
     }
 
-    //<editor-fold desc="getters & setters">
-    public void setMesh(Mesh mesh) { this.mesh = mesh; }
-    public void setShaderProgram(ShaderProgram shaderProgram) { this.shaderProgram = shaderProgram; }
-    //</editor-fold>
-
     @Override
     public void render()
     {
