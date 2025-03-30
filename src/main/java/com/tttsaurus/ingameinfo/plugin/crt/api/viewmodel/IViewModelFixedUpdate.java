@@ -5,8 +5,8 @@ import crafttweaker.annotations.ZenRegister;
 import stanhebben.zenscript.annotations.ZenClass;
 
 @ZenRegister
-@ZenClass("mods.ingameinfo.mvvm.IViewModelStart")
-public interface IViewModelStart
+@ZenClass("mods.ingameinfo.mvvm.IViewModelFixedUpdate")
+public interface IViewModelFixedUpdate
 {
-    void start(CrtViewModel this0);
+    void update(CrtViewModel this0, double deltaTime);
 }
