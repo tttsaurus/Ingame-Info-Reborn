@@ -6,7 +6,7 @@ import stanhebben.zenscript.annotations.ZenProperty;
 
 @ZenRegister
 @ZenClass("mods.ingameinfo.Types")
-public class TypesWrapper
+public final class TypesWrapper
 {
     public final Types types;
     private TypesWrapper(Types types)
@@ -40,4 +40,16 @@ public class TypesWrapper
 
     @ZenProperty
     public static final TypesWrapper String = new TypesWrapper(Types.String);
+
+    @ZenProperty
+    public static final TypesWrapper Alignment = new TypesWrapper(Types.Alignment);
+
+    @ZenProperty
+    public static final TypesWrapper Padding = new TypesWrapper(Types.Padding);
+
+    @ZenProperty
+    public static final TypesWrapper Pivot = new TypesWrapper(Types.Pivot);
+
+    @ZenProperty
+    public static final TypesWrapper Skewness = new TypesWrapper(Types.Skewness);
 }
