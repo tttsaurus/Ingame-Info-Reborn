@@ -35,28 +35,33 @@ public final class PaddingWrapper
     }
 
     @ZenMethod
-    public void set(float top, float bottom, float left, float right)
+    public PaddingWrapper set(float top, float bottom, float left, float right)
     {
         padding.set(top, bottom, left, right);
+        return this;
     }
     @ZenMethod
-    public void setTop(float top)
+    public PaddingWrapper setTop(float top)
     {
         padding.top = top;
+        return this;
     }
     @ZenMethod
-    public void setBottom(float bottom)
+    public PaddingWrapper setBottom(float bottom)
     {
         padding.bottom = bottom;
+        return this;
     }
     @ZenMethod
-    public void setLeft(float left)
+    public PaddingWrapper setLeft(float left)
     {
         padding.left = left;
+        return this;
     }
     @ZenMethod
-    public void setRight(float right)
+    public PaddingWrapper setRight(float right)
     {
         padding.right = right;
+        return this;
     }
 }
