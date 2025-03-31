@@ -5,5 +5,5 @@ import javax.annotation.Nullable;
 public interface IDeserializer<T>
 {
     @Nullable
-    T deserialize(String raw, String protocol);
+    T deserialize(String raw);
 }

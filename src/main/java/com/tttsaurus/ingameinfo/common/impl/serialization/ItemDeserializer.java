@@ -6,7 +6,7 @@ import com.tttsaurus.ingameinfo.common.api.serialization.IDeserializer;
 public class ItemDeserializer implements IDeserializer<GhostableItem>
 {
     @Override
-    public GhostableItem deserialize(String raw, String protocol)
+    public GhostableItem deserialize(String raw)
     {
         raw = raw.trim();
         if (raw.startsWith("(") && raw.endsWith(")"))

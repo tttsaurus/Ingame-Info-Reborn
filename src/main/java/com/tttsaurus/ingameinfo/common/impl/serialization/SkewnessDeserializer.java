@@ -6,7 +6,7 @@ import com.tttsaurus.ingameinfo.common.api.serialization.IDeserializer;
 public class SkewnessDeserializer implements IDeserializer<Skewness>
 {
     @Override
-    public Skewness deserialize(String raw, String protocol)
+    public Skewness deserialize(String raw)
     {
         try { return Skewness.valueOf(raw); }
         catch (Exception ignored) { return null; }

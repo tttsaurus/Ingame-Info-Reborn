@@ -6,7 +6,7 @@ import com.tttsaurus.ingameinfo.common.api.serialization.IDeserializer;
 public class PivotDeserializer implements IDeserializer<Pivot>
 {
     @Override
-    public Pivot deserialize(String raw, String protocol)
+    public Pivot deserialize(String raw)
     {
         try { return Pivot.valueOf(raw); }
         catch (Exception ignored) { return null; }

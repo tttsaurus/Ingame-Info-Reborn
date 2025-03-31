@@ -10,7 +10,7 @@ public class BuiltinTypesDeserializer<T> implements IDeserializer<T>
     public BuiltinTypesDeserializer(Class<T> clazz) { this.clazz = clazz; }
 
     @Override
-    public T deserialize(String raw, String protocol)
+    public T deserialize(String raw)
     {
         {
             // int

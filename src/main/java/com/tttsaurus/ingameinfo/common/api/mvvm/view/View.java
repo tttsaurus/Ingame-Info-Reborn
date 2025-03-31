@@ -77,7 +77,7 @@ public abstract class View
 
             file.close();
 
-            return (new GuiLayoutDeserializer()).deserialize(RawIxmlUtils.deleteComments(builder.toString()), "ixml");
+            return (new GuiLayoutDeserializer()).deserialize(RawIxmlUtils.deleteComments(builder.toString()));
         }
         catch (Exception ignored) { return InternalMethods.instance.GuiLayout$constructor.invoke(); }
     }

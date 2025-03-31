@@ -16,12 +16,12 @@ public class ElementStylesDeserializer implements IDeserializer<List<ElementStyl
     public ElementStylesDeserializer(Class<? extends Element> clazz) { this.clazz = clazz; }
 
     @Override
-    public List<ElementStyle> deserialize(String raw, String protocol)
+    public List<ElementStyle> deserialize(String raw)
     {
         List<ElementStyle> elementStyles = new ArrayList<>();
 
         RawElementStylesDeserializer deserializer = new RawElementStylesDeserializer();
-        List<Tuple<String, String>> list = deserializer.deserialize(raw, protocol);
+        List<Tuple<String, String>> list = deserializer.deserialize(raw);
         for (Tuple<String, String> pair: list)
         {
             IStylePropertySetter setter = ElementRegistry.getStylePropertySetter(clazz, pair.getFirst());
@@ -30,7 +30,7 @@ public class ElementStylesDeserializer implements IDeserializer<List<ElementStyl
                 IDeserializer<?> stylePropertyDeserializer = ElementRegistry.getStylePropertyDeserializer(setter);
                 if (stylePropertyDeserializer != null)
                 {
-                    Object obj = stylePropertyDeserializer.deserialize(pair.getSecond(), protocol);
+                    Object obj = stylePropertyDeserializer.deserialize(pair.getSecond());
                     if (obj != null) elementStyles.add(new ElementStyle(pair.getFirst(), obj));
                 }
             }
