@@ -4,8 +4,10 @@ import com.tttsaurus.ingameinfo.common.api.gui.Element;
 import com.tttsaurus.ingameinfo.common.api.gui.GuiLayout;
 import com.tttsaurus.ingameinfo.common.api.gui.layout.ElementGroup;
 import com.tttsaurus.ingameinfo.common.api.internal.InternalMethods;
+import com.tttsaurus.ingameinfo.common.api.item.GhostableItem;
 import com.tttsaurus.ingameinfo.common.api.serialization.IDeserializer;
 import com.tttsaurus.ingameinfo.common.api.serialization.ixml.RawIxmlUtils;
+import com.tttsaurus.ingameinfo.common.api.serialization.json.RawJsonUtils;
 import com.tttsaurus.ingameinfo.common.impl.gui.registry.ElementRegistry;
 import net.minecraft.util.Tuple;
 import java.util.List;
@@ -45,16 +47,26 @@ public class GuiLayoutDeserializer implements IDeserializer<GuiLayout>
                             try { guiLayout.setBackgroundColor(Integer.parseInt(value)); }
                             catch (Exception ignored) { }
                         else if (field.equals("useHeldItemWhitelist"))
-                            guiLayout.setHasFocusBackground(Boolean.parseBoolean(value));
+                            guiLayout.setHeldItemWhitelist(Boolean.parseBoolean(value));
                         else if (field.equals("useHeldItemBlacklist"))
-                            guiLayout.setHasFocusBackground(Boolean.parseBoolean(value));
+                            guiLayout.setHeldItemBlacklist(Boolean.parseBoolean(value));
                         else if (field.equals("heldItemWhitelist"))
                         {
-
+                            ItemDeserializer itemDeserializer = new ItemDeserializer();
+                            for (String rawItem: RawJsonUtils.splitArray(value))
+                            {
+                                GhostableItem item = itemDeserializer.deserialize(rawItem, protocol);
+                                if (item != null) guiLayout.addHeldItemWhitelist(item);
+                            }
                         }
                         else if (field.equals("heldItemBlacklist"))
                         {
-
+                            ItemDeserializer itemDeserializer = new ItemDeserializer();
+                            for (String rawItem: RawJsonUtils.splitArray(value))
+                            {
+                                GhostableItem item = itemDeserializer.deserialize(rawItem, protocol);
+                                if (item != null) guiLayout.addHeldItemBlacklist(item);
+                            }
                         }
                     }
                 }

@@ -59,6 +59,6 @@ public final class GhostableItem
         if (itemStack == null)
             return null;
         else
-            return itemStack.copy();
+            return itemStack;
     }
 }

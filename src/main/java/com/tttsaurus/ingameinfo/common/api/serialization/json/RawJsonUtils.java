@@ -34,6 +34,7 @@ public final class RawJsonUtils
 
     public static List<String> extractKeys(String json)
     {
+        json = json.trim();
         if (json.startsWith("{") && json.endsWith("}"))
             json = json.substring(1, json.length() - 1).trim();
 
@@ -79,6 +80,7 @@ public final class RawJsonUtils
 
     public static List<String> splitArray(String json)
     {
+        json = json.trim();
         if (json.startsWith("[") && json.endsWith("]"))
             json = json.substring(1, json.length() - 1).trim();
 

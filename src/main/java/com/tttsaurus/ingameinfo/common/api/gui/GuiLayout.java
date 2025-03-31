@@ -2,9 +2,9 @@ package com.tttsaurus.ingameinfo.common.api.gui;
 
 import com.tttsaurus.ingameinfo.common.api.gui.layout.ElementGroup;
 import com.tttsaurus.ingameinfo.common.api.gui.style.IStylePropertySetter;
+import com.tttsaurus.ingameinfo.common.api.item.GhostableItem;
 import com.tttsaurus.ingameinfo.common.impl.gui.layout.MainGroup;
 import com.tttsaurus.ingameinfo.common.impl.gui.registry.ElementRegistry;
-import net.minecraft.item.ItemStack;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -55,14 +55,14 @@ public class GuiLayout
         igiGuiContainer.useHeldItemBlacklist = flag;
         return this;
     }
-    public GuiLayout addHeldItemWhitelist(ItemStack itemStack)
+    public GuiLayout addHeldItemWhitelist(GhostableItem item)
     {
-        igiGuiContainer.heldItemWhitelist.add(itemStack);
+        igiGuiContainer.heldItemWhitelist.add(item);
         return this;
     }
-    public GuiLayout addHeldItemBlacklist(ItemStack itemStack)
+    public GuiLayout addHeldItemBlacklist(GhostableItem item)
     {
-        igiGuiContainer.heldItemBlacklist.add(itemStack);
+        igiGuiContainer.heldItemBlacklist.add(item);
         return this;
     }
 

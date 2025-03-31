@@ -6,6 +6,7 @@ import com.tttsaurus.ingameinfo.common.api.gui.IgiGuiContainer;
 import com.tttsaurus.ingameinfo.common.api.gui.delegate.placeholder.IPlaceholderDrawScreen;
 import com.tttsaurus.ingameinfo.common.api.gui.delegate.placeholder.IPlaceholderKeyTyped;
 import com.tttsaurus.ingameinfo.common.api.function.IFunc;
+import com.tttsaurus.ingameinfo.common.api.item.GhostableItem;
 import com.tttsaurus.ingameinfo.common.api.render.GlResourceManager;
 import com.tttsaurus.ingameinfo.common.api.render.IGlDisposable;
 import com.tttsaurus.ingameinfo.common.api.render.RenderHints;
@@ -230,15 +231,17 @@ public final class IgiGuiLifeCycle
                 if (container.getUseHeldItemWhitelist())
                 {
                     display = false;
-                    for (ItemStack itemStack: container.getHeldItemWhitelist())
-                        if (itemStack.isItemEqual(heldItemMainhand))
-                            display = true;
+                    for (GhostableItem item: container.getHeldItemWhitelist())
+                        if (item.getItemStack() != null)
+                            if (item.getItemStack().isItemEqual(heldItemMainhand))
+                                display = true;
                 }
                 if (container.getUseHeldItemBlacklist())
                 {
-                    for (ItemStack itemStack: container.getHeldItemBlacklist())
-                        if (itemStack.isItemEqual(heldItemMainhand))
-                            display = false;
+                    for (GhostableItem item: container.getHeldItemBlacklist())
+                        if (item.getItemStack() != null)
+                            if (item.getItemStack().isItemEqual(heldItemMainhand))
+                                display = false;
                 }
             }
 

@@ -2,12 +2,12 @@ package com.tttsaurus.ingameinfo.common.api.gui;
 
 import com.tttsaurus.ingameinfo.common.api.function.IFunc;
 import com.tttsaurus.ingameinfo.common.api.internal.InternalMethods;
+import com.tttsaurus.ingameinfo.common.api.item.GhostableItem;
 import com.tttsaurus.ingameinfo.common.api.mvvm.viewmodel.ViewModel;
 import com.tttsaurus.ingameinfo.common.impl.gui.layout.MainGroup;
 import com.tttsaurus.ingameinfo.common.api.render.RenderUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.ScaledResolution;
-import net.minecraft.item.ItemStack;
 import org.lwjgl.input.Keyboard;
 import java.util.ArrayList;
 import java.util.List;
@@ -17,9 +17,9 @@ public class IgiGuiContainer
     protected ViewModel<?> viewModel;
 
     protected boolean useHeldItemWhitelist = false;
-    protected final List<ItemStack> heldItemWhitelist = new ArrayList<>();
+    protected final List<GhostableItem> heldItemWhitelist = new ArrayList<>();
     protected boolean useHeldItemBlacklist = false;
-    protected final List<ItemStack> heldItemBlacklist = new ArrayList<>();
+    protected final List<GhostableItem> heldItemBlacklist = new ArrayList<>();
 
     protected MainGroup mainGroup = new MainGroup();
     protected boolean debug = false;
@@ -30,7 +30,7 @@ public class IgiGuiContainer
 
     private boolean initFlag = false;
     private boolean isActive = true;
-    private IFunc<Boolean> exitCallback = () -> { return true; };
+    private IFunc<Boolean> exitCallback = () -> true;
 
     //<editor-fold desc="getters">
     public boolean getActive() { return isActive; }
@@ -40,8 +40,8 @@ public class IgiGuiContainer
     public boolean getInitFlag() { return initFlag; }
     public boolean getUseHeldItemWhitelist() { return useHeldItemWhitelist; }
     public boolean getUseHeldItemBlacklist() { return useHeldItemBlacklist; }
-    public List<ItemStack> getHeldItemWhitelist() { return heldItemWhitelist; }
-    public List<ItemStack> getHeldItemBlacklist() { return heldItemBlacklist; }
+    public List<GhostableItem> getHeldItemWhitelist() { return heldItemWhitelist; }
+    public List<GhostableItem> getHeldItemBlacklist() { return heldItemBlacklist; }
     //</editor-fold>
 
     protected IgiGuiContainer() { }
