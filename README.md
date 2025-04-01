@@ -53,6 +53,7 @@ Feature Overview:
   - GIF
   - Slide Bar
   - Progress Bar (✔)
+  - Item (✔)
 - Introduce modular animation options for controls
 - Add CrT/Zenscript support (✔)
 - Ingame spotify support (go to wiki for details) (✔)
