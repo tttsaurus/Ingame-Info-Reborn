@@ -195,7 +195,7 @@ public abstract class Element
 
     public void renderDebugRect()
     {
-        RenderUtils.renderRectOutline(rect.x, rect.y, rect.width, rect.height, 1.0f, Color.RED.getRGB());
+        RenderUtils.renderRectOutline(rect.x, rect.y, rect.width, rect.height, 1.0f, (new Color(241, 58, 30, 128)).getRGB());
         RenderUtils.renderRect(pivotPosX - 1, pivotPosY - 1, 3, 3, Color.GREEN.getRGB());
     }
 }

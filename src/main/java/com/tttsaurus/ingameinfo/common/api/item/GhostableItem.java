@@ -1,11 +1,14 @@
 package com.tttsaurus.ingameinfo.common.api.item;
 
+import com.tttsaurus.ingameinfo.common.api.serialization.Deserializer;
+import com.tttsaurus.ingameinfo.common.impl.serialization.ItemDeserializer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.common.registry.ForgeRegistries;
 import javax.annotation.Nullable;
 
+@Deserializer(ItemDeserializer.class)
 public final class GhostableItem
 {
     private int meta;
@@ -16,6 +19,10 @@ public final class GhostableItem
 
     private ItemStack itemStack;
 
+    public GhostableItem(ItemStack itemStack)
+    {
+        this.itemStack = itemStack;
+    }
     public GhostableItem(String registryName)
     {
         itemStack = null;
