@@ -52,4 +52,7 @@ public final class TypesWrapper
 
     @ZenProperty
     public static final TypesWrapper Skewness = new TypesWrapper(Types.Skewness);
+
+    @ZenProperty
+    public static final TypesWrapper GhostableItem = new TypesWrapper(Types.GhostableItem);
 }

@@ -1,4 +1,4 @@
-package com.tttsaurus.ingameinfo.plugin.crt.impl.layout;
+package com.tttsaurus.ingameinfo.plugin.crt.impl.typeswrapper;
 
 import com.tttsaurus.ingameinfo.common.api.gui.layout.Skewness;
 import crafttweaker.annotations.ZenRegister;

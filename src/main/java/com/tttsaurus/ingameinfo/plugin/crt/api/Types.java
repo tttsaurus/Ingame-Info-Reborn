@@ -14,5 +14,6 @@ public enum Types
     Alignment,
     Padding,
     Pivot,
-    Skewness
+    Skewness,
+    GhostableItem
 }

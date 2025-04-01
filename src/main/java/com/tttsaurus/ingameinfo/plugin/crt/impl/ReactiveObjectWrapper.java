@@ -4,12 +4,10 @@ import com.tttsaurus.ingameinfo.common.api.gui.layout.Alignment;
 import com.tttsaurus.ingameinfo.common.api.gui.layout.Padding;
 import com.tttsaurus.ingameinfo.common.api.gui.layout.Pivot;
 import com.tttsaurus.ingameinfo.common.api.gui.layout.Skewness;
+import com.tttsaurus.ingameinfo.common.api.item.GhostableItem;
 import com.tttsaurus.ingameinfo.common.api.mvvm.binding.ReactiveObject;
 import com.tttsaurus.ingameinfo.plugin.crt.api.Types;
-import com.tttsaurus.ingameinfo.plugin.crt.impl.layout.AlignmentWrapper;
-import com.tttsaurus.ingameinfo.plugin.crt.impl.layout.PaddingWrapper;
-import com.tttsaurus.ingameinfo.plugin.crt.impl.layout.PivotWrapper;
-import com.tttsaurus.ingameinfo.plugin.crt.impl.layout.SkewnessWrapper;
+import com.tttsaurus.ingameinfo.plugin.crt.impl.typeswrapper.*;
 import crafttweaker.annotations.ZenRegister;
 import stanhebben.zenscript.annotations.ZenClass;
 import stanhebben.zenscript.annotations.ZenMethod;
@@ -46,6 +44,7 @@ public final class ReactiveObjectWrapper
             case Padding -> wrapper.reactiveObject = new ReactiveObject<Padding>(){};
             case Pivot -> wrapper.reactiveObject = new ReactiveObject<Pivot>(){};
             case Skewness -> wrapper.reactiveObject = new ReactiveObject<Skewness>(){};
+            case GhostableItem -> wrapper.reactiveObject = new ReactiveObject<GhostableItem>(){};
         }
         return wrapper;
     }
@@ -63,6 +62,8 @@ public final class ReactiveObjectWrapper
             return new PivotWrapper(pivot);
         if (obj instanceof Skewness skewness)
             return new SkewnessWrapper(skewness);
+        if (obj instanceof GhostableItem ghostableItem)
+            return new GhostableItemWrapper(ghostableItem);
 
         return obj;
     }
@@ -79,6 +80,8 @@ public final class ReactiveObjectWrapper
             input = pivotWrapper.pivot;
         if (value instanceof SkewnessWrapper skewnessWrapper)
             input = skewnessWrapper.skewness;
+        if (value instanceof GhostableItemWrapper ghostableItemWrapper)
+            input = ghostableItemWrapper.ghostableItem;
 
         reactiveObject.set(input);
     }
