@@ -84,7 +84,7 @@ public class AnimText extends Element
     @Override
     public void onFixedUpdate(double deltaTime)
     {
-        if (timer.get() == Double.POSITIVE_INFINITY)
+        if (timer.get() == null || timer.get() == Double.POSITIVE_INFINITY)
             timer.set(0d);
         animDef.calcAnim(animTextRenderer.getCharacterInfos(), timer, deltaTime);
         timer.set(timer.get() + deltaTime);

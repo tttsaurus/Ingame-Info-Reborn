@@ -66,6 +66,11 @@ public final class TextAnimDefWrapper
                 throw new IndexOutOfBoundsException("Index " + index + " is invalid for an array of length " + charInfos.length);
             return new CharInfoWrapper(charInfos[index]);
         }
+        @ZenMethod
+        public int getCharInfosLength()
+        {
+            return charInfos.length;
+        }
     }
     @ZenRegister
     @ZenClass("mods.ingameinfo.animation.text.Timer")
@@ -96,23 +101,18 @@ public final class TextAnimDefWrapper
     {
         this.iTextAnimDef = iTextAnimDef;
     }
-    public TextAnimDefWrapper()
+    public TextAnimDefWrapper(ITextAnimDefWrapper iTextAnimDefWrapper)
     {
-        iTextAnimDefWrapper = (charInfos, timer, deltaTime) -> {};
+        this.iTextAnimDefWrapper = iTextAnimDefWrapper;
         this.iTextAnimDef = (charInfos, timer, deltaTime) ->
         {
-            iTextAnimDefWrapper.calcAnim(new CharInfosWrapper(charInfos), new TimerWrapper(timer), deltaTime);
+            this.iTextAnimDefWrapper.calcAnim(new CharInfosWrapper(charInfos), new TimerWrapper(timer), deltaTime);
         };
     }
 
     @ZenMethod
-    public static TextAnimDefWrapper newTextAnimDef()
+    public static TextAnimDefWrapper newTextAnimDef(ITextAnimDefWrapper iTextAnimDefWrapper)
     {
-        return new TextAnimDefWrapper();
-    }
-    @ZenMethod
-    public void set(ITextAnimDefWrapper iTextAnimDefWrapper)
-    {
-        this.iTextAnimDefWrapper = iTextAnimDefWrapper;
+        return new TextAnimDefWrapper(iTextAnimDefWrapper);
     }
 }
