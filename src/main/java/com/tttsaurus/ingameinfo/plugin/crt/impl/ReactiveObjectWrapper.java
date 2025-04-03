@@ -1,5 +1,6 @@
 package com.tttsaurus.ingameinfo.plugin.crt.impl;
 
+import com.tttsaurus.ingameinfo.common.api.animation.text.ITextAnimDef;
 import com.tttsaurus.ingameinfo.common.api.gui.layout.Alignment;
 import com.tttsaurus.ingameinfo.common.api.gui.layout.Padding;
 import com.tttsaurus.ingameinfo.common.api.gui.layout.Pivot;
@@ -45,6 +46,7 @@ public final class ReactiveObjectWrapper
             case Pivot -> wrapper.reactiveObject = new ReactiveObject<Pivot>(){};
             case Skewness -> wrapper.reactiveObject = new ReactiveObject<Skewness>(){};
             case GhostableItem -> wrapper.reactiveObject = new ReactiveObject<GhostableItem>(){};
+            case TextAnimDef -> wrapper.reactiveObject = new ReactiveObject<ITextAnimDef>(){};
         }
         return wrapper;
     }
@@ -64,6 +66,8 @@ public final class ReactiveObjectWrapper
             return new SkewnessWrapper(skewness);
         if (obj instanceof GhostableItem ghostableItem)
             return new GhostableItemWrapper(ghostableItem);
+        if (obj instanceof ITextAnimDef iTextAnimDef)
+            return new TextAnimDefWrapper(iTextAnimDef);
 
         return obj;
     }
@@ -82,6 +86,8 @@ public final class ReactiveObjectWrapper
             input = skewnessWrapper.skewness;
         if (value instanceof GhostableItemWrapper ghostableItemWrapper)
             input = ghostableItemWrapper.ghostableItem;
+        if (value instanceof TextAnimDefWrapper textAnimDefWrapper)
+            input = textAnimDefWrapper.iTextAnimDef;
 
         reactiveObject.set(input);
     }

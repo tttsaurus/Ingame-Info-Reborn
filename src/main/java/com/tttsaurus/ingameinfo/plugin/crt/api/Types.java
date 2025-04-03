@@ -15,5 +15,6 @@ public enum Types
     Padding,
     Pivot,
     Skewness,
-    GhostableItem
+    GhostableItem,
+    TextAnimDef
 }

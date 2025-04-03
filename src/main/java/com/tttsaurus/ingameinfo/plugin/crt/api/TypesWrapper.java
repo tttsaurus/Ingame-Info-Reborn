@@ -55,4 +55,7 @@ public final class TypesWrapper
 
     @ZenProperty
     public static final TypesWrapper GhostableItem = new TypesWrapper(Types.GhostableItem);
+
+    @ZenProperty
+    public static final TypesWrapper TextAnimDef = new TypesWrapper(Types.TextAnimDef);
 }

@@ -14,6 +14,7 @@ import com.tttsaurus.ingameinfo.common.impl.render.renderer.AnimTextRenderer;
 public class AnimText extends Element
 {
     private final AnimTextRenderer animTextRenderer = new AnimTextRenderer();
+    private final DoubleProperty timer = new DoubleProperty();
 
     public AnimText()
     {
@@ -28,9 +29,6 @@ public class AnimText extends Element
     }
     @StyleProperty(setterCallbackPre = "textAnimDefValidation")
     public ITextAnimDef animDef;
-
-    @StyleProperty
-    public DoubleProperty timer = new DoubleProperty();
 
     @StylePropertyCallback
     public void textValidation(String value, CallbackInfo callbackInfo)
@@ -86,6 +84,8 @@ public class AnimText extends Element
     @Override
     public void onFixedUpdate(double deltaTime)
     {
+        if (timer.get() == Double.POSITIVE_INFINITY)
+            timer.set(0d);
         animDef.calcAnim(animTextRenderer.getCharacterInfos(), timer, deltaTime);
         timer.set(timer.get() + deltaTime);
     }
