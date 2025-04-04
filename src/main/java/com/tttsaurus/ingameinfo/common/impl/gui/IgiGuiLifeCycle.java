@@ -765,16 +765,16 @@ public final class IgiGuiLifeCycle
     private static boolean isPlaceholderGuiOn = false;
     private static PlaceholderMcGui placeholderGui;
 
+    // key: mvvm registry name
     private static final Map<String, IgiGuiContainer> openedGuiMap = new LinkedHashMap<>();
 
-    public static String openIgiGui(IgiGuiContainer guiContainer)
+    public static void openIgiGui(String mvvmRegistryName, IgiGuiContainer guiContainer)
     {
-        String uuid = UUID.randomUUID().toString();
-        openedGuiMap.put(uuid, guiContainer);
-        return uuid;
+        if (openedGuiMap.containsKey(mvvmRegistryName)) return;
+        openedGuiMap.put(mvvmRegistryName, guiContainer);
     }
-    public static void closeIgiGui(String uuid)
+    public static void closeIgiGui(String mvvmRegistryName)
     {
-        openedGuiMap.remove(uuid);
+        openedGuiMap.remove(mvvmRegistryName);
     }
 }

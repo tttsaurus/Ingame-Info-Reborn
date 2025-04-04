@@ -10,13 +10,13 @@ import stanhebben.zenscript.annotations.ZenMethod;
 public final class IgiGuiManagerWrapper
 {
     @ZenMethod
-    public static String openGui(String mvvmRegistryName)
+    public static void openGui(String mvvmRegistryName)
     {
-        return IgiGuiManager.openGui(mvvmRegistryName);
+        IgiGuiManager.openGui(mvvmRegistryName);
     }
     @ZenMethod
-    public static void closeGui(String uuid)
+    public static void closeGui(String mvvmRegistryName)
     {
-        IgiGuiManager.closeGui(uuid);
+        IgiGuiManager.closeGui(mvvmRegistryName);
     }
 }

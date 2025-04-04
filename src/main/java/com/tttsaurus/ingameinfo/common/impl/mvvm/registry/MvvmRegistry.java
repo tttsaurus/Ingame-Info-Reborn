@@ -54,7 +54,7 @@ public final class MvvmRegistry
         catch (Exception e) { return null; }
     }
 
-    // only be called under MvvmRegisterEvent
+    // only to be called under MvvmRegisterEvent
     public static boolean manualRegister(String mvvmRegistryName, Class<? extends ViewModel<?>> viewModelClass)
     {
         if (viewModelClasses.containsKey(mvvmRegistryName)) return false;
@@ -67,7 +67,7 @@ public final class MvvmRegistry
         return true;
     }
 
-    // only be called under MvvmRegisterEvent
+    // only to be called under MvvmRegisterEvent
     public static boolean autoRegister(String mvvmRegistryName, Class<? extends ViewModel<?>> viewModelClass)
     {
         if (!manualRegister(mvvmRegistryName, viewModelClass)) return false;

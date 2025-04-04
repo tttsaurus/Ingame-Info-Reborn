@@ -5,11 +5,11 @@ import com.tttsaurus.ingameinfo.common.impl.mvvm.registry.MvvmRegistry;
 
 public final class IgiGuiManager
 {
-    public static String openGui(String mvvmRegistryName)
+    public static void openGui(String mvvmRegistryName)
     {
         IgiGuiContainer igiGuiContainer = MvvmRegistry.getIgiGuiContainer(mvvmRegistryName);
-        if (igiGuiContainer == null) return "";
-        return IgiGuiLifeCycle.openIgiGui(igiGuiContainer);
+        if (igiGuiContainer == null) return;
+        IgiGuiLifeCycle.openIgiGui(mvvmRegistryName, igiGuiContainer);
     }
 
     public static void closeGui(String uuid)
