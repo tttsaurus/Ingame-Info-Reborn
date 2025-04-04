@@ -19,25 +19,25 @@ public final class PivotWrapper
     public static final PivotWrapper TOP_LEFT = new PivotWrapper(Pivot.TOP_LEFT);
 
     @ZenProperty
-    public static final PivotWrapper TOP_MIDLE = new PivotWrapper(Pivot.TOP_MIDDLE);
+    public static final PivotWrapper TOP_CENTER = new PivotWrapper(Pivot.TOP_CENTER);
 
     @ZenProperty
     public static final PivotWrapper TOP_RIGHT = new PivotWrapper(Pivot.TOP_RIGHT);
 
     @ZenProperty
-    public static final PivotWrapper MIDDLE_LEFT = new PivotWrapper(Pivot.MIDDLE_LEFT);
+    public static final PivotWrapper CENTER_LEFT = new PivotWrapper(Pivot.CENTER_LEFT);
 
     @ZenProperty
     public static final PivotWrapper CENTER = new PivotWrapper(Pivot.CENTER);
 
     @ZenProperty
-    public static final PivotWrapper MIDDLE_RIGHT = new PivotWrapper(Pivot.MIDDLE_RIGHT);
+    public static final PivotWrapper CENTER_RIGHT = new PivotWrapper(Pivot.CENTER_RIGHT);
 
     @ZenProperty
     public static final PivotWrapper BOTTOM_LEFT = new PivotWrapper(Pivot.BOTTOM_LEFT);
 
     @ZenProperty
-    public static final PivotWrapper BOTTOM_MIDDLE = new PivotWrapper(Pivot.BOTTOM_MIDDLE);
+    public static final PivotWrapper BOTTOM_CENTER = new PivotWrapper(Pivot.BOTTOM_CENTER);
 
     @ZenProperty
     public static final PivotWrapper BOTTOM_RIGHT = new PivotWrapper(Pivot.BOTTOM_RIGHT);
