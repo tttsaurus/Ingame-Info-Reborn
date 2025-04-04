@@ -1,6 +1,7 @@
 package com.tttsaurus.ingameinfo.common.impl.render.renderer;
 
 import com.tttsaurus.ingameinfo.common.api.render.RenderUtils;
+import java.util.Arrays;
 
 public class AnimTextRenderer extends TextRenderer
 {
@@ -29,16 +30,41 @@ public class AnimTextRenderer extends TextRenderer
     public void setText(String text)
     {
         this.text = text;
+        int oldLength = characterInfos.length;
         int length = text.length();
-        characterInfos = new CharInfo[length];
+
         float width = 0;
-        for (int i = 0; i < length; i++)
+        for (int i = 0; i < oldLength; i++)
+        {
+            char c = text.charAt(i);
+            characterInfos[i].x = width;
+            width += RenderUtils.fontRenderer.getCharWidth(c) * characterInfos[i].scale;
+        }
+
+        characterInfos = Arrays.copyOf(characterInfos, length);
+
+        for (int i = oldLength; i < length; i++)
         {
             char c = text.charAt(i);
             characterInfos[i] = new CharInfo(width, 0f, scale, color, shadow);
             width += RenderUtils.fontRenderer.getCharWidth(c) * scale;
         }
     }
+
+    @Override
+    public void setScale(float scale)
+    {
+        super.setScale(scale);
+        float width = 0;
+        for (int i = 0; i < characterInfos.length; i++)
+        {
+            char c = text.charAt(i);
+            characterInfos[i].x = width;
+            characterInfos[i].scale = scale;
+            width += RenderUtils.fontRenderer.getCharWidth(c) * characterInfos[i].scale;
+        }
+    }
+
     public CharInfo[] getCharacterInfos() { return characterInfos; }
     //</editor-fold>
 

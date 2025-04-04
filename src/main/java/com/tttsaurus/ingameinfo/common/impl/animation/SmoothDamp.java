@@ -33,7 +33,7 @@ public class SmoothDamp
         this.from = from;
         this.to = to;
         vel = 0f;
-        this.smoothTime = Math.max(smoothTime, 0.001f);
+        this.smoothTime = Math.max(smoothTime * 0.268f, 0.001f);
         maxSpeed = Float.POSITIVE_INFINITY;
     }
     public SmoothDamp(float from, float to, float smoothTime, float maxSpeed)
@@ -42,7 +42,7 @@ public class SmoothDamp
         this.from = from;
         this.to = to;
         vel = 0f;
-        this.smoothTime = Math.max(smoothTime, 0.001f);
+        this.smoothTime = Math.max(smoothTime * 0.268f, 0.001f);
         this.maxSpeed = maxSpeed;
     }
 

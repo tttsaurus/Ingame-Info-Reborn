@@ -8,7 +8,7 @@ import com.tttsaurus.ingameinfo.common.api.gui.layout.Skewness;
 import com.tttsaurus.ingameinfo.common.api.item.GhostableItem;
 import com.tttsaurus.ingameinfo.common.api.mvvm.binding.ReactiveObject;
 import com.tttsaurus.ingameinfo.plugin.crt.api.Types;
-import com.tttsaurus.ingameinfo.plugin.crt.impl.typeswrapper.*;
+import com.tttsaurus.ingameinfo.plugin.crt.impl.types.*;
 import crafttweaker.annotations.ZenRegister;
 import stanhebben.zenscript.annotations.ZenClass;
 import stanhebben.zenscript.annotations.ZenMethod;

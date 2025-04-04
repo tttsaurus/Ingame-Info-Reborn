@@ -1,4 +1,4 @@
-package com.tttsaurus.ingameinfo.plugin.crt.impl.typeswrapper;
+package com.tttsaurus.ingameinfo.plugin.crt.impl.types;
 
 import com.tttsaurus.ingameinfo.common.api.animation.text.ITextAnimDef;
 import com.tttsaurus.ingameinfo.common.impl.gui.style.wrapped.DoubleProperty;
@@ -33,16 +33,16 @@ public final class TextAnimDefWrapper
 
             @ZenMethod
             public float getX() { return charInfo.x; }
-            @ZenMethod
-            public void setX(float x) { charInfo.x = x; }
+//            @ZenMethod
+//            public void setX(float x) { charInfo.x = x; }
             @ZenMethod
             public float getY() { return charInfo.y; }
             @ZenMethod
             public void setY(float y) { charInfo.y = y; }
             @ZenMethod
             public float getScale() { return charInfo.scale; }
-            @ZenMethod
-            public void setScale(float scale) { charInfo.scale = scale; }
+//            @ZenMethod
+//            public void setScale(float scale) { charInfo.scale = scale; }
             @ZenMethod
             public int getColor() { return charInfo.color; }
             @ZenMethod

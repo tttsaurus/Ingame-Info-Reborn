@@ -1,4 +1,4 @@
-package com.tttsaurus.ingameinfo.plugin.crt.impl.typeswrapper;
+package com.tttsaurus.ingameinfo.plugin.crt.impl.types;
 
 import com.tttsaurus.ingameinfo.common.api.item.GhostableItem;
 import crafttweaker.annotations.ZenRegister;

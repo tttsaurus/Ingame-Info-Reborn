@@ -1,4 +1,4 @@
-package com.tttsaurus.ingameinfo.plugin.crt.impl.typeswrapper;
+package com.tttsaurus.ingameinfo.plugin.crt.impl.types;
 
 import com.tttsaurus.ingameinfo.common.api.gui.layout.Pivot;
 import crafttweaker.annotations.ZenRegister;
