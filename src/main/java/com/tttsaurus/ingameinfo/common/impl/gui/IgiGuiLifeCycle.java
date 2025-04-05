@@ -767,6 +767,7 @@ public final class IgiGuiLifeCycle
 
     // key: mvvm registry name
     private static final Map<String, IgiGuiContainer> openedGuiMap = new LinkedHashMap<>();
+    private static Map<String, IgiGuiContainer> getOpenedGuiMap() { return openedGuiMap; }
 
     public static void openIgiGui(String mvvmRegistryName, IgiGuiContainer guiContainer)
     {

@@ -16,9 +16,11 @@ import com.tttsaurus.ingameinfo.common.api.shutdown.ShutdownHooks;
 import com.tttsaurus.ingameinfo.common.impl.appcommunication.spotify.SpotifyCommandHandler;
 import com.tttsaurus.ingameinfo.common.impl.gui.IgiGuiLifeCycle;
 import com.tttsaurus.ingameinfo.common.impl.gui.registry.ElementRegistry;
+import com.tttsaurus.ingameinfo.common.impl.mvvm.command.RefreshVvmCommand;
 import com.tttsaurus.ingameinfo.common.impl.mvvm.registry.MvvmRegisterEventHandler;
 import com.tttsaurus.ingameinfo.config.IgiConfig;
 import net.minecraft.client.renderer.OpenGlHelper;
+import net.minecraftforge.client.ClientCommandHandler;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
@@ -92,6 +94,10 @@ public class ClientProxy extends CommonProxy
         if (IgiConfig.ENABLE_SPOTIFY_INTEGRATION)
             MinecraftForge.EVENT_BUS.register(SpotifyCommandHandler.class);
 
+        // commands
+        ClientCommandHandler.instance.registerCommand(new RefreshVvmCommand());
+
+        // gui elements
         String myPackage = "com.tttsaurus.ingameinfo";
         ElementRegistry.register();
 
@@ -149,6 +155,7 @@ public class ClientProxy extends CommonProxy
             logger.info("");
         }
 
+        // mvvm
         logger.info("Starts registering mvvm.");
         MinecraftForge.EVENT_BUS.post(new MvvmRegisterEvent());
     }

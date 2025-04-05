@@ -100,8 +100,9 @@ public class IgiGuiContainer
         if (debug) mainGroup.renderDebugRect();
     }
 
-    public void refresh()
+    public void refreshVvm()
     {
         viewModel.refresh();
+        viewModel.start();
     }
 }

@@ -10,6 +10,7 @@ import com.tttsaurus.ingameinfo.common.api.mvvm.binding.IReactiveCallback;
 import com.tttsaurus.ingameinfo.common.api.mvvm.binding.ReactiveObject;
 import com.tttsaurus.ingameinfo.common.api.mvvm.view.View;
 import com.tttsaurus.ingameinfo.common.api.mvvm.viewmodel.ViewModel;
+import com.tttsaurus.ingameinfo.common.impl.gui.IgiGuiLifeCycle;
 import com.tttsaurus.ingameinfo.common.impl.gui.layout.MainGroup;
 import java.lang.invoke.MethodHandle;
 import java.lang.invoke.MethodHandles;
@@ -30,6 +31,7 @@ public class InternalMethods
     public IFunc_1Param<IgiGuiContainer, GuiLayout> GuiLayout$igiGuiContainer$getter;
     public IFunc_1Param<Map<String, IStylePropertySyncTo>, Element> Element$syncToMap$getter;
     public IFunc_1Param<List<IReactiveCallback>, ReactiveObject> ReactiveObject$setterCallbacks$getter;
+    public IFunc<Map<String, IgiGuiContainer>> IgiGuiLifeCycle$openedGuiMap$getter;
 
     public IAction_2Param<IgiGuiContainer, ViewModel> IgiGuiContainer$viewModel$setter;
     public IAction_2Param<View, MainGroup> View$mainGroup$setter;
@@ -144,6 +146,26 @@ public class InternalMethods
         {
             ReactiveObject$setterCallbacks$getter = null;
             InGameInfoReborn.logger.info("Reflection setup failed for ReactiveObject$setterCallbacks$getter: " + exception.getMessage());
+        }
+
+        try
+        {
+            Method method = IgiGuiLifeCycle.class.getDeclaredMethod("getOpenedGuiMap", new Class[0]);
+            method.setAccessible(true);
+            MethodHandle handle = lookup.unreflect(method);
+            IgiGuiLifeCycle$openedGuiMap$getter = () ->
+            {
+                try
+                {
+                    return (Map<String, IgiGuiContainer>)handle.invoke();
+                }
+                catch (Throwable ignored) { return null; }
+            };
+        }
+        catch (Exception exception)
+        {
+            IgiGuiLifeCycle$openedGuiMap$getter = null;
+            InGameInfoReborn.logger.info("Reflection setup failed for IgiGuiLifeCycle$openedGuiMap$getter: " + exception.getMessage());
         }
 
         try
