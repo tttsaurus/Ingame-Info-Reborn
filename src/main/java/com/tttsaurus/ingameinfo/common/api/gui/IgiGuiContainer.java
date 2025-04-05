@@ -99,4 +99,9 @@ public class IgiGuiContainer
 
         if (debug) mainGroup.renderDebugRect();
     }
+
+    public void refresh()
+    {
+        viewModel.refresh();
+    }
 }

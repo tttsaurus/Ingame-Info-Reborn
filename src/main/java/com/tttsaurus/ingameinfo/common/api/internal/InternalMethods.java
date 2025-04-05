@@ -6,6 +6,8 @@ import com.tttsaurus.ingameinfo.common.api.gui.Element;
 import com.tttsaurus.ingameinfo.common.api.gui.GuiLayout;
 import com.tttsaurus.ingameinfo.common.api.gui.IgiGuiContainer;
 import com.tttsaurus.ingameinfo.common.api.gui.style.IStylePropertySyncTo;
+import com.tttsaurus.ingameinfo.common.api.mvvm.binding.IReactiveCallback;
+import com.tttsaurus.ingameinfo.common.api.mvvm.binding.ReactiveObject;
 import com.tttsaurus.ingameinfo.common.api.mvvm.view.View;
 import com.tttsaurus.ingameinfo.common.api.mvvm.viewmodel.ViewModel;
 import com.tttsaurus.ingameinfo.common.impl.gui.layout.MainGroup;
@@ -14,6 +16,7 @@ import java.lang.invoke.MethodHandles;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
+import java.util.List;
 import java.util.Map;
 
 @SuppressWarnings("all")
@@ -26,6 +29,7 @@ public class InternalMethods
     public IFunc_1Param<MainGroup, GuiLayout> GuiLayout$mainGroup$getter;
     public IFunc_1Param<IgiGuiContainer, GuiLayout> GuiLayout$igiGuiContainer$getter;
     public IFunc_1Param<Map<String, IStylePropertySyncTo>, Element> Element$syncToMap$getter;
+    public IFunc_1Param<List<IReactiveCallback>, ReactiveObject> ReactiveObject$setterCallbacks$getter;
 
     public IAction_2Param<IgiGuiContainer, ViewModel> IgiGuiContainer$viewModel$setter;
     public IAction_2Param<View, MainGroup> View$mainGroup$setter;
@@ -120,6 +124,26 @@ public class InternalMethods
         {
             Element$syncToMap$getter = null;
             InGameInfoReborn.logger.info("Reflection setup failed for Element$syncToMap$getter: " + exception.getMessage());
+        }
+
+        try
+        {
+            Field field = ReactiveObject.class.getDeclaredField("setterCallbacks");
+            field.setAccessible(true);
+            MethodHandle handle = lookup.unreflectGetter(field);
+            ReactiveObject$setterCallbacks$getter = (arg0) ->
+            {
+                try
+                {
+                    return (List<IReactiveCallback>)handle.invoke(arg0);
+                }
+                catch (Throwable ignored) { return null; }
+            };
+        }
+        catch (Exception exception)
+        {
+            ReactiveObject$setterCallbacks$getter = null;
+            InGameInfoReborn.logger.info("Reflection setup failed for ReactiveObject$setterCallbacks$getter: " + exception.getMessage());
         }
 
         try

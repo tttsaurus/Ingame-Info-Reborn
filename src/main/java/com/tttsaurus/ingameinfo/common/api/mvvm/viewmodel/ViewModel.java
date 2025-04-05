@@ -3,8 +3,10 @@ package com.tttsaurus.ingameinfo.common.api.mvvm.viewmodel;
 import com.tttsaurus.ingameinfo.common.api.gui.GuiLayout;
 import com.tttsaurus.ingameinfo.common.api.function.IAction_1Param;
 import com.tttsaurus.ingameinfo.common.api.function.IFunc;
+import com.tttsaurus.ingameinfo.common.api.internal.InternalMethods;
 import com.tttsaurus.ingameinfo.common.api.mvvm.binding.IReactiveObjectGetter;
 import com.tttsaurus.ingameinfo.common.api.mvvm.binding.Reactive;
+import com.tttsaurus.ingameinfo.common.api.mvvm.binding.ReactiveObject;
 import com.tttsaurus.ingameinfo.common.api.mvvm.binding.VvmBinding;
 import com.tttsaurus.ingameinfo.common.api.mvvm.view.View;
 import com.tttsaurus.ingameinfo.common.impl.mvvm.registry.MvvmRegistry;
@@ -15,6 +17,8 @@ import java.util.Map;
 @SuppressWarnings("all")
 public abstract class ViewModel<T extends View>
 {
+    protected String mvvmRegistryName;
+
     // getters & setters for communication with gui container
     // will be init before start()
     private IAction_1Param<Boolean> isActiveSetter = null;
@@ -52,8 +56,9 @@ public abstract class ViewModel<T extends View>
     private VvmBinding<T> binding = new VvmBinding<>();
 
     // register entry point
-    private GuiLayout init(String mvvmRegistryName)
+    private final GuiLayout init(String mvvmRegistryName)
     {
+        this.mvvmRegistryName = mvvmRegistryName;
         GuiLayout guiLayout = binding.init(this, mvvmRegistryName);
 
         Map<Reactive, IReactiveObjectGetter> reactiveObjects = MvvmRegistry.getRegisteredReactiveObjects(mvvmRegistryName);
@@ -61,6 +66,20 @@ public abstract class ViewModel<T extends View>
             binding.bindReactiveObject(entry.getKey(), entry.getValue().get(this));
 
         return guiLayout;
+    }
+
+    public final void refresh()
+    {
+        if (binding.view == null) return;
+        binding.view.refreshMainGroup();
+
+        Map<Reactive, IReactiveObjectGetter> reactiveObjects = MvvmRegistry.getRegisteredReactiveObjects(mvvmRegistryName);
+        for (Map.Entry<Reactive, IReactiveObjectGetter> entry: reactiveObjects.entrySet())
+        {
+            ReactiveObject<?> reactiveObject = entry.getValue().get(this);
+            InternalMethods.instance.ReactiveObject$setterCallbacks$getter.invoke(reactiveObject).clear();
+            binding.bindReactiveObject(entry.getKey(), reactiveObject);
+        }
     }
 
     public abstract void start();

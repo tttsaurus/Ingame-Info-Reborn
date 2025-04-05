@@ -19,11 +19,11 @@ public abstract class View
 {
     private MainGroup mainGroup = null;
 
-    public List<Element> getElements(String uid)
+    public final List<Element> getElements(String uid)
     {
         return getElements(mainGroup, uid);
     }
-    private List<Element> getElements(ElementGroup group, String uid)
+    private final List<Element> getElements(ElementGroup group, String uid)
     {
         List<Element> list = new ArrayList<>();
 
@@ -40,13 +40,23 @@ public abstract class View
         return list;
     }
 
+    public final void refreshMainGroup()
+    {
+        if (mainGroup == null) return;
+        GuiLayout guiLayout = init();
+        MainGroup mainGroup = InternalMethods.instance.GuiLayout$mainGroup$getter.invoke(guiLayout);
+        this.mainGroup.elements.clear();
+        for (Element element: mainGroup.elements)
+            this.mainGroup.add(element);
+    }
+
     public String getDefaultIxml() { return ""; }
 
     // searching the file under ./config/ingameinfo/
     // and .ixml is the suffix
     public abstract String getIxmlFileName();
 
-    private GuiLayout init()
+    private final GuiLayout init()
     {
         try
         {

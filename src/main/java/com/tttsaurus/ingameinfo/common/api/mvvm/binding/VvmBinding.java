@@ -18,7 +18,7 @@ import java.util.Map;
 @SuppressWarnings("all")
 public class VvmBinding<TView extends View>
 {
-    private TView view;
+    public TView view = null;
 
     public GuiLayout init(ViewModel<TView> viewModel, String mvvmRegistryName)
     {
