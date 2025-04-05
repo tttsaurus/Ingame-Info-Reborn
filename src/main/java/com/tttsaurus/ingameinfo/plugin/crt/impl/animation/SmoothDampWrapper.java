@@ -19,12 +19,12 @@ public class SmoothDampWrapper
         smoothDamp = new SmoothDamp(from, to, smoothTime, maxSpeed);
     }
 
-    @ZenMethod
+    @ZenMethod("new")
     public static SmoothDampWrapper newSmoothDamp(float from, float to, float smoothTime)
     {
         return new SmoothDampWrapper(from, to, smoothTime);
     }
-    @ZenMethod
+    @ZenMethod("new")
     public static SmoothDampWrapper newSmoothDamp(float from, float to, float smoothTime, float maxSpeed)
     {
         return new SmoothDampWrapper(from, to, smoothTime, maxSpeed);

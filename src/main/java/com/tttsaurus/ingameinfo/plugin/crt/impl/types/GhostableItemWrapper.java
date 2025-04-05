@@ -27,12 +27,12 @@ public class GhostableItemWrapper
         this.ghostableItem = new GhostableItem(itemStack);
     }
 
-    @ZenMethod
+    @ZenMethod("new")
     public static GhostableItemWrapper newGhostableItem(String registryName)
     {
         return new GhostableItemWrapper(registryName);
     }
-    @ZenMethod
+    @ZenMethod("new")
     public static GhostableItemWrapper newGhostableItem(IItemStack itemStack)
     {
         return new GhostableItemWrapper(CraftTweakerMC.getItemStack(itemStack));

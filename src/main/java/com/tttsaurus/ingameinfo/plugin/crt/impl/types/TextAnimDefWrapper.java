@@ -110,7 +110,7 @@ public final class TextAnimDefWrapper
         };
     }
 
-    @ZenMethod
+    @ZenMethod("new")
     public static TextAnimDefWrapper newTextAnimDef(ITextAnimDefWrapper iTextAnimDefWrapper)
     {
         return new TextAnimDefWrapper(iTextAnimDefWrapper);

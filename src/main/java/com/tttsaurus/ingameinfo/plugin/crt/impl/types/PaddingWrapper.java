@@ -23,12 +23,12 @@ public final class PaddingWrapper
         this.padding = new Padding(top, bottom, left, right);
     }
 
-    @ZenMethod
+    @ZenMethod("new")
     public static PaddingWrapper newPadding(float top, float bottom, float left, float right)
     {
         return new PaddingWrapper(top, bottom, left, right);
     }
-    @ZenMethod
+    @ZenMethod("new")
     public static PaddingWrapper newPadding()
     {
         return new PaddingWrapper();

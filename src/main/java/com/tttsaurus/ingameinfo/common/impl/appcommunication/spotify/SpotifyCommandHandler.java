@@ -11,6 +11,7 @@ import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.event.ClickEvent;
 import net.minecraftforge.client.event.ClientChatReceivedEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import java.util.Locale;
 
 public final class SpotifyCommandHandler
 {
@@ -22,7 +23,7 @@ public final class SpotifyCommandHandler
         if (player == null) return;
         String prefix = "<" + player.getName() + "> ";
         if (!message.startsWith(prefix)) return;
-        message = message.substring(prefix.length());
+        message = message.substring(prefix.length()).toLowerCase(Locale.ROOT);
 
         if (message.equals("#spotify-oauth"))
         {
