@@ -27,7 +27,7 @@ public class IgiConfig
     public static void useSpotifyExtendedLayout(boolean flag)
     {
         SPOTIFY_EXTENDED_LAYOUT = flag;
-        CONFIG_WRITER.write("Use Extended Overlay Layout", flag ? "true" : "false");
+        CONFIG_WRITER.replaceBoolean("spotify", "Use Extended Overlay Layout", flag);
     }
 
     public static void loadConfig()
