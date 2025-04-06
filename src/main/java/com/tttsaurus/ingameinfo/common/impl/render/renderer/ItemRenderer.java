@@ -5,6 +5,7 @@ import com.tttsaurus.ingameinfo.common.api.render.RenderUtils;
 import com.tttsaurus.ingameinfo.common.api.render.renderer.IRenderer;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.RenderItem;
 
 public class ItemRenderer implements IRenderer
@@ -47,7 +48,9 @@ public class ItemRenderer implements IRenderer
         GlStateManager.pushMatrix();
         GlStateManager.translate(x, y, RenderUtils.zLevel);
         GlStateManager.scale(scaleX, scaleY, 1f);
+        RenderHelper.enableGUIStandardItemLighting();
         renderer.renderItemAndEffectIntoGUI(item.getItemStack(), 0, 0);
+        RenderHelper.disableStandardItemLighting();
         GlStateManager.popMatrix();
     }
 }
