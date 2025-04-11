@@ -29,7 +29,6 @@ public class AnimTextRenderer extends TextRenderer
     @Override
     public void setText(String text)
     {
-        this.text = text;
         int oldLength = characterInfos.length;
         int length = text.length();
 
@@ -49,6 +48,8 @@ public class AnimTextRenderer extends TextRenderer
             characterInfos[i] = new CharInfo(width, 0f, scale, color, shadow);
             width += RenderUtils.fontRenderer.getCharWidth(c) * scale;
         }
+
+        this.text = text;
     }
 
     @Override
@@ -71,7 +72,7 @@ public class AnimTextRenderer extends TextRenderer
     @Override
     public void render()
     {
-        for (int i = 0; i < characterInfos.length; i++)
+        for (int i = 0; i < text.length(); i++)
         {
             String c = String.valueOf(text.charAt(i));
             CharInfo info = characterInfos[i];
