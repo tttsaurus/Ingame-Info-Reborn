@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @SuppressWarnings("all")
-public class GuiLayout
+public final class GuiLayout
 {
     private IgiGuiContainer igiGuiContainer;
     private MainGroup mainGroup;

@@ -20,9 +20,9 @@ public class GlStateManagerMixin
             ))
     private static void mixin_bindTexture_GL11$glBindTexture(int target, int texture, Operation<Void> original)
     {
-        if (RenderHints.getGlStateManagerBindTextureHint() == RenderHints.GlStateManager.BindTextureHint.TEXTURE_2D)
+        if (RenderHints.getHint_GlStateManager$BindTextureHint() == RenderHints.GlStateManager.BindTextureHint.TEXTURE_2D)
             original.call(target, texture);
-        else if (RenderHints.getGlStateManagerBindTextureHint() == RenderHints.GlStateManager.BindTextureHint.TEXTURE_2D_MULTISAMPLE)
+        else if (RenderHints.getHint_GlStateManager$BindTextureHint() == RenderHints.GlStateManager.BindTextureHint.TEXTURE_2D_MULTISAMPLE)
             GL11.glBindTexture(GL32.GL_TEXTURE_2D_MULTISAMPLE, texture);
     }
 }

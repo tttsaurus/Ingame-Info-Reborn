@@ -510,7 +510,7 @@ public final class IgiGuiLifeCycle
             uniformsPassed = true;
             shaderProgram.setUniform("screenTexture", 1);
             if (enableMultisampleOnFbo)
-                shaderProgram.setUniform("sampleNum", RenderHints.getFramebufferSampleNum());
+                shaderProgram.setUniform("sampleNum", RenderHints.getHint_Framebuffer$FramebufferSampleNum());
             shaderProgram.setUniform("enableAlpha", IgiConfig.ENABLE_PP_ALPHA);
             shaderProgram.setUniform("targetAlpha", IgiConfig.PP_ALPHA);
         }

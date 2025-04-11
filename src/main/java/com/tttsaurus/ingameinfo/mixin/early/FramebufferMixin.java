@@ -29,10 +29,10 @@ public class FramebufferMixin implements IGlDisposable
             ))
     public void mixin_createFramebuffer_GlStateManager$glTexImage2D(int target, int level, int internalFormat, int width, int height, int border, int format, int type, IntBuffer pixels, Operation<Void> original)
     {
-        if (RenderHints.getFramebufferCreateFramebufferHint() == RenderHints.Framebuffer.CreateFramebufferHint.TEXTURE_2D)
+        if (RenderHints.getHint_Framebuffer$CreateFramebufferHint() == RenderHints.Framebuffer.CreateFramebufferHint.TEXTURE_2D)
             original.call(target, level, internalFormat, width, height, border, format, type, pixels);
-        else if (RenderHints.getFramebufferCreateFramebufferHint() == RenderHints.Framebuffer.CreateFramebufferHint.TEXTURE_2D_MULTISAMPLE)
-            GL32.glTexImage2DMultisample(GL32.GL_TEXTURE_2D_MULTISAMPLE, RenderHints.getFramebufferSampleNum(), GL11.GL_RGBA8, width, height, true);
+        else if (RenderHints.getHint_Framebuffer$CreateFramebufferHint() == RenderHints.Framebuffer.CreateFramebufferHint.TEXTURE_2D_MULTISAMPLE)
+            GL32.glTexImage2DMultisample(GL32.GL_TEXTURE_2D_MULTISAMPLE, RenderHints.getHint_Framebuffer$FramebufferSampleNum(), GL11.GL_RGBA8, width, height, true);
     }
 
     @WrapOperation(
@@ -43,9 +43,9 @@ public class FramebufferMixin implements IGlDisposable
             ))
     public void mixin_createFramebuffer_OpenGlHelper$glFramebufferTexture2D(int target, int attachment, int textarget, int texture, int level, Operation<Void> original)
     {
-        if (RenderHints.getFramebufferCreateFramebufferHint() == RenderHints.Framebuffer.CreateFramebufferHint.TEXTURE_2D)
+        if (RenderHints.getHint_Framebuffer$CreateFramebufferHint() == RenderHints.Framebuffer.CreateFramebufferHint.TEXTURE_2D)
             original.call(target, attachment, textarget, texture, level);
-        else if (RenderHints.getFramebufferCreateFramebufferHint() == RenderHints.Framebuffer.CreateFramebufferHint.TEXTURE_2D_MULTISAMPLE)
+        else if (RenderHints.getHint_Framebuffer$CreateFramebufferHint() == RenderHints.Framebuffer.CreateFramebufferHint.TEXTURE_2D_MULTISAMPLE)
             OpenGlHelper.glFramebufferTexture2D(GL30.GL_FRAMEBUFFER, GL30.GL_COLOR_ATTACHMENT0, GL32.GL_TEXTURE_2D_MULTISAMPLE, texture, 0);
     }
 
@@ -57,9 +57,9 @@ public class FramebufferMixin implements IGlDisposable
             ))
     public void mixin_createFramebuffer_Framebuffer$setFramebufferFilter(Framebuffer instance, int framebufferFilterIn, Operation<Void> original)
     {
-        if (RenderHints.getFramebufferCreateFramebufferHint() == RenderHints.Framebuffer.CreateFramebufferHint.TEXTURE_2D)
+        if (RenderHints.getHint_Framebuffer$CreateFramebufferHint() == RenderHints.Framebuffer.CreateFramebufferHint.TEXTURE_2D)
             original.call(instance, framebufferFilterIn);
-        else if (RenderHints.getFramebufferCreateFramebufferHint() == RenderHints.Framebuffer.CreateFramebufferHint.TEXTURE_2D_MULTISAMPLE)
+        else if (RenderHints.getHint_Framebuffer$CreateFramebufferHint() == RenderHints.Framebuffer.CreateFramebufferHint.TEXTURE_2D_MULTISAMPLE)
         {
             // no need to set param to multisample texture
         }
@@ -74,10 +74,10 @@ public class FramebufferMixin implements IGlDisposable
             ))
     public void mixin_createFramebuffer_OpenGlHelper$glRenderbufferStorage_0(int target, int internalFormat, int width, int height, Operation<Void> original)
     {
-        if (RenderHints.getFramebufferCreateFramebufferHint() == RenderHints.Framebuffer.CreateFramebufferHint.TEXTURE_2D)
+        if (RenderHints.getHint_Framebuffer$CreateFramebufferHint() == RenderHints.Framebuffer.CreateFramebufferHint.TEXTURE_2D)
             original.call(target, internalFormat, width, height);
-        else if (RenderHints.getFramebufferCreateFramebufferHint() == RenderHints.Framebuffer.CreateFramebufferHint.TEXTURE_2D_MULTISAMPLE)
-            GL30.glRenderbufferStorageMultisample(GL30.GL_RENDERBUFFER, RenderHints.getFramebufferSampleNum(), GL14.GL_DEPTH_COMPONENT24, width, height);
+        else if (RenderHints.getHint_Framebuffer$CreateFramebufferHint() == RenderHints.Framebuffer.CreateFramebufferHint.TEXTURE_2D_MULTISAMPLE)
+            GL30.glRenderbufferStorageMultisample(GL30.GL_RENDERBUFFER, RenderHints.getHint_Framebuffer$FramebufferSampleNum(), GL14.GL_DEPTH_COMPONENT24, width, height);
     }
 
     @WrapOperation(
@@ -89,10 +89,10 @@ public class FramebufferMixin implements IGlDisposable
             ))
     public void mixin_createFramebuffer_OpenGlHelper$glRenderbufferStorage_1(int target, int internalFormat, int width, int height, Operation<Void> original)
     {
-        if (RenderHints.getFramebufferCreateFramebufferHint() == RenderHints.Framebuffer.CreateFramebufferHint.TEXTURE_2D)
+        if (RenderHints.getHint_Framebuffer$CreateFramebufferHint() == RenderHints.Framebuffer.CreateFramebufferHint.TEXTURE_2D)
             original.call(target, internalFormat, width, height);
-        else if (RenderHints.getFramebufferCreateFramebufferHint() == RenderHints.Framebuffer.CreateFramebufferHint.TEXTURE_2D_MULTISAMPLE)
-            GL30.glRenderbufferStorageMultisample(GL30.GL_RENDERBUFFER, RenderHints.getFramebufferSampleNum(), EXTPackedDepthStencil.GL_DEPTH24_STENCIL8_EXT, width, height);
+        else if (RenderHints.getHint_Framebuffer$CreateFramebufferHint() == RenderHints.Framebuffer.CreateFramebufferHint.TEXTURE_2D_MULTISAMPLE)
+            GL30.glRenderbufferStorageMultisample(GL30.GL_RENDERBUFFER, RenderHints.getHint_Framebuffer$FramebufferSampleNum(), EXTPackedDepthStencil.GL_DEPTH24_STENCIL8_EXT, width, height);
     }
 
     @WrapOperation(
@@ -103,9 +103,9 @@ public class FramebufferMixin implements IGlDisposable
             ))
     public void mixin_framebufferClear_Framebuffer$unbindFramebuffer(Framebuffer instance, Operation<Void> original)
     {
-        if (RenderHints.getFramebufferClearHint() == RenderHints.Framebuffer.FramebufferClearHint.UNBIND_FBO)
+        if (RenderHints.getHint_Framebuffer$FramebufferClearHint() == RenderHints.Framebuffer.FramebufferClearHint.UNBIND_FBO)
             original.call(instance);
-        else if (RenderHints.getFramebufferClearHint() == RenderHints.Framebuffer.FramebufferClearHint.DONT_UNBIND_FBO)
+        else if (RenderHints.getHint_Framebuffer$FramebufferClearHint() == RenderHints.Framebuffer.FramebufferClearHint.DONT_UNBIND_FBO)
         {
             // don't unbind
         }

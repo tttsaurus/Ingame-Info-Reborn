@@ -27,54 +27,56 @@ public final class RenderHints
         }
     }
 
+    // gl version
     private static boolean glVersionParsed = false;
     private static int majorGlVersion = -1;
     private static int minorGlVersion = -1;
     private static String rawGlVersion = "";
 
-    private static GlStateManager.BindTextureHint glStateManagerBindTextureHint = GlStateManager.BindTextureHint.TEXTURE_2D;
-    private static Framebuffer.CreateFramebufferHint framebufferCreateFramebufferHint = Framebuffer.CreateFramebufferHint.TEXTURE_2D;
-    private static Framebuffer.FramebufferClearHint framebufferClearHint = Framebuffer.FramebufferClearHint.UNBIND_FBO;
-    private static int framebufferSampleNum = 2;
+    // render hints
+    private static GlStateManager.BindTextureHint hint_GlStateManager$BindTextureHint = GlStateManager.BindTextureHint.TEXTURE_2D;
+    private static Framebuffer.CreateFramebufferHint hint_Framebuffer$CreateFramebufferHint = Framebuffer.CreateFramebufferHint.TEXTURE_2D;
+    private static Framebuffer.FramebufferClearHint hint_Framebuffer$FramebufferClearHint = Framebuffer.FramebufferClearHint.UNBIND_FBO;
+    private static int hint_Framebuffer$FramebufferSampleNum = 2;
 
     public static void multisampleTexBind()
     {
-        glStateManagerBindTextureHint = GlStateManager.BindTextureHint.TEXTURE_2D_MULTISAMPLE;
+        hint_GlStateManager$BindTextureHint = GlStateManager.BindTextureHint.TEXTURE_2D_MULTISAMPLE;
     }
     public static void normalTexBind()
     {
-        glStateManagerBindTextureHint = GlStateManager.BindTextureHint.TEXTURE_2D;
+        hint_GlStateManager$BindTextureHint = GlStateManager.BindTextureHint.TEXTURE_2D;
     }
     public static void multisampleFbo()
     {
-        framebufferCreateFramebufferHint = Framebuffer.CreateFramebufferHint.TEXTURE_2D_MULTISAMPLE;
+        hint_Framebuffer$CreateFramebufferHint = Framebuffer.CreateFramebufferHint.TEXTURE_2D_MULTISAMPLE;
     }
     public static void normalFbo()
     {
-        framebufferCreateFramebufferHint = Framebuffer.CreateFramebufferHint.TEXTURE_2D;
+        hint_Framebuffer$CreateFramebufferHint = Framebuffer.CreateFramebufferHint.TEXTURE_2D;
     }
     public static void clearFboWithoutUnbind()
     {
-        framebufferClearHint = Framebuffer.FramebufferClearHint.DONT_UNBIND_FBO;
+        hint_Framebuffer$FramebufferClearHint = Framebuffer.FramebufferClearHint.DONT_UNBIND_FBO;
     }
     public static void clearFboWithUnbind()
     {
-        framebufferClearHint = Framebuffer.FramebufferClearHint.UNBIND_FBO;
+        hint_Framebuffer$FramebufferClearHint = Framebuffer.FramebufferClearHint.UNBIND_FBO;
     }
     public static void fboSampleNum(int num)
     {
         if (num < 1) num = 1;
         if (num > 4) num = 4;
-        framebufferSampleNum = num;
+        hint_Framebuffer$FramebufferSampleNum = num;
     }
 
-    public static GlStateManager.BindTextureHint getGlStateManagerBindTextureHint() { return glStateManagerBindTextureHint; }
-    public static Framebuffer.CreateFramebufferHint getFramebufferCreateFramebufferHint() { return framebufferCreateFramebufferHint; }
-    public static Framebuffer.FramebufferClearHint getFramebufferClearHint() { return framebufferClearHint; }
-    public static int getFramebufferSampleNum() { return framebufferSampleNum; }
+    public static GlStateManager.BindTextureHint getHint_GlStateManager$BindTextureHint() { return hint_GlStateManager$BindTextureHint; }
+    public static Framebuffer.CreateFramebufferHint getHint_Framebuffer$CreateFramebufferHint() { return hint_Framebuffer$CreateFramebufferHint; }
+    public static Framebuffer.FramebufferClearHint getHint_Framebuffer$FramebufferClearHint() { return hint_Framebuffer$FramebufferClearHint; }
+    public static int getHint_Framebuffer$FramebufferSampleNum() { return hint_Framebuffer$FramebufferSampleNum; }
 
-    public static boolean getLineSmoothHint() { return !IgiGuiLifeCycle.getEnableFbo() || IgiGuiLifeCycle.getEnableMultisampleOnFbo(); }
-    public static boolean getPolygonSmoothHint() { return !IgiGuiLifeCycle.getEnableFbo() || IgiGuiLifeCycle.getEnableMultisampleOnFbo(); }
+    public static boolean getHint_LineSmoothHint() { return !IgiGuiLifeCycle.getEnableFbo() || IgiGuiLifeCycle.getEnableMultisampleOnFbo(); }
+    public static boolean getHint_PolygonSmoothHint() { return !IgiGuiLifeCycle.getEnableFbo() || IgiGuiLifeCycle.getEnableMultisampleOnFbo(); }
 
     public static int getMajorGlVersion()
     {

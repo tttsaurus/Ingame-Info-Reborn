@@ -181,7 +181,7 @@ public final class RenderUtils
         GlStateManager.tryBlendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO);
         GlStateManager.color(r, g, b, a);
 
-        if (RenderHints.getPolygonSmoothHint())
+        if (RenderHints.getHint_PolygonSmoothHint())
         {
             GlStateManager.glPolygonMode(GL11.GL_FRONT_AND_BACK, GL11.GL_FILL);
             GL11.glEnable(GL11.GL_POLYGON_SMOOTH);
@@ -211,7 +211,7 @@ public final class RenderUtils
 
         GlStateManager.popMatrix();
 
-        if (RenderHints.getPolygonSmoothHint()) GL11.glDisable(GL11.GL_POLYGON_SMOOTH);
+        if (RenderHints.getHint_PolygonSmoothHint()) GL11.glDisable(GL11.GL_POLYGON_SMOOTH);
     }
     public static void renderRoundedRectOutline(float x, float y, float width, float height, float radius, float thickness, int color)
     {
@@ -229,7 +229,7 @@ public final class RenderUtils
         GlStateManager.glLineWidth(thickness * (float)(new ScaledResolution(Minecraft.getMinecraft())).getScaleFactor());
         GlStateManager.color(r, g, b, a);
 
-        if (RenderHints.getLineSmoothHint())
+        if (RenderHints.getHint_LineSmoothHint())
         {
             GL11.glEnable(GL11.GL_LINE_SMOOTH);
             GL11.glHint(GL11.GL_LINE_SMOOTH_HINT, GL11.GL_NICEST);
@@ -259,7 +259,7 @@ public final class RenderUtils
 
         GlStateManager.popMatrix();
 
-        if (RenderHints.getLineSmoothHint()) GL11.glDisable(GL11.GL_LINE_SMOOTH);
+        if (RenderHints.getHint_LineSmoothHint()) GL11.glDisable(GL11.GL_LINE_SMOOTH);
     }
     //</editor-fold>
 
