@@ -18,24 +18,30 @@ public class CommonProxy
 {
     public void preInit(FMLPreInitializationEvent event, Logger logger)
     {
-        // config setup
+        //<editor-fold desc="config setup">
         File file = event.getSuggestedConfigurationFile();
         IgiConfig.CONFIG = new Configuration(file);
         IgiConfig.loadConfig();
         IgiConfig.CONFIG_WRITER = new ForgeConfigWriter(file);
         logger.info("In-Game Info Reborn config loaded.");
+        //</editor-fold>
     }
 
     public void init(FMLInitializationEvent event, Logger logger)
     {
         logger.info("In-Game Info Reborn starts initializing.");
 
+        //<editor-fold desc="reflection">
         InternalMethods.instance = new InternalMethods();
         logger.info("Reflection setup finished.");
+        //</editor-fold>
 
+        //<editor-fold desc="network">
         IgiNetwork.init();
         logger.info("Network setup finished.");
+        //</editor-fold>
 
+        //<editor-fold desc="dependencies">
         InGameInfoReborn.crafttweakerLoaded = Loader.isModLoaded("crafttweaker");
         InGameInfoReborn.bloodmagicLoaded = Loader.isModLoaded("bloodmagic");
         InGameInfoReborn.sereneseasonsLoaded = Loader.isModLoaded("sereneseasons");
@@ -44,9 +50,11 @@ public class CommonProxy
         InGameInfoReborn.deepresonanceLoaded = Loader.isModLoaded("deepresonance");
         InGameInfoReborn.toughasnailsLoaded = Loader.isModLoaded("toughasnails");
         InGameInfoReborn.simpledifficultyLoaded = Loader.isModLoaded("simpledifficulty");
+        //</editor-fold>
 
-        // crt support
+        //<editor-fold desc="crafttweaker support">
         if (InGameInfoReborn.crafttweakerLoaded)
             MinecraftForge.EVENT_BUS.register(CrtEventManager.Handler.class);
+        //</editor-fold>
     }
 }

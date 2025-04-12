@@ -3,6 +3,7 @@ package com.tttsaurus.ingameinfo.common.api.serialization.json;
 import java.util.ArrayList;
 import java.util.List;
 
+// assume no `\n`
 public final class RawJsonUtils
 {
     public static String extractValue(String json, String key) 

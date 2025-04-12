@@ -16,6 +16,7 @@ import com.tttsaurus.ingameinfo.common.api.shutdown.ShutdownHooks;
 import com.tttsaurus.ingameinfo.common.impl.appcommunication.spotify.SpotifyCommandHandler;
 import com.tttsaurus.ingameinfo.common.impl.gui.IgiGuiLifeCycle;
 import com.tttsaurus.ingameinfo.common.impl.gui.registry.ElementRegistry;
+import com.tttsaurus.ingameinfo.common.impl.gui.theme.registry.ThemeRegistry;
 import com.tttsaurus.ingameinfo.common.impl.mvvm.command.RefreshVvmCommand;
 import com.tttsaurus.ingameinfo.common.impl.mvvm.registry.MvvmRegisterEventHandler;
 import com.tttsaurus.ingameinfo.config.IgiConfig;
@@ -35,14 +36,15 @@ public class ClientProxy extends CommonProxy
     {
         super.preInit(event, logger);
 
+        //<editor-fold desc="gl setup">
         int majorGlVersion = RenderHints.getMajorGlVersion();
         int minorGlVersion = RenderHints.getMinorGlVersion();
 
-        logger.info("Raw OpenGl version: " + RenderHints.getRawGlVersion());
+        logger.info("Raw OpenGL version: " + RenderHints.getRawGlVersion());
         if (majorGlVersion == -1 || minorGlVersion == -1)
-            logger.info("Error: Can't parse OpenGl version");
+            logger.info("Error: Can't parse OpenGL version");
         else
-            logger.info(String.format("OpenGl version: %d.%d", majorGlVersion, minorGlVersion));
+            logger.info(String.format("OpenGL version: %d.%d", majorGlVersion, minorGlVersion));
 
         boolean enableFbo = IgiConfig.ENABLE_FRAMEBUFFER && OpenGlHelper.framebufferSupported;
         // at least gl 33
@@ -57,7 +59,9 @@ public class ClientProxy extends CommonProxy
         logger.info("[Render Feature] Framebuffer is " + (enableFbo ? "ON" : "OFF"));
         logger.info("[Render Feature] Post-Processing on framebuffer is " + (enablePostProcessing ? "ON" : "OFF") + " (requires GL33 and framebuffer)");
         logger.info("[Render Feature] Multisampling on framebuffer is " + (enableMsfbo ? "ON" : "OFF") + " (requires GL40 and framebuffer)");
+        //</editor-fold>
 
+        //<editor-fold desc="igi gui lifecycle setup">
         IgiGuiLifeCycle.setEnableFbo(enableFbo);
         IgiGuiLifeCycle.setEnableShader(enablePostProcessing);
         IgiGuiLifeCycle.setEnableMultisampleOnFbo(enableMsfbo);
@@ -65,12 +69,15 @@ public class ClientProxy extends CommonProxy
 
         IgiGuiLifeCycle.setMaxFps_FixedUpdate(IgiConfig.FIXED_UPDATE_LIMIT);
         IgiGuiLifeCycle.setMaxFps_RefreshFbo(IgiConfig.RENDER_UPDATE_LIMIT);
+        //</editor-fold>
 
+        //<editor-fold desc="spotify setup">
         if (IgiConfig.ENABLE_SPOTIFY_INTEGRATION)
         {
             SpotifyOAuthUtils.CLIENT_ID = IgiConfig.SPOTIFY_CLIENT_ID;
             SpotifyOAuthUtils.CLIENT_SECRET = IgiConfig.SPOTIFY_CLIENT_SECRET;
         }
+        //</editor-fold>
     }
 
     @Override
@@ -78,26 +85,34 @@ public class ClientProxy extends CommonProxy
     {
         super.init(event, logger);
 
-        // shutdown hook
+        //<editor-fold desc="shutdown hooks">
         ShutdownHooks.hooks.add(() ->
         {
             logger.info("Starts disposing OpenGL resources");
             GlResourceManager.disposeAll(logger);
             logger.info("OpenGL resources disposed");
         });
+        //</editor-fold>
 
-        // core
+        //<editor-fold desc="core events">
         MinecraftForge.EVENT_BUS.register(IgiGuiLifeCycle.class);
         MinecraftForge.EVENT_BUS.register(MvvmRegisterEventHandler.class);
+        //</editor-fold>
 
-        // app communication
+        //<editor-fold desc="app communication">
         if (IgiConfig.ENABLE_SPOTIFY_INTEGRATION)
             MinecraftForge.EVENT_BUS.register(SpotifyCommandHandler.class);
+        //</editor-fold>
 
-        // commands
+        //<editor-fold desc="commands">
         ClientCommandHandler.instance.registerCommand(new RefreshVvmCommand());
+        //</editor-fold>
 
-        // gui elements
+        //<editor-fold desc="themes">
+        ThemeRegistry.init();
+        //</editor-fold>
+
+        //<editor-fold desc="gui elements">
         String myPackage = "com.tttsaurus.ingameinfo";
         ElementRegistry.register();
 
@@ -154,9 +169,11 @@ public class ClientProxy extends CommonProxy
 
             logger.info("");
         }
+        //</editor-fold>
 
-        // mvvm
+        //<editor-fold desc="mvvm">
         logger.info("Starts registering mvvm.");
         MinecraftForge.EVENT_BUS.post(new MvvmRegisterEvent());
+        //</editor-fold>
     }
 }

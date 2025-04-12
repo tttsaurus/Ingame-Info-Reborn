@@ -55,6 +55,8 @@ public class IgiGuiContainer
         mainGroup.calcRenderPos(mainGroup.rect);
         mainGroup.finishReCalc();
 
+        mainGroup.loadTheme(null);
+
         InternalMethods.instance.ViewModel$isActiveGetter$setter.invoke(viewModel, () -> isActive);
         InternalMethods.instance.ViewModel$isActiveSetter$setter.invoke(viewModel, (flag) -> isActive = flag);
         InternalMethods.instance.ViewModel$exitCallbackSetter$setter.invoke(viewModel, (callback) -> exitCallback = callback);
@@ -103,6 +105,7 @@ public class IgiGuiContainer
     public void refreshVvm()
     {
         viewModel.refresh();
+        mainGroup.loadTheme(null);
         viewModel.start();
     }
 }

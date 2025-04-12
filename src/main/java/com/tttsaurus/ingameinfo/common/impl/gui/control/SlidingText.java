@@ -140,6 +140,8 @@ public class SlidingText extends Sized
                     {
                         xShift = 0;
                         onFreezeTiming = true;
+                        secondTextRenderer.setX(rect.x);
+                        secondTextRenderer.render();
                     }
                     else
                     {
@@ -163,6 +165,8 @@ public class SlidingText extends Sized
                     {
                         xShift = 0;
                         onFreezeTiming = true;
+                        secondTextRenderer.setX(rect.x);
+                        secondTextRenderer.render();
                     }
                     else
                     {

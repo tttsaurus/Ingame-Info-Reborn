@@ -266,8 +266,8 @@ public final class RenderUtils
     //<editor-fold desc="stencil">
     public static void prepareStencilToWrite(int stencilValue)
     {
-        if (!Minecraft.getMinecraft().getFramebuffer().isStencilEnabled())
-            Minecraft.getMinecraft().getFramebuffer().enableStencil();
+//        if (!Minecraft.getMinecraft().getFramebuffer().isStencilEnabled())
+//            Minecraft.getMinecraft().getFramebuffer().enableStencil();
 
         GlStateManager.disableTexture2D();
         GlStateManager.disableCull();

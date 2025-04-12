@@ -1,6 +1,7 @@
 package com.tttsaurus.ingameinfo.common.api.gui.layout;
 
 import com.tttsaurus.ingameinfo.common.api.gui.Element;
+import com.tttsaurus.ingameinfo.common.api.gui.theme.ThemeConfig;
 import com.tttsaurus.ingameinfo.common.api.render.RenderUtils;
 import java.awt.*;
 import java.util.ArrayList;
@@ -13,6 +14,14 @@ public abstract class ElementGroup extends Element
     public void add(Element element)
     {
         elements.add(element);
+    }
+
+    @Override
+    public void loadTheme(ThemeConfig themeConfig)
+    {
+        super.loadTheme(themeConfig);
+        for (Element element: elements)
+            element.loadTheme(themeConfig);
     }
 
     @Override

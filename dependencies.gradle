@@ -38,14 +38,9 @@
  * For more details, see https://docs.gradle.org/8.4/userguide/java_library_plugin.html#sec:java_library_configurations_graph
  */
 dependencies {
-    //compileOnly "com.cleanroommc:groovyscript:${grsVersion}"
-    //runtimeOnly "com.cleanroommc:groovyscript:${grsVersion}"
 
-    //compileOnly "mezz.jei:jei_1.12.2:${jeiVersion}:api"
-    //runtimeOnly "mezz.jei:jei_1.12.2:${jeiVersion}:api"
-
-    //compileOnly "com.cleanroommc:modularui:2.5.0-rc2"
-    //runtimeOnly "com.cleanroommc:modularui:2.5.0-rc2"
+    // configurate
+    shadowCompile "org.spongepowered:configurate-hocon:4.2.0"
 
     // zenutils-1.12.8
     compileOnly "curse.maven:zenutils-401178:4394263"

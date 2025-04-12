@@ -9,6 +9,7 @@ import com.tttsaurus.ingameinfo.common.api.gui.style.CallbackInfo;
 import com.tttsaurus.ingameinfo.common.api.gui.style.IStylePropertySyncTo;
 import com.tttsaurus.ingameinfo.common.api.gui.style.StylePropertyCallback;
 import com.tttsaurus.ingameinfo.common.api.gui.style.StyleProperty;
+import com.tttsaurus.ingameinfo.common.api.gui.theme.ThemeConfig;
 import com.tttsaurus.ingameinfo.common.api.render.RenderUtils;
 import java.awt.*;
 import java.util.HashMap;
@@ -23,10 +24,10 @@ public abstract class Element
 
     //<editor-fold desc="runtime variables">
 
-    // stores width & height when enabled is false
+    // stores width & height when `enabled` is false
     public float cachedWidth = 0f, cachedHeight = 0f;
 
-    // stores padding when enabled is false
+    // stores padding when `enabled` is false
     public Padding cachedPadding = new Padding(0f, 0f, 0f, 0f);
 
     // stores the actual render pos (top-left) and size
@@ -40,7 +41,13 @@ public abstract class Element
 
     private boolean needReCalc = false;
 
+    // vvm binding will inject
+    @SuppressWarnings("all")
     private Map<String, IStylePropertySyncTo> syncToMap = new HashMap<>();
+
+    // theme reference
+    @SuppressWarnings("all")
+    private ThemeConfig themeConfig = null;
     //</editor-fold>
 
     //<editor-fold desc="style properties">
@@ -129,7 +136,10 @@ public abstract class Element
         if (value == null) callbackInfo.cancel = true;
     }
     @StyleProperty(setterCallbackPre = "backgroundStyleValidation")
-    public String backgroundStyle;
+    public String backgroundStyle = "";
+
+    @StyleProperty
+    public boolean drawBackground = false;
     //</editor-fold>
 
     // sync to view model, not sync from
@@ -170,8 +180,8 @@ public abstract class Element
 
     public void renderBackground()
     {
-        if (backgroundStyle == null) return;
         if (backgroundStyle.isEmpty()) return;
+        if (!drawBackground) return;
 
         switch (backgroundStyle)
         {
@@ -192,6 +202,17 @@ public abstract class Element
 
     public boolean getNeedReCalc() { return needReCalc; }
     public void finishReCalc() { needReCalc = false; }
+
+    public void loadTheme(ThemeConfig themeConfig)
+    {
+        this.themeConfig = themeConfig;
+
+        if (backgroundStyle.isEmpty())
+        {
+            //backgroundStyle = themeConfig.element.backgroundStyle;
+            sync("backgroundStyle");
+        }
+    }
 
     public void renderDebugRect()
     {

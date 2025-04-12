@@ -4,6 +4,7 @@ import net.minecraft.util.Tuple;
 import java.util.ArrayList;
 import java.util.List;
 
+// assume no `\n`
 public final class RawIxmlUtils
 {
     public static List<Tuple<String, String>> extractNodes(String ixml)
