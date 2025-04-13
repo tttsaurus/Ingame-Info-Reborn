@@ -6,6 +6,7 @@ import com.tttsaurus.ingameinfo.common.api.item.GhostableItem;
 import com.tttsaurus.ingameinfo.common.api.mvvm.viewmodel.ViewModel;
 import com.tttsaurus.ingameinfo.common.impl.gui.layout.MainGroup;
 import com.tttsaurus.ingameinfo.common.api.render.RenderUtils;
+import com.tttsaurus.ingameinfo.common.impl.gui.theme.registry.ThemeRegistry;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.ScaledResolution;
 import org.lwjgl.input.Keyboard;
@@ -27,6 +28,7 @@ public class IgiGuiContainer
     protected boolean isFocused = false;
     protected boolean hasFocusBackground = true;
     protected int backgroundColor = -1072689136;
+    protected String themeName = "default";
 
     private boolean initFlag = false;
     private boolean isActive = true;
@@ -55,7 +57,7 @@ public class IgiGuiContainer
         mainGroup.calcRenderPos(mainGroup.rect);
         mainGroup.finishReCalc();
 
-        mainGroup.loadTheme(null);
+        mainGroup.loadTheme(ThemeRegistry.getTheme(themeName));
 
         InternalMethods.instance.ViewModel$isActiveGetter$setter.invoke(viewModel, () -> isActive);
         InternalMethods.instance.ViewModel$isActiveSetter$setter.invoke(viewModel, (flag) -> isActive = flag);
@@ -105,7 +107,7 @@ public class IgiGuiContainer
     public void refreshVvm()
     {
         viewModel.refresh();
-        mainGroup.loadTheme(null);
+        mainGroup.loadTheme(ThemeRegistry.getTheme(themeName));
         viewModel.start();
     }
 }

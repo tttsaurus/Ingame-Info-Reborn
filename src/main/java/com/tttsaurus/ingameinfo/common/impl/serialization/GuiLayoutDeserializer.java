@@ -66,6 +66,8 @@ public class GuiLayoutDeserializer implements IDeserializer<GuiLayout>
                             if (item != null) guiLayout.addHeldItemBlacklist(item);
                         }
                     }
+                    else if (field.equals("theme"))
+                        guiLayout.setThemeName(value);
                 }
             }
             else if (pair.getFirst().equals("/Group"))

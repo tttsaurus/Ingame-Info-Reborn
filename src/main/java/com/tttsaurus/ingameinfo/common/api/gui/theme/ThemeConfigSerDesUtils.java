@@ -32,7 +32,7 @@ public final class ThemeConfigSerDesUtils
                 .build();
 
         ConfigurationNode root = loader.createNode();
-        root.node("version").set(1);
+        root.node("version").set(ThemeConfig.latestVersion);
         root.node("config").set(config);
 
         loader.save(root);
@@ -59,6 +59,6 @@ public final class ThemeConfigSerDesUtils
         ObjectMapper.Factory factory = ObjectMapper.factory();
         ObjectMapper<ThemeConfig> mapper = factory.get(ThemeConfig.class);
 
-        return new ThemeConfigUpdater(mapper.load(root.node("config")), root.node("version").getInt());
+        return new ThemeConfigUpdater(mapper.load(root.node("config")), root.node("version").getInt(), root);
     }
 }

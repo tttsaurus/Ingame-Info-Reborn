@@ -65,6 +65,11 @@ public final class GuiLayout
         igiGuiContainer.heldItemBlacklist.add(item);
         return this;
     }
+    public GuiLayout setThemeName(String themeName)
+    {
+        igiGuiContainer.themeName = themeName;
+        return this;
+    }
 
     private int groupLayer = 0;
     private final List<ElementGroup> groupBuffer = new ArrayList<>();

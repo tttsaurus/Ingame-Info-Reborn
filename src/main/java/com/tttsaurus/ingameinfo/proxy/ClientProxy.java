@@ -110,6 +110,7 @@ public class ClientProxy extends CommonProxy
 
         //<editor-fold desc="themes">
         ThemeRegistry.init();
+        logger.info("Theme configs loaded. They are: " + String.join(", ", ThemeRegistry.getThemeNames()));
         //</editor-fold>
 
         //<editor-fold desc="gui elements">

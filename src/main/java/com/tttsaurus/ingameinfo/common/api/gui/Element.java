@@ -11,6 +11,7 @@ import com.tttsaurus.ingameinfo.common.api.gui.style.StylePropertyCallback;
 import com.tttsaurus.ingameinfo.common.api.gui.style.StyleProperty;
 import com.tttsaurus.ingameinfo.common.api.gui.theme.ThemeConfig;
 import com.tttsaurus.ingameinfo.common.api.render.RenderUtils;
+import com.tttsaurus.ingameinfo.common.impl.gui.layout.MainGroup;
 import java.awt.*;
 import java.util.HashMap;
 import java.util.Map;
@@ -186,13 +187,13 @@ public abstract class Element
         switch (backgroundStyle)
         {
             case "box" -> RenderUtils.renderRect(rect.x, rect.y, rect.width, rect.height, DEFAULT_COLOR_DARK);
-            case "boxWithOutline" ->
+            case "box-with-outline" ->
             {
                 RenderUtils.renderRect(rect.x, rect.y, rect.width, rect.height, DEFAULT_COLOR_DARK);
                 RenderUtils.renderRectOutline(rect.x, rect.y, rect.width, rect.height, 1.0f, DEFAULT_COLOR_DARKER);
             }
-            case "roundedBox" -> RenderUtils.renderRoundedRect(rect.x, rect.y, rect.width, rect.height, 3f, DEFAULT_COLOR_DARK);
-            case "roundedBoxWithOutline" ->
+            case "rounde-box" -> RenderUtils.renderRoundedRect(rect.x, rect.y, rect.width, rect.height, 3f, DEFAULT_COLOR_DARK);
+            case "rounded-box-with-outline" ->
             {
                 RenderUtils.renderRoundedRect(rect.x, rect.y, rect.width, rect.height, 3f, DEFAULT_COLOR_DARK);
                 RenderUtils.renderRoundedRectOutline(rect.x, rect.y, rect.width, rect.height, 3f, 1.0f, DEFAULT_COLOR_DARKER);
@@ -206,10 +207,11 @@ public abstract class Element
     public void loadTheme(ThemeConfig themeConfig)
     {
         this.themeConfig = themeConfig;
+        if (this instanceof MainGroup) return;
 
         if (backgroundStyle.isEmpty())
         {
-            //backgroundStyle = themeConfig.element.backgroundStyle;
+            backgroundStyle = themeConfig.element.backgroundStyle;
             sync("backgroundStyle");
         }
     }
