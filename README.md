@@ -27,6 +27,7 @@ My Detailed Todo List:
 Feature Overview:
 - Approximate Model-View-ViewModel pattern (✔)
 - Add framebuffer to the GUI rendering life cycle (✔)
+- GUI theme manager (✔)
 - Introduce a custom GUI container (✔)
 - Maintain a list of custom GUI containers so that GUIs can stack together (✔)
 - A GUI container can be ingame-overlaid/focused (runtime switchable) (✔)
