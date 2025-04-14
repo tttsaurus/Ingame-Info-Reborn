@@ -1,20 +1,73 @@
 package com.tttsaurus.ingameinfo.common.api.gui.theme;
 
 import org.spongepowered.configurate.objectmapping.ConfigSerializable;
-import org.spongepowered.configurate.objectmapping.meta.Setting;
+import org.spongepowered.configurate.objectmapping.meta.Comment;
 
 @ConfigSerializable
-public class ThemeConfig
+public final class ThemeConfig
 {
     public static final int latestVersion = 1;
 
-    @Setting("Element")
+    public BackgroundStyles backgroundStyles = new BackgroundStyles();
+
+    @ConfigSerializable
+    public static class BackgroundStyles
+    {
+        public Box box = new Box();
+        public BoxWithOutline boxWithOutline = new BoxWithOutline();
+        public RoundedBox roundedBox = new RoundedBox();
+        public RoundedBoxWithOutline roundedBoxWithOutline = new RoundedBoxWithOutline();
+
+        @ConfigSerializable
+        public static class Box
+        {
+            @Comment("In the form of hex RRGGBB or AARRGGBB.")
+            public String color = "383838";
+
+            public transient int parsedColor;
+        }
+
+        @ConfigSerializable
+        public static class BoxWithOutline
+        {
+            @Comment("In the form of hex RRGGBB or AARRGGBB.")
+            public String color = "383838";
+            @Comment("In the form of hex RRGGBB or AARRGGBB.")
+            public String outlineColor = "232323";
+
+            public transient int parsedColor;
+            public transient int parsedOutlineColor;
+        }
+
+        @ConfigSerializable
+        public static class RoundedBox
+        {
+            @Comment("In the form of hex RRGGBB or AARRGGBB.")
+            public String color = "383838";
+            public float cornerRadius = 3f;
+
+            public transient int parsedColor;
+        }
+
+        @ConfigSerializable
+        public static class RoundedBoxWithOutline
+        {
+            @Comment("In the form of hex RRGGBB or AARRGGBB.")
+            public String color = "383838";
+            @Comment("In the form of hex RRGGBB or AARRGGBB.")
+            public String outlineColor = "232323";
+            public float cornerRadius = 3f;
+
+            public transient int parsedColor;
+            public transient int parsedOutlineColor;
+        }
+    }
+
     public Element element = new Element();
 
     @ConfigSerializable
     public static class Element
     {
-        @Setting("background-style")
         public String backgroundStyle = "";
     }
 }

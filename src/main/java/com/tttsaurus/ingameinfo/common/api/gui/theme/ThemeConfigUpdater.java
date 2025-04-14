@@ -1,6 +1,7 @@
 package com.tttsaurus.ingameinfo.common.api.gui.theme;
 
 import org.spongepowered.configurate.ConfigurationNode;
+import java.awt.*;
 
 public final class ThemeConfigUpdater
 {
@@ -8,7 +9,35 @@ public final class ThemeConfigUpdater
     private final ThemeConfig config;
     private final int version;
 
-    public ThemeConfig getConfig() { return config; }
+    private int parseColor(String hex)
+    {
+        if (hex == null) return 0;
+        if (hex.isEmpty()) return 0;
+        if (hex.length() == 6)
+            return (new Color(Integer.parseInt(hex, 16), false)).getRGB();
+        if (hex.length() == 8)
+            return (new Color(Integer.parseInt(hex, 16), true)).getRGB();
+        return 0;
+    }
+
+    private void parse()
+    {
+        config.backgroundStyles.box.parsedColor = parseColor(config.backgroundStyles.box.color);
+
+        config.backgroundStyles.boxWithOutline.parsedColor = parseColor(config.backgroundStyles.boxWithOutline.color);
+        config.backgroundStyles.boxWithOutline.parsedOutlineColor = parseColor(config.backgroundStyles.boxWithOutline.outlineColor);
+
+        config.backgroundStyles.roundedBox.parsedColor = parseColor(config.backgroundStyles.roundedBox.color);
+
+        config.backgroundStyles.roundedBoxWithOutline.parsedColor = parseColor(config.backgroundStyles.roundedBoxWithOutline.color);
+        config.backgroundStyles.roundedBoxWithOutline.parsedOutlineColor = parseColor(config.backgroundStyles.roundedBoxWithOutline.outlineColor);
+    }
+
+    public ThemeConfig getConfig()
+    {
+        parse();
+        return config;
+    }
     public int getVersion() { return version; }
 
     public ThemeConfigUpdater(ThemeConfig config, int version, ConfigurationNode root)

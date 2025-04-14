@@ -1,5 +1,6 @@
 package com.tttsaurus.ingameinfo.common.api.gui.theme;
 
+import org.spongepowered.configurate.CommentedConfigurationNode;
 import org.spongepowered.configurate.ConfigurationNode;
 import org.spongepowered.configurate.hocon.HoconConfigurationLoader;
 import org.spongepowered.configurate.objectmapping.ObjectMapper;
@@ -32,7 +33,7 @@ public final class ThemeConfigSerDesUtils
                 .build();
 
         ConfigurationNode root = loader.createNode();
-        root.node("version").set(ThemeConfig.latestVersion);
+        ((CommentedConfigurationNode)(root.node("version").set(ThemeConfig.latestVersion))).comment("Don't touch 'version' manually. This is an indicator for config updater.");
         root.node("config").set(config);
 
         loader.save(root);

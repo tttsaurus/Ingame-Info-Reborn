@@ -186,17 +186,17 @@ public abstract class Element
 
         switch (backgroundStyle)
         {
-            case "box" -> RenderUtils.renderRect(rect.x, rect.y, rect.width, rect.height, DEFAULT_COLOR_DARK);
+            case "box" -> RenderUtils.renderRect(rect.x, rect.y, rect.width, rect.height, themeConfig.backgroundStyles.box.parsedColor);
             case "box-with-outline" ->
             {
-                RenderUtils.renderRect(rect.x, rect.y, rect.width, rect.height, DEFAULT_COLOR_DARK);
-                RenderUtils.renderRectOutline(rect.x, rect.y, rect.width, rect.height, 1.0f, DEFAULT_COLOR_DARKER);
+                RenderUtils.renderRect(rect.x, rect.y, rect.width, rect.height, themeConfig.backgroundStyles.boxWithOutline.parsedColor);
+                RenderUtils.renderRectOutline(rect.x, rect.y, rect.width, rect.height, 1.0f, themeConfig.backgroundStyles.boxWithOutline.parsedOutlineColor);
             }
-            case "rounde-box" -> RenderUtils.renderRoundedRect(rect.x, rect.y, rect.width, rect.height, 3f, DEFAULT_COLOR_DARK);
+            case "rounded-box" -> RenderUtils.renderRoundedRect(rect.x, rect.y, rect.width, rect.height, themeConfig.backgroundStyles.roundedBox.cornerRadius, themeConfig.backgroundStyles.roundedBox.parsedColor);
             case "rounded-box-with-outline" ->
             {
-                RenderUtils.renderRoundedRect(rect.x, rect.y, rect.width, rect.height, 3f, DEFAULT_COLOR_DARK);
-                RenderUtils.renderRoundedRectOutline(rect.x, rect.y, rect.width, rect.height, 3f, 1.0f, DEFAULT_COLOR_DARKER);
+                RenderUtils.renderRoundedRect(rect.x, rect.y, rect.width, rect.height, themeConfig.backgroundStyles.roundedBoxWithOutline.cornerRadius, themeConfig.backgroundStyles.roundedBoxWithOutline.parsedColor);
+                RenderUtils.renderRoundedRectOutline(rect.x, rect.y, rect.width, rect.height, themeConfig.backgroundStyles.roundedBoxWithOutline.cornerRadius, 1.0f, themeConfig.backgroundStyles.roundedBoxWithOutline.parsedOutlineColor);
             }
         }
     }

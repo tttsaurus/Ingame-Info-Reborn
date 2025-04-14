@@ -53,11 +53,11 @@ public class IgiGuiContainer
         if (initFlag) return;
         initFlag = true;
 
+        mainGroup.loadTheme(ThemeRegistry.getTheme(themeName));
+
         mainGroup.calcWidthHeight();
         mainGroup.calcRenderPos(mainGroup.rect);
         mainGroup.finishReCalc();
-
-        mainGroup.loadTheme(ThemeRegistry.getTheme(themeName));
 
         InternalMethods.instance.ViewModel$isActiveGetter$setter.invoke(viewModel, () -> isActive);
         InternalMethods.instance.ViewModel$isActiveSetter$setter.invoke(viewModel, (flag) -> isActive = flag);
@@ -104,6 +104,8 @@ public class IgiGuiContainer
         if (debug) mainGroup.renderDebugRect();
     }
 
+    // can't refresh <Def> content
+    // viewModel.start() may not work properly due to the lack of `undo` function
     public void refreshVvm()
     {
         viewModel.refresh();
