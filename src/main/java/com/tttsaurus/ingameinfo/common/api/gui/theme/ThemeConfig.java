@@ -68,6 +68,8 @@ public final class ThemeConfig
     @ConfigSerializable
     public static class Element
     {
+        @Comment("This will only be applied to elements with style property 'backgroundStyle' left empty.\n" +
+                "Valid values are 'box', 'box-with-outline', 'rounded-box', 'rounded-box-with-outline'")
         public String backgroundStyle = "";
     }
 }

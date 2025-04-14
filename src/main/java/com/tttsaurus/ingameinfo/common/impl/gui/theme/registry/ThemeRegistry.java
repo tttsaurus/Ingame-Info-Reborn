@@ -1,5 +1,6 @@
 package com.tttsaurus.ingameinfo.common.impl.gui.theme.registry;
 
+import com.tttsaurus.ingameinfo.InGameInfoReborn;
 import com.tttsaurus.ingameinfo.common.api.gui.theme.ThemeConfig;
 import com.tttsaurus.ingameinfo.common.api.gui.theme.ThemeConfigSerDesUtils;
 import com.tttsaurus.ingameinfo.common.api.gui.theme.ThemeConfigUpdater;
@@ -150,7 +151,11 @@ public final class ThemeRegistry
                         }
                         themeConfigs.put(themeName, updater.getConfig());
                     }
-                    catch (Exception ignored) { }
+                    catch (Exception exception)
+                    {
+                        InGameInfoReborn.logger.error("Caught an exception when loading the theme config '" + themeName + "'");
+                        InGameInfoReborn.logger.throwing(exception);
+                    }
                 }
             }
         }

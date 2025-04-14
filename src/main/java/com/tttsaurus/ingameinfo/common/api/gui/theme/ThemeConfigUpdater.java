@@ -1,7 +1,6 @@
 package com.tttsaurus.ingameinfo.common.api.gui.theme;
 
 import org.spongepowered.configurate.ConfigurationNode;
-import java.awt.*;
 
 public final class ThemeConfigUpdater
 {
@@ -14,9 +13,9 @@ public final class ThemeConfigUpdater
         if (hex == null) return 0;
         if (hex.isEmpty()) return 0;
         if (hex.length() == 6)
-            return (new Color(Integer.parseInt(hex, 16), false)).getRGB();
+            return 0xff000000 | Integer.parseInt(hex, 16);
         if (hex.length() == 8)
-            return (new Color(Integer.parseInt(hex, 16), true)).getRGB();
+            return (int)Long.parseLong(hex, 16);
         return 0;
     }
 
