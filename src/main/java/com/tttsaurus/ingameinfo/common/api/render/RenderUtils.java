@@ -353,6 +353,10 @@ public final class RenderUtils
     //</editor-fold>
 
     //<editor-fold desc="texture">
+    public static void renderTexture2D(float x, float y, float width, float height, Texture2D texture2D)
+    {
+        renderTexture2D(x, y, width, height, texture2D.getWidth(), texture2D.getHeight(), texture2D.getGlTextureID());
+    }
     public static void renderTexture2D(float x, float y, float width, float height, int textureWidth, int textureHeight, int textureId)
     {
         GL11.glGetInteger(GL11.GL_TEXTURE_BINDING_2D, intBuffer);

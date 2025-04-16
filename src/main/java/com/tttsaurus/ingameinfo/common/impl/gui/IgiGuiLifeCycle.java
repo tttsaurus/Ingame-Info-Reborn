@@ -420,8 +420,8 @@ public final class IgiGuiLifeCycle
             fbo.enableStencil();
             if (enableMultisampleOnFbo)
             {
-                RenderHints.normalTexBind();
-                RenderHints.normalFbo();
+                RenderHints.defaultTexBind();
+                RenderHints.defaultFbo();
             }
             fbo.bindFramebuffer(true);
             GlResourceManager.addDisposable((IGlDisposable)fbo);
@@ -437,8 +437,8 @@ public final class IgiGuiLifeCycle
             fbo.createBindFramebuffer(minecraft.displayWidth, minecraft.displayHeight);
             if (enableMultisampleOnFbo)
             {
-                RenderHints.normalTexBind();
-                RenderHints.normalFbo();
+                RenderHints.defaultTexBind();
+                RenderHints.defaultFbo();
             }
             fbo.bindFramebuffer(true);
         }
@@ -501,7 +501,7 @@ public final class IgiGuiLifeCycle
 
         if (enableMultisampleOnFbo) RenderHints.multisampleTexBind();
         fbo.bindFramebufferTexture();
-        if (enableMultisampleOnFbo) RenderHints.normalTexBind();
+        if (enableMultisampleOnFbo) RenderHints.defaultTexBind();
 
         GlStateManager.setActiveTexture(texUnit);
 

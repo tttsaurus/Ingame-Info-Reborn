@@ -1,6 +1,7 @@
 package com.tttsaurus.ingameinfo.common.api.render;
 
 import com.tttsaurus.ingameinfo.common.impl.gui.IgiGuiLifeCycle;
+import com.tttsaurus.ingameinfo.common.impl.render.Texture2D;
 import org.lwjgl.opengl.GL11;
 
 public final class RenderHints
@@ -27,23 +28,29 @@ public final class RenderHints
         }
     }
 
-    // gl version
+    //<editor-fold desc="gl version">
     private static boolean glVersionParsed = false;
     private static int majorGlVersion = -1;
     private static int minorGlVersion = -1;
     private static String rawGlVersion = "";
+    //</editor-fold>
 
-    // render hints
+    //<editor-fold desc="render hints">
     private static GlStateManager.BindTextureHint hint_GlStateManager$BindTextureHint = GlStateManager.BindTextureHint.TEXTURE_2D;
     private static Framebuffer.CreateFramebufferHint hint_Framebuffer$CreateFramebufferHint = Framebuffer.CreateFramebufferHint.TEXTURE_2D;
     private static Framebuffer.FramebufferClearHint hint_Framebuffer$FramebufferClearHint = Framebuffer.FramebufferClearHint.UNBIND_FBO;
     private static int hint_Framebuffer$FramebufferSampleNum = 2;
+    private static Texture2D.FilterMode hint_Texture2D$FilterMode = Texture2D.FilterMode.LINEAR;
+    // per unit scaled resolution
+    private static float hint_pixelPerUnit = 1f;
+    //</editor-fold>
 
+    //<editor-fold desc="simplified setters">
     public static void multisampleTexBind()
     {
         hint_GlStateManager$BindTextureHint = GlStateManager.BindTextureHint.TEXTURE_2D_MULTISAMPLE;
     }
-    public static void normalTexBind()
+    public static void defaultTexBind()
     {
         hint_GlStateManager$BindTextureHint = GlStateManager.BindTextureHint.TEXTURE_2D;
     }
@@ -51,7 +58,7 @@ public final class RenderHints
     {
         hint_Framebuffer$CreateFramebufferHint = Framebuffer.CreateFramebufferHint.TEXTURE_2D_MULTISAMPLE;
     }
-    public static void normalFbo()
+    public static void defaultFbo()
     {
         hint_Framebuffer$CreateFramebufferHint = Framebuffer.CreateFramebufferHint.TEXTURE_2D;
     }
@@ -69,11 +76,54 @@ public final class RenderHints
         if (num > 4) num = 4;
         hint_Framebuffer$FramebufferSampleNum = num;
     }
+    public static void texture2dLinearFilter()
+    {
+        hint_Texture2D$FilterMode = Texture2D.FilterMode.LINEAR;
+    }
+    public static void texture2dNearestFilter()
+    {
+        hint_Texture2D$FilterMode = Texture2D.FilterMode.NEAREST;
+    }
+    public static void pixelPerUnit(float pixel)
+    {
+        hint_pixelPerUnit = pixel;
+    }
+    //</editor-fold>
 
+    //<editor-fold desc="setters">
+    public static void setHint_GlStateManager$BindTextureHint(GlStateManager.BindTextureHint hint)
+    {
+        hint_GlStateManager$BindTextureHint = hint;
+    }
+    public static void setHint_Framebuffer$CreateFramebufferHint(Framebuffer.CreateFramebufferHint hint)
+    {
+        hint_Framebuffer$CreateFramebufferHint = hint;
+    }
+    public static void setHint_Framebuffer$FramebufferClearHint(Framebuffer.FramebufferClearHint hint)
+    {
+        hint_Framebuffer$FramebufferClearHint = hint;
+    }
+    public static void setHint_Framebuffer$FramebufferSampleNum(int hint)
+    {
+        hint_Framebuffer$FramebufferSampleNum = hint;
+    }
+    public static void setHint_Texture2D$FilterMode(Texture2D.FilterMode hint)
+    {
+        hint_Texture2D$FilterMode = hint;
+    }
+    public static void setHint_pixelPerUnit(float pixel)
+    {
+        hint_pixelPerUnit = pixel;
+    }
+    //</editor-fold>
+
+    //<editor-fold desc="getters">
     public static GlStateManager.BindTextureHint getHint_GlStateManager$BindTextureHint() { return hint_GlStateManager$BindTextureHint; }
     public static Framebuffer.CreateFramebufferHint getHint_Framebuffer$CreateFramebufferHint() { return hint_Framebuffer$CreateFramebufferHint; }
     public static Framebuffer.FramebufferClearHint getHint_Framebuffer$FramebufferClearHint() { return hint_Framebuffer$FramebufferClearHint; }
     public static int getHint_Framebuffer$FramebufferSampleNum() { return hint_Framebuffer$FramebufferSampleNum; }
+    public static Texture2D.FilterMode getHint_Texture2D$FilterMode() { return hint_Texture2D$FilterMode; }
+    public static float getHint_pixelPerUnit() { return hint_pixelPerUnit; }
 
     public static boolean getHint_LineSmoothHint() { return !IgiGuiLifeCycle.getEnableFbo() || IgiGuiLifeCycle.getEnableMultisampleOnFbo(); }
     public static boolean getHint_PolygonSmoothHint() { return !IgiGuiLifeCycle.getEnableFbo() || IgiGuiLifeCycle.getEnableMultisampleOnFbo(); }
@@ -119,10 +169,11 @@ public final class RenderHints
                     majorGlVersion = Integer.parseInt(parts[0]);
                     minorGlVersion = Integer.parseInt(parts[1]);
                 }
-                catch (NumberFormatException e) { }
+                catch (NumberFormatException ignored) { }
             }
         }
         else
             rawGlVersion = "";
     }
+    //</editor-fold>
 }

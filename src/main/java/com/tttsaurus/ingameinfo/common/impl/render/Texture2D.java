@@ -2,6 +2,7 @@ package com.tttsaurus.ingameinfo.common.impl.render;
 
 import com.tttsaurus.ingameinfo.common.api.render.GlResourceManager;
 import com.tttsaurus.ingameinfo.common.api.render.IGlDisposable;
+import com.tttsaurus.ingameinfo.common.api.render.RenderHints;
 import net.minecraft.client.renderer.GlStateManager;
 import org.lwjgl.opengl.GL11;
 import java.nio.ByteBuffer;
@@ -10,6 +11,18 @@ import java.nio.IntBuffer;
 
 public final class Texture2D implements IGlDisposable
 {
+    public enum FilterMode
+    {
+        LINEAR(GL11.GL_LINEAR),
+        NEAREST(GL11.GL_NEAREST);
+
+        public final int glValue;
+        FilterMode(int glValue)
+        {
+            this.glValue = glValue;
+        }
+    }
+
     private static final IntBuffer intBuffer = ByteBuffer.allocateDirect(16 << 2).order(ByteOrder.nativeOrder()).asIntBuffer();
 
     private int glTextureID = 0;
@@ -33,8 +46,8 @@ public final class Texture2D implements IGlDisposable
 
         GL11.glBindTexture(GL11.GL_TEXTURE_2D, glTextureID);
 
-        GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MIN_FILTER, GL11.GL_LINEAR);
-        GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MAG_FILTER, GL11.GL_LINEAR);
+        GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MIN_FILTER, RenderHints.getHint_Texture2D$FilterMode().glValue);
+        GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MAG_FILTER, RenderHints.getHint_Texture2D$FilterMode().glValue);
         GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_WRAP_S, GL11.GL_CLAMP);
         GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_WRAP_T, GL11.GL_CLAMP);
 

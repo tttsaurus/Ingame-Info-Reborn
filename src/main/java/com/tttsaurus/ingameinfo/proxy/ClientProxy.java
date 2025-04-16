@@ -14,6 +14,7 @@ import com.tttsaurus.ingameinfo.common.api.render.RenderHints;
 import com.tttsaurus.ingameinfo.common.api.serialization.IDeserializer;
 import com.tttsaurus.ingameinfo.common.api.shutdown.ShutdownHooks;
 import com.tttsaurus.ingameinfo.common.impl.appcommunication.spotify.SpotifyCommandHandler;
+import com.tttsaurus.ingameinfo.common.impl.gui.GuiResources;
 import com.tttsaurus.ingameinfo.common.impl.gui.IgiGuiLifeCycle;
 import com.tttsaurus.ingameinfo.common.impl.gui.registry.ElementRegistry;
 import com.tttsaurus.ingameinfo.common.impl.gui.theme.registry.ThemeRegistry;
@@ -92,11 +93,13 @@ public class ClientProxy extends CommonProxy
             GlResourceManager.disposeAll(logger);
             logger.info("OpenGL resources disposed");
         });
+        logger.info("Shutdown hooks setup finished.");
         //</editor-fold>
 
         //<editor-fold desc="core events">
         MinecraftForge.EVENT_BUS.register(IgiGuiLifeCycle.class);
         MinecraftForge.EVENT_BUS.register(MvvmRegisterEventHandler.class);
+        logger.info("Core event listeners registered.");
         //</editor-fold>
 
         //<editor-fold desc="app communication">
@@ -106,6 +109,12 @@ public class ClientProxy extends CommonProxy
 
         //<editor-fold desc="commands">
         ClientCommandHandler.instance.registerCommand(new RefreshVvmCommand());
+        logger.info("Client commands registered.");
+        //</editor-fold>
+
+        //<editor-fold desc="gui resources">
+        GuiResources.init();
+        logger.info("GUI resources loaded.");
         //</editor-fold>
 
         //<editor-fold desc="themes">
@@ -116,6 +125,7 @@ public class ClientProxy extends CommonProxy
         //<editor-fold desc="gui elements">
         String myPackage = "com.tttsaurus.ingameinfo";
         ElementRegistry.register();
+        logger.info("GUI elements registered.");
 
         logger.info("");
         logger.info("Registered serviceable elements: ");

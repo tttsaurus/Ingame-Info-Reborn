@@ -69,7 +69,7 @@ public final class ThemeConfig
     public static class Element
     {
         @Comment("This will only be applied to elements with style property 'backgroundStyle' left empty.\n" +
-                "Valid values are 'box', 'box-with-outline', 'rounded-box', 'rounded-box-with-outline'")
+                "Valid values are 'box', 'box-with-outline', 'rounded-box', 'rounded-box-with-outline', 'mc-vanilla'")
         public String backgroundStyle = "";
     }
 }
