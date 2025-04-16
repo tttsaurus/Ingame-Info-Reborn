@@ -30,6 +30,10 @@ public final class ThemeConfigUpdater
 
         config.backgroundStyles.roundedBoxWithOutline.parsedColor = parseColor(config.backgroundStyles.roundedBoxWithOutline.color);
         config.backgroundStyles.roundedBoxWithOutline.parsedOutlineColor = parseColor(config.backgroundStyles.roundedBoxWithOutline.outlineColor);
+
+        config.text.parsedColor = parseColor(config.text.color);
+        config.slidingText.parsedColor = parseColor(config.slidingText.color);
+        config.animText.parsedColor = parseColor(config.animText.color);
     }
 
     public ThemeConfig getConfig()

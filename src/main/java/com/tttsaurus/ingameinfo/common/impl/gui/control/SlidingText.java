@@ -5,6 +5,7 @@ import com.tttsaurus.ingameinfo.common.api.gui.registry.RegisterElement;
 import com.tttsaurus.ingameinfo.common.api.gui.style.CallbackInfo;
 import com.tttsaurus.ingameinfo.common.api.gui.style.StyleProperty;
 import com.tttsaurus.ingameinfo.common.api.gui.style.StylePropertyCallback;
+import com.tttsaurus.ingameinfo.common.api.gui.theme.ThemeConfig;
 import com.tttsaurus.ingameinfo.common.impl.render.RenderMask;
 import com.tttsaurus.ingameinfo.common.impl.render.renderer.TextRenderer;
 
@@ -14,13 +15,6 @@ public class SlidingText extends Sized
     private final TextRenderer textRenderer = new TextRenderer();
     private final TextRenderer secondTextRenderer = new TextRenderer();
     private final RenderMask mask = new RenderMask(RenderMask.MaskShape.RECT);
-
-    public SlidingText()
-    {
-        color = DEFAULT_COLOR_LIGHT;
-        textRenderer.setColor(color);
-        secondTextRenderer.setColor(color);
-    }
 
     private float xShift = 0;
     private boolean needSliding;
@@ -183,5 +177,16 @@ public class SlidingText extends Sized
             textRenderer.setX(rect.x);
             textRenderer.render();
         }
+    }
+
+    @Override
+    public void loadTheme(ThemeConfig themeConfig)
+    {
+        super.loadTheme(themeConfig);
+
+        if (scale == 0f)
+            setStyleProperty("scale", themeConfig.slidingText.scale);
+        if (color == 0)
+            setStyleProperty("color", themeConfig.slidingText.parsedColor);
     }
 }

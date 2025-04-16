@@ -8,7 +8,7 @@ public class TextRenderer implements IRenderer
 {
     public static final float DEFAULT_SCALE = 1f;
     public static final int DEFAULT_COLOR = Color.WHITE.getRGB();
-    public static final boolean DEFAULT_SHADOW = true;
+    public static final boolean DEFAULT_SHADOW = false;
 
     protected float x = 0;
     protected float y = 0;

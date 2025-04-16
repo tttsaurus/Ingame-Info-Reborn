@@ -6,18 +6,13 @@ import com.tttsaurus.ingameinfo.common.api.gui.registry.RegisterElement;
 import com.tttsaurus.ingameinfo.common.api.gui.style.CallbackInfo;
 import com.tttsaurus.ingameinfo.common.api.gui.style.StyleProperty;
 import com.tttsaurus.ingameinfo.common.api.gui.style.StylePropertyCallback;
+import com.tttsaurus.ingameinfo.common.api.gui.theme.ThemeConfig;
 import com.tttsaurus.ingameinfo.common.impl.render.renderer.TextRenderer;
 
 @RegisterElement
 public class Text extends Element
 {
     private final TextRenderer textRenderer = new TextRenderer();
-
-    public Text()
-    {
-        color = DEFAULT_COLOR_LIGHT;
-        textRenderer.setColor(color);
-    }
 
     @StylePropertyCallback
     public void textValidation(String value, CallbackInfo callbackInfo)
@@ -80,5 +75,16 @@ public class Text extends Element
     public void onRenderUpdate(boolean focused)
     {
         textRenderer.render();
+    }
+
+    @Override
+    public void loadTheme(ThemeConfig themeConfig)
+    {
+        super.loadTheme(themeConfig);
+
+        if (scale == 0f)
+            setStyleProperty("scale", themeConfig.text.scale);
+        if (color == 0)
+            setStyleProperty("color", themeConfig.text.parsedColor);
     }
 }

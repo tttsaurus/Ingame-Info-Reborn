@@ -65,11 +65,13 @@ public final class ThemeConfig
 
     public Element element = new Element();
     public Text text = new Text();
+    public SlidingText slidingText = new SlidingText();
+    public AnimText animText = new AnimText();
 
     @ConfigSerializable
     public static class Element
     {
-        @Comment("This will only be applied to elements with style property 'backgroundStyle' left empty.\n" +
+        @Comment("This will only be applied to Element with style property 'backgroundStyle' left empty.\n" +
                 "Valid values are 'box', 'box-with-outline', 'rounded-box', 'rounded-box-with-outline', 'mc-vanilla'")
         public String backgroundStyle = "";
     }
@@ -77,7 +79,36 @@ public final class ThemeConfig
     @ConfigSerializable
     public static class Text
     {
-        @Comment("In the form of hex RRGGBB or AARRGGBB.")
+        @Comment("This will only be applied to Text with style property 'scale' left empty.")
+        public float scale = 1f;
+        @Comment("This will only be applied to Text with style property 'color' left empty.\n" +
+                "In the form of hex RRGGBB or AARRGGBB.")
         public String color = "d2d2d2";
+
+        public transient int parsedColor;
+    }
+
+    @ConfigSerializable
+    public static class SlidingText
+    {
+        @Comment("This will only be applied to SlidingText with style property 'scale' left empty.")
+        public float scale = 1f;
+        @Comment("This will only be applied to SlidingText with style property 'color' left empty.\n" +
+                "In the form of hex RRGGBB or AARRGGBB.")
+        public String color = "d2d2d2";
+
+        public transient int parsedColor;
+    }
+
+    @ConfigSerializable
+    public static class AnimText
+    {
+        @Comment("This will only be applied to AnimText with style property 'scale' left empty.")
+        public float scale = 1f;
+        @Comment("This will only be applied to AnimText with style property 'color' left empty.\n" +
+                "In the form of hex RRGGBB or AARRGGBB.")
+        public String color = "d2d2d2";
+
+        public transient int parsedColor;
     }
 }

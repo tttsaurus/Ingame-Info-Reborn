@@ -16,7 +16,6 @@ import com.tttsaurus.ingameinfo.common.api.render.RenderUtils;
 import com.tttsaurus.ingameinfo.common.impl.gui.GuiResources;
 import com.tttsaurus.ingameinfo.common.impl.gui.layout.MainGroup;
 import com.tttsaurus.ingameinfo.common.impl.gui.registry.ElementRegistry;
-
 import java.awt.*;
 import java.util.HashMap;
 import java.util.Map;
@@ -53,7 +52,7 @@ public abstract class Element
 
     // theme reference
     @SuppressWarnings("all")
-    private ThemeConfig themeConfig = null;
+    protected ThemeConfig themeConfig = null;
     //</editor-fold>
 
     //<editor-fold desc="style properties">

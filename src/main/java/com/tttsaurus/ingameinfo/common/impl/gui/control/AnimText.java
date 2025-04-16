@@ -7,6 +7,7 @@ import com.tttsaurus.ingameinfo.common.api.gui.registry.RegisterElement;
 import com.tttsaurus.ingameinfo.common.api.gui.style.CallbackInfo;
 import com.tttsaurus.ingameinfo.common.api.gui.style.StyleProperty;
 import com.tttsaurus.ingameinfo.common.api.gui.style.StylePropertyCallback;
+import com.tttsaurus.ingameinfo.common.api.gui.theme.ThemeConfig;
 import com.tttsaurus.ingameinfo.common.impl.gui.style.wrapped.DoubleProperty;
 import com.tttsaurus.ingameinfo.common.impl.render.renderer.AnimTextRenderer;
 
@@ -15,12 +16,6 @@ public class AnimText extends Element
 {
     private final AnimTextRenderer animTextRenderer = new AnimTextRenderer();
     private final DoubleProperty timer = new DoubleProperty();
-
-    public AnimText()
-    {
-        color = DEFAULT_COLOR_LIGHT;
-        animTextRenderer.setColor(color);
-    }
 
     @StylePropertyCallback
     public void textAnimDefValidation(ITextAnimDef value, CallbackInfo callbackInfo)
@@ -94,5 +89,16 @@ public class AnimText extends Element
     public void onRenderUpdate(boolean focused)
     {
         animTextRenderer.render();
+    }
+
+    @Override
+    public void loadTheme(ThemeConfig themeConfig)
+    {
+        super.loadTheme(themeConfig);
+
+        if (scale == 0f)
+            setStyleProperty("scale", themeConfig.animText.scale);
+        if (color == 0)
+            setStyleProperty("color", themeConfig.animText.parsedColor);
     }
 }
