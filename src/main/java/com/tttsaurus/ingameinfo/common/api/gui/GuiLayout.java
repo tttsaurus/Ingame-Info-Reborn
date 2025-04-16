@@ -1,5 +1,6 @@
 package com.tttsaurus.ingameinfo.common.api.gui;
 
+import com.tttsaurus.ingameinfo.common.api.function.IAction_1Param;
 import com.tttsaurus.ingameinfo.common.api.gui.layout.ElementGroup;
 import com.tttsaurus.ingameinfo.common.api.gui.style.IStylePropertySetter;
 import com.tttsaurus.ingameinfo.common.api.item.GhostableItem;
@@ -128,13 +129,9 @@ public final class GuiLayout
     {
         for (ElementStyle style: styles)
         {
-            IStylePropertySetter setter = ElementRegistry.getStylePropertySetter(element.getClass(), style.name);
-            if (setter != null)
-                ElementRegistry.getStylePropertySetterWithCallbacksHandled(
-                        setter,
-                        element,
-                        ElementRegistry.getStylePropertySetterCallbackPre(setter),
-                        ElementRegistry.getStylePropertySetterCallbackPost(setter)).invoke(style.value);
+            IAction_1Param<Object> action = ElementRegistry.getStylePropertySetterFullCallback(element, style.name);
+            if (action != null)
+                action.invoke(style.value);
         }
     }
 }

@@ -66,6 +66,14 @@ public class AnimTextRenderer extends TextRenderer
         }
     }
 
+    @Override
+    public void setColor(int color)
+    {
+        super.setColor(color);
+        for (CharInfo characterInfo : characterInfos)
+            characterInfo.color = color;
+    }
+
     public CharInfo[] getCharacterInfos() { return characterInfos; }
     //</editor-fold>
 

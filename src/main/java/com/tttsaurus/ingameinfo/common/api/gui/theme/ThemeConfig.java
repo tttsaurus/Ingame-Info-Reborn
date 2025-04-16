@@ -64,6 +64,7 @@ public final class ThemeConfig
     }
 
     public Element element = new Element();
+    public Text text = new Text();
 
     @ConfigSerializable
     public static class Element
@@ -71,5 +72,12 @@ public final class ThemeConfig
         @Comment("This will only be applied to elements with style property 'backgroundStyle' left empty.\n" +
                 "Valid values are 'box', 'box-with-outline', 'rounded-box', 'rounded-box-with-outline', 'mc-vanilla'")
         public String backgroundStyle = "";
+    }
+
+    @ConfigSerializable
+    public static class Text
+    {
+        @Comment("In the form of hex RRGGBB or AARRGGBB.")
+        public String color = "d2d2d2";
     }
 }

@@ -82,7 +82,20 @@ public final class ElementRegistry
         catch (Exception e) { return null; }
     }
 
-    public static IAction_1Param<Object> getStylePropertySetterWithCallbacksHandled(
+    @Nullable
+    public static IAction_1Param<Object> getStylePropertySetterFullCallback(Element element, String propertyName)
+    {
+        IStylePropertySetter setter = ElementRegistry.getStylePropertySetter(element.getClass(), propertyName);
+        if (setter == null)
+            return null;
+        else
+            return ElementRegistry.getStylePropertySetterWithCallbacksHandled(
+                    setter,
+                    element,
+                    ElementRegistry.getStylePropertySetterCallbackPre(setter),
+                    ElementRegistry.getStylePropertySetterCallbackPost(setter));
+    }
+    private static IAction_1Param<Object> getStylePropertySetterWithCallbacksHandled(
             @Nonnull IStylePropertySetter setter,
             @Nonnull Element element,
             IStylePropertyCallbackPre setterCallbackPre,

@@ -65,13 +65,7 @@ public class VvmBinding<TView extends View>
             // viewmodel to view sync
             if (reactive.initiativeSync())
             {
-                IStylePropertyCallbackPre setterCallbackPre = ElementRegistry.getStylePropertySetterCallbackPre(stylePropertySetter);
-                IStylePropertyCallbackPost setterCallbackPost = ElementRegistry.getStylePropertySetterCallbackPost(stylePropertySetter);
-                IAction_1Param<Object> action = ElementRegistry.getStylePropertySetterWithCallbacksHandled(
-                        stylePropertySetter,
-                        element,
-                        setterCallbackPre,
-                        setterCallbackPost);
+                IAction_1Param<Object> action = ElementRegistry.getStylePropertySetterFullCallback(element, reactive.property());
                 reactiveObject.setterCallbacks.add((value) ->
                 {
                     action.invoke(value);

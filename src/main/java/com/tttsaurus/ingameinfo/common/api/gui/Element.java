@@ -1,5 +1,6 @@
 package com.tttsaurus.ingameinfo.common.api.gui;
 
+import com.tttsaurus.ingameinfo.common.api.function.IAction_1Param;
 import com.tttsaurus.ingameinfo.common.api.gui.layout.Alignment;
 import com.tttsaurus.ingameinfo.common.api.gui.layout.Padding;
 import com.tttsaurus.ingameinfo.common.api.gui.layout.Pivot;
@@ -14,6 +15,8 @@ import com.tttsaurus.ingameinfo.common.api.render.RenderHints;
 import com.tttsaurus.ingameinfo.common.api.render.RenderUtils;
 import com.tttsaurus.ingameinfo.common.impl.gui.GuiResources;
 import com.tttsaurus.ingameinfo.common.impl.gui.layout.MainGroup;
+import com.tttsaurus.ingameinfo.common.impl.gui.registry.ElementRegistry;
+
 import java.awt.*;
 import java.util.HashMap;
 import java.util.Map;
@@ -44,7 +47,7 @@ public abstract class Element
 
     private boolean needReCalc = false;
 
-    // vvm binding will inject
+    // vvm binding will inject callbacks to here
     @SuppressWarnings("all")
     private Map<String, IStylePropertySyncTo> syncToMap = new HashMap<>();
 
@@ -145,11 +148,15 @@ public abstract class Element
     public boolean drawBackground = false;
     //</editor-fold>
 
-    // sync to view model, not sync from
-    public final void sync(String stylePropertyName)
+    public final void setStyleProperty(String propertyName, Object value)
     {
-        IStylePropertySyncTo sync = syncToMap.get(stylePropertyName);
-        if (sync != null) sync.sync();
+        IAction_1Param<Object> action = ElementRegistry.getStylePropertySetterFullCallback(this, propertyName);
+        if (action != null)
+        {
+            action.invoke(value);
+            IStylePropertySyncTo sync = syncToMap.get(propertyName);
+            if (sync != null) sync.sync();
+        }
     }
 
     public void resetRenderInfo()
@@ -261,10 +268,7 @@ public abstract class Element
         if (this instanceof MainGroup) return;
 
         if (backgroundStyle.isEmpty())
-        {
-            backgroundStyle = themeConfig.element.backgroundStyle;
-            sync("backgroundStyle");
-        }
+            setStyleProperty("backgroundStyle", themeConfig.element.backgroundStyle);
     }
 
     public void renderDebugRect()
