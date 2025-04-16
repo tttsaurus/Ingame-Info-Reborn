@@ -99,6 +99,7 @@ public class ClientProxy extends CommonProxy
         //<editor-fold desc="core events">
         MinecraftForge.EVENT_BUS.register(IgiGuiLifeCycle.class);
         MinecraftForge.EVENT_BUS.register(MvvmRegisterEventHandler.class);
+        MinecraftForge.EVENT_BUS.register(ThemeRegistry.class);
         logger.info("Core event listeners registered.");
         //</editor-fold>
 

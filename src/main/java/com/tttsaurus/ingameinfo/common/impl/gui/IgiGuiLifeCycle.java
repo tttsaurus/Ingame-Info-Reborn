@@ -2,6 +2,7 @@ package com.tttsaurus.ingameinfo.common.impl.gui;
 
 import com.tttsaurus.ingameinfo.InGameInfoReborn;
 import com.tttsaurus.ingameinfo.common.api.event.IgiGuiInitEvent;
+import com.tttsaurus.ingameinfo.common.api.event.RegainScreenFocusEvent;
 import com.tttsaurus.ingameinfo.common.api.gui.IgiGuiContainer;
 import com.tttsaurus.ingameinfo.common.api.gui.delegate.placeholder.IPlaceholderDrawScreen;
 import com.tttsaurus.ingameinfo.common.api.gui.delegate.placeholder.IPlaceholderKeyTyped;
@@ -595,6 +596,10 @@ public final class IgiGuiLifeCycle
     }
     //</editor-fold>
 
+    //<editor-fold desc="screen focus">
+    private static boolean listenRegainScreenFocus = false;
+    //</editor-fold>
+
     @SubscribeEvent
     public static void onRenderGameOverlay(RenderGameOverlayEvent.Post event)
     {
@@ -749,6 +754,16 @@ public final class IgiGuiLifeCycle
                     isPlaceholderGuiOn = true;
                 }
             }
+        }
+        //</editor-fold>
+
+        //<editor-fold desc="regain screen focus event">
+        if (!Display.isActive() && !listenRegainScreenFocus)
+            listenRegainScreenFocus = true;
+        if (Display.isActive() && listenRegainScreenFocus)
+        {
+            listenRegainScreenFocus = false;
+            MinecraftForge.EVENT_BUS.post(new RegainScreenFocusEvent());
         }
         //</editor-fold>
 

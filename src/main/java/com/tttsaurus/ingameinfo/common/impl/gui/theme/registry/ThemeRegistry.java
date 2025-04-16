@@ -1,10 +1,12 @@
 package com.tttsaurus.ingameinfo.common.impl.gui.theme.registry;
 
 import com.tttsaurus.ingameinfo.InGameInfoReborn;
+import com.tttsaurus.ingameinfo.common.api.event.RegainScreenFocusEvent;
 import com.tttsaurus.ingameinfo.common.api.gui.theme.ThemeConfig;
 import com.tttsaurus.ingameinfo.common.api.gui.theme.ThemeConfigSerDesUtils;
 import com.tttsaurus.ingameinfo.common.api.gui.theme.ThemeConfigUpdater;
 import com.tttsaurus.ingameinfo.config.IgiConfig;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import java.io.File;
 import java.io.RandomAccessFile;
 import java.nio.charset.StandardCharsets;
@@ -83,7 +85,11 @@ public final class ThemeRegistry
 
                 file.close();
             }
-            catch (Exception ignored) { }
+            catch (Exception exception)
+            {
+                InGameInfoReborn.logger.error("Caught an exception when creating and loading the default theme.");
+                InGameInfoReborn.logger.throwing(exception);
+            }
 
             themeConfigs.put("default", defaultTheme);
             ThemeRegistry.defaultTheme = defaultTheme;
@@ -110,7 +116,11 @@ public final class ThemeRegistry
                     file.close();
                 }
             }
-            catch (Exception ignored) { }
+            catch (Exception exception)
+            {
+                InGameInfoReborn.logger.error("Caught an exception when creating the spotify theme.");
+                InGameInfoReborn.logger.throwing(exception);
+            }
         }
 
         File directory = new File("config/ingameinfo/themes");
@@ -150,11 +160,76 @@ public final class ThemeRegistry
                             raf.write(config.getBytes(StandardCharsets.UTF_8));
                         }
                         themeConfigs.put(themeName, updater.getConfig());
+
+                        raf.close();
                     }
                     catch (Exception exception)
                     {
-                        InGameInfoReborn.logger.error("Caught an exception when loading the theme config '" + themeName + "'");
+                        InGameInfoReborn.logger.error("Caught an exception when loading the theme config '" + themeName + "'.");
                         InGameInfoReborn.logger.throwing(exception);
+                    }
+                }
+            }
+        }
+    }
+
+    // auto-reload
+    @SubscribeEvent
+    public static void onRegainScreenFocus(RegainScreenFocusEvent event)
+    {
+        InGameInfoReborn.logger.info("Regain screen focus. Trying to reload theme configs...");
+
+        File directory = new File("config/ingameinfo/themes");
+        if (!directory.exists()) return;
+
+        File[] files = directory.listFiles();
+        if (files != null)
+        {
+            for (File file: files)
+            {
+                if (file.isFile())
+                {
+                    String[] args = file.getName().split("\\.");
+
+                    if (args.length != 2) continue;
+                    if (!args[1].equals("itheme")) continue;
+                    String themeName = args[0];
+
+                    long lastModified = file.lastModified();
+                    long fiveMinutesAgo = System.currentTimeMillis() - (5 * 60 * 1000);
+                    if (lastModified > fiveMinutesAgo)
+                    {
+                        InGameInfoReborn.logger.info("Theme config '" + themeName + "' was modified within 5 minutes. Start reloading.");
+                        try
+                        {
+                            RandomAccessFile raf = new RandomAccessFile(file, "rw");
+                            StringBuilder builder = new StringBuilder();
+
+                            String line = raf.readLine();
+                            while (line != null)
+                            {
+                                builder.append(line).append("\n");
+                                line = raf.readLine();
+                            }
+
+                            ThemeConfigUpdater updater = ThemeConfigSerDesUtils.deserialize(builder.toString());
+                            if (updater.update())
+                            {
+                                String config = ThemeConfigSerDesUtils.serialize(updater.getConfig());
+                                raf.setLength(0);
+                                raf.seek(0);
+                                raf.write(config.getBytes(StandardCharsets.UTF_8));
+                            }
+                            themeConfigs.put(themeName, updater.getConfig());
+
+                            raf.close();
+                            InGameInfoReborn.logger.info("Theme config '" + themeName + "' reloaded.");
+                        }
+                        catch (Exception exception)
+                        {
+                            InGameInfoReborn.logger.error("Caught an exception when reloading the theme config '" + themeName + "'.");
+                            InGameInfoReborn.logger.throwing(exception);
+                        }
                     }
                 }
             }
