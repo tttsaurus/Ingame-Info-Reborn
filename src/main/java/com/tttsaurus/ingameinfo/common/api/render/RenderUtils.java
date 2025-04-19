@@ -1,6 +1,5 @@
 package com.tttsaurus.ingameinfo.common.api.render;
 
-import com.tttsaurus.ingameinfo.common.impl.render.Texture2D;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.Gui;
@@ -353,6 +352,55 @@ public final class RenderUtils
     //</editor-fold>
 
     //<editor-fold desc="texture">
+    public static void renderNinePatchBorderByPixel(float x, float y, float width, float height, NinePatchBorder ninePatchBorder)
+    {
+        float ppu = RenderHints.getHint_pixelPerUnit();
+
+        float width1 = ninePatchBorder.topLeft.getWidth() / ppu;
+        float height1 = ninePatchBorder.topLeft.getHeight() / ppu;
+        renderTexture2D(x, y, width1, height1, ninePatchBorder.topLeft);
+
+        float width2 = ninePatchBorder.topRight.getWidth() / ppu;
+        float height2 = ninePatchBorder.topRight.getHeight() / ppu;
+        renderTexture2D(x + width - width2, y, width2, height2, ninePatchBorder.topRight);
+
+        if (width - width1 - width2 > 0)
+        {
+            float height3 = ninePatchBorder.topCenter.getHeight() / ppu;
+            renderTexture2D(x + width1, y, width - width1 - width2, height3, ninePatchBorder.topCenter);
+        }
+
+        float width4 = ninePatchBorder.bottomLeft.getWidth() / ppu;
+        float height4 = ninePatchBorder.bottomLeft.getHeight() / ppu;
+        renderTexture2D(x, y + height - height4, width4, height4, ninePatchBorder.bottomLeft);
+
+        float width5 = ninePatchBorder.bottomRight.getWidth() / ppu;
+        float height5 = ninePatchBorder.bottomRight.getHeight() / ppu;
+        renderTexture2D(x + width - width5, y + height - height5, width5, height5, ninePatchBorder.bottomRight);
+
+        if (width - width4 - width5 > 0)
+        {
+            float height6 = ninePatchBorder.bottomCenter.getHeight() / ppu;
+            renderTexture2D(x + width4, y + height - height6, width - width4 - width5, height6, ninePatchBorder.bottomCenter);
+        }
+
+        if (height - height1 - height4 > 0)
+        {
+            float width7 = ninePatchBorder.centerLeft.getWidth() / ppu;
+            renderTexture2D(x, y + height1, width7, height - height1 - height4, ninePatchBorder.centerLeft);
+        }
+
+        if (height - height2 - height5 > 0)
+        {
+            float width8 = ninePatchBorder.centerRight.getWidth() / ppu;
+            renderTexture2D(x + width - width8, y + height2, width8, height - height2 - height5, ninePatchBorder.centerRight);
+        }
+
+        if (width - width1 - width2 > 0 && height - height1 - height4 > 0)
+        {
+            renderTexture2D(x + width1, y + height1, width - width1 - width2, height - height1 - height4, ninePatchBorder.center);
+        }
+    }
     public static void renderTexture2D(float x, float y, float width, float height, Texture2D texture2D)
     {
         renderTexture2D(x, y, width, height, texture2D.getWidth(), texture2D.getHeight(), texture2D.getGlTextureID());

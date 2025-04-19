@@ -6,7 +6,7 @@ import com.tttsaurus.ingameinfo.common.api.gui.style.CallbackInfo;
 import com.tttsaurus.ingameinfo.common.api.gui.style.StyleProperty;
 import com.tttsaurus.ingameinfo.common.api.gui.style.StylePropertyCallback;
 import com.tttsaurus.ingameinfo.common.api.gui.theme.ThemeConfig;
-import com.tttsaurus.ingameinfo.common.impl.render.RenderMask;
+import com.tttsaurus.ingameinfo.common.api.render.RenderMask;
 import com.tttsaurus.ingameinfo.common.impl.render.renderer.TextRenderer;
 
 @RegisterElement

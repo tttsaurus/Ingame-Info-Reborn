@@ -11,7 +11,6 @@ import com.tttsaurus.ingameinfo.common.api.gui.style.IStylePropertySyncTo;
 import com.tttsaurus.ingameinfo.common.api.gui.style.StylePropertyCallback;
 import com.tttsaurus.ingameinfo.common.api.gui.style.StyleProperty;
 import com.tttsaurus.ingameinfo.common.api.gui.theme.ThemeConfig;
-import com.tttsaurus.ingameinfo.common.api.render.RenderHints;
 import com.tttsaurus.ingameinfo.common.api.render.RenderUtils;
 import com.tttsaurus.ingameinfo.common.impl.gui.GuiResources;
 import com.tttsaurus.ingameinfo.common.impl.gui.layout.MainGroup;
@@ -206,55 +205,7 @@ public abstract class Element
                 RenderUtils.renderRoundedRect(rect.x, rect.y, rect.width, rect.height, themeConfig.backgroundStyles.roundedBoxWithOutline.cornerRadius, themeConfig.backgroundStyles.roundedBoxWithOutline.parsedColor);
                 RenderUtils.renderRoundedRectOutline(rect.x, rect.y, rect.width, rect.height, themeConfig.backgroundStyles.roundedBoxWithOutline.cornerRadius, 1.0f, themeConfig.backgroundStyles.roundedBoxWithOutline.parsedOutlineColor);
             }
-            case "mc-vanilla" ->
-            {
-                float ppu = RenderHints.getHint_pixelPerUnit();
-
-                float width1 = GuiResources.mcVanillaBgTopLeft.getWidth() / ppu;
-                float height1 = GuiResources.mcVanillaBgTopLeft.getHeight() / ppu;
-                RenderUtils.renderTexture2D(rect.x, rect.y, width1, height1, GuiResources.mcVanillaBgTopLeft);
-
-                float width2 = GuiResources.mcVanillaBgTopRight.getWidth() / ppu;
-                float height2 = GuiResources.mcVanillaBgTopRight.getHeight() / ppu;
-                RenderUtils.renderTexture2D(rect.x + rect.width - width2, rect.y, width2, height2, GuiResources.mcVanillaBgTopRight);
-
-                if (rect.width - width1 - width2 > 0)
-                {
-                    float height3 = GuiResources.mcVanillaBgTopCenter.getHeight() / ppu;
-                    RenderUtils.renderTexture2D(rect.x + width1, rect.y, rect.width - width1 - width2, height3, GuiResources.mcVanillaBgTopCenter);
-                }
-
-                float width4 = GuiResources.mcVanillaBgBottomLeft.getWidth() / ppu;
-                float height4 = GuiResources.mcVanillaBgBottomLeft.getHeight() / ppu;
-                RenderUtils.renderTexture2D(rect.x, rect.y + rect.height - height4, width4, height4, GuiResources.mcVanillaBgBottomLeft);
-
-                float width5 = GuiResources.mcVanillaBgBottomRight.getWidth() / ppu;
-                float height5 = GuiResources.mcVanillaBgBottomRight.getHeight() / ppu;
-                RenderUtils.renderTexture2D(rect.x + rect.width - width5, rect.y + rect.height - height5, width5, height5, GuiResources.mcVanillaBgBottomRight);
-
-                if (rect.width - width4 - width5 > 0)
-                {
-                    float height6 = GuiResources.mcVanillaBgBottomCenter.getHeight() / ppu;
-                    RenderUtils.renderTexture2D(rect.x + width4, rect.y + rect.height - height6, rect.width - width4 - width5, height6, GuiResources.mcVanillaBgBottomCenter);
-                }
-
-                if (rect.height - height1 - height4 > 0)
-                {
-                    float width7 = GuiResources.mcVanillaBgCenterLeft.getWidth() / ppu;
-                    RenderUtils.renderTexture2D(rect.x, rect.y + height1, width7, rect.height - height1 - height4, GuiResources.mcVanillaBgCenterLeft);
-                }
-
-                if (rect.height - height2 - height5 > 0)
-                {
-                    float width8 = GuiResources.mcVanillaBgCenterRight.getWidth() / ppu;
-                    RenderUtils.renderTexture2D(rect.x + rect.width - width8, rect.y + height2, width8, rect.height - height2 - height5, GuiResources.mcVanillaBgCenterRight);
-                }
-
-                if (rect.width - width1 - width2 > 0 && rect.height - height1 - height4 > 0)
-                {
-                    RenderUtils.renderTexture2D(rect.x + width1, rect.y + height1, rect.width - width1 - width2, rect.height - height1 - height4, GuiResources.mcVanillaBgCenter);
-                }
-            }
+            case "mc-vanilla" -> RenderUtils.renderNinePatchBorderByPixel(rect.x, rect.y, rect.width, rect.height, GuiResources.mcVanillaBg);
         }
     }
 

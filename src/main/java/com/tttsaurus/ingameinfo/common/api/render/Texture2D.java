@@ -1,8 +1,5 @@
-package com.tttsaurus.ingameinfo.common.impl.render;
+package com.tttsaurus.ingameinfo.common.api.render;
 
-import com.tttsaurus.ingameinfo.common.api.render.GlResourceManager;
-import com.tttsaurus.ingameinfo.common.api.render.IGlDisposable;
-import com.tttsaurus.ingameinfo.common.api.render.RenderHints;
 import net.minecraft.client.renderer.GlStateManager;
 import org.lwjgl.opengl.GL11;
 import java.nio.ByteBuffer;

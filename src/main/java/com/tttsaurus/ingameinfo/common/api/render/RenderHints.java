@@ -1,7 +1,6 @@
 package com.tttsaurus.ingameinfo.common.api.render;
 
 import com.tttsaurus.ingameinfo.common.impl.gui.IgiGuiLifeCycle;
-import com.tttsaurus.ingameinfo.common.impl.render.Texture2D;
 import org.lwjgl.opengl.GL11;
 
 public final class RenderHints

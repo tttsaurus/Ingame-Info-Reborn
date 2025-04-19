@@ -1,7 +1,6 @@
-package com.tttsaurus.ingameinfo.common.impl.render;
+package com.tttsaurus.ingameinfo.common.api.render;
 
 import com.tttsaurus.ingameinfo.common.api.function.IAction;
-import com.tttsaurus.ingameinfo.common.api.render.RenderUtils;
 import org.lwjgl.opengl.GL11;
 import java.util.*;
 

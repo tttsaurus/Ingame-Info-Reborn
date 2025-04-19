@@ -5,7 +5,7 @@ import com.tttsaurus.ingameinfo.common.api.gui.registry.RegisterElement;
 import com.tttsaurus.ingameinfo.common.api.gui.style.CallbackInfo;
 import com.tttsaurus.ingameinfo.common.api.gui.style.StyleProperty;
 import com.tttsaurus.ingameinfo.common.api.render.RenderUtils;
-import com.tttsaurus.ingameinfo.common.impl.render.RenderMask;
+import com.tttsaurus.ingameinfo.common.api.render.RenderMask;
 
 @RegisterElement
 public class ProgressBar extends Sized

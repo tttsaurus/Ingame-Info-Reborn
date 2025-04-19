@@ -2,7 +2,8 @@ package com.tttsaurus.ingameinfo.common.impl.gui;
 
 import com.tttsaurus.ingameinfo.common.api.render.RenderHints;
 import com.tttsaurus.ingameinfo.common.api.render.RenderUtils;
-import com.tttsaurus.ingameinfo.common.impl.render.Texture2D;
+import com.tttsaurus.ingameinfo.common.api.render.NinePatchBorder;
+import com.tttsaurus.ingameinfo.common.api.render.Texture2D;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.IResource;
 import net.minecraft.util.ResourceLocation;
@@ -13,15 +14,7 @@ import java.io.InputStream;
 
 public final class GuiResources
 {
-    public static Texture2D mcVanillaBgTopLeft;
-    public static Texture2D mcVanillaBgTopCenter;
-    public static Texture2D mcVanillaBgTopRight;
-    public static Texture2D mcVanillaBgCenterLeft;
-    public static Texture2D mcVanillaBgCenter;
-    public static Texture2D mcVanillaBgCenterRight;
-    public static Texture2D mcVanillaBgBottomLeft;
-    public static Texture2D mcVanillaBgBottomCenter;
-    public static Texture2D mcVanillaBgBottomRight;
+    public static NinePatchBorder mcVanillaBg;
 
     @Nullable
     private static BufferedImage getBufferedImageFromRl(ResourceLocation rl)
@@ -40,6 +33,16 @@ public final class GuiResources
     {
         Texture2D.FilterMode hint = RenderHints.getHint_Texture2D$FilterMode();
         RenderHints.texture2dNearestFilter();
+
+        Texture2D mcVanillaBgTopLeft = null;
+        Texture2D mcVanillaBgTopCenter = null;
+        Texture2D mcVanillaBgTopRight = null;
+        Texture2D mcVanillaBgCenterLeft = null;
+        Texture2D mcVanillaBgCenter = null;
+        Texture2D mcVanillaBgCenterRight = null;
+        Texture2D mcVanillaBgBottomLeft = null;
+        Texture2D mcVanillaBgBottomCenter = null;
+        Texture2D mcVanillaBgBottomRight = null;
 
         BufferedImage image = getBufferedImageFromRl(new ResourceLocation("ingameinfo:gui/background/vanilla/top_left.png"));
         if (image != null)
@@ -78,5 +81,16 @@ public final class GuiResources
             mcVanillaBgBottomRight = RenderUtils.createTexture2D(image);
 
         RenderHints.setHint_Texture2D$FilterMode(hint);
+
+        mcVanillaBg = new NinePatchBorder(
+                mcVanillaBgTopLeft,
+                mcVanillaBgTopCenter,
+                mcVanillaBgTopRight,
+                mcVanillaBgCenterLeft,
+                mcVanillaBgCenter,
+                mcVanillaBgCenterRight,
+                mcVanillaBgBottomLeft,
+                mcVanillaBgBottomCenter,
+                mcVanillaBgBottomRight);
     }
 }
