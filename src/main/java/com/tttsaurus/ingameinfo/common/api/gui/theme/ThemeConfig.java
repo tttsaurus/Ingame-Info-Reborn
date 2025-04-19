@@ -17,6 +17,7 @@ public final class ThemeConfig
         public BoxWithOutline boxWithOutline = new BoxWithOutline();
         public RoundedBox roundedBox = new RoundedBox();
         public RoundedBoxWithOutline roundedBoxWithOutline = new RoundedBoxWithOutline();
+        public McVanilla mcVanilla = new McVanilla();
 
         @ConfigSerializable
         public static class Box
@@ -60,6 +61,13 @@ public final class ThemeConfig
 
             public transient int parsedColor;
             public transient int parsedOutlineColor;
+        }
+
+        @ConfigSerializable
+        public static class McVanilla
+        {
+            @Comment("The transparency of the background. Range: 0.0 to 1.0")
+            public float alpha = 1f;
         }
     }
 

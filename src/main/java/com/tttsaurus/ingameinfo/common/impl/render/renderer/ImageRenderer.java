@@ -76,6 +76,6 @@ public class ImageRenderer implements IRenderer
         if (texture == null) return;
         if (!texture.getIsGlBounded()) return;
 
-        RenderUtils.renderTexture2D(x, y, width, height, texture);
+        RenderUtils.renderTexture2D(x, y, width, height, texture.getGlTextureID());
     }
 }

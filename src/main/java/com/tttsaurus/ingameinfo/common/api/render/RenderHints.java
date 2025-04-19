@@ -40,6 +40,7 @@ public final class RenderHints
     private static Framebuffer.FramebufferClearHint hint_Framebuffer$FramebufferClearHint = Framebuffer.FramebufferClearHint.UNBIND_FBO;
     private static int hint_Framebuffer$FramebufferSampleNum = 2;
     private static Texture2D.FilterMode hint_Texture2D$FilterMode = Texture2D.FilterMode.LINEAR;
+    private static Texture2D.WrapMode hint_Texture2D$WrapMode = Texture2D.WrapMode.CLAMP;
     // per unit scaled resolution
     private static float hint_pixelPerUnit = 1f;
     //</editor-fold>
@@ -83,6 +84,26 @@ public final class RenderHints
     {
         hint_Texture2D$FilterMode = Texture2D.FilterMode.NEAREST;
     }
+    public static void texture2dRepeatWrap()
+    {
+        hint_Texture2D$WrapMode = Texture2D.WrapMode.REPEAT;
+    }
+    public static void texture2dClampWrap()
+    {
+        hint_Texture2D$WrapMode = Texture2D.WrapMode.CLAMP;
+    }
+    public static void texture2dClampToEdgeWrap()
+    {
+        hint_Texture2D$WrapMode = Texture2D.WrapMode.CLAMP_TO_EDGE;
+    }
+    public static void texture2dClampToBorderWrap()
+    {
+        hint_Texture2D$WrapMode = Texture2D.WrapMode.CLAMP_TO_BORDER;
+    }
+    public static void texture2dMirroredRepeatWrap()
+    {
+        hint_Texture2D$WrapMode = Texture2D.WrapMode.MIRRORED_REPEAT;
+    }
     public static void pixelPerUnit(float pixel)
     {
         hint_pixelPerUnit = pixel;
@@ -110,6 +131,10 @@ public final class RenderHints
     {
         hint_Texture2D$FilterMode = hint;
     }
+    public static void setHint_Texture2D$WrapMode(Texture2D.WrapMode hint)
+    {
+        hint_Texture2D$WrapMode = hint;
+    }
     public static void setHint_pixelPerUnit(float pixel)
     {
         hint_pixelPerUnit = pixel;
@@ -122,6 +147,7 @@ public final class RenderHints
     public static Framebuffer.FramebufferClearHint getHint_Framebuffer$FramebufferClearHint() { return hint_Framebuffer$FramebufferClearHint; }
     public static int getHint_Framebuffer$FramebufferSampleNum() { return hint_Framebuffer$FramebufferSampleNum; }
     public static Texture2D.FilterMode getHint_Texture2D$FilterMode() { return hint_Texture2D$FilterMode; }
+    public static Texture2D.WrapMode getHint_Texture2D$WrapMode() { return hint_Texture2D$WrapMode; }
     public static float getHint_pixelPerUnit() { return hint_pixelPerUnit; }
 
     public static boolean getHint_LineSmoothHint() { return !IgiGuiLifeCycle.getEnableFbo() || IgiGuiLifeCycle.getEnableMultisampleOnFbo(); }

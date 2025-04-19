@@ -31,8 +31,11 @@ public final class GuiResources
 
     public static void init()
     {
-        Texture2D.FilterMode hint = RenderHints.getHint_Texture2D$FilterMode();
+        Texture2D.FilterMode filterMode = RenderHints.getHint_Texture2D$FilterMode();
+        Texture2D.WrapMode wrapMode = RenderHints.getHint_Texture2D$WrapMode();
+
         RenderHints.texture2dNearestFilter();
+        RenderHints.texture2dRepeatWrap();
 
         Texture2D mcVanillaBgTopLeft = null;
         Texture2D mcVanillaBgTopCenter = null;
@@ -80,7 +83,8 @@ public final class GuiResources
         if (image != null)
             mcVanillaBgBottomRight = RenderUtils.createTexture2D(image);
 
-        RenderHints.setHint_Texture2D$FilterMode(hint);
+        RenderHints.setHint_Texture2D$FilterMode(filterMode);
+        RenderHints.setHint_Texture2D$WrapMode(wrapMode);
 
         mcVanillaBg = new NinePatchBorder(
                 mcVanillaBgTopLeft,
