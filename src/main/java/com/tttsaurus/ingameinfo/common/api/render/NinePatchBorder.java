@@ -2,17 +2,37 @@ package com.tttsaurus.ingameinfo.common.api.render;
 
 public class NinePatchBorder
 {
-    public Texture2D topLeft;
-    public Texture2D topCenter;
-    public Texture2D topRight;
+    public static class Patch
+    {
+        public Texture2D tex;
+        public float width;
+        public float height;
 
-    public Texture2D centerLeft;
-    public Texture2D center;
-    public Texture2D centerRight;
+        public Patch(Texture2D tex, float width, float height)
+        {
+            this.tex = tex;
+            this.width = width;
+            this.height = height;
+        }
+        public Patch(Texture2D tex)
+        {
+            this.tex = tex;
+            width = 0f;
+            height = 0f;
+        }
+    }
 
-    public Texture2D bottomLeft;
-    public Texture2D bottomCenter;
-    public Texture2D bottomRight;
+    public Patch topLeft;
+    public Patch topCenter;
+    public Patch topRight;
+
+    public Patch centerLeft;
+    public Patch center;
+    public Patch centerRight;
+
+    public Patch bottomLeft;
+    public Patch bottomCenter;
+    public Patch bottomRight;
 
     public NinePatchBorder(Texture2D topLeft,
                            Texture2D topCenter,
@@ -23,6 +43,27 @@ public class NinePatchBorder
                            Texture2D bottomLeft,
                            Texture2D bottomCenter,
                            Texture2D bottomRight)
+    {
+        this.topLeft = new Patch(topLeft);
+        this.topCenter = new Patch(topCenter);
+        this.topRight = new Patch(topRight);
+        this.centerLeft = new Patch(centerLeft);
+        this.center = new Patch(center);
+        this.centerRight = new Patch(centerRight);
+        this.bottomLeft = new Patch(bottomLeft);
+        this.bottomCenter = new Patch(bottomCenter);
+        this.bottomRight = new Patch(bottomRight);
+    }
+
+    public NinePatchBorder(Patch topLeft,
+                           Patch topCenter,
+                           Patch topRight,
+                           Patch centerLeft,
+                           Patch center,
+                           Patch centerRight,
+                           Patch bottomLeft,
+                           Patch bottomCenter,
+                           Patch bottomRight)
     {
         this.topLeft = topLeft;
         this.topCenter = topCenter;
