@@ -540,6 +540,12 @@ public final class IgiGuiLifeCycle
     private static int shadeModel = 0;
     private static boolean depthTest = false;
     private static boolean cullFace = false;
+    private static int blendSrcRgb;
+    private static int blendDstRgb;
+    private static int blendSrcAlpha;
+    private static int blendDstAlpha;
+    private static int alphaFunc;
+    private static float alphaRef;
 
     private static final IntBuffer intBuffer = ByteBuffer.allocateDirect(16 << 2).order(ByteOrder.nativeOrder()).asIntBuffer();
     private static final FloatBuffer floatBuffer = ByteBuffer.allocateDirect(16 << 2).order(ByteOrder.nativeOrder()).asFloatBuffer();
@@ -563,9 +569,23 @@ public final class IgiGuiLifeCycle
         shadeModel = intBuffer.get(0);
         depthTest = GL11.glIsEnabled(GL11.GL_DEPTH_TEST);
         cullFace = GL11.glIsEnabled(GL11.GL_CULL_FACE);
+        GL11.glGetInteger(GL14.GL_BLEND_SRC_RGB, intBuffer);
+        blendSrcRgb = intBuffer.get(0);
+        GL11.glGetInteger(GL14.GL_BLEND_DST_RGB, intBuffer);
+        blendDstRgb = intBuffer.get(0);
+        GL11.glGetInteger(GL14.GL_BLEND_SRC_ALPHA, intBuffer);
+        blendSrcAlpha = intBuffer.get(0);
+        GL11.glGetInteger(GL14.GL_BLEND_DST_ALPHA, intBuffer);
+        blendDstAlpha = intBuffer.get(0);
+        GL11.glGetInteger(GL11.GL_ALPHA_TEST_FUNC, intBuffer);
+        alphaFunc = intBuffer.get(0);
+        GL11.glGetFloat(GL11.GL_ALPHA_TEST_REF, floatBuffer);
+        alphaRef = floatBuffer.get(0);
     }
     private static void restoreCommonGlStates()
     {
+        GlStateManager.alphaFunc(alphaFunc, alphaRef);
+        GlStateManager.tryBlendFuncSeparate(blendSrcRgb, blendDstRgb, blendSrcAlpha, blendDstAlpha);
         if (cullFace)
             GlStateManager.enableCull();
         else
