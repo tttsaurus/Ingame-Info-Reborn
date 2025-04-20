@@ -34,13 +34,29 @@ public final class ThemeConfigUpdater
         config.text.parsedColor = parseColor(config.text.color);
         config.slidingText.parsedColor = parseColor(config.slidingText.color);
         config.animText.parsedColor = parseColor(config.animText.color);
+
+        config.progressBar.parsedFillerColor = parseColor(config.progressBar.fillerColor);
+        config.progressBar.parsedBackgroundColor = parseColor(config.progressBar.backgroundColor);
+        config.progressBar.parsedOutlineColor = parseColor(config.progressBar.outlineColor);
+
+        config.button.parsedDefaultColor = parseColor(config.button.defaultColor);
+        config.button.parsedHoverColor = parseColor(config.button.hoverColor);
+        config.button.parsedHoldColor = parseColor(config.button.holdColor);
     }
 
-    public ThemeConfig getConfig()
+    private void validate()
     {
-        parse();
-        return config;
+        config.backgroundStyles.roundedBox.cornerRadius = Math.max(0f, config.backgroundStyles.roundedBox.cornerRadius);
+        config.backgroundStyles.roundedBoxWithOutline.cornerRadius = Math.max(0f, config.backgroundStyles.roundedBoxWithOutline.cornerRadius);
+        config.backgroundStyles.mcVanilla.alpha = Math.min(1f, Math.max(0f, config.backgroundStyles.mcVanilla.alpha));
+        config.text.scale = Math.max(0f, config.text.scale);
+        config.slidingText.scale = Math.max(0f, config.slidingText.scale);
+        config.animText.scale = Math.max(0f, config.animText.scale);
+        config.image.cornerRadius = Math.max(0f, config.image.cornerRadius);
+        config.urlImage.cornerRadius = Math.max(0f, config.urlImage.cornerRadius);
     }
+
+    public ThemeConfig getConfig() { return config; }
     public int getVersion() { return version; }
 
     public ThemeConfigUpdater(ThemeConfig config, int version, ConfigurationNode root)
@@ -59,6 +75,10 @@ public final class ThemeConfigUpdater
             return true;
         }
         else
+        {
+            parse();
+            validate();
             return false;
+        }
     }
 }

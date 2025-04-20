@@ -59,6 +59,7 @@ public final class ThemeRegistry
                 {
                     String config = ThemeConfigSerDesUtils.serialize(new ThemeConfig());
                     file.write(config.getBytes(StandardCharsets.UTF_8));
+                    builder.append(config);
                 }
                 else
                 {
@@ -70,18 +71,15 @@ public final class ThemeRegistry
                     }
                 }
 
-                if (!writeDefault)
+                ThemeConfigUpdater updater = ThemeConfigSerDesUtils.deserialize(builder.toString());
+                if (updater.update())
                 {
-                    ThemeConfigUpdater updater = ThemeConfigSerDesUtils.deserialize(builder.toString());
-                    if (updater.update())
-                    {
-                        String config = ThemeConfigSerDesUtils.serialize(updater.getConfig());
-                        file.setLength(0);
-                        file.seek(0);
-                        file.write(config.getBytes(StandardCharsets.UTF_8));
-                    }
-                    defaultTheme = updater.getConfig();
+                    String config = ThemeConfigSerDesUtils.serialize(updater.getConfig());
+                    file.setLength(0);
+                    file.seek(0);
+                    file.write(config.getBytes(StandardCharsets.UTF_8));
                 }
+                defaultTheme = updater.getConfig();
 
                 file.close();
             }

@@ -43,7 +43,7 @@ public class Image extends Sized
         super.calcRenderPos(contextRect);
         imageRenderer.setX(rect.x);
         imageRenderer.setY(rect.y);
-        mask.setRoundedRectMask(rect.x, rect.y, rect.width, rect.height, 3f);
+        mask.setRoundedRectMask(rect.x, rect.y, rect.width, rect.height, themeConfig.image.cornerRadius);
     }
 
     @Override

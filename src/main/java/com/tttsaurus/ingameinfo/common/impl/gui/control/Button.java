@@ -9,26 +9,25 @@ import com.tttsaurus.ingameinfo.common.api.gui.registry.RegisterElement;
 import com.tttsaurus.ingameinfo.common.api.gui.style.CallbackInfo;
 import com.tttsaurus.ingameinfo.common.api.gui.style.StyleProperty;
 import com.tttsaurus.ingameinfo.common.api.gui.style.StylePropertyCallback;
+import com.tttsaurus.ingameinfo.common.api.gui.theme.ThemeConfig;
 import com.tttsaurus.ingameinfo.common.api.render.RenderUtils;
-import com.tttsaurus.ingameinfo.common.impl.gui.style.wrapped.IntProperty;
 import com.tttsaurus.ingameinfo.common.impl.render.renderer.TextRenderer;
 
 @RegisterElement
-public class SimpleButton extends AbstractButton
+public class Button extends AbstractButton
 {
     private final TextRenderer textRenderer = new TextRenderer();
 
-    @StyleProperty
-    public IntProperty currentColor = new IntProperty();
+    private int currentColor;
 
     @StyleProperty
-    public IntProperty defaultColor = new IntProperty();
+    public int defaultColor;
 
     @StyleProperty
-    public IntProperty hoverColor = new IntProperty();
+    public int hoverColor;
 
     @StyleProperty
-    public IntProperty holdColor = new IntProperty();
+    public int holdColor;
 
     @StylePropertyCallback
     public void textValidation(String value, CallbackInfo callbackInfo)
@@ -46,37 +45,35 @@ public class SimpleButton extends AbstractButton
     @StyleProperty(setterCallbackPost = "setTextCallback", setterCallbackPre = "textValidation")
     public String text;
 
-    public SimpleButton()
+    public Button()
     {
-        defaultColor.set(DEFAULT_COLOR_DARK);
-        hoverColor.set(DEFAULT_COLOR_LIGHT);
-        holdColor.set(DEFAULT_COLOR_DARKER);
-        currentColor.set(defaultColor.get());
-
         addListener(new IMouseEnterButton()
         {
             @Override
-            public void enter() { currentColor.set(hoverColor.get()); }
+            public void enter()
+            {
+                currentColor = hoverColor;
+            }
         }).addListener(new IMousePressButton()
         {
             @Override
             public void press()
             {
-                currentColor.set(holdColor.get());
+                currentColor = holdColor;
             }
         }).addListener(new IMouseLeaveButton()
         {
             @Override
             public void leave()
             {
-                currentColor.set(defaultColor.get());
+                currentColor = defaultColor;
             }
         }).addListener(new IMouseReleaseButton()
         {
             @Override
             public void release()
             {
-                currentColor.set(defaultColor.get());
+                currentColor = defaultColor;
             }
         });
     }
@@ -93,8 +90,23 @@ public class SimpleButton extends AbstractButton
     public void onRenderUpdate(boolean focused)
     {
         super.onRenderUpdate(focused);
-        textRenderer.setColor(currentColor.get());
+        textRenderer.setColor(currentColor);
         textRenderer.render();
-        RenderUtils.renderRoundedRectOutline(rect.x, rect.y, rect.width, rect.height, 5f, 1f, currentColor.get());
+        RenderUtils.renderRoundedRectOutline(rect.x, rect.y, rect.width, rect.height, 5f, 1f, currentColor);
+    }
+
+    @Override
+    public void loadTheme(ThemeConfig themeConfig)
+    {
+        super.loadTheme(themeConfig);
+
+        if (defaultColor == 0)
+            setStyleProperty("defaultColor", themeConfig.button.parsedDefaultColor);
+        if (hoverColor == 0)
+            setStyleProperty("hoverColor", themeConfig.button.parsedHoverColor);
+        if (holdColor == 0)
+            setStyleProperty("holdColor", themeConfig.button.parsedHoldColor);
+
+        currentColor = defaultColor;
     }
 }

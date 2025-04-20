@@ -36,7 +36,7 @@ public class UrlImage extends Sized
         super.calcRenderPos(contextRect);
         urlImageRenderer.setX(rect.x);
         urlImageRenderer.setY(rect.y);
-        mask.setRoundedRectMask(rect.x, rect.y, rect.width, rect.height, 3f);
+        mask.setRoundedRectMask(rect.x, rect.y, rect.width, rect.height, themeConfig.urlImage.cornerRadius);
     }
 
     @Override

@@ -4,6 +4,7 @@ import com.tttsaurus.ingameinfo.common.api.gui.layout.Rect;
 import com.tttsaurus.ingameinfo.common.api.gui.registry.RegisterElement;
 import com.tttsaurus.ingameinfo.common.api.gui.style.CallbackInfo;
 import com.tttsaurus.ingameinfo.common.api.gui.style.StyleProperty;
+import com.tttsaurus.ingameinfo.common.api.gui.theme.ThemeConfig;
 import com.tttsaurus.ingameinfo.common.api.render.RenderUtils;
 import com.tttsaurus.ingameinfo.common.api.render.RenderMask;
 
@@ -13,13 +14,13 @@ public class ProgressBar extends Sized
     private final RenderMask mask = new RenderMask(RenderMask.MaskShape.ROUNDED_RECT);
 
     @StyleProperty
-    public int fillerColor = DEFAULT_COLOR_LIGHT;
+    public int fillerColor;
 
     @StyleProperty
-    public int backgroundColor = DEFAULT_COLOR_DARK;
+    public int backgroundColor;
 
     @StyleProperty
-    public int outlineColor = DEFAULT_COLOR_DARKER;
+    public int outlineColor;
 
     public void percentageValidation(float value, CallbackInfo callbackInfo)
     {
@@ -54,5 +55,18 @@ public class ProgressBar extends Sized
             mask.endMasking();
         }
         RenderUtils.renderRoundedRectOutline(rect.x, rect.y, rect.width, rect.height, rect.height / 2f, 1.0f, outlineColor);
+    }
+
+    @Override
+    public void loadTheme(ThemeConfig themeConfig)
+    {
+        super.loadTheme(themeConfig);
+
+        if (fillerColor == 0)
+            setStyleProperty("fillerColor", themeConfig.progressBar.parsedFillerColor);
+        if (backgroundColor == 0)
+            setStyleProperty("backgroundColor", themeConfig.progressBar.parsedBackgroundColor);
+        if (outlineColor == 0)
+            setStyleProperty("outlineColor", themeConfig.progressBar.parsedOutlineColor);
     }
 }

@@ -27,7 +27,7 @@ public class SpotifyView extends View
                            <ProgressBar uid = "progressBar" width = 50 height = 3 padding = {"left": 5, "right": 5}>
                        </Group>
                    </Group>
-                   <SimpleButton uid = "editButton" text = "Switch Layout" padding = {"top": 5} enabled = false>
+                   <Button uid = "editButton" text = "Switch Layout" padding = {"top": 5} enabled = false>
                </Group>
                """;
     }

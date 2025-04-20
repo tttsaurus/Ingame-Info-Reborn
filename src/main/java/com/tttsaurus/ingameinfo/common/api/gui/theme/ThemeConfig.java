@@ -22,7 +22,7 @@ public final class ThemeConfig
         @ConfigSerializable
         public static class Box
         {
-            @Comment("In the form of hex RRGGBB or AARRGGBB.")
+            @Comment("In the form of hex rrggbb or aarrggbb.")
             public String color = "383838";
 
             public transient int parsedColor;
@@ -31,9 +31,9 @@ public final class ThemeConfig
         @ConfigSerializable
         public static class BoxWithOutline
         {
-            @Comment("In the form of hex RRGGBB or AARRGGBB.")
+            @Comment("In the form of hex rrggbb or aarrggbb.")
             public String color = "383838";
-            @Comment("In the form of hex RRGGBB or AARRGGBB.")
+            @Comment("In the form of hex rrggbb or aarrggbb.")
             public String outlineColor = "232323";
 
             public transient int parsedColor;
@@ -43,7 +43,7 @@ public final class ThemeConfig
         @ConfigSerializable
         public static class RoundedBox
         {
-            @Comment("In the form of hex RRGGBB or AARRGGBB.")
+            @Comment("In the form of hex rrggbb or aarrggbb.")
             public String color = "383838";
             public float cornerRadius = 3f;
 
@@ -53,9 +53,9 @@ public final class ThemeConfig
         @ConfigSerializable
         public static class RoundedBoxWithOutline
         {
-            @Comment("In the form of hex RRGGBB or AARRGGBB.")
+            @Comment("In the form of hex rrggbb or aarrggbb.")
             public String color = "383838";
-            @Comment("In the form of hex RRGGBB or AARRGGBB.")
+            @Comment("In the form of hex rrggbb or aarrggbb.")
             public String outlineColor = "232323";
             public float cornerRadius = 3f;
 
@@ -75,6 +75,10 @@ public final class ThemeConfig
     public Text text = new Text();
     public SlidingText slidingText = new SlidingText();
     public AnimText animText = new AnimText();
+    public Image image = new Image();
+    public UrlImage urlImage = new UrlImage();
+    public ProgressBar progressBar = new ProgressBar();
+    public Button button = new Button();
 
     @ConfigSerializable
     public static class Element
@@ -90,7 +94,7 @@ public final class ThemeConfig
         @Comment("This will only be applied to Text with style property 'scale' left empty.")
         public float scale = 1f;
         @Comment("This will only be applied to Text with style property 'color' left empty.\n" +
-                "In the form of hex RRGGBB or AARRGGBB.")
+                "In the form of hex rrggbb or aarrggbb.")
         public String color = "d2d2d2";
 
         public transient int parsedColor;
@@ -102,7 +106,7 @@ public final class ThemeConfig
         @Comment("This will only be applied to SlidingText with style property 'scale' left empty.")
         public float scale = 1f;
         @Comment("This will only be applied to SlidingText with style property 'color' left empty.\n" +
-                "In the form of hex RRGGBB or AARRGGBB.")
+                "In the form of hex rrggbb or aarrggbb.")
         public String color = "d2d2d2";
 
         public transient int parsedColor;
@@ -114,9 +118,57 @@ public final class ThemeConfig
         @Comment("This will only be applied to AnimText with style property 'scale' left empty.")
         public float scale = 1f;
         @Comment("This will only be applied to AnimText with style property 'color' left empty.\n" +
-                "In the form of hex RRGGBB or AARRGGBB.")
+                "In the form of hex rrggbb or aarrggbb.")
         public String color = "d2d2d2";
 
         public transient int parsedColor;
+    }
+
+    @ConfigSerializable
+    public static class Image
+    {
+        public float cornerRadius = 3f;
+    }
+
+    @ConfigSerializable
+    public static class UrlImage
+    {
+        public float cornerRadius = 3f;
+    }
+
+    @ConfigSerializable
+    public static class ProgressBar
+    {
+        @Comment("This will only be applied to ProgressBar with style property 'fillerColor' left empty.\n" +
+                "In the form of hex rrggbb or aarrggbb.")
+        public String fillerColor = "d2d2d2";
+        @Comment("This will only be applied to ProgressBar with style property 'backgroundColor' left empty.\n" +
+                "In the form of hex rrggbb or aarrggbb.")
+        public String backgroundColor = "383838";
+        @Comment("This will only be applied to ProgressBar with style property 'outlineColor' left empty.\n" +
+                "In the form of hex rrggbb or aarrggbb.")
+        public String outlineColor = "232323";
+
+        public transient int parsedFillerColor;
+        public transient int parsedBackgroundColor;
+        public transient int parsedOutlineColor;
+    }
+
+    @ConfigSerializable
+    public static class Button
+    {
+        @Comment("This will only be applied to Button with style property 'defaultColor' left empty.\n" +
+                "In the form of hex rrggbb or aarrggbb.")
+        public String defaultColor = "383838";
+        @Comment("This will only be applied to Button with style property 'hoverColor' left empty.\n" +
+                "In the form of hex rrggbb or aarrggbb.")
+        public String hoverColor = "d2d2d2";
+        @Comment("This will only be applied to Button with style property 'holdColor' left empty.\n" +
+                "In the form of hex rrggbb or aarrggbb.")
+        public String holdColor = "232323";
+
+        public transient int parsedDefaultColor;
+        public transient int parsedHoverColor;
+        public transient int parsedHoldColor;
     }
 }

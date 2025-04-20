@@ -13,7 +13,6 @@ import com.tttsaurus.ingameinfo.common.api.gui.style.StyleProperty;
 import com.tttsaurus.ingameinfo.common.api.gui.theme.ThemeConfig;
 import com.tttsaurus.ingameinfo.common.api.render.RenderUtils;
 import com.tttsaurus.ingameinfo.common.impl.gui.GuiResources;
-import com.tttsaurus.ingameinfo.common.impl.gui.layout.MainGroup;
 import com.tttsaurus.ingameinfo.common.impl.gui.registry.ElementRegistry;
 import java.awt.*;
 import java.util.HashMap;
@@ -22,10 +21,6 @@ import java.util.Map;
 @RegisterElement(constructable = false)
 public abstract class Element
 {
-    public static int DEFAULT_COLOR_LIGHT = Color.decode("0xd2d2d2").getRGB();
-    public static int DEFAULT_COLOR_DARK = Color.decode("0x383838").getRGB();
-    public static int DEFAULT_COLOR_DARKER = Color.decode("0x232323").getRGB();
-
     //<editor-fold desc="runtime variables">
 
     // stores width & height when `enabled` is false
@@ -215,7 +210,6 @@ public abstract class Element
     public void loadTheme(ThemeConfig themeConfig)
     {
         this.themeConfig = themeConfig;
-        if (this instanceof MainGroup) return;
 
         if (backgroundStyle.isEmpty())
             setStyleProperty("backgroundStyle", themeConfig.element.backgroundStyle);
