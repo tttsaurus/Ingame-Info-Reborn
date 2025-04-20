@@ -50,6 +50,14 @@ public class Text extends Element
     @StyleProperty(setterCallbackPost = "setColorCallback")
     public int color;
 
+    @StylePropertyCallback
+    public void setShadowCallback()
+    {
+        textRenderer.setShadow(shadow);
+    }
+    @StyleProperty(setterCallbackPost = "setShadowCallback")
+    public boolean shadow;
+
     @Override
     public void calcRenderPos(Rect contextRect)
     {

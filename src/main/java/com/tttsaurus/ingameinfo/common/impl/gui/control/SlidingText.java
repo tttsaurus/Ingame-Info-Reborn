@@ -87,6 +87,15 @@ public class SlidingText extends Sized
     @StyleProperty(setterCallbackPost = "setColorCallback")
     public int color;
 
+    @StylePropertyCallback
+    public void setShadowCallback()
+    {
+        textRenderer.setShadow(shadow);
+        secondTextRenderer.setShadow(shadow);
+    }
+    @StyleProperty(setterCallbackPost = "setShadowCallback")
+    public boolean shadow;
+
     @Override
     public void calcRenderPos(Rect contextRect)
     {

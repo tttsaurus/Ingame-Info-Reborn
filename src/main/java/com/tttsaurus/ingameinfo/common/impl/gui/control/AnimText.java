@@ -61,6 +61,14 @@ public class AnimText extends Element
     @StyleProperty(setterCallbackPost = "setColorCallback")
     public int color;
 
+    @StylePropertyCallback
+    public void setShadowCallback()
+    {
+        animTextRenderer.setShadow(shadow);
+    }
+    @StyleProperty(setterCallbackPost = "setShadowCallback")
+    public boolean shadow;
+
     @Override
     public void calcRenderPos(Rect contextRect)
     {

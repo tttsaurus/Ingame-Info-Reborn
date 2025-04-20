@@ -74,6 +74,14 @@ public class AnimTextRenderer extends TextRenderer
             characterInfo.color = color;
     }
 
+    @Override
+    public void setShadow(boolean shadow)
+    {
+        super.setShadow(shadow);
+        for (CharInfo characterInfo : characterInfos)
+            characterInfo.shadow = shadow;
+    }
+
     public CharInfo[] getCharacterInfos() { return characterInfos; }
     //</editor-fold>
 
