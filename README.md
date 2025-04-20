@@ -47,7 +47,7 @@ Feature Overview:
   - Text (✔)
   - Sliding Text (✔)
   - Anim Text (✔)
-  - Simple Button (✔)
+  - Button (✔)
   - Checkbox
   - Input Field
   - Image (✔)
