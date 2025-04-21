@@ -6,6 +6,7 @@ layout (location = 2) in vec3 normal;
 
 uniform mat4 modelView;
 uniform mat4 projection;
+uniform mat4 transformation;
 uniform vec3 camPos;
 uniform vec3 targetWorldPos;
 uniform float screenWidthHeightRatio;
@@ -20,16 +21,20 @@ void main()
     {
         vec4 anchorPos = inverse(modelView) * inverse(projection) * vec4(0, 0, -1, 1);
         anchorPos /= anchorPos.w;
-
         vec4 worldPos = inverse(modelView) * inverse(projection) * vec4(ndcPos.x, ndcPos.y, -1, 1);
         worldPos /= worldPos.w;
+        vec4 transformed = transformation * vec4(worldPos.xyz - anchorPos.xyz, 1);
+        transformed /= transformed.w;
 
-        gl_Position = projection * modelView * vec4(targetWorldPos - camPos + worldPos.xyz - anchorPos.xyz, 1);
+        gl_Position = projection * modelView * vec4(targetWorldPos - camPos + transformed.xyz, 1);
     }
     else
     {
         vec3 adjustedNdc = vec3(ndcPos.x, ndcPos.y / screenWidthHeightRatio, 0);
-        gl_Position = projection * modelView * vec4(targetWorldPos - camPos + adjustedNdc, 1);
+        vec4 transformed = transformation * vec4(adjustedNdc, 1);
+        transformed /= transformed.w;
+
+        gl_Position = projection * modelView * vec4(targetWorldPos - camPos + transformed.xyz, 1);
     }
 
     TexCoord = texCoord;
