@@ -5,8 +5,10 @@ import com.tttsaurus.ingameinfo.common.impl.gui.IgiGuiLifeCycle;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.ActiveRenderInfo;
 import net.minecraft.entity.Entity;
-import net.minecraft.util.math.Vec3d;
 import org.lwjgl.opengl.GL11;
+import org.lwjgl.util.vector.Matrix4f;
+import org.lwjgl.util.vector.Vector2f;
+import org.lwjgl.util.vector.Vector3f;
 import java.lang.invoke.MethodHandle;
 import java.lang.invoke.MethodHandles;
 import java.lang.reflect.Field;
@@ -203,8 +205,8 @@ public final class RenderHints
     public static boolean getHint_PolygonSmoothHint() { return !IgiGuiLifeCycle.getEnableFbo() || IgiGuiLifeCycle.getEnableMultisampleOnFbo(); }
     //</editor-fold>
 
-    // inspired by <https://github.com/Laike-Endaril/Fantastic-Lib/blob/669c3306bbebca9de1c3959e6dd4203b5b7215d4/src/main/java/com/fantasticsource/mctools/Render.java>
     //<editor-fold desc="active render info">
+    // inspired by <https://github.com/Laike-Endaril/Fantastic-Lib/blob/669c3306bbebca9de1c3959e6dd4203b5b7215d4/src/main/java/com/fantasticsource/mctools/Render.java>
     private static boolean isActiveRenderInfoGettersInit = false;
     private static IFunc<FloatBuffer> modelViewMatrixGetter;
     private static IFunc<FloatBuffer> projectionMatrixGetter;
@@ -279,8 +281,8 @@ public final class RenderHints
     }
     //</editor-fold>
 
-    // inspired by <https://github.com/Laike-Endaril/Fantastic-Lib/blob/669c3306bbebca9de1c3959e6dd4203b5b7215d4/src/main/java/com/fantasticsource/mctools/Render.java>
     //<editor-fold desc="partial ticks">
+    // inspired by <https://github.com/Laike-Endaril/Fantastic-Lib/blob/669c3306bbebca9de1c3959e6dd4203b5b7215d4/src/main/java/com/fantasticsource/mctools/Render.java>
     private static boolean isPartialTickGetterInit = false;
     private static IFunc<Double> partialTickGetter;
 
@@ -326,18 +328,30 @@ public final class RenderHints
     //</editor-fold>
 
     //<editor-fold desc="camera">
-    public static Vec3d getCameraPos()
+    public static Vector3f getCameraPos()
     {
         double partialTick = getPartialTick();
 
         Entity viewEntity = Minecraft.getMinecraft().getRenderViewEntity();
-        if (viewEntity == null) return Vec3d.ZERO;
+        if (viewEntity == null) return new Vector3f(0, 0, 0);
 
         double camX = viewEntity.lastTickPosX + (viewEntity.posX - viewEntity.lastTickPosX) * partialTick;
         double camY = viewEntity.lastTickPosY + (viewEntity.posY - viewEntity.lastTickPosY) * partialTick;
         double camZ = viewEntity.lastTickPosZ + (viewEntity.posZ - viewEntity.lastTickPosZ) * partialTick;
 
-        return new Vec3d(camX, camY, camZ);
+        return new Vector3f((float)camX, (float)camY, (float)camZ);
+    }
+    public static Vector2f getCameraRotationInDegree()
+    {
+        Entity viewEntity = Minecraft.getMinecraft().getRenderViewEntity();
+        if (viewEntity == null) return new Vector2f(0, 0);
+        return new Vector2f(viewEntity.rotationYaw, viewEntity.rotationPitch);
+    }
+    public static Vector2f getCameraRotationInRadian()
+    {
+        Entity viewEntity = Minecraft.getMinecraft().getRenderViewEntity();
+        if (viewEntity == null) return new Vector2f(0, 0);
+        return new Vector2f((float)Math.toRadians(viewEntity.rotationYaw), (float)Math.toRadians(viewEntity.rotationPitch));
     }
     //</editor-fold>
 }

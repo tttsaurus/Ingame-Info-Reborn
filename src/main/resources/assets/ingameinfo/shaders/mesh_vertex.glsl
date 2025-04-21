@@ -17,7 +17,10 @@ void main()
 {
     vec4 worldPos = inverse(modelView) * inverse(projection) * vec4(ndcPos.x, ndcPos.y, 0, 1);
     worldPos /= worldPos.w;
-    gl_Position = projection * modelView * transformation * vec4(worldPos.xyz - camPos + targetWorldPos, 1);
+    vec4 transformedPos = transformation * vec4(worldPos.xyz, 1);
+    transformedPos /= transformedPos.w;
+
+    gl_Position = projection * modelView * vec4(transformedPos.xyz - camPos + targetWorldPos, 1);
 
     TexCoord = texCoord;
     FragNormal = normal;
