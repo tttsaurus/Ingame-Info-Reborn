@@ -42,10 +42,7 @@ public class ClientProxy extends CommonProxy
         int minorGlVersion = RenderHints.getMinorGlVersion();
 
         logger.info("Raw OpenGL version: " + RenderHints.getRawGlVersion());
-        if (majorGlVersion == -1 || minorGlVersion == -1)
-            logger.info("Error: Can't parse OpenGL version");
-        else
-            logger.info(String.format("OpenGL version: %d.%d", majorGlVersion, minorGlVersion));
+        logger.info(String.format("OpenGL version: %d.%d", majorGlVersion, minorGlVersion));
 
         boolean enableFbo = IgiConfig.ENABLE_FRAMEBUFFER && OpenGlHelper.framebufferSupported;
         // at least gl 33
@@ -57,9 +54,15 @@ public class ClientProxy extends CommonProxy
         enablePostProcessing = enableFbo && enablePostProcessing;
         enableMsfbo = enableFbo && enableMsfbo;
 
-        logger.info("[Render Feature] Framebuffer is " + (enableFbo ? "ON" : "OFF"));
-        logger.info("[Render Feature] Post-Processing on framebuffer is " + (enablePostProcessing ? "ON" : "OFF") + " (requires GL33 and framebuffer)");
-        logger.info("[Render Feature] Multisampling on framebuffer is " + (enableMsfbo ? "ON" : "OFF") + " (requires GL40 and framebuffer)");
+        logger.info("[IGI Render Feature] Framebuffer is " + (enableFbo ? "ON" : "OFF"));
+        logger.info("[IGI Render Feature] Post-Processing on framebuffer is " + (enablePostProcessing ? "ON" : "OFF") + " (requires GL33 and framebuffer)");
+        logger.info("[IGI Render Feature] Multisampling on framebuffer is " + (enableMsfbo ? "ON" : "OFF") + " (requires GL40 and framebuffer)");
+
+        // init getters
+        RenderHints.getModelViewMatrix();
+        logger.info("The getters of ActiveRenderInfo private fields are ready.");
+        RenderHints.getPartialTick();
+        logger.info("The getter of private partial tick field is ready.");
         //</editor-fold>
 
         //<editor-fold desc="igi gui lifecycle setup">

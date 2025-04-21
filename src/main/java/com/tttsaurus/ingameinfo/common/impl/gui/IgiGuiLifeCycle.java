@@ -14,6 +14,8 @@ import com.tttsaurus.ingameinfo.common.api.render.RenderHints;
 import com.tttsaurus.ingameinfo.common.api.render.RenderUtils;
 import com.tttsaurus.ingameinfo.common.impl.igievent.EventCenter;
 import com.tttsaurus.ingameinfo.common.impl.network.IgiNetwork;
+import com.tttsaurus.ingameinfo.common.impl.render.mesh.RoundedRectOutlineMesh;
+import com.tttsaurus.ingameinfo.common.impl.render.renderer.MeshRenderer;
 import com.tttsaurus.ingameinfo.config.IgiConfig;
 import com.tttsaurus.saurus3d_snippet.common.api.reader.RlReaderUtils;
 import com.tttsaurus.saurus3d_snippet.common.api.shader.Shader;
@@ -22,19 +24,26 @@ import com.tttsaurus.saurus3d_snippet.common.impl.shader.ShaderLoader;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.client.gui.ScaledResolution;
+import net.minecraft.client.renderer.ActiveRenderInfo;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.OpenGlHelper;
+import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.client.shader.Framebuffer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.biome.Biome;
+import net.minecraftforge.client.event.RenderWorldLastEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import org.apache.commons.lang3.time.StopWatch;
+import org.lwjgl.BufferUtils;
 import org.lwjgl.opengl.*;
+import org.lwjgl.util.vector.Matrix4f;
+import org.lwjgl.util.vector.Vector3f;
+
 import java.io.RandomAccessFile;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
@@ -793,6 +802,40 @@ public final class IgiGuiLifeCycle
             MinecraftForge.EVENT_BUS.post(new IgiGuiInitEvent());
         }
     }
+
+    @SubscribeEvent
+    public static void onRenderWorld(RenderWorldLastEvent event)
+    {
+        if (meshRenderer == null)
+        {
+            RoundedRectOutlineMesh mesh = new RoundedRectOutlineMesh(3, 20);
+            mesh.setup();
+            mesh.setRect(0, 0, 500, 500).setCornerRadius(50).update();
+            meshRenderer = new MeshRenderer(mesh, MeshRenderer.SHARED_MESH_SHADER_PROGRAM);
+        }
+
+        Matrix4f matrix = new Matrix4f();
+        matrix.setIdentity();
+        //matrix.scale(new Vector3f(10f, 10f, 10f));
+        FloatBuffer transformation = BufferUtils.createFloatBuffer(16);
+        matrix.store(transformation);
+        transformation.flip();
+
+        RenderManager renderManager = Minecraft.getMinecraft().getRenderManager();
+        InGameInfoReborn.logger.info("renderManager camPos: " + (float)renderManager.viewerPosX + ", " + (float)renderManager.viewerPosY + ", " + (float)renderManager.viewerPosZ);
+        InGameInfoReborn.logger.info("camEntity camPos: " + RenderHints.getCameraPos().x + ", " + RenderHints.getCameraPos().y + ", " + RenderHints.getCameraPos().z);
+
+        meshRenderer.shaderProgram.use();
+        meshRenderer.shaderProgram.setUniform("modelView", RenderHints.getModelViewMatrix());
+        meshRenderer.shaderProgram.setUniform("projection", RenderHints.getProjectionMatrix());
+        meshRenderer.shaderProgram.setUniform("transformation", transformation);
+        meshRenderer.shaderProgram.setUniform("camPos", RenderHints.getCameraPos().x, RenderHints.getCameraPos().y, RenderHints.getCameraPos().z);
+        meshRenderer.shaderProgram.setUniform("targetWorldPos", 0, 100, 0);
+        meshRenderer.shaderProgram.unuse();
+
+        meshRenderer.render();
+    }
+    static MeshRenderer meshRenderer = null;
 
     private static boolean initFlag = true;
 

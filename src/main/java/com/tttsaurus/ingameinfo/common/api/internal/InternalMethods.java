@@ -65,7 +65,7 @@ public class InternalMethods
         catch (Exception exception)
         {
             GuiLayout$constructor = null;
-            InGameInfoReborn.logger.info("Reflection setup failed for GuiLayout$constructor: " + exception.getMessage());
+            InGameInfoReborn.logger.error("Reflection setup failed for GuiLayout$constructor: " + exception.getMessage());
         }
 
         try
@@ -85,7 +85,7 @@ public class InternalMethods
         catch (Exception exception)
         {
             GuiLayout$mainGroup$getter = null;
-            InGameInfoReborn.logger.info("Reflection setup failed for GuiLayout$mainGroup$getter: " + exception.getMessage());
+            InGameInfoReborn.logger.error("Reflection setup failed for GuiLayout$mainGroup$getter: " + exception.getMessage());
         }
 
         try
@@ -105,7 +105,7 @@ public class InternalMethods
         catch (Exception exception)
         {
             GuiLayout$igiGuiContainer$getter = null;
-            InGameInfoReborn.logger.info("Reflection setup failed for GuiLayout$igiGuiContainer$getter: " + exception.getMessage());
+            InGameInfoReborn.logger.error("Reflection setup failed for GuiLayout$igiGuiContainer$getter: " + exception.getMessage());
         }
 
         try
@@ -125,7 +125,7 @@ public class InternalMethods
         catch (Exception exception)
         {
             Element$syncToMap$getter = null;
-            InGameInfoReborn.logger.info("Reflection setup failed for Element$syncToMap$getter: " + exception.getMessage());
+            InGameInfoReborn.logger.error("Reflection setup failed for Element$syncToMap$getter: " + exception.getMessage());
         }
 
         try
@@ -145,7 +145,7 @@ public class InternalMethods
         catch (Exception exception)
         {
             ReactiveObject$setterCallbacks$getter = null;
-            InGameInfoReborn.logger.info("Reflection setup failed for ReactiveObject$setterCallbacks$getter: " + exception.getMessage());
+            InGameInfoReborn.logger.error("Reflection setup failed for ReactiveObject$setterCallbacks$getter: " + exception.getMessage());
         }
 
         try
@@ -165,7 +165,7 @@ public class InternalMethods
         catch (Exception exception)
         {
             IgiGuiLifeCycle$openedGuiMap$getter = null;
-            InGameInfoReborn.logger.info("Reflection setup failed for IgiGuiLifeCycle$openedGuiMap$getter: " + exception.getMessage());
+            InGameInfoReborn.logger.error("Reflection setup failed for IgiGuiLifeCycle$openedGuiMap$getter: " + exception.getMessage());
         }
 
         try
@@ -185,7 +185,7 @@ public class InternalMethods
         catch (Exception exception)
         {
             IgiGuiContainer$viewModel$setter = null;
-            InGameInfoReborn.logger.info("Reflection setup failed for IgiGuiContainer$viewModel$setter: " + exception.getMessage());
+            InGameInfoReborn.logger.error("Reflection setup failed for IgiGuiContainer$viewModel$setter: " + exception.getMessage());
         }
 
         try
@@ -205,7 +205,7 @@ public class InternalMethods
         catch (Exception exception)
         {
             View$mainGroup$setter = null;
-            InGameInfoReborn.logger.info("Reflection setup failed for View$mainGroup$setter: " + exception.getMessage());
+            InGameInfoReborn.logger.error("Reflection setup failed for View$mainGroup$setter: " + exception.getMessage());
         }
 
         try
@@ -225,7 +225,7 @@ public class InternalMethods
         catch (Exception exception)
         {
             ViewModel$isActiveSetter$setter = null;
-            InGameInfoReborn.logger.info("Reflection setup failed for ViewModel$isActiveSetter$setter: " + exception.getMessage());
+            InGameInfoReborn.logger.error("Reflection setup failed for ViewModel$isActiveSetter$setter: " + exception.getMessage());
         }
 
         try
@@ -245,7 +245,7 @@ public class InternalMethods
         catch (Exception exception)
         {
             ViewModel$isActiveGetter$setter = null;
-            InGameInfoReborn.logger.info("Reflection setup failed for ViewModel$isActiveGetter$setter: " + exception.getMessage());
+            InGameInfoReborn.logger.error("Reflection setup failed for ViewModel$isActiveGetter$setter: " + exception.getMessage());
         }
 
         try
@@ -265,7 +265,7 @@ public class InternalMethods
         catch (Exception exception)
         {
             ViewModel$exitCallbackSetter$setter = null;
-            InGameInfoReborn.logger.info("Reflection setup failed for ViewModel$exitCallbackSetter$setter: " + exception.getMessage());
+            InGameInfoReborn.logger.error("Reflection setup failed for ViewModel$exitCallbackSetter$setter: " + exception.getMessage());
         }
 
         try
@@ -285,7 +285,7 @@ public class InternalMethods
         catch (Exception exception)
         {
             ViewModel$isFocusedSetter$setter = null;
-            InGameInfoReborn.logger.info("Reflection setup failed for ViewModel$isFocusedSetter$setter: " + exception.getMessage());
+            InGameInfoReborn.logger.error("Reflection setup failed for ViewModel$isFocusedSetter$setter: " + exception.getMessage());
         }
 
         try
@@ -305,7 +305,7 @@ public class InternalMethods
         catch (Exception exception)
         {
             ViewModel$isFocusedGetter$setter = null;
-            InGameInfoReborn.logger.info("Reflection setup failed for ViewModel$isFocusedGetter$setter: " + exception.getMessage());
+            InGameInfoReborn.logger.error("Reflection setup failed for ViewModel$isFocusedGetter$setter: " + exception.getMessage());
         }
 
         try
@@ -325,7 +325,7 @@ public class InternalMethods
         catch (Exception exception)
         {
             ViewModel$init = null;
-            InGameInfoReborn.logger.info("Reflection setup failed for ViewModel$init: " + exception.getMessage());
+            InGameInfoReborn.logger.error("Reflection setup failed for ViewModel$init: " + exception.getMessage());
         }
 
         try
@@ -345,7 +345,7 @@ public class InternalMethods
         catch (Exception exception)
         {
             View$init = null;
-            InGameInfoReborn.logger.info("Reflection setup failed for View$init: " + exception.getMessage());
+            InGameInfoReborn.logger.error("Reflection setup failed for View$init: " + exception.getMessage());
         }
     }
 }

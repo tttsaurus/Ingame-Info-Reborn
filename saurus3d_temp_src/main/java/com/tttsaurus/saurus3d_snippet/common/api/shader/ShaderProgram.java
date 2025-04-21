@@ -182,6 +182,8 @@ public class ShaderProgram implements Comparable<ShaderProgram>, IGlDisposable
             v = (float)value;
         else if (TypeUtils.isIntOrWrappedInt(clazz))
             v = (float)((int)value);
+        else if (TypeUtils.isDoubleOrWrappedDouble(clazz))
+            v = (float)((double)value);
         return v;
     }
     private static double getDouble(Class<?> clazz, Object value)
