@@ -818,9 +818,8 @@ public final class IgiGuiLifeCycle
         meshRenderer.shaderProgram.setUniform("camPos", RenderHints.getCameraPos().x, RenderHints.getCameraPos().y, RenderHints.getCameraPos().z);
         meshRenderer.shaderProgram.setUniform("targetWorldPos", 0, 100, 0);
         meshRenderer.shaderProgram.setUniform("screenWidthHeightRatio", (float)Minecraft.getMinecraft().displayWidth / (float)Minecraft.getMinecraft().displayHeight);
+        meshRenderer.shaderProgram.setUniform("unprojectToWorld", false);
         meshRenderer.shaderProgram.unuse();
-
-        InGameInfoReborn.logger.info("ratio: " + ((float)Minecraft.getMinecraft().displayWidth / (float)Minecraft.getMinecraft().displayHeight));
 
         meshRenderer.render();
     }
