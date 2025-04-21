@@ -812,22 +812,15 @@ public final class IgiGuiLifeCycle
             meshRenderer = new MeshRenderer(mesh, MeshRenderer.SHARED_MESH_SHADER_PROGRAM);
         }
 
-        FloatBuffer buffer = BufferUtils.createFloatBuffer(16);
-        Matrix4f matrix4f = new Matrix4f();
-        matrix4f.setIdentity();
-        matrix4f.rotate(-RenderHints.getCameraRotationInRadian().x, new Vector3f(0, 1, 0));
-        matrix4f.rotate(RenderHints.getCameraRotationInRadian().y, new Vector3f(1, 0, 0));
-        matrix4f.invert();
-        matrix4f.store(buffer);
-        buffer.flip();
-
         meshRenderer.shaderProgram.use();
         meshRenderer.shaderProgram.setUniform("modelView", RenderHints.getModelViewMatrix());
         meshRenderer.shaderProgram.setUniform("projection", RenderHints.getProjectionMatrix());
-        meshRenderer.shaderProgram.setUniform("transformation", buffer);
         meshRenderer.shaderProgram.setUniform("camPos", RenderHints.getCameraPos().x, RenderHints.getCameraPos().y, RenderHints.getCameraPos().z);
         meshRenderer.shaderProgram.setUniform("targetWorldPos", 0, 100, 0);
+        meshRenderer.shaderProgram.setUniform("screenWidthHeightRatio", (float)Minecraft.getMinecraft().displayWidth / (float)Minecraft.getMinecraft().displayHeight);
         meshRenderer.shaderProgram.unuse();
+
+        InGameInfoReborn.logger.info("ratio: " + ((float)Minecraft.getMinecraft().displayWidth / (float)Minecraft.getMinecraft().displayHeight));
 
         meshRenderer.render();
     }

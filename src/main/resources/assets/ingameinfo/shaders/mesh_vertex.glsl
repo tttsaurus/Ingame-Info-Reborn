@@ -6,21 +6,26 @@ layout (location = 2) in vec3 normal;
 
 uniform mat4 modelView;
 uniform mat4 projection;
-uniform mat4 transformation;
+//uniform mat4 transformation;
 uniform vec3 camPos;
 uniform vec3 targetWorldPos;
+uniform float screenWidthHeightRatio;
 
 out vec2 TexCoord;
 out vec3 FragNormal;
 
 void main()
 {
-    vec4 worldPos = inverse(modelView) * inverse(projection) * vec4(ndcPos.x, ndcPos.y, 0, 1);
-    worldPos /= worldPos.w;
-    vec4 transformedPos = transformation * vec4(worldPos.xyz, 1);
-    transformedPos /= transformedPos.w;
+    vec2 fixedNdc = vec2(ndcPos.x, ndcPos.y / screenWidthHeightRatio);
 
-    gl_Position = projection * modelView * vec4(transformedPos.xyz - camPos + targetWorldPos, 1);
+//    vec3 right = vec3(modelViewInverse[0][0], modelViewInverse[1][0], modelViewInverse[2][0]);
+//    vec3 up = vec3(modelViewInverse[0][1], modelViewInverse[1][1], modelViewInverse[2][1]);
+//
+//    float scaleX = 0.1;
+//    float scaleY = 0.1;
+//    vec3 offset = fixedNdc.x * right * scaleX + fixedNdc.y * up * scaleY;
+
+    gl_Position = projection * modelView * vec4(targetWorldPos - camPos + vec3(fixedNdc, 0), 1);
 
     TexCoord = texCoord;
     FragNormal = normal;
