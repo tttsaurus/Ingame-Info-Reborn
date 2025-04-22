@@ -15,10 +15,10 @@ import com.tttsaurus.ingameinfo.common.api.render.RenderUtils;
 import com.tttsaurus.ingameinfo.common.impl.igievent.EventCenter;
 import com.tttsaurus.ingameinfo.common.impl.network.IgiNetwork;
 import com.tttsaurus.ingameinfo.config.IgiConfig;
-import com.tttsaurus.saurus3d_snippet.common.api.reader.RlReaderUtils;
-import com.tttsaurus.saurus3d_snippet.common.api.shader.Shader;
-import com.tttsaurus.saurus3d_snippet.common.api.shader.ShaderProgram;
-import com.tttsaurus.saurus3d_snippet.common.impl.shader.ShaderLoader;
+import com.tttsaurus.ingameinfo.common.api.reader.RlReaderUtils;
+import com.tttsaurus.ingameinfo.common.api.render.shader.Shader;
+import com.tttsaurus.ingameinfo.common.api.render.shader.ShaderProgram;
+import com.tttsaurus.ingameinfo.common.api.render.shader.ShaderLoadingUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.client.gui.ScaledResolution;
@@ -36,14 +36,12 @@ import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import org.apache.commons.lang3.time.StopWatch;
 import org.lwjgl.opengl.*;
 import java.io.RandomAccessFile;
-import java.nio.ByteBuffer;
-import java.nio.ByteOrder;
-import java.nio.FloatBuffer;
-import java.nio.IntBuffer;
 import java.nio.charset.StandardCharsets;
 import java.util.*;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
+import static com.tttsaurus.ingameinfo.common.api.render.CommonBuffers.intBuffer;
+import static com.tttsaurus.ingameinfo.common.api.render.CommonBuffers.floatBuffer;
 
 @SuppressWarnings("all")
 public final class IgiGuiLifeCycle
@@ -98,7 +96,6 @@ public final class IgiGuiLifeCycle
     //<editor-fold desc="shader variables">
     private static boolean enableShader = true;
     public static void setEnableShader(boolean flag) { enableShader = flag; }
-    private static final ShaderLoader shaderLoader = new ShaderLoader();
     private static ShaderProgram shaderProgram = null;
     private static int texUnit1TextureID;
     private static boolean uniformsPassed = false;
@@ -481,7 +478,7 @@ public final class IgiGuiLifeCycle
             rawFragBuilder.append(rawFrag);
 
             Shader frag = new Shader("ingameinfo:shaders/post_processing_frag.glsl", rawFragBuilder.toString(), Shader.ShaderType.FRAGMENT);
-            Shader vertex = shaderLoader.load("ingameinfo:shaders/post_processing_vertex.glsl", Shader.ShaderType.VERTEX);
+            Shader vertex = ShaderLoadingUtils.load("ingameinfo:shaders/post_processing_vertex.glsl", Shader.ShaderType.VERTEX);
 
             shaderProgram = new ShaderProgram(frag, vertex);
             shaderProgram.setup();
@@ -546,9 +543,6 @@ public final class IgiGuiLifeCycle
     private static int blendDstAlpha;
     private static int alphaFunc;
     private static float alphaRef;
-
-    private static final IntBuffer intBuffer = ByteBuffer.allocateDirect(16 << 2).order(ByteOrder.nativeOrder()).asIntBuffer();
-    private static final FloatBuffer floatBuffer = ByteBuffer.allocateDirect(16 << 2).order(ByteOrder.nativeOrder()).asFloatBuffer();
     //</editor-fold>
 
     //<editor-fold desc="gl state management">

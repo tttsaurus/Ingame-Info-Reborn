@@ -617,7 +617,7 @@ sourceSets {
     }
     main {
         java {
-            srcDirs = ['src/main/java', 'saurus3d_temp_src/main/java']
+            srcDirs = ['src/main/java']
         }
     }
 }

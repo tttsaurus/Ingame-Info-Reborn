@@ -1,4 +1,4 @@
-package com.tttsaurus.saurus3d_snippet.common.api;
+package com.tttsaurus.ingameinfo.common.api.render;
 
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;

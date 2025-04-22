@@ -1,6 +1,6 @@
-package com.tttsaurus.saurus3d_snippet.common.api.shader;
+package com.tttsaurus.ingameinfo.common.api.render.shader;
 
-import com.tttsaurus.saurus3d_snippet.common.api.shader.uniform.UniformField;
+import com.tttsaurus.ingameinfo.common.api.render.shader.uniform.UniformField;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL20;
 import org.lwjgl.opengl.GL40;

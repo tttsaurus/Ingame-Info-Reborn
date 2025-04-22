@@ -6,7 +6,6 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.ActiveRenderInfo;
 import net.minecraft.entity.Entity;
 import org.lwjgl.opengl.GL11;
-import org.lwjgl.util.vector.Matrix4f;
 import org.lwjgl.util.vector.Vector2f;
 import org.lwjgl.util.vector.Vector3f;
 import java.lang.invoke.MethodHandle;
@@ -14,6 +13,7 @@ import java.lang.invoke.MethodHandles;
 import java.lang.reflect.Field;
 import java.nio.FloatBuffer;
 
+@SuppressWarnings("all")
 public final class RenderHints
 {
     public static class GlStateManager
@@ -222,7 +222,6 @@ public final class RenderHints
         return projectionMatrixGetter.invoke();
     }
 
-    @SuppressWarnings("all")
     private static void initActiveRenderInfoGetters()
     {
         isActiveRenderInfoGettersInit = true;
@@ -293,7 +292,6 @@ public final class RenderHints
         return minecraft.isGamePaused() ? partialTickGetter.invoke() : minecraft.getRenderPartialTicks();
     }
 
-    @SuppressWarnings("all")
     private static void initPartialTickGetter()
     {
         isPartialTickGetterInit = true;

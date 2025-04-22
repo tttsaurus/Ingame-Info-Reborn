@@ -1,13 +1,13 @@
-package com.tttsaurus.saurus3d_snippet.common.api.shader;
+package com.tttsaurus.ingameinfo.common.api.render.shader;
 
 import com.tttsaurus.ingameinfo.common.api.reflection.TypeUtils;
 import com.tttsaurus.ingameinfo.common.api.render.GlResourceManager;
 import com.tttsaurus.ingameinfo.common.api.render.IGlDisposable;
-import com.tttsaurus.saurus3d_snippet.common.api.CommonBuffers;
-import com.tttsaurus.saurus3d_snippet.common.api.shader.uniform.UniformField;
-import com.tttsaurus.saurus3d_snippet.common.api.shader.uniform.UniformType;
-import com.tttsaurus.saurus3d_snippet.common.api.shader.uniform.UniformTypeKind;
-import com.tttsaurus.saurus3d_snippet.common.api.shader.uniform.Variant;
+import com.tttsaurus.ingameinfo.common.api.render.CommonBuffers;
+import com.tttsaurus.ingameinfo.common.api.render.shader.uniform.UniformField;
+import com.tttsaurus.ingameinfo.common.api.render.shader.uniform.UniformType;
+import com.tttsaurus.ingameinfo.common.api.render.shader.uniform.UniformTypeKind;
+import com.tttsaurus.ingameinfo.common.api.render.shader.uniform.Variant;
 import org.apache.commons.lang3.time.StopWatch;
 import org.jetbrains.annotations.NotNull;
 import org.lwjgl.opengl.*;

@@ -106,6 +106,7 @@ public class IgiGuiContainer
 
     // can't refresh <Def> content
     // viewModel.start() may not work properly due to the lack of `undo` function
+    // todo: state preserving hotswap
     public void refreshVvm()
     {
         viewModel.refresh();

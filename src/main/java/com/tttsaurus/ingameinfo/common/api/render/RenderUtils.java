@@ -17,15 +17,12 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.nio.ByteBuffer;
-import java.nio.ByteOrder;
-import java.nio.IntBuffer;
+import static com.tttsaurus.ingameinfo.common.api.render.CommonBuffers.intBuffer;
 
 public final class RenderUtils
 {
     public static FontRenderer fontRenderer = Minecraft.getMinecraft().fontRenderer;
     public static float zLevel = 0;
-
-    private static final IntBuffer intBuffer = ByteBuffer.allocateDirect(16 << 2).order(ByteOrder.nativeOrder()).asIntBuffer();
 
     private static void addArcVertices(BufferBuilder bufferbuilder, float cx, float cy, float radius, float startAngle, float endAngle, int segments)
     {

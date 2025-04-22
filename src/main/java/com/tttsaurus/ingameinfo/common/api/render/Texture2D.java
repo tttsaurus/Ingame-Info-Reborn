@@ -3,8 +3,7 @@ package com.tttsaurus.ingameinfo.common.api.render;
 import net.minecraft.client.renderer.GlStateManager;
 import org.lwjgl.opengl.*;
 import java.nio.ByteBuffer;
-import java.nio.ByteOrder;
-import java.nio.IntBuffer;
+import static com.tttsaurus.ingameinfo.common.api.render.CommonBuffers.intBuffer;
 
 public final class Texture2D implements IGlDisposable
 {
@@ -33,8 +32,6 @@ public final class Texture2D implements IGlDisposable
             this.glValue = glValue;
         }
     }
-
-    private static final IntBuffer intBuffer = ByteBuffer.allocateDirect(16 << 2).order(ByteOrder.nativeOrder()).asIntBuffer();
 
     private int glTextureID = 0;
     private final int width;
