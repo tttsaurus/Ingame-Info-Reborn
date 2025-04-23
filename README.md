@@ -3,7 +3,11 @@
   <h1>InGame Info Reborn</h1>
 </div>
 
-This is a spiritual successor of [InGame-Info-XML](https://github.com/Lunatrius/InGame-Info-XML), **not a fork**. Moreover, this is growing into a general-purpose HUD/GUI lib for both java and zenscript users.
+[![Versions](https://img.shields.io/curseforge/game-versions/1171541?logo=curseforge&label=Game%20Version)](https://www.curseforge.com/minecraft/mc-mods/ingame-info-reborn)
+[![Downloads](https://img.shields.io/curseforge/dt/1171541?logo=curseforge&label=Downloads)](https://www.curseforge.com/minecraft/mc-mods/ingame-info-reborn)
+[![Downloads](https://img.shields.io/modrinth/dt/ingame-info-reborn?logo=modrinth&label=Downloads)](https://modrinth.com/mod/ingame-info-reborn)
+
+This is a spiritual successor of [InGame-Info-XML](https://github.com/Lunatrius/InGame-Info-XML), **not a fork**. Moreover, This is evolving into a general-purpose declarative MVVM architecture HUD/GUI library for both Java and ZenScript users.
 
 If you like this project, don't forget to give it a star⭐!
 
@@ -30,7 +34,7 @@ Feature Overview:
 - Add framebuffer to the GUI rendering life cycle (✔)
 - GUI theme manager (✔)
 - Introduce a custom GUI container (✔)
-- Maintain a list of custom GUI containers so that GUIs can stack together (✔)
+- Maintain a list of GUI containers so that GUIs can stack together (✔)
 - A GUI container can be ingame-overlaid/focused (runtime switchable) (✔)
 - Introduce feature-rich GUI layout
   - Pivot (✔)
