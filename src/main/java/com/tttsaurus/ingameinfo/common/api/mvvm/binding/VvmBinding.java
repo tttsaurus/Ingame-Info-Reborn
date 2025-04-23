@@ -66,7 +66,7 @@ public class VvmBinding<TView extends View>
             if (reactive.initiativeSync())
             {
                 IAction_1Param<Object> action = ElementRegistry.getStylePropertySetterFullCallback(element, reactive.property());
-                reactiveObject.setterCallbacks.add((value) ->
+                reactiveObject.initiativeCallbacks.add((value) ->
                 {
                     action.invoke(value);
                 });
@@ -80,9 +80,9 @@ public class VvmBinding<TView extends View>
                 {
                     syncToMap.put(reactive.property(), () ->
                     {
-                        reactiveObject.set(getter.get(element));
+                        reactiveObject.setInternal(getter.get(element));
                     });
-                    reactiveObject.set(getter.get(element));
+                    reactiveObject.setInternal(getter.get(element));
                 }
             }
         }

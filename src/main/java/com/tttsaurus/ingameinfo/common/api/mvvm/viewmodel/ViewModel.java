@@ -77,7 +77,7 @@ public abstract class ViewModel<T extends View>
         for (Map.Entry<Reactive, IReactiveObjectGetter> entry: reactiveObjects.entrySet())
         {
             ReactiveObject<?> reactiveObject = entry.getValue().get(this);
-            InternalMethods.instance.ReactiveObject$setterCallbacks$getter.invoke(reactiveObject).clear();
+            InternalMethods.instance.ReactiveObject$initiativeCallbacks$getter.invoke(reactiveObject).clear();
             binding.bindReactiveObject(entry.getKey(), reactiveObject);
         }
     }

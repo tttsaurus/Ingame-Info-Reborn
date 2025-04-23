@@ -30,7 +30,7 @@ public class InternalMethods
     public IFunc_1Param<MainGroup, GuiLayout> GuiLayout$mainGroup$getter;
     public IFunc_1Param<IgiGuiContainer, GuiLayout> GuiLayout$igiGuiContainer$getter;
     public IFunc_1Param<Map<String, IStylePropertySyncTo>, Element> Element$syncToMap$getter;
-    public IFunc_1Param<List<IReactiveCallback>, ReactiveObject> ReactiveObject$setterCallbacks$getter;
+    public IFunc_1Param<List<IReactiveCallback>, ReactiveObject> ReactiveObject$initiativeCallbacks$getter;
     public IFunc<Map<String, IgiGuiContainer>> IgiGuiLifeCycle$openedGuiMap$getter;
 
     public IAction_2Param<IgiGuiContainer, ViewModel> IgiGuiContainer$viewModel$setter;
@@ -130,10 +130,10 @@ public class InternalMethods
 
         try
         {
-            Field field = ReactiveObject.class.getDeclaredField("setterCallbacks");
+            Field field = ReactiveObject.class.getDeclaredField("initiativeCallbacks");
             field.setAccessible(true);
             MethodHandle handle = lookup.unreflectGetter(field);
-            ReactiveObject$setterCallbacks$getter = (arg0) ->
+            ReactiveObject$initiativeCallbacks$getter = (arg0) ->
             {
                 try
                 {
@@ -144,7 +144,7 @@ public class InternalMethods
         }
         catch (Exception exception)
         {
-            ReactiveObject$setterCallbacks$getter = null;
+            ReactiveObject$initiativeCallbacks$getter = null;
             InGameInfoReborn.logger.error("Reflection setup failed for ReactiveObject$setterCallbacks$getter: " + exception.getMessage());
         }
 
