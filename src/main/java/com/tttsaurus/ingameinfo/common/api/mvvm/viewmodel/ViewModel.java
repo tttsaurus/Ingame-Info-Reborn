@@ -4,10 +4,7 @@ import com.tttsaurus.ingameinfo.common.api.gui.GuiLayout;
 import com.tttsaurus.ingameinfo.common.api.function.IAction_1Param;
 import com.tttsaurus.ingameinfo.common.api.function.IFunc;
 import com.tttsaurus.ingameinfo.common.api.internal.InternalMethods;
-import com.tttsaurus.ingameinfo.common.api.mvvm.binding.IReactiveObjectGetter;
-import com.tttsaurus.ingameinfo.common.api.mvvm.binding.Reactive;
-import com.tttsaurus.ingameinfo.common.api.mvvm.binding.ReactiveObject;
-import com.tttsaurus.ingameinfo.common.api.mvvm.binding.VvmBinding;
+import com.tttsaurus.ingameinfo.common.api.mvvm.binding.*;
 import com.tttsaurus.ingameinfo.common.api.mvvm.view.View;
 import com.tttsaurus.ingameinfo.common.impl.mvvm.registry.MvvmRegistry;
 import java.util.Map;
@@ -65,6 +62,10 @@ public abstract class ViewModel<T extends View>
         for (Map.Entry<Reactive, IReactiveObjectGetter> entry: reactiveObjects.entrySet())
             binding.bindReactiveObject(entry.getKey(), entry.getValue().get(this));
 
+        Map<Reactive, IReactiveCollectionGetter> reactiveCollections = MvvmRegistry.getRegisteredReactiveCollections(mvvmRegistryName);
+        for (Map.Entry<Reactive, IReactiveCollectionGetter> entry: reactiveCollections.entrySet())
+            binding.bindReactiveCollection(entry.getKey(), entry.getValue().get(this));
+
         return guiLayout;
     }
 
@@ -79,6 +80,14 @@ public abstract class ViewModel<T extends View>
             ReactiveObject<?> reactiveObject = entry.getValue().get(this);
             InternalMethods.instance.ReactiveObject$initiativeCallbacks$getter.invoke(reactiveObject).clear();
             binding.bindReactiveObject(entry.getKey(), reactiveObject);
+        }
+
+        Map<Reactive, IReactiveCollectionGetter> reactiveCollections = MvvmRegistry.getRegisteredReactiveCollections(mvvmRegistryName);
+        for (Map.Entry<Reactive, IReactiveCollectionGetter> entry: reactiveCollections.entrySet())
+        {
+            ReactiveCollection reactiveCollection = entry.getValue().get(this);
+            InternalMethods.instance.ReactiveCollection$group$setter.invoke(reactiveCollection, null);
+            binding.bindReactiveCollection(entry.getKey(), reactiveCollection);
         }
     }
 

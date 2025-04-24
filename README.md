@@ -7,7 +7,7 @@
 [![Downloads](https://img.shields.io/curseforge/dt/1171541?logo=curseforge&label=Downloads)](https://www.curseforge.com/minecraft/mc-mods/ingame-info-reborn)
 [![Downloads](https://img.shields.io/modrinth/dt/ingame-info-reborn?logo=modrinth&label=Downloads)](https://modrinth.com/mod/ingame-info-reborn)
 
-This is a spiritual successor of [InGame-Info-XML](https://github.com/Lunatrius/InGame-Info-XML), **not a fork**. Moreover, This is evolving into a general-purpose declarative MVVM architecture HUD/GUI library for both Java and ZenScript users.
+This is a spiritual successor of [InGame-Info-XML](https://github.com/Lunatrius/InGame-Info-XML), **not a fork**. Moreover, this is evolving into a general-purpose declarative MVVM architecture HUD/GUI library for both Java and ZenScript users.
 
 If you like this project, don't forget to give it a star⭐!
 

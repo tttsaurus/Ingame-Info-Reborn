@@ -1,8 +1,6 @@
 package com.tttsaurus.ingameinfo.common.api.mvvm.registry;
 
-import com.tttsaurus.ingameinfo.common.api.mvvm.binding.IReactiveObjectGetter;
-import com.tttsaurus.ingameinfo.common.api.mvvm.binding.Reactive;
-import com.tttsaurus.ingameinfo.common.api.mvvm.binding.ReactiveObject;
+import com.tttsaurus.ingameinfo.common.api.mvvm.binding.*;
 import com.tttsaurus.ingameinfo.common.api.mvvm.viewmodel.ViewModel;
 import com.tttsaurus.ingameinfo.plugin.crt.impl.CrtViewModel;
 import net.minecraft.util.Tuple;
@@ -57,5 +55,40 @@ public final class RegistryUtils
             }
 
         return reactiveObjects;
+    }
+
+    public static Map<Reactive, IReactiveCollectionGetter> findReactiveCollections(String mvvmRegistryName, Class<? extends ViewModel<?>> clazz)
+    {
+        Map<Reactive, IReactiveCollectionGetter> reactiveCollections = new HashMap<>();
+
+        Class<Reactive> annotation = Reactive.class;
+
+        for (Field field: clazz.getDeclaredFields())
+            if (field.isAnnotationPresent(annotation))
+            {
+                Reactive reactive = field.getAnnotation(annotation);
+                MethodHandles.Lookup lookup = MethodHandles.lookup();
+                try
+                {
+                    Class<?> fieldClass = field.getType();
+                    String fieldName = field.getName();
+                    if (ReactiveCollection.class.equals(fieldClass))
+                    {
+                        MethodHandle getter = lookup.findGetter(clazz, fieldName, fieldClass);
+                        IReactiveCollectionGetter wrappedGetter = (target) ->
+                        {
+                            try
+                            {
+                                return (ReactiveCollection)getter.invoke(target);
+                            }
+                            catch (Throwable ignored) { return null; }
+                        };
+                        reactiveCollections.put(reactive, wrappedGetter);
+                    }
+                }
+                catch (Exception ignored) { }
+            }
+
+        return reactiveCollections;
     }
 }

@@ -5,8 +5,10 @@ import com.tttsaurus.ingameinfo.common.api.function.*;
 import com.tttsaurus.ingameinfo.common.api.gui.Element;
 import com.tttsaurus.ingameinfo.common.api.gui.GuiLayout;
 import com.tttsaurus.ingameinfo.common.api.gui.IgiGuiContainer;
+import com.tttsaurus.ingameinfo.common.api.gui.layout.ElementGroup;
 import com.tttsaurus.ingameinfo.common.api.gui.style.IStylePropertySyncTo;
 import com.tttsaurus.ingameinfo.common.api.mvvm.binding.IReactiveCallback;
+import com.tttsaurus.ingameinfo.common.api.mvvm.binding.ReactiveCollection;
 import com.tttsaurus.ingameinfo.common.api.mvvm.binding.ReactiveObject;
 import com.tttsaurus.ingameinfo.common.api.mvvm.view.View;
 import com.tttsaurus.ingameinfo.common.api.mvvm.viewmodel.ViewModel;
@@ -40,6 +42,7 @@ public class InternalMethods
     public IAction_2Param<ViewModel, IAction_1Param<IFunc<Boolean>>> ViewModel$exitCallbackSetter$setter;
     public IAction_2Param<ViewModel, IAction_1Param<Boolean>> ViewModel$isFocusedSetter$setter;
     public IAction_2Param<ViewModel, IFunc<Boolean>> ViewModel$isFocusedGetter$setter;
+    public IAction_2Param<ReactiveCollection, ElementGroup> ReactiveCollection$group$setter;
 
     public IFunc_2Param<GuiLayout, ViewModel, String> ViewModel$init;
     public IFunc_1Param<GuiLayout, View> View$init;
@@ -48,6 +51,7 @@ public class InternalMethods
     {
         MethodHandles.Lookup lookup = MethodHandles.lookup();
 
+        //<editor-fold desc="getters">
         try
         {
             Constructor<GuiLayout> constructor = GuiLayout.class.getDeclaredConstructor(new Class[0]);
@@ -167,7 +171,9 @@ public class InternalMethods
             IgiGuiLifeCycle$openedGuiMap$getter = null;
             InGameInfoReborn.logger.error("Reflection setup failed for IgiGuiLifeCycle$openedGuiMap$getter: " + exception.getMessage());
         }
+        //</editor-fold>
 
+        //<editor-fold desc="setters">
         try
         {
             Field field = IgiGuiContainer.class.getDeclaredField("viewModel");
@@ -310,6 +316,28 @@ public class InternalMethods
 
         try
         {
+            Field field = ReactiveCollection.class.getDeclaredField("group");
+            field.setAccessible(true);
+            MethodHandle handle = lookup.unreflectSetter(field);
+            ReactiveCollection$group$setter = (arg0, arg1) ->
+            {
+                try
+                {
+                    handle.invoke(arg0, arg1);
+                }
+                catch (Throwable ignored) { }
+            };
+        }
+        catch (Exception exception)
+        {
+            ReactiveCollection$group$setter = null;
+            InGameInfoReborn.logger.error("Reflection setup failed for ReactiveCollection$group$setter: " + exception.getMessage());
+        }
+        //</editor-fold>
+
+        //<editor-fold desc="methods">
+        try
+        {
             Method method = ViewModel.class.getDeclaredMethod("init", String.class);
             method.setAccessible(true);
             MethodHandle handle = lookup.unreflect(method);
@@ -347,5 +375,6 @@ public class InternalMethods
             View$init = null;
             InGameInfoReborn.logger.error("Reflection setup failed for View$init: " + exception.getMessage());
         }
+        //</editor-fold>
     }
 }

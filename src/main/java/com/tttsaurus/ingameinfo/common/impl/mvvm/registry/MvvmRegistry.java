@@ -4,6 +4,7 @@ import com.tttsaurus.ingameinfo.InGameInfoReborn;
 import com.tttsaurus.ingameinfo.common.api.gui.GuiLayout;
 import com.tttsaurus.ingameinfo.common.api.gui.IgiGuiContainer;
 import com.tttsaurus.ingameinfo.common.api.internal.InternalMethods;
+import com.tttsaurus.ingameinfo.common.api.mvvm.binding.IReactiveCollectionGetter;
 import com.tttsaurus.ingameinfo.common.api.mvvm.binding.IReactiveObjectGetter;
 import com.tttsaurus.ingameinfo.common.api.mvvm.binding.Reactive;
 import com.tttsaurus.ingameinfo.common.api.mvvm.registry.RegistryUtils;
@@ -35,10 +36,17 @@ public final class MvvmRegistry
 
     // key: mvvm registry name
     private static final Map<String, Map<Reactive, IReactiveObjectGetter>> registeredReactiveObjects = new HashMap<>();
+    private static final Map<String, Map<Reactive, IReactiveCollectionGetter>> registeredReactiveCollections = new HashMap<>();
 
     public static Map<Reactive, IReactiveObjectGetter> getRegisteredReactiveObjects(String mvvmRegistryName)
     {
         Map<Reactive, IReactiveObjectGetter> map = registeredReactiveObjects.get(mvvmRegistryName);
+        if (map == null) return new HashMap<>();
+        return map;
+    }
+    public static Map<Reactive, IReactiveCollectionGetter> getRegisteredReactiveCollections(String mvvmRegistryName)
+    {
+        Map<Reactive, IReactiveCollectionGetter> map = registeredReactiveCollections.get(mvvmRegistryName);
         if (map == null) return new HashMap<>();
         return map;
     }
@@ -63,6 +71,7 @@ public final class MvvmRegistry
 
         viewModelClasses.put(mvvmRegistryName, viewModelClass);
         registeredReactiveObjects.put(mvvmRegistryName, RegistryUtils.findReactiveObjects(mvvmRegistryName, viewModelClass));
+        registeredReactiveCollections.put(mvvmRegistryName, RegistryUtils.findReactiveCollections(mvvmRegistryName, viewModelClass));
 
         return true;
     }

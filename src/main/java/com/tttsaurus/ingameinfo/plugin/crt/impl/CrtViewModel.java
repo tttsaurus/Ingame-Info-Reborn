@@ -40,7 +40,7 @@ public final class CrtViewModel extends ViewModel<CrtView>
     public static final Map<String, Map<String, Tuple<Reactive, ReactiveObject<?>>>> reactiveObjectDefs = new HashMap<>();
 
     @ZenMethod
-    public static ReactiveObjectWrapper registerReactiveObject(String fieldName, TypesWrapper typesWrapper, String targetUid, String property, @Optional boolean initiativeSync, @Optional boolean passiveSync)
+    public static ReactiveObjectWrapper registerReactiveObject(String fieldName, TypesWrapper typesWrapper, String targetUid, String property, @Optional boolean initiativeSync, @Optional boolean passiveSync, @Optional(valueLong = -1) int ordinal)
     {
         Map<String, Tuple<Reactive, ReactiveObject<?>>> def = reactiveObjectDefs.computeIfAbsent(CrtMvvm.currentMvvm, k -> new HashMap<>());
 
@@ -51,6 +51,7 @@ public final class CrtViewModel extends ViewModel<CrtView>
         values.put("property", property);
         values.put("initiativeSync", initiativeSync);
         values.put("passiveSync", passiveSync);
+        values.put("ordinal", ordinal);
         Reactive reactive = AnnotationUtils.createAnnotation(Reactive.class, values);
 
         ReactiveObjectWrapper wrapper = ReactiveObjectWrapper.instantiate(typesWrapper.types);

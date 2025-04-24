@@ -13,4 +13,5 @@ public @interface Reactive
     String property() default "";
     boolean passiveSync() default false;
     boolean initiativeSync() default false;
+    int ordinal() default -1;
 }

@@ -2,6 +2,7 @@ package com.tttsaurus.ingameinfo.common.api.mvvm.binding;
 
 import com.tttsaurus.ingameinfo.common.api.gui.Element;
 import com.tttsaurus.ingameinfo.common.api.gui.GuiLayout;
+import com.tttsaurus.ingameinfo.common.api.gui.layout.ElementGroup;
 import com.tttsaurus.ingameinfo.common.api.gui.style.*;
 import com.tttsaurus.ingameinfo.common.api.function.IAction_1Param;
 import com.tttsaurus.ingameinfo.common.api.internal.InternalMethods;
@@ -40,6 +41,22 @@ public class VvmBinding<TView extends View>
         return guiLayout;
     }
 
+    public void bindReactiveCollection(Reactive reactive, ReactiveCollection reactiveCollection)
+    {
+        int index = 0;
+        List<Element> elements = view.getElements(reactive.targetUid());
+        for (Element element: elements)
+        {
+            if (reactive.ordinal() != -1 && reactive.ordinal() != index++) continue;
+
+            if (ElementGroup.class.isAssignableFrom(element.getClass()))
+            {
+                reactiveCollection.group = (ElementGroup)element;
+                return;
+            }
+        }
+    }
+
     public <T> void bindReactiveObject(Reactive reactive, ReactiveObject<T> reactiveObject)
     {
         if (reactive.targetUid().isEmpty()) return;
@@ -51,9 +68,12 @@ public class VvmBinding<TView extends View>
         // only happens if didn't use the anonymous subclass when instantiating the ReactiveObject
         catch (Exception ignored) { return; }
 
+        int index = 0;
         List<Element> elements = view.getElements(reactive.targetUid());
         for (Element element: elements)
         {
+            if (reactive.ordinal() != -1 && reactive.ordinal() != index++) continue;
+
             IStylePropertySetter stylePropertySetter = ElementRegistry.getStylePropertySetter(element.getClass(), reactive.property());
             Class<?> stylePropertyClass = ElementRegistry.getStylePropertyClass(stylePropertySetter);
 

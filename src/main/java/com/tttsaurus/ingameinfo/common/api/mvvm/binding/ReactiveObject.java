@@ -4,7 +4,7 @@ import com.tttsaurus.ingameinfo.common.api.function.IAction_1Param;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ReactiveObject<T>
+public abstract class ReactiveObject<T>
 {
     protected final List<IReactiveCallback> initiativeCallbacks = new ArrayList<>();
     protected final List<IReactiveCallback> passiveCallbacks = new ArrayList<>();
