@@ -106,7 +106,10 @@ public final class ThemeRegistry
                     RandomAccessFile file = new RandomAccessFile(spotify, "rw");
 
                     ThemeConfig spotifyTheme = new ThemeConfig();
-                    spotifyTheme.element.backgroundStyle = "rounded-box-with-outline";
+                    spotifyTheme.element.backgroundStyle = "mc-vanilla";
+                    spotifyTheme.text.color = "232323";
+                    spotifyTheme.slidingText.color = "232323";
+                    spotifyTheme.animText.color = "232323";
 
                     String config = ThemeConfigSerDesUtils.serialize(spotifyTheme);
                     file.write(config.getBytes(StandardCharsets.UTF_8));

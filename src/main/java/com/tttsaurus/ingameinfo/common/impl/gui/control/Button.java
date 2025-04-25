@@ -19,6 +19,9 @@ public class Button extends AbstractButton
 {
     private final TextRenderer textRenderer = new TextRenderer();
 
+    @StyleProperty
+    public String style = "";
+
     private int currentColor;
 
     @StyleProperty
@@ -30,6 +33,17 @@ public class Button extends AbstractButton
     @StyleProperty
     public int holdColor;
 
+    private int currentTextColor;
+
+    @StyleProperty
+    public int defaultTextColor;
+
+    @StyleProperty
+    public int hoverTextColor;
+
+    @StyleProperty
+    public int holdTextColor;
+
     @StylePropertyCallback
     public void textValidation(String value, CallbackInfo callbackInfo)
     {
@@ -39,21 +53,31 @@ public class Button extends AbstractButton
     public void setTextCallback()
     {
         textRenderer.setText(text);
-        width = textRenderer.simulateWidth() + 4;
-        height = textRenderer.simulateHeight() + 4;
+        width = textRenderer.simulateWidth() + 10;
+        height = textRenderer.simulateHeight() + 10;
         requestReCalc();
     }
     @StyleProperty(setterCallbackPost = "setTextCallback", setterCallbackPre = "textValidation")
     public String text;
 
+    @StylePropertyCallback
+    public void setShadowCallback()
+    {
+        textRenderer.setShadow(shadow);
+    }
+    @StyleProperty(setterCallbackPost = "setShadowCallback")
+    public boolean shadow = true;
+
     public Button()
     {
+        textRenderer.setShadow(true);
         addListener(new IMouseEnterButton()
         {
             @Override
             public void enter()
             {
                 currentColor = hoverColor;
+                currentTextColor = hoverTextColor;
             }
         }).addListener(new IMousePressButton()
         {
@@ -61,6 +85,7 @@ public class Button extends AbstractButton
             public void press()
             {
                 currentColor = holdColor;
+                currentTextColor = holdTextColor;
             }
         }).addListener(new IMouseLeaveButton()
         {
@@ -68,6 +93,7 @@ public class Button extends AbstractButton
             public void leave()
             {
                 currentColor = defaultColor;
+                currentTextColor = defaultTextColor;
             }
         }).addListener(new IMouseReleaseButton()
         {
@@ -75,6 +101,7 @@ public class Button extends AbstractButton
             public void release()
             {
                 currentColor = defaultColor;
+                currentTextColor = defaultTextColor;
             }
         });
     }
@@ -83,18 +110,29 @@ public class Button extends AbstractButton
     public void calcRenderPos(Rect contextRect)
     {
         super.calcRenderPos(contextRect);
-        textRenderer.setX(rect.x + 2);
-        textRenderer.setY(rect.y + 2);
+        textRenderer.setX(rect.x + (rect.width - textRenderer.simulateWidth()) / 2f);
+        textRenderer.setY(rect.y + (rect.height - textRenderer.simulateHeight()) / 2f);
     }
 
     @Override
     public void onRenderUpdate(boolean focused)
     {
         super.onRenderUpdate(focused);
-        textRenderer.setColor(currentColor);
-        textRenderer.render();
-        RenderUtils.renderRoundedRectOutline(rect.x, rect.y, rect.width, rect.height, 5f, 1f, currentColor);
-        //RenderUtils.renderNinePatchBorderByPixel(rect.x, rect.y, rect.width, rect.height, GuiResources.mcVanillaButton, -1);
+        switch (style)
+        {
+            case "simple" ->
+            {
+                RenderUtils.renderRoundedRectOutline(rect.x, rect.y, rect.width, rect.height, 5f, 1f, currentColor);
+                textRenderer.setColor(currentTextColor);
+                textRenderer.render();
+            }
+            case "mc-vanilla" ->
+            {
+                RenderUtils.renderNinePatchBorderByPixel(rect.x, rect.y, rect.width, rect.height, GuiResources.mcVanillaButton, currentColor);
+                textRenderer.setColor(currentTextColor);
+                textRenderer.render();
+            }
+        }
     }
 
     @Override
@@ -102,13 +140,36 @@ public class Button extends AbstractButton
     {
         super.loadTheme(themeConfig);
 
-        if (defaultColor == 0)
-            setStyleProperty("defaultColor", themeConfig.button.parsedDefaultColor);
-        if (hoverColor == 0)
-            setStyleProperty("hoverColor", themeConfig.button.parsedHoverColor);
-        if (holdColor == 0)
-            setStyleProperty("holdColor", themeConfig.button.parsedHoldColor);
+        if (style.isEmpty())
+            setStyleProperty("style", themeConfig.button.style);
+
+        if (defaultColor == 0 && style.equals("simple"))
+            setStyleProperty("defaultColor", themeConfig.button.simple.parsedDefaultColor);
+        if (hoverColor == 0 && style.equals("simple"))
+            setStyleProperty("hoverColor", themeConfig.button.simple.parsedHoverColor);
+        if (holdColor == 0 && style.equals("simple"))
+            setStyleProperty("holdColor", themeConfig.button.simple.parsedHoldColor);
+        if (defaultTextColor == 0 && style.equals("simple"))
+            setStyleProperty("defaultTextColor", themeConfig.button.simple.parsedDefaultTextColor);
+        if (hoverTextColor == 0 && style.equals("simple"))
+            setStyleProperty("hoverTextColor", themeConfig.button.simple.parsedHoverTextColor);
+        if (holdTextColor == 0 && style.equals("simple"))
+            setStyleProperty("holdTextColor", themeConfig.button.simple.parsedHoldTextColor);
+
+        if (defaultColor == 0 && style.equals("mc-vanilla"))
+            setStyleProperty("defaultColor", themeConfig.button.mcVanilla.parsedDefaultColor);
+        if (hoverColor == 0 && style.equals("mc-vanilla"))
+            setStyleProperty("hoverColor", themeConfig.button.mcVanilla.parsedHoverColor);
+        if (holdColor == 0 && style.equals("mc-vanilla"))
+            setStyleProperty("holdColor", themeConfig.button.mcVanilla.parsedHoldColor);
+        if (defaultTextColor == 0 && style.equals("mc-vanilla"))
+            setStyleProperty("defaultTextColor", themeConfig.button.mcVanilla.parsedDefaultTextColor);
+        if (hoverTextColor == 0 && style.equals("mc-vanilla"))
+            setStyleProperty("hoverTextColor", themeConfig.button.mcVanilla.parsedHoverTextColor);
+        if (holdTextColor == 0 && style.equals("mc-vanilla"))
+            setStyleProperty("holdTextColor", themeConfig.button.mcVanilla.parsedHoldTextColor);
 
         currentColor = defaultColor;
+        currentTextColor = defaultTextColor;
     }
 }
