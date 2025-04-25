@@ -19,6 +19,33 @@ This is a library mod that helps you to create in-game overlaid (or focused) GUI
 ![Snipaste_2025-01-12_12-53-07](https://github.com/user-attachments/assets/581f0727-bba8-4ff5-9780-8fdbfaf587fd)
 (Nothing will pop up with the default configuration!)
 
+Declarative GUI example:
+```xml
+<VerticalGroup>
+    <HorizontalGroup>
+        <Text text = "Memory: ">
+        <ProgressBar uid = "memoryBar" 
+                     width = 40 
+                     height = 3 
+                     alignment = CENTER 
+                     pivot = CENTER 
+                     padding = {"right": 5}>
+        <Text uid = "memory">
+    </Group>
+    <Text uid = "fps">
+</Group>
+```
+```java
+@Reactive(targetUid = "fps", property = "text", initiativeSync = true)
+public ReactiveObject<String> fpsText = new ReactiveObject<>(){};
+
+EventCenter.gameFpsEvent.addListener((fps) ->
+{
+    fpsText.set("FPS: " + fps);
+});
+...
+```
+
 ## Wiki
 - [Wiki Link](https://tttsaurus.github.io/Ingame-Info-Reborn-Wiki/)
 
