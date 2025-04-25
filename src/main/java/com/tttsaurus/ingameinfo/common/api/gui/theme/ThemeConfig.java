@@ -66,8 +66,10 @@ public final class ThemeConfig
         @ConfigSerializable
         public static class McVanilla
         {
-            @Comment("The transparency of the background. Range: 0.0 to 1.0")
-            public float alpha = 1f;
+            @Comment("In the form of hex rrggbb or aarrggbb.")
+            public String color = "ffffffff";
+
+            public transient int parsedColor;
         }
     }
 

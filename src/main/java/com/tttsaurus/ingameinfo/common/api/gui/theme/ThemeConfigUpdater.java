@@ -31,6 +31,8 @@ public final class ThemeConfigUpdater
         config.backgroundStyles.roundedBoxWithOutline.parsedColor = parseColor(config.backgroundStyles.roundedBoxWithOutline.color);
         config.backgroundStyles.roundedBoxWithOutline.parsedOutlineColor = parseColor(config.backgroundStyles.roundedBoxWithOutline.outlineColor);
 
+        config.backgroundStyles.mcVanilla.parsedColor = parseColor(config.backgroundStyles.mcVanilla.color);
+
         config.text.parsedColor = parseColor(config.text.color);
         config.slidingText.parsedColor = parseColor(config.slidingText.color);
         config.animText.parsedColor = parseColor(config.animText.color);
@@ -48,7 +50,6 @@ public final class ThemeConfigUpdater
     {
         config.backgroundStyles.roundedBox.cornerRadius = Math.max(0f, config.backgroundStyles.roundedBox.cornerRadius);
         config.backgroundStyles.roundedBoxWithOutline.cornerRadius = Math.max(0f, config.backgroundStyles.roundedBoxWithOutline.cornerRadius);
-        config.backgroundStyles.mcVanilla.alpha = Math.min(1f, Math.max(0f, config.backgroundStyles.mcVanilla.alpha));
         config.text.scale = Math.max(0f, config.text.scale);
         config.slidingText.scale = Math.max(0f, config.slidingText.scale);
         config.animText.scale = Math.max(0f, config.animText.scale);

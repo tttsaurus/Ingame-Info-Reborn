@@ -52,7 +52,6 @@ public class VvmBinding<TView extends View>
             if (ElementGroup.class.isAssignableFrom(element.getClass()))
             {
                 reactiveCollection.group = (ElementGroup)element;
-                return;
             }
         }
     }
