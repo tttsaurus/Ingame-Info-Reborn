@@ -617,7 +617,8 @@ sourceSets {
     }
     main {
         java {
-            srcDirs = ['src/main/java', 'src_demo/main/java']
+            srcDirs = ['src/main/java']
+            //srcDirs = ['src/main/java', 'src_demo/main/java']
         }
     }
 }
