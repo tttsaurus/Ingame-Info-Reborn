@@ -30,19 +30,26 @@ public final class ElementAccessor
     {
         List<Element> list = new ArrayList<>();
 
+        if (group.uid.equals(uid)) list.add(group);
+
         for (Element element: group.elements)
         {
-            if (element.uid.equals(uid)) list.add(element);
             if (ElementGroup.class.isAssignableFrom(element.getClass()))
             {
                 ElementGroup nextGroup = (ElementGroup)element;
                 list.addAll(getElements(nextGroup, uid));
             }
+            else if (element.uid.equals(uid)) list.add(element);
         }
 
         return list;
     }
 
+    public void set(String propertyName, Object value)
+    {
+        IAction_1Param<Object> action = ElementRegistry.getStylePropertySetterFullCallback(element, propertyName);
+        if (action != null) action.invoke(value);
+    }
     public void set(String uid, String propertyName, Object value)
     {
         set(uid, propertyName, value, -1);
@@ -59,6 +66,15 @@ public final class ElementAccessor
             IAction_1Param<Object> action = ElementRegistry.getStylePropertySetterFullCallback(item, propertyName);
             if (action != null) action.invoke(value);
         }
+    }
+
+    public Object get(String propertyName)
+    {
+        IStylePropertySetter setter = ElementRegistry.getStylePropertySetter(element.getClass(), propertyName);
+        if (setter == null) return null;
+        IStylePropertyGetter getter = ElementRegistry.getStylePropertyGetter(setter);
+        if (getter == null) return null;
+        return getter.get(element);
     }
     public Object get(String uid, String propertyName)
     {

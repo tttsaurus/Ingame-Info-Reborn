@@ -1,0 +1,28 @@
+package com.tttsaurus.ingameinfo.demo;
+
+import com.tttsaurus.ingameinfo.InGameInfoReborn;
+import com.tttsaurus.ingameinfo.common.api.event.IgiGuiInitEvent;
+import com.tttsaurus.ingameinfo.common.api.event.MvvmRegisterEvent;
+import com.tttsaurus.ingameinfo.common.api.gui.IgiGuiManager;
+import com.tttsaurus.ingameinfo.common.impl.mvvm.registry.MvvmRegistry;
+import com.tttsaurus.ingameinfo.demo.eg1.Eg1ViewModel;
+import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+
+@Mod.EventBusSubscriber
+public final class DemoMvvmRegistration
+{
+    @SubscribeEvent
+    public static void onMvvmRegister(MvvmRegisterEvent event)
+    {
+        MvvmRegistry.autoRegister("eg1", Eg1ViewModel.class);
+
+        InGameInfoReborn.logger.info("In-Game Info Reborn mvvm demos registered.");
+    }
+
+    @SubscribeEvent
+    public static void onIgiGuiInit(IgiGuiInitEvent event)
+    {
+        IgiGuiManager.openGui("eg1");
+    }
+}

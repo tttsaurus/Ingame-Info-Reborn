@@ -10,7 +10,7 @@ import stanhebben.zenscript.annotations.ZenMethod;
 
 @ZenRegister
 @ZenClass("mods.ingameinfo.item.GhostableItem")
-public class GhostableItemWrapper
+public final class GhostableItemWrapper
 {
     public final GhostableItem ghostableItem;
 

@@ -10,13 +10,13 @@ public abstract class ReactiveObject<T>
     protected final List<IReactiveCallback> passiveCallbacks = new ArrayList<>();
 
     private T value;
-    public T get()
+    public final T get()
     {
         return value;
     }
 
     @SuppressWarnings("all")
-    public void addListener(IAction_1Param<T> action)
+    public final void addListener(IAction_1Param<T> action)
     {
         passiveCallbacks.add((value) ->
         {
@@ -27,14 +27,14 @@ public abstract class ReactiveObject<T>
 
     // to view
     @SuppressWarnings("all")
-    public void set(Object value)
+    public final void set(Object value)
     {
         this.value = (T)value;
         for (IReactiveCallback callback: initiativeCallbacks) callback.invoke(this.value);
     }
     // from view
     @SuppressWarnings("all")
-    protected void setInternal(Object value)
+    protected final void setInternal(Object value)
     {
         this.value = (T)value;
         for (IReactiveCallback callback: passiveCallbacks) callback.invoke(this.value);
