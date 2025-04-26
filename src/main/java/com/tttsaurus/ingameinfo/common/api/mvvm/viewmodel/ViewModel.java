@@ -53,7 +53,7 @@ public abstract class ViewModel<T extends View>
     private VvmBinding<T> binding = new VvmBinding<>();
 
     // register entry point
-    private final GuiLayout init(String mvvmRegistryName)
+    private GuiLayout init(String mvvmRegistryName)
     {
         this.mvvmRegistryName = mvvmRegistryName;
         GuiLayout guiLayout = binding.init(this, mvvmRegistryName);

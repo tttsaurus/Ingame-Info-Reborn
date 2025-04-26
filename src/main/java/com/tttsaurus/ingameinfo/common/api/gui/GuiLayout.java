@@ -2,7 +2,6 @@ package com.tttsaurus.ingameinfo.common.api.gui;
 
 import com.tttsaurus.ingameinfo.common.api.function.IAction_1Param;
 import com.tttsaurus.ingameinfo.common.api.gui.layout.ElementGroup;
-import com.tttsaurus.ingameinfo.common.api.gui.style.IStylePropertySetter;
 import com.tttsaurus.ingameinfo.common.api.item.GhostableItem;
 import com.tttsaurus.ingameinfo.common.impl.gui.layout.MainGroup;
 import com.tttsaurus.ingameinfo.common.impl.gui.registry.ElementRegistry;

@@ -10,7 +10,7 @@ public class TemplateViewModel extends ViewModel<TemplateView>
     @Reactive(targetUid = "biome", property = "text", initiativeSync = true)
     public ReactiveObject<String> biomeText = new ReactiveObject<>(){};
 
-    @Reactive(targetUid = "tps/mtps", property = "text", initiativeSync = true)
+    @Reactive(targetUid = "tps/mspt", property = "text", initiativeSync = true)
     public ReactiveObject<String> tpsMtpsText = new ReactiveObject<>(){};
 
     @Reactive(targetUid = "memoryBar", property = "percentage", initiativeSync = true)

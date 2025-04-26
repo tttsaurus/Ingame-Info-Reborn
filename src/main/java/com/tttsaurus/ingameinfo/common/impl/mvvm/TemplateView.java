@@ -12,7 +12,7 @@ public class TemplateView extends View
                 <Def debug = false>
                 <VerticalGroup>
                     <Text uid = "biome">
-                    <Text uid = "tps/mtps">
+                    <Text uid = "tps/mspt">
                     <HorizontalGroup>
                         <Text text = "Memory: ">
                         <ProgressBar uid = "memoryBar" width = 40 height = 3 alignment = CENTER pivot = CENTER padding = {"right": 5}>
