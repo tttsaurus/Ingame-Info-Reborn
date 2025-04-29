@@ -9,6 +9,7 @@ import com.tttsaurus.ingameinfo.common.api.render.RenderUtils;
 import com.tttsaurus.ingameinfo.common.impl.gui.theme.registry.ThemeRegistry;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.ScaledResolution;
+import net.minecraft.client.renderer.GlStateManager;
 import org.lwjgl.input.Keyboard;
 import java.util.ArrayList;
 import java.util.List;
@@ -86,8 +87,8 @@ public class IgiGuiContainer
 
         if (isFocused && hasFocusBackground)
         {
-            ScaledResolution resolution = new ScaledResolution(Minecraft.getMinecraft());
-            RenderUtils.renderGradientRect(0, 0, resolution.getScaledWidth(), resolution.getScaledHeight(), backgroundColor, backgroundColor);
+            GlStateManager.tryBlendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ONE);
+            RenderUtils.renderRectFullScreen(backgroundColor);
         }
 
         if (mainGroup.getNeedReCalc())
