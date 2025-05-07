@@ -2,24 +2,15 @@ package com.tttsaurus.ingameinfo.common.impl.render.renderer;
 
 import com.tttsaurus.ingameinfo.common.api.render.renderer.IRenderer;
 import com.tttsaurus.ingameinfo.common.api.render.Mesh;
-import com.tttsaurus.ingameinfo.common.api.render.shader.Shader;
 import com.tttsaurus.ingameinfo.common.api.render.shader.ShaderProgram;
-import com.tttsaurus.ingameinfo.common.api.render.shader.ShaderLoadingUtils;
 
 public class MeshRenderer implements IRenderer
 {
-    public static ShaderProgram SHARED_MESH_SHADER_PROGRAM;
-    static
-    {
-        ShaderLoadingUtils loader = new ShaderLoadingUtils();
-        Shader frag = loader.load("ingameinfo:shaders/mesh_frag.glsl", Shader.ShaderType.FRAGMENT);
-        Shader vertex = loader.load("ingameinfo:shaders/mesh_vertex.glsl", Shader.ShaderType.VERTEX);
-        SHARED_MESH_SHADER_PROGRAM = new ShaderProgram(frag, vertex);
-        SHARED_MESH_SHADER_PROGRAM.setup();
-    }
+    public Mesh getMesh() { return mesh; }
+    public ShaderProgram getShaderProgram() { return shaderProgram; }
 
-    public Mesh mesh;
-    public ShaderProgram shaderProgram;
+    protected Mesh mesh;
+    protected ShaderProgram shaderProgram;
 
     public MeshRenderer(Mesh mesh, ShaderProgram shaderProgram)
     {
