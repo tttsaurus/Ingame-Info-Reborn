@@ -1,7 +1,7 @@
 package com.tttsaurus.ingameinfo.common.impl.render.renderer;
 
 import com.tttsaurus.ingameinfo.common.api.render.renderer.IRenderer;
-import com.tttsaurus.ingameinfo.common.impl.render.mesh.Mesh;
+import com.tttsaurus.ingameinfo.common.api.render.Mesh;
 import com.tttsaurus.ingameinfo.common.api.render.shader.Shader;
 import com.tttsaurus.ingameinfo.common.api.render.shader.ShaderProgram;
 import com.tttsaurus.ingameinfo.common.api.render.shader.ShaderLoadingUtils;

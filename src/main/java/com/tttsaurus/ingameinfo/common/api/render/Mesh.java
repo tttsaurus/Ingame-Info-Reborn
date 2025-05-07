@@ -1,7 +1,5 @@
-package com.tttsaurus.ingameinfo.common.impl.render.mesh;
+package com.tttsaurus.ingameinfo.common.api.render;
 
-import com.tttsaurus.ingameinfo.common.api.render.GlResourceManager;
-import com.tttsaurus.ingameinfo.common.api.render.IGlDisposable;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL15;
 import org.lwjgl.opengl.GL20;
