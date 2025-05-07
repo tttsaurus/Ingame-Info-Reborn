@@ -4,7 +4,7 @@ import com.tttsaurus.ingameinfo.InGameInfoReborn;
 import com.tttsaurus.ingameinfo.common.core.event.IgiGuiInitEvent;
 import com.tttsaurus.ingameinfo.common.core.event.MvvmRegisterEvent;
 import com.tttsaurus.ingameinfo.common.core.gui.IgiGuiManager;
-import com.tttsaurus.ingameinfo.common.impl.mvvm.registry.MvvmRegistry;
+import com.tttsaurus.ingameinfo.common.core.mvvm.registry.MvvmRegistry;
 import com.tttsaurus.ingameinfo.demo.eg1.Eg1ViewModel;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
