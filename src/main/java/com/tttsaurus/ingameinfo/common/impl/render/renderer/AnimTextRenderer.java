@@ -1,6 +1,6 @@
 package com.tttsaurus.ingameinfo.common.impl.render.renderer;
 
-import com.tttsaurus.ingameinfo.common.api.render.RenderUtils;
+import com.tttsaurus.ingameinfo.common.core.render.RenderUtils;
 import java.util.Arrays;
 
 public class AnimTextRenderer extends TextRenderer

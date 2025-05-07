@@ -1,24 +1,24 @@
 package com.tttsaurus.ingameinfo.common.impl.gui;
 
 import com.tttsaurus.ingameinfo.InGameInfoReborn;
-import com.tttsaurus.ingameinfo.common.api.event.IgiGuiInitEvent;
-import com.tttsaurus.ingameinfo.common.api.event.RegainScreenFocusEvent;
-import com.tttsaurus.ingameinfo.common.api.gui.IgiGuiContainer;
-import com.tttsaurus.ingameinfo.common.api.gui.delegate.placeholder.IPlaceholderDrawScreen;
-import com.tttsaurus.ingameinfo.common.api.gui.delegate.placeholder.IPlaceholderKeyTyped;
-import com.tttsaurus.ingameinfo.common.api.function.IFunc;
-import com.tttsaurus.ingameinfo.common.api.item.GhostableItem;
-import com.tttsaurus.ingameinfo.common.api.render.GlResourceManager;
-import com.tttsaurus.ingameinfo.common.api.render.IGlDisposable;
-import com.tttsaurus.ingameinfo.common.api.render.RenderHints;
-import com.tttsaurus.ingameinfo.common.api.render.RenderUtils;
+import com.tttsaurus.ingameinfo.common.core.event.IgiGuiInitEvent;
+import com.tttsaurus.ingameinfo.common.core.event.RegainScreenFocusEvent;
+import com.tttsaurus.ingameinfo.common.core.gui.IgiGuiContainer;
+import com.tttsaurus.ingameinfo.common.core.gui.delegate.placeholder.IPlaceholderDrawScreen;
+import com.tttsaurus.ingameinfo.common.core.gui.delegate.placeholder.IPlaceholderKeyTyped;
+import com.tttsaurus.ingameinfo.common.core.function.IFunc;
+import com.tttsaurus.ingameinfo.common.core.item.GhostableItem;
+import com.tttsaurus.ingameinfo.common.core.render.GlResourceManager;
+import com.tttsaurus.ingameinfo.common.core.render.IGlDisposable;
+import com.tttsaurus.ingameinfo.common.core.render.RenderHints;
+import com.tttsaurus.ingameinfo.common.core.render.RenderUtils;
 import com.tttsaurus.ingameinfo.common.impl.igievent.EventCenter;
 import com.tttsaurus.ingameinfo.common.impl.network.IgiNetwork;
 import com.tttsaurus.ingameinfo.config.IgiConfig;
-import com.tttsaurus.ingameinfo.common.api.reader.RlReaderUtils;
-import com.tttsaurus.ingameinfo.common.api.render.shader.Shader;
-import com.tttsaurus.ingameinfo.common.api.render.shader.ShaderProgram;
-import com.tttsaurus.ingameinfo.common.api.render.shader.ShaderLoadingUtils;
+import com.tttsaurus.ingameinfo.common.core.reader.RlReaderUtils;
+import com.tttsaurus.ingameinfo.common.core.render.shader.Shader;
+import com.tttsaurus.ingameinfo.common.core.render.shader.ShaderProgram;
+import com.tttsaurus.ingameinfo.common.core.render.shader.ShaderLoadingUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.client.gui.ScaledResolution;
@@ -40,8 +40,8 @@ import java.nio.charset.StandardCharsets;
 import java.util.*;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
-import static com.tttsaurus.ingameinfo.common.api.render.CommonBuffers.intBuffer;
-import static com.tttsaurus.ingameinfo.common.api.render.CommonBuffers.floatBuffer;
+import static com.tttsaurus.ingameinfo.common.core.render.CommonBuffers.intBuffer;
+import static com.tttsaurus.ingameinfo.common.core.render.CommonBuffers.floatBuffer;
 
 @SuppressWarnings("all")
 public final class IgiGuiLifeCycle

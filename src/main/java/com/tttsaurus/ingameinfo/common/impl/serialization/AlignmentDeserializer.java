@@ -1,7 +1,7 @@
 package com.tttsaurus.ingameinfo.common.impl.serialization;
 
-import com.tttsaurus.ingameinfo.common.api.gui.layout.Alignment;
-import com.tttsaurus.ingameinfo.common.api.serialization.IDeserializer;
+import com.tttsaurus.ingameinfo.common.core.gui.layout.Alignment;
+import com.tttsaurus.ingameinfo.common.core.serialization.IDeserializer;
 
 public class AlignmentDeserializer implements IDeserializer<Alignment>
 {

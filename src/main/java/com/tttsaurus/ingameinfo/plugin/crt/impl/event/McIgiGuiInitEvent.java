@@ -1,6 +1,6 @@
 package com.tttsaurus.ingameinfo.plugin.crt.impl.event;
 
-import com.tttsaurus.ingameinfo.common.api.event.IgiGuiInitEvent;
+import com.tttsaurus.ingameinfo.common.core.event.IgiGuiInitEvent;
 import com.tttsaurus.ingameinfo.plugin.crt.api.event.IIgiGuiInitEvent;
 
 public class McIgiGuiInitEvent implements IIgiGuiInitEvent

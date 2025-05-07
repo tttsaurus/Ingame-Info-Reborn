@@ -1,10 +1,10 @@
 package com.tttsaurus.ingameinfo.common.impl.serialization;
 
-import com.tttsaurus.ingameinfo.common.api.gui.Element;
-import com.tttsaurus.ingameinfo.common.api.gui.ElementStyle;
-import com.tttsaurus.ingameinfo.common.api.gui.style.IStylePropertySetter;
-import com.tttsaurus.ingameinfo.common.api.serialization.IDeserializer;
-import com.tttsaurus.ingameinfo.common.impl.gui.registry.ElementRegistry;
+import com.tttsaurus.ingameinfo.common.core.gui.Element;
+import com.tttsaurus.ingameinfo.common.core.gui.ElementStyle;
+import com.tttsaurus.ingameinfo.common.core.gui.style.IStylePropertySetter;
+import com.tttsaurus.ingameinfo.common.core.serialization.IDeserializer;
+import com.tttsaurus.ingameinfo.common.core.gui.registry.ElementRegistry;
 import net.minecraft.util.Tuple;
 import java.util.ArrayList;
 import java.util.List;

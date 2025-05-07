@@ -1,8 +1,8 @@
 package com.tttsaurus.ingameinfo.common.impl.render.mesh2d;
 
-import com.tttsaurus.ingameinfo.common.api.render.ScaledRes2NdcUtils;
-import com.tttsaurus.ingameinfo.common.api.render.VertexIndexUtils;
-import com.tttsaurus.ingameinfo.common.api.render.Mesh;
+import com.tttsaurus.ingameinfo.common.core.render.ScaledRes2NdcUtils;
+import com.tttsaurus.ingameinfo.common.core.render.VertexIndexUtils;
+import com.tttsaurus.ingameinfo.common.core.render.Mesh;
 
 public class LineMesh extends Mesh
 {

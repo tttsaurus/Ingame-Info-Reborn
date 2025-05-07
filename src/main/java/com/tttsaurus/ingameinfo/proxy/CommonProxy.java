@@ -4,7 +4,7 @@ import com.tttsaurus.ingameinfo.InGameInfoReborn;
 import com.tttsaurus.ingameinfo.common.impl.network.IgiNetwork;
 import com.tttsaurus.ingameinfo.config.ForgeConfigWriter;
 import com.tttsaurus.ingameinfo.config.IgiConfig;
-import com.tttsaurus.ingameinfo.common.api.internal.InternalMethods;
+import com.tttsaurus.ingameinfo.common.core.internal.InternalMethods;
 import com.tttsaurus.ingameinfo.plugin.crt.impl.CrtEventManager;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.config.Configuration;

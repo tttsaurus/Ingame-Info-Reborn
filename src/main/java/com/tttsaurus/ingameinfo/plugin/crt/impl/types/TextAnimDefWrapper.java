@@ -1,6 +1,6 @@
 package com.tttsaurus.ingameinfo.plugin.crt.impl.types;
 
-import com.tttsaurus.ingameinfo.common.api.animation.text.ITextAnimDef;
+import com.tttsaurus.ingameinfo.common.core.animation.text.ITextAnimDef;
 import com.tttsaurus.ingameinfo.common.impl.gui.style.wrapped.DoubleProperty;
 import com.tttsaurus.ingameinfo.common.impl.render.renderer.AnimTextRenderer;
 import crafttweaker.annotations.ZenRegister;

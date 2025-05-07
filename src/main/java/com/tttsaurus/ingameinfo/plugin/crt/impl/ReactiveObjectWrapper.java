@@ -1,12 +1,12 @@
 package com.tttsaurus.ingameinfo.plugin.crt.impl;
 
-import com.tttsaurus.ingameinfo.common.api.animation.text.ITextAnimDef;
-import com.tttsaurus.ingameinfo.common.api.gui.layout.Alignment;
-import com.tttsaurus.ingameinfo.common.api.gui.layout.Padding;
-import com.tttsaurus.ingameinfo.common.api.gui.layout.Pivot;
-import com.tttsaurus.ingameinfo.common.api.gui.layout.Skewness;
-import com.tttsaurus.ingameinfo.common.api.item.GhostableItem;
-import com.tttsaurus.ingameinfo.common.api.mvvm.binding.ReactiveObject;
+import com.tttsaurus.ingameinfo.common.core.animation.text.ITextAnimDef;
+import com.tttsaurus.ingameinfo.common.core.gui.layout.Alignment;
+import com.tttsaurus.ingameinfo.common.core.gui.layout.Padding;
+import com.tttsaurus.ingameinfo.common.core.gui.layout.Pivot;
+import com.tttsaurus.ingameinfo.common.core.gui.layout.Skewness;
+import com.tttsaurus.ingameinfo.common.core.item.GhostableItem;
+import com.tttsaurus.ingameinfo.common.core.mvvm.binding.ReactiveObject;
 import com.tttsaurus.ingameinfo.plugin.crt.api.Types;
 import com.tttsaurus.ingameinfo.plugin.crt.impl.types.*;
 import crafttweaker.annotations.ZenRegister;

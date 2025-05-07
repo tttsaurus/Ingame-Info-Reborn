@@ -1,6 +1,6 @@
 package com.tttsaurus.ingameinfo.common.impl.network.tps;
 
-import com.tttsaurus.ingameinfo.common.api.function.IAction_2Param;
+import com.tttsaurus.ingameinfo.common.core.function.IAction_2Param;
 import io.netty.buffer.ByteBuf;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;

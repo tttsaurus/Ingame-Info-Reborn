@@ -1,15 +1,15 @@
 package com.tttsaurus.ingameinfo.common.impl.appcommunication.spotify;
 
 import com.tttsaurus.ingameinfo.config.IgiConfig;
-import com.tttsaurus.ingameinfo.common.api.appcommunication.spotify.SpotifyAccessUtils;
-import com.tttsaurus.ingameinfo.common.api.appcommunication.spotify.SpotifyOAuthUtils;
-import com.tttsaurus.ingameinfo.common.api.appcommunication.spotify.SpotifyUserInfo;
-import com.tttsaurus.ingameinfo.common.api.appcommunication.spotify.TrackPlaying;
-import com.tttsaurus.ingameinfo.common.api.gui.delegate.button.IMouseClickButton;
-import com.tttsaurus.ingameinfo.common.api.gui.layout.Padding;
-import com.tttsaurus.ingameinfo.common.api.mvvm.binding.Reactive;
-import com.tttsaurus.ingameinfo.common.api.mvvm.binding.ReactiveObject;
-import com.tttsaurus.ingameinfo.common.api.mvvm.viewmodel.ViewModel;
+import com.tttsaurus.ingameinfo.common.core.appcommunication.spotify.SpotifyAccessUtils;
+import com.tttsaurus.ingameinfo.common.core.appcommunication.spotify.SpotifyOAuthUtils;
+import com.tttsaurus.ingameinfo.common.core.appcommunication.spotify.SpotifyUserInfo;
+import com.tttsaurus.ingameinfo.common.core.appcommunication.spotify.TrackPlaying;
+import com.tttsaurus.ingameinfo.common.core.gui.delegate.button.IMouseClickButton;
+import com.tttsaurus.ingameinfo.common.core.gui.layout.Padding;
+import com.tttsaurus.ingameinfo.common.core.mvvm.binding.Reactive;
+import com.tttsaurus.ingameinfo.common.core.mvvm.binding.ReactiveObject;
+import com.tttsaurus.ingameinfo.common.core.mvvm.viewmodel.ViewModel;
 import com.tttsaurus.ingameinfo.common.impl.igievent.EventCenter;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;

@@ -1,8 +1,8 @@
 package com.tttsaurus.ingameinfo.common.impl.network;
 
 import com.tttsaurus.ingameinfo.Tags;
-import com.tttsaurus.ingameinfo.common.api.function.IAction_1Param;
-import com.tttsaurus.ingameinfo.common.api.function.IAction_2Param;
+import com.tttsaurus.ingameinfo.common.core.function.IAction_1Param;
+import com.tttsaurus.ingameinfo.common.core.function.IAction_2Param;
 import com.tttsaurus.ingameinfo.common.impl.network.common.RespondNbtPacket;
 import com.tttsaurus.ingameinfo.common.impl.network.modcompat.bloodmagic.RequestBloodMagicNbtPacket;
 import com.tttsaurus.ingameinfo.common.impl.network.modcompat.thaumcraft.RequestThaumcraftNbtPacket;

@@ -1,12 +1,12 @@
 package com.tttsaurus.ingameinfo.common.impl.gui.layout;
 
-import com.tttsaurus.ingameinfo.common.api.gui.layout.Alignment;
-import com.tttsaurus.ingameinfo.common.api.gui.layout.Padding;
-import com.tttsaurus.ingameinfo.common.api.gui.layout.Pivot;
-import com.tttsaurus.ingameinfo.common.api.gui.layout.Rect;
-import com.tttsaurus.ingameinfo.common.api.gui.registry.RegisterElement;
-import com.tttsaurus.ingameinfo.common.api.gui.style.StyleProperty;
-import com.tttsaurus.ingameinfo.common.api.input.MouseUtils;
+import com.tttsaurus.ingameinfo.common.core.gui.layout.Alignment;
+import com.tttsaurus.ingameinfo.common.core.gui.layout.Padding;
+import com.tttsaurus.ingameinfo.common.core.gui.layout.Pivot;
+import com.tttsaurus.ingameinfo.common.core.gui.layout.Rect;
+import com.tttsaurus.ingameinfo.common.core.gui.registry.RegisterElement;
+import com.tttsaurus.ingameinfo.common.core.gui.style.StyleProperty;
+import com.tttsaurus.ingameinfo.common.core.input.MouseUtils;
 
 @RegisterElement
 public class DraggableGroup extends DraggableContainerGroup

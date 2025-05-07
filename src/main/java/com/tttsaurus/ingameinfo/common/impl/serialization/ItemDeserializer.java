@@ -1,7 +1,7 @@
 package com.tttsaurus.ingameinfo.common.impl.serialization;
 
-import com.tttsaurus.ingameinfo.common.api.item.GhostableItem;
-import com.tttsaurus.ingameinfo.common.api.serialization.IDeserializer;
+import com.tttsaurus.ingameinfo.common.core.item.GhostableItem;
+import com.tttsaurus.ingameinfo.common.core.serialization.IDeserializer;
 
 public class ItemDeserializer implements IDeserializer<GhostableItem>
 {

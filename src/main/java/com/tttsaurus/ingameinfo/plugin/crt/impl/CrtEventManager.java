@@ -1,6 +1,6 @@
 package com.tttsaurus.ingameinfo.plugin.crt.impl;
 
-import com.tttsaurus.ingameinfo.common.api.event.IgiGuiInitEvent;
+import com.tttsaurus.ingameinfo.common.core.event.IgiGuiInitEvent;
 import com.tttsaurus.ingameinfo.plugin.crt.api.event.IIgiGuiInitEvent;
 import com.tttsaurus.ingameinfo.plugin.crt.impl.event.McIgiGuiInitEvent;
 import crafttweaker.annotations.ZenRegister;

@@ -1,7 +1,7 @@
 package com.tttsaurus.ingameinfo.common.impl.igievent.modcompat;
 
-import com.tttsaurus.ingameinfo.common.api.function.IAction_2Param;
-import com.tttsaurus.ingameinfo.common.api.igievent.EventBase;
+import com.tttsaurus.ingameinfo.common.core.function.IAction_2Param;
+import com.tttsaurus.ingameinfo.common.core.igievent.EventBase;
 
 public final class BloodMagicEvent extends EventBase<IAction_2Param<Integer, Integer>>
 {

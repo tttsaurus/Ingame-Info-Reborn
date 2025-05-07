@@ -1,7 +1,7 @@
 package com.tttsaurus.ingameinfo.common.impl.igievent.modcompat;
 
-import com.tttsaurus.ingameinfo.common.api.function.IAction_1Param;
-import com.tttsaurus.ingameinfo.common.api.igievent.EventBase;
+import com.tttsaurus.ingameinfo.common.core.function.IAction_1Param;
+import com.tttsaurus.ingameinfo.common.core.igievent.EventBase;
 import crafttweaker.annotations.ZenRegister;
 import stanhebben.zenscript.annotations.ZenClass;
 import stanhebben.zenscript.annotations.ZenMethod;

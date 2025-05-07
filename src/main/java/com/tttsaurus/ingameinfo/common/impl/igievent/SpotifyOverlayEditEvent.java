@@ -1,7 +1,7 @@
 package com.tttsaurus.ingameinfo.common.impl.igievent;
 
-import com.tttsaurus.ingameinfo.common.api.igievent.EventBase;
-import com.tttsaurus.ingameinfo.common.api.function.IAction;
+import com.tttsaurus.ingameinfo.common.core.igievent.EventBase;
+import com.tttsaurus.ingameinfo.common.core.function.IAction;
 
 public final class SpotifyOverlayEditEvent extends EventBase<IAction>
 {

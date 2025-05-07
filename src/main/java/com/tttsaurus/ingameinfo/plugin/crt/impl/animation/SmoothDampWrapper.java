@@ -1,6 +1,6 @@
 package com.tttsaurus.ingameinfo.plugin.crt.impl.animation;
 
-import com.tttsaurus.ingameinfo.common.impl.animation.SmoothDamp;
+import com.tttsaurus.ingameinfo.common.core.animation.SmoothDamp;
 import crafttweaker.annotations.ZenRegister;
 import stanhebben.zenscript.annotations.ZenClass;
 import stanhebben.zenscript.annotations.ZenMethod;

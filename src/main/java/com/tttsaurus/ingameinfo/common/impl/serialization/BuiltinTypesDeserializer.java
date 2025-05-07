@@ -1,7 +1,7 @@
 package com.tttsaurus.ingameinfo.common.impl.serialization;
 
-import com.tttsaurus.ingameinfo.common.api.reflection.TypeUtils;
-import com.tttsaurus.ingameinfo.common.api.serialization.IDeserializer;
+import com.tttsaurus.ingameinfo.common.core.reflection.TypeUtils;
+import com.tttsaurus.ingameinfo.common.core.serialization.IDeserializer;
 
 @SuppressWarnings("all")
 public class BuiltinTypesDeserializer<T> implements IDeserializer<T>

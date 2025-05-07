@@ -1,14 +1,14 @@
 package com.tttsaurus.ingameinfo.common.impl.serialization;
 
-import com.tttsaurus.ingameinfo.common.api.gui.Element;
-import com.tttsaurus.ingameinfo.common.api.gui.GuiLayout;
-import com.tttsaurus.ingameinfo.common.api.gui.layout.ElementGroup;
-import com.tttsaurus.ingameinfo.common.api.internal.InternalMethods;
-import com.tttsaurus.ingameinfo.common.api.item.GhostableItem;
-import com.tttsaurus.ingameinfo.common.api.serialization.IDeserializer;
-import com.tttsaurus.ingameinfo.common.api.serialization.ixml.RawIxmlUtils;
-import com.tttsaurus.ingameinfo.common.api.serialization.json.RawJsonUtils;
-import com.tttsaurus.ingameinfo.common.impl.gui.registry.ElementRegistry;
+import com.tttsaurus.ingameinfo.common.core.gui.Element;
+import com.tttsaurus.ingameinfo.common.core.gui.GuiLayout;
+import com.tttsaurus.ingameinfo.common.core.gui.layout.ElementGroup;
+import com.tttsaurus.ingameinfo.common.core.internal.InternalMethods;
+import com.tttsaurus.ingameinfo.common.core.item.GhostableItem;
+import com.tttsaurus.ingameinfo.common.core.serialization.IDeserializer;
+import com.tttsaurus.ingameinfo.common.core.serialization.ixml.RawIxmlUtils;
+import com.tttsaurus.ingameinfo.common.core.serialization.json.RawJsonUtils;
+import com.tttsaurus.ingameinfo.common.core.gui.registry.ElementRegistry;
 import net.minecraft.util.Tuple;
 import java.util.List;
 

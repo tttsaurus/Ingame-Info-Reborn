@@ -1,9 +1,9 @@
 package com.tttsaurus.ingameinfo.plugin.crt.impl;
 
-import com.tttsaurus.ingameinfo.common.api.mvvm.binding.Reactive;
-import com.tttsaurus.ingameinfo.common.api.mvvm.binding.ReactiveObject;
-import com.tttsaurus.ingameinfo.common.api.mvvm.viewmodel.ViewModel;
-import com.tttsaurus.ingameinfo.common.api.reflection.AnnotationUtils;
+import com.tttsaurus.ingameinfo.common.core.mvvm.binding.Reactive;
+import com.tttsaurus.ingameinfo.common.core.mvvm.binding.ReactiveObject;
+import com.tttsaurus.ingameinfo.common.core.mvvm.viewmodel.ViewModel;
+import com.tttsaurus.ingameinfo.common.core.reflection.AnnotationUtils;
 import com.tttsaurus.ingameinfo.plugin.crt.api.TypesWrapper;
 import com.tttsaurus.ingameinfo.plugin.crt.api.viewmodel.IGuiExit;
 import com.tttsaurus.ingameinfo.plugin.crt.api.viewmodel.IViewModelFixedUpdate;

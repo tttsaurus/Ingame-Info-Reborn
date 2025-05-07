@@ -1,10 +1,10 @@
 package com.tttsaurus.ingameinfo.demo.eg1;
 
-import com.tttsaurus.ingameinfo.common.api.gui.delegate.button.IMouseClickButton;
-import com.tttsaurus.ingameinfo.common.api.mvvm.binding.Reactive;
-import com.tttsaurus.ingameinfo.common.api.mvvm.binding.ReactiveCollection;
-import com.tttsaurus.ingameinfo.common.api.mvvm.binding.ReactiveObject;
-import com.tttsaurus.ingameinfo.common.api.mvvm.viewmodel.ViewModel;
+import com.tttsaurus.ingameinfo.common.core.gui.delegate.button.IMouseClickButton;
+import com.tttsaurus.ingameinfo.common.core.mvvm.binding.Reactive;
+import com.tttsaurus.ingameinfo.common.core.mvvm.binding.ReactiveCollection;
+import com.tttsaurus.ingameinfo.common.core.mvvm.binding.ReactiveObject;
+import com.tttsaurus.ingameinfo.common.core.mvvm.viewmodel.ViewModel;
 import com.tttsaurus.ingameinfo.common.impl.igievent.EventCenter;
 
 public class Eg1ViewModel extends ViewModel<Eg1View>

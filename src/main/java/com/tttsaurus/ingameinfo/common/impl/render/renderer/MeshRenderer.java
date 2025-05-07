@@ -1,8 +1,8 @@
 package com.tttsaurus.ingameinfo.common.impl.render.renderer;
 
-import com.tttsaurus.ingameinfo.common.api.render.renderer.IRenderer;
-import com.tttsaurus.ingameinfo.common.api.render.Mesh;
-import com.tttsaurus.ingameinfo.common.api.render.shader.ShaderProgram;
+import com.tttsaurus.ingameinfo.common.core.render.renderer.IRenderer;
+import com.tttsaurus.ingameinfo.common.core.render.Mesh;
+import com.tttsaurus.ingameinfo.common.core.render.shader.ShaderProgram;
 
 public class MeshRenderer implements IRenderer
 {

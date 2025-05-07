@@ -1,6 +1,6 @@
 package com.tttsaurus.ingameinfo.common.impl.mvvm;
 
-import com.tttsaurus.ingameinfo.common.api.mvvm.view.View;
+import com.tttsaurus.ingameinfo.common.core.mvvm.view.View;
 
 public class TemplateView extends View
 {

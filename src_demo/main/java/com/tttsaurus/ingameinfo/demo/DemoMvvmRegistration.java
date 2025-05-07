@@ -1,9 +1,9 @@
 package com.tttsaurus.ingameinfo.demo;
 
 import com.tttsaurus.ingameinfo.InGameInfoReborn;
-import com.tttsaurus.ingameinfo.common.api.event.IgiGuiInitEvent;
-import com.tttsaurus.ingameinfo.common.api.event.MvvmRegisterEvent;
-import com.tttsaurus.ingameinfo.common.api.gui.IgiGuiManager;
+import com.tttsaurus.ingameinfo.common.core.event.IgiGuiInitEvent;
+import com.tttsaurus.ingameinfo.common.core.event.MvvmRegisterEvent;
+import com.tttsaurus.ingameinfo.common.core.gui.IgiGuiManager;
 import com.tttsaurus.ingameinfo.common.impl.mvvm.registry.MvvmRegistry;
 import com.tttsaurus.ingameinfo.demo.eg1.Eg1ViewModel;
 import net.minecraftforge.fml.common.Mod;

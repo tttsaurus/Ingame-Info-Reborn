@@ -1,9 +1,9 @@
 package com.tttsaurus.ingameinfo.common.impl.gui;
 
-import com.tttsaurus.ingameinfo.common.api.render.RenderHints;
-import com.tttsaurus.ingameinfo.common.api.render.RenderUtils;
-import com.tttsaurus.ingameinfo.common.api.render.NinePatchBorder;
-import com.tttsaurus.ingameinfo.common.api.render.Texture2D;
+import com.tttsaurus.ingameinfo.common.core.render.RenderHints;
+import com.tttsaurus.ingameinfo.common.core.render.RenderUtils;
+import com.tttsaurus.ingameinfo.common.core.render.NinePatchBorder;
+import com.tttsaurus.ingameinfo.common.core.render.Texture2D;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.IResource;
 import net.minecraft.util.ResourceLocation;

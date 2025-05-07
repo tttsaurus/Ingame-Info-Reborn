@@ -1,9 +1,9 @@
 package com.tttsaurus.ingameinfo.common.impl.render.renderer;
 
-import com.tttsaurus.ingameinfo.common.api.render.Mesh;
-import com.tttsaurus.ingameinfo.common.api.render.shader.Shader;
-import com.tttsaurus.ingameinfo.common.api.render.shader.ShaderLoadingUtils;
-import com.tttsaurus.ingameinfo.common.api.render.shader.ShaderProgram;
+import com.tttsaurus.ingameinfo.common.core.render.Mesh;
+import com.tttsaurus.ingameinfo.common.core.render.shader.Shader;
+import com.tttsaurus.ingameinfo.common.core.render.shader.ShaderLoadingUtils;
+import com.tttsaurus.ingameinfo.common.core.render.shader.ShaderProgram;
 import org.lwjgl.util.vector.Vector3f;
 import java.nio.FloatBuffer;
 

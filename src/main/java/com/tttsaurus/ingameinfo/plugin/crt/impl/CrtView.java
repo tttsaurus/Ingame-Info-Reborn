@@ -1,6 +1,6 @@
 package com.tttsaurus.ingameinfo.plugin.crt.impl;
 
-import com.tttsaurus.ingameinfo.common.api.mvvm.view.View;
+import com.tttsaurus.ingameinfo.common.core.mvvm.view.View;
 import crafttweaker.annotations.ZenRegister;
 import stanhebben.zenscript.annotations.ZenClass;
 import stanhebben.zenscript.annotations.ZenMethod;

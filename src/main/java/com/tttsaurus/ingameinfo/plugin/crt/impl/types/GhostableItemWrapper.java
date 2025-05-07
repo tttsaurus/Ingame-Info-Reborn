@@ -1,6 +1,6 @@
 package com.tttsaurus.ingameinfo.plugin.crt.impl.types;
 
-import com.tttsaurus.ingameinfo.common.api.item.GhostableItem;
+import com.tttsaurus.ingameinfo.common.core.item.GhostableItem;
 import crafttweaker.annotations.ZenRegister;
 import crafttweaker.api.item.IItemStack;
 import crafttweaker.api.minecraft.CraftTweakerMC;

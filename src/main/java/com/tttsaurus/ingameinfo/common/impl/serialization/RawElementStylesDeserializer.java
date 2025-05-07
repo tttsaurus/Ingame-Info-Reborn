@@ -1,7 +1,7 @@
 package com.tttsaurus.ingameinfo.common.impl.serialization;
 
-import com.tttsaurus.ingameinfo.common.api.serialization.IDeserializer;
-import com.tttsaurus.ingameinfo.common.api.serialization.ixml.RawIxmlUtils;
+import com.tttsaurus.ingameinfo.common.core.serialization.IDeserializer;
+import com.tttsaurus.ingameinfo.common.core.serialization.ixml.RawIxmlUtils;
 import net.minecraft.util.Tuple;
 import java.util.List;
 

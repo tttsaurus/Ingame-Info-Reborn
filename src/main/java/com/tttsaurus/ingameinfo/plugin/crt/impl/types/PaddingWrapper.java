@@ -1,6 +1,6 @@
 package com.tttsaurus.ingameinfo.plugin.crt.impl.types;
 
-import com.tttsaurus.ingameinfo.common.api.gui.layout.Padding;
+import com.tttsaurus.ingameinfo.common.core.gui.layout.Padding;
 import crafttweaker.annotations.ZenRegister;
 import stanhebben.zenscript.annotations.ZenClass;
 import stanhebben.zenscript.annotations.ZenMethod;

@@ -2,8 +2,8 @@ package com.tttsaurus.ingameinfo.mixin.early;
 
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
-import com.tttsaurus.ingameinfo.common.api.render.IGlDisposable;
-import com.tttsaurus.ingameinfo.common.api.render.RenderHints;
+import com.tttsaurus.ingameinfo.common.core.render.IGlDisposable;
+import com.tttsaurus.ingameinfo.common.core.render.RenderHints;
 import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.shader.Framebuffer;
 import org.lwjgl.opengl.*;

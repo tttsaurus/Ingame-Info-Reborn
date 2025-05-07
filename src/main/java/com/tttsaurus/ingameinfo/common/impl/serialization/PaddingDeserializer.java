@@ -1,8 +1,8 @@
 package com.tttsaurus.ingameinfo.common.impl.serialization;
 
-import com.tttsaurus.ingameinfo.common.api.gui.layout.Padding;
-import com.tttsaurus.ingameinfo.common.api.serialization.IDeserializer;
-import com.tttsaurus.ingameinfo.common.api.serialization.json.RawJsonUtils;
+import com.tttsaurus.ingameinfo.common.core.gui.layout.Padding;
+import com.tttsaurus.ingameinfo.common.core.serialization.IDeserializer;
+import com.tttsaurus.ingameinfo.common.core.serialization.json.RawJsonUtils;
 
 public class PaddingDeserializer implements IDeserializer<Padding>
 {

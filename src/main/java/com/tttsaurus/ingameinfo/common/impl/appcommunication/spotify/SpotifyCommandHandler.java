@@ -1,7 +1,7 @@
 package com.tttsaurus.ingameinfo.common.impl.appcommunication.spotify;
 
-import com.tttsaurus.ingameinfo.common.api.appcommunication.spotify.SpotifyOAuthUtils;
-import com.tttsaurus.ingameinfo.common.api.appcommunication.spotify.SpotifyUserInfo;
+import com.tttsaurus.ingameinfo.common.core.appcommunication.spotify.SpotifyOAuthUtils;
+import com.tttsaurus.ingameinfo.common.core.appcommunication.spotify.SpotifyUserInfo;
 import com.tttsaurus.ingameinfo.common.impl.igievent.EventCenter;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;

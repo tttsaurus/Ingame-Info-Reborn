@@ -1,8 +1,8 @@
 package com.tttsaurus.ingameinfo.common.impl.gui.layout;
 
-import com.tttsaurus.ingameinfo.common.api.gui.Element;
-import com.tttsaurus.ingameinfo.common.api.gui.layout.Rect;
-import com.tttsaurus.ingameinfo.common.api.gui.registry.RegisterElement;
+import com.tttsaurus.ingameinfo.common.core.gui.Element;
+import com.tttsaurus.ingameinfo.common.core.gui.layout.Rect;
+import com.tttsaurus.ingameinfo.common.core.gui.registry.RegisterElement;
 
 @RegisterElement
 public class DraggableContainerGroup extends SizedGroup

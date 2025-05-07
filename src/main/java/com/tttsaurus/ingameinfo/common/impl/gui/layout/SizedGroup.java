@@ -1,13 +1,13 @@
 package com.tttsaurus.ingameinfo.common.impl.gui.layout;
 
-import com.tttsaurus.ingameinfo.common.api.gui.Element;
-import com.tttsaurus.ingameinfo.common.api.gui.layout.ElementGroup;
-import com.tttsaurus.ingameinfo.common.api.gui.layout.Rect;
-import com.tttsaurus.ingameinfo.common.api.gui.registry.RegisterElement;
-import com.tttsaurus.ingameinfo.common.api.gui.style.CallbackInfo;
-import com.tttsaurus.ingameinfo.common.api.gui.style.StyleProperty;
-import com.tttsaurus.ingameinfo.common.api.gui.style.StylePropertyCallback;
-import com.tttsaurus.ingameinfo.common.api.render.RenderMask;
+import com.tttsaurus.ingameinfo.common.core.gui.Element;
+import com.tttsaurus.ingameinfo.common.core.gui.layout.ElementGroup;
+import com.tttsaurus.ingameinfo.common.core.gui.layout.Rect;
+import com.tttsaurus.ingameinfo.common.core.gui.registry.RegisterElement;
+import com.tttsaurus.ingameinfo.common.core.gui.style.CallbackInfo;
+import com.tttsaurus.ingameinfo.common.core.gui.style.StyleProperty;
+import com.tttsaurus.ingameinfo.common.core.gui.style.StylePropertyCallback;
+import com.tttsaurus.ingameinfo.common.core.render.RenderMask;
 
 @RegisterElement
 public class SizedGroup extends ElementGroup

@@ -2,7 +2,7 @@ package com.tttsaurus.ingameinfo.mixin.early;
 
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
-import com.tttsaurus.ingameinfo.common.api.render.RenderHints;
+import com.tttsaurus.ingameinfo.common.core.render.RenderHints;
 import net.minecraft.client.renderer.GlStateManager;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL32;

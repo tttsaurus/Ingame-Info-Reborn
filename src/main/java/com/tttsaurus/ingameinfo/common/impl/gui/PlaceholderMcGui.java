@@ -1,7 +1,7 @@
 package com.tttsaurus.ingameinfo.common.impl.gui;
 
-import com.tttsaurus.ingameinfo.common.api.gui.delegate.placeholder.IPlaceholderDrawScreen;
-import com.tttsaurus.ingameinfo.common.api.gui.delegate.placeholder.IPlaceholderKeyTyped;
+import com.tttsaurus.ingameinfo.common.core.gui.delegate.placeholder.IPlaceholderDrawScreen;
+import com.tttsaurus.ingameinfo.common.core.gui.delegate.placeholder.IPlaceholderKeyTyped;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiScreen;
 import java.io.IOException;

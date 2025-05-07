@@ -1,6 +1,6 @@
 package com.tttsaurus.ingameinfo.demo.eg1;
 
-import com.tttsaurus.ingameinfo.common.api.mvvm.view.View;
+import com.tttsaurus.ingameinfo.common.core.mvvm.view.View;
 
 public class Eg1View extends View
 {

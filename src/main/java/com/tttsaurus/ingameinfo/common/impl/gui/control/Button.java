@@ -1,16 +1,16 @@
 package com.tttsaurus.ingameinfo.common.impl.gui.control;
 
-import com.tttsaurus.ingameinfo.common.api.gui.delegate.button.IMouseEnterButton;
-import com.tttsaurus.ingameinfo.common.api.gui.delegate.button.IMouseLeaveButton;
-import com.tttsaurus.ingameinfo.common.api.gui.delegate.button.IMousePressButton;
-import com.tttsaurus.ingameinfo.common.api.gui.delegate.button.IMouseReleaseButton;
-import com.tttsaurus.ingameinfo.common.api.gui.layout.Rect;
-import com.tttsaurus.ingameinfo.common.api.gui.registry.RegisterElement;
-import com.tttsaurus.ingameinfo.common.api.gui.style.CallbackInfo;
-import com.tttsaurus.ingameinfo.common.api.gui.style.StyleProperty;
-import com.tttsaurus.ingameinfo.common.api.gui.style.StylePropertyCallback;
-import com.tttsaurus.ingameinfo.common.api.gui.theme.ThemeConfig;
-import com.tttsaurus.ingameinfo.common.api.render.RenderUtils;
+import com.tttsaurus.ingameinfo.common.core.gui.delegate.button.IMouseEnterButton;
+import com.tttsaurus.ingameinfo.common.core.gui.delegate.button.IMouseLeaveButton;
+import com.tttsaurus.ingameinfo.common.core.gui.delegate.button.IMousePressButton;
+import com.tttsaurus.ingameinfo.common.core.gui.delegate.button.IMouseReleaseButton;
+import com.tttsaurus.ingameinfo.common.core.gui.layout.Rect;
+import com.tttsaurus.ingameinfo.common.core.gui.registry.RegisterElement;
+import com.tttsaurus.ingameinfo.common.core.gui.style.CallbackInfo;
+import com.tttsaurus.ingameinfo.common.core.gui.style.StyleProperty;
+import com.tttsaurus.ingameinfo.common.core.gui.style.StylePropertyCallback;
+import com.tttsaurus.ingameinfo.common.core.gui.theme.ThemeConfig;
+import com.tttsaurus.ingameinfo.common.core.render.RenderUtils;
 import com.tttsaurus.ingameinfo.common.impl.gui.GuiResources;
 import com.tttsaurus.ingameinfo.common.impl.render.renderer.TextRenderer;
 

@@ -1,6 +1,6 @@
 package com.tttsaurus.ingameinfo.common.impl.appcommunication.spotify;
 
-import com.tttsaurus.ingameinfo.common.api.mvvm.view.View;
+import com.tttsaurus.ingameinfo.common.core.mvvm.view.View;
 
 public class SpotifyView extends View
 {
