@@ -7,6 +7,7 @@ import com.tttsaurus.ingameinfo.common.core.render.shader.ShaderProgram;
 import org.lwjgl.util.vector.Vector3f;
 import java.nio.FloatBuffer;
 
+// don't change shader program manually here
 public class Mesh2DRenderer extends MeshRenderer
 {
     public Mesh2DRenderer(Mesh mesh)

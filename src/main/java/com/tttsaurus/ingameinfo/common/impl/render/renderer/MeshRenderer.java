@@ -7,7 +7,9 @@ import com.tttsaurus.ingameinfo.common.core.render.shader.ShaderProgram;
 public class MeshRenderer implements IRenderer
 {
     public Mesh getMesh() { return mesh; }
+    public void setMesh(Mesh mesh) { this.mesh = mesh; }
     public ShaderProgram getShaderProgram() { return shaderProgram; }
+    public void setShaderProgram(ShaderProgram shaderProgram) { this.shaderProgram = shaderProgram; }
 
     protected Mesh mesh;
     protected ShaderProgram shaderProgram;
