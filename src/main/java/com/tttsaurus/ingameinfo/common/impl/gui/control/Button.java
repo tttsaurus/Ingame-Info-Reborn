@@ -19,9 +19,6 @@ public class Button extends AbstractButton
 {
     private final TextRenderer textRenderer = new TextRenderer();
 
-    @StyleProperty
-    public String style = "";
-
     private int currentColor;
 
     @StyleProperty
@@ -118,21 +115,10 @@ public class Button extends AbstractButton
     public void onRenderUpdate(boolean focused)
     {
         super.onRenderUpdate(focused);
-        switch (style)
-        {
-            case "simple" ->
-            {
-                RenderUtils.renderRoundedRectOutline(rect.x, rect.y, rect.width, rect.height, 5f, 1f, currentColor);
-                textRenderer.setColor(currentTextColor);
-                textRenderer.render();
-            }
-            case "mc-vanilla" ->
-            {
-                RenderUtils.renderNinePatchBorderByPixel(rect.x, rect.y, rect.width, rect.height, GuiResources.mcVanillaButton, currentColor);
-                textRenderer.setColor(currentTextColor);
-                textRenderer.render();
-            }
-        }
+
+        RenderUtils.renderNinePatchBorderByPixel(rect.x, rect.y, rect.width, rect.height, GuiResources.mcVanillaButton, currentColor);
+        textRenderer.setColor(currentTextColor);
+        textRenderer.render();
     }
 
     @Override
@@ -140,34 +126,18 @@ public class Button extends AbstractButton
     {
         super.loadTheme(themeConfig);
 
-        if (style.isEmpty())
-            setStyleProperty("style", themeConfig.button.style);
-
-        if (defaultColor == 0 && style.equals("simple"))
-            setStyleProperty("defaultColor", themeConfig.button.simple.parsedDefaultColor);
-        if (hoverColor == 0 && style.equals("simple"))
-            setStyleProperty("hoverColor", themeConfig.button.simple.parsedHoverColor);
-        if (holdColor == 0 && style.equals("simple"))
-            setStyleProperty("holdColor", themeConfig.button.simple.parsedHoldColor);
-        if (defaultTextColor == 0 && style.equals("simple"))
-            setStyleProperty("defaultTextColor", themeConfig.button.simple.parsedDefaultTextColor);
-        if (hoverTextColor == 0 && style.equals("simple"))
-            setStyleProperty("hoverTextColor", themeConfig.button.simple.parsedHoverTextColor);
-        if (holdTextColor == 0 && style.equals("simple"))
-            setStyleProperty("holdTextColor", themeConfig.button.simple.parsedHoldTextColor);
-
-        if (defaultColor == 0 && style.equals("mc-vanilla"))
-            setStyleProperty("defaultColor", themeConfig.button.mcVanilla.parsedDefaultColor);
-        if (hoverColor == 0 && style.equals("mc-vanilla"))
-            setStyleProperty("hoverColor", themeConfig.button.mcVanilla.parsedHoverColor);
-        if (holdColor == 0 && style.equals("mc-vanilla"))
-            setStyleProperty("holdColor", themeConfig.button.mcVanilla.parsedHoldColor);
-        if (defaultTextColor == 0 && style.equals("mc-vanilla"))
-            setStyleProperty("defaultTextColor", themeConfig.button.mcVanilla.parsedDefaultTextColor);
-        if (hoverTextColor == 0 && style.equals("mc-vanilla"))
-            setStyleProperty("hoverTextColor", themeConfig.button.mcVanilla.parsedHoverTextColor);
-        if (holdTextColor == 0 && style.equals("mc-vanilla"))
-            setStyleProperty("holdTextColor", themeConfig.button.mcVanilla.parsedHoldTextColor);
+        if (defaultColor == 0)
+            setStyleProperty("defaultColor", themeConfig.button.parsedDefaultColor);
+        if (hoverColor == 0)
+            setStyleProperty("hoverColor", themeConfig.button.parsedHoverColor);
+        if (holdColor == 0)
+            setStyleProperty("holdColor", themeConfig.button.parsedHoldColor);
+        if (defaultTextColor == 0)
+            setStyleProperty("defaultTextColor", themeConfig.button.parsedDefaultTextColor);
+        if (hoverTextColor == 0)
+            setStyleProperty("hoverTextColor", themeConfig.button.parsedHoverTextColor);
+        if (holdTextColor == 0)
+            setStyleProperty("holdTextColor", themeConfig.button.parsedHoldTextColor);
 
         currentColor = defaultColor;
         currentTextColor = defaultTextColor;

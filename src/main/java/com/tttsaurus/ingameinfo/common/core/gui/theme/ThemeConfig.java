@@ -159,70 +159,30 @@ public final class ThemeConfig
     @ConfigSerializable
     public static class Button
     {
-        public McVanilla mcVanilla = new McVanilla();
-        public Simple simple = new Simple();
+        @Comment("This will only be applied to Button with style property 'defaultColor' left empty when using this style.\n" +
+                "In the form of hex #rrggbb or #aarrggbb.")
+        public String defaultColor = "#ffffff";
+        @Comment("This will only be applied to Button with style property 'hoverColor' left empty when using this style.\n" +
+                "In the form of hex #rrggbb or #aarrggbb.")
+        public String hoverColor = "#bec7ff";
+        @Comment("This will only be applied to Button with style property 'holdColor' left empty when using this style.\n" +
+                "In the form of hex #rrggbb or #aarrggbb.")
+        public String holdColor = "#232323";
+        @Comment("This will only be applied to Button with style property 'defaultTextColor' left empty when using this style.\n" +
+                "In the form of hex #rrggbb or #aarrggbb.")
+        public String defaultTextColor = "#ffffff";
+        @Comment("This will only be applied to Button with style property 'hoverTextColor' left empty when using this style.\n" +
+                "In the form of hex #rrggbb or #aarrggbb.")
+        public String hoverTextColor = "#ffffa0";
+        @Comment("This will only be applied to Button with style property 'holdTextColor' left empty when using this style.\n" +
+                "In the form of hex #rrggbb or #aarrggbb.")
+        public String holdTextColor = "#383838";
 
-        @ConfigSerializable
-        public static class McVanilla
-        {
-            @Comment("This will only be applied to Button with style property 'defaultColor' left empty when using this style.\n" +
-                    "In the form of hex #rrggbb or #aarrggbb.")
-            public String defaultColor = "#ffffff";
-            @Comment("This will only be applied to Button with style property 'hoverColor' left empty when using this style.\n" +
-                    "In the form of hex #rrggbb or #aarrggbb.")
-            public String hoverColor = "#bec7ff";
-            @Comment("This will only be applied to Button with style property 'holdColor' left empty when using this style.\n" +
-                    "In the form of hex #rrggbb or #aarrggbb.")
-            public String holdColor = "#232323";
-            @Comment("This will only be applied to Button with style property 'defaultTextColor' left empty when using this style.\n" +
-                    "In the form of hex #rrggbb or #aarrggbb.")
-            public String defaultTextColor = "#ffffff";
-            @Comment("This will only be applied to Button with style property 'hoverTextColor' left empty when using this style.\n" +
-                    "In the form of hex #rrggbb or #aarrggbb.")
-            public String hoverTextColor = "#ffffa0";
-            @Comment("This will only be applied to Button with style property 'holdTextColor' left empty when using this style.\n" +
-                    "In the form of hex #rrggbb or #aarrggbb.")
-            public String holdTextColor = "#383838";
-
-            public transient int parsedDefaultColor;
-            public transient int parsedHoverColor;
-            public transient int parsedHoldColor;
-            public transient int parsedDefaultTextColor;
-            public transient int parsedHoverTextColor;
-            public transient int parsedHoldTextColor;
-        }
-        @ConfigSerializable
-        public static class Simple
-        {
-            @Comment("This will only be applied to Button with style property 'defaultColor' left empty when using this style.\n" +
-                    "In the form of hex #rrggbb or #aarrggbb.")
-            public String defaultColor = "#383838";
-            @Comment("This will only be applied to Button with style property 'hoverColor' left empty when using this style.\n" +
-                    "In the form of hex #rrggbb or #aarrggbb.")
-            public String hoverColor = "#d2d2d2";
-            @Comment("This will only be applied to Button with style property 'holdColor' left empty when using this style.\n" +
-                    "In the form of hex #rrggbb or #aarrggbb.")
-            public String holdColor = "#232323";
-            @Comment("This will only be applied to Button with style property 'defaultTextColor' left empty when using this style.\n" +
-                    "In the form of hex #rrggbb or #aarrggbb.")
-            public String defaultTextColor = "#383838";
-            @Comment("This will only be applied to Button with style property 'hoverTextColor' left empty when using this style.\n" +
-                    "In the form of hex #rrggbb or #aarrggbb.")
-            public String hoverTextColor = "#d2d2d2";
-            @Comment("This will only be applied to Button with style property 'holdTextColor' left empty when using this style.\n" +
-                    "In the form of hex #rrggbb or #aarrggbb.")
-            public String holdTextColor = "#232323";
-
-            public transient int parsedDefaultColor;
-            public transient int parsedHoverColor;
-            public transient int parsedHoldColor;
-            public transient int parsedDefaultTextColor;
-            public transient int parsedHoverTextColor;
-            public transient int parsedHoldTextColor;
-        }
-
-        @Comment("This will only be applied to Button with style property 'style' left empty.\n" +
-                "Valid values are 'mc-vanilla', 'simple'")
-        public String style = "mc-vanilla";
+        public transient int parsedDefaultColor;
+        public transient int parsedHoverColor;
+        public transient int parsedHoldColor;
+        public transient int parsedDefaultTextColor;
+        public transient int parsedHoverTextColor;
+        public transient int parsedHoldTextColor;
     }
 }

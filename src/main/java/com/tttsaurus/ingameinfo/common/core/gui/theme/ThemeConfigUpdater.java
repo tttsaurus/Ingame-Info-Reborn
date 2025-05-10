@@ -42,19 +42,12 @@ public final class ThemeConfigUpdater
         config.progressBar.parsedBackgroundColor = parseColor(config.progressBar.backgroundColor);
         config.progressBar.parsedOutlineColor = parseColor(config.progressBar.outlineColor);
 
-        config.button.simple.parsedDefaultColor = parseColor(config.button.simple.defaultColor);
-        config.button.simple.parsedHoverColor = parseColor(config.button.simple.hoverColor);
-        config.button.simple.parsedHoldColor = parseColor(config.button.simple.holdColor);
-        config.button.simple.parsedDefaultTextColor = parseColor(config.button.simple.defaultTextColor);
-        config.button.simple.parsedHoverTextColor = parseColor(config.button.simple.hoverTextColor);
-        config.button.simple.parsedHoldTextColor = parseColor(config.button.simple.holdTextColor);
-
-        config.button.mcVanilla.parsedDefaultColor = parseColor(config.button.mcVanilla.defaultColor);
-        config.button.mcVanilla.parsedHoverColor = parseColor(config.button.mcVanilla.hoverColor);
-        config.button.mcVanilla.parsedHoldColor = parseColor(config.button.mcVanilla.holdColor);
-        config.button.mcVanilla.parsedDefaultTextColor = parseColor(config.button.mcVanilla.defaultTextColor);
-        config.button.mcVanilla.parsedHoverTextColor = parseColor(config.button.mcVanilla.hoverTextColor);
-        config.button.mcVanilla.parsedHoldTextColor = parseColor(config.button.mcVanilla.holdTextColor);
+        config.button.parsedDefaultColor = parseColor(config.button.defaultColor);
+        config.button.parsedHoverColor = parseColor(config.button.hoverColor);
+        config.button.parsedHoldColor = parseColor(config.button.holdColor);
+        config.button.parsedDefaultTextColor = parseColor(config.button.defaultTextColor);
+        config.button.parsedHoverTextColor = parseColor(config.button.hoverTextColor);
+        config.button.parsedHoldTextColor = parseColor(config.button.holdTextColor);
     }
 
     private void validate()
