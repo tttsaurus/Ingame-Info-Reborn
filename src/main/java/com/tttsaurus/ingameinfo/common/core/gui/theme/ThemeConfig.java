@@ -22,8 +22,8 @@ public final class ThemeConfig
         @ConfigSerializable
         public static class Box
         {
-            @Comment("In the form of hex rrggbb or aarrggbb.")
-            public String color = "383838";
+            @Comment("In the form of hex #rrggbb or #aarrggbb.")
+            public String color = "#383838";
 
             public transient int parsedColor;
         }
@@ -31,10 +31,10 @@ public final class ThemeConfig
         @ConfigSerializable
         public static class BoxWithOutline
         {
-            @Comment("In the form of hex rrggbb or aarrggbb.")
-            public String color = "383838";
-            @Comment("In the form of hex rrggbb or aarrggbb.")
-            public String outlineColor = "232323";
+            @Comment("In the form of hex #rrggbb or #aarrggbb.")
+            public String color = "#383838";
+            @Comment("In the form of hex #rrggbb or #aarrggbb.")
+            public String outlineColor = "#232323";
 
             public transient int parsedColor;
             public transient int parsedOutlineColor;
@@ -43,8 +43,8 @@ public final class ThemeConfig
         @ConfigSerializable
         public static class RoundedBox
         {
-            @Comment("In the form of hex rrggbb or aarrggbb.")
-            public String color = "383838";
+            @Comment("In the form of hex #rrggbb or #aarrggbb.")
+            public String color = "#383838";
             public float cornerRadius = 3f;
 
             public transient int parsedColor;
@@ -53,10 +53,10 @@ public final class ThemeConfig
         @ConfigSerializable
         public static class RoundedBoxWithOutline
         {
-            @Comment("In the form of hex rrggbb or aarrggbb.")
-            public String color = "383838";
-            @Comment("In the form of hex rrggbb or aarrggbb.")
-            public String outlineColor = "232323";
+            @Comment("In the form of hex #rrggbb or #aarrggbb.")
+            public String color = "#383838";
+            @Comment("In the form of hex #rrggbb or #aarrggbb.")
+            public String outlineColor = "#232323";
             public float cornerRadius = 3f;
 
             public transient int parsedColor;
@@ -66,8 +66,8 @@ public final class ThemeConfig
         @ConfigSerializable
         public static class McVanilla
         {
-            @Comment("In the form of hex rrggbb or aarrggbb.")
-            public String color = "ffffff";
+            @Comment("In the form of hex #rrggbb or #aarrggbb.")
+            public String color = "#ffffff";
 
             public transient int parsedColor;
         }
@@ -96,8 +96,8 @@ public final class ThemeConfig
         @Comment("This will only be applied to Text with style property 'scale' left empty.")
         public float scale = 1f;
         @Comment("This will only be applied to Text with style property 'color' left empty.\n" +
-                "In the form of hex rrggbb or aarrggbb.")
-        public String color = "d2d2d2";
+                "In the form of hex #rrggbb or #aarrggbb.")
+        public String color = "#d2d2d2";
 
         public transient int parsedColor;
     }
@@ -108,8 +108,8 @@ public final class ThemeConfig
         @Comment("This will only be applied to SlidingText with style property 'scale' left empty.")
         public float scale = 1f;
         @Comment("This will only be applied to SlidingText with style property 'color' left empty.\n" +
-                "In the form of hex rrggbb or aarrggbb.")
-        public String color = "d2d2d2";
+                "In the form of hex #rrggbb or #aarrggbb.")
+        public String color = "#d2d2d2";
 
         public transient int parsedColor;
     }
@@ -120,8 +120,8 @@ public final class ThemeConfig
         @Comment("This will only be applied to AnimText with style property 'scale' left empty.")
         public float scale = 1f;
         @Comment("This will only be applied to AnimText with style property 'color' left empty.\n" +
-                "In the form of hex rrggbb or aarrggbb.")
-        public String color = "d2d2d2";
+                "In the form of hex #rrggbb or #aarrggbb.")
+        public String color = "#d2d2d2";
 
         public transient int parsedColor;
     }
@@ -142,14 +142,14 @@ public final class ThemeConfig
     public static class ProgressBar
     {
         @Comment("This will only be applied to ProgressBar with style property 'fillerColor' left empty.\n" +
-                "In the form of hex rrggbb or aarrggbb.")
-        public String fillerColor = "d2d2d2";
+                "In the form of hex #rrggbb or #aarrggbb.")
+        public String fillerColor = "#d2d2d2";
         @Comment("This will only be applied to ProgressBar with style property 'backgroundColor' left empty.\n" +
-                "In the form of hex rrggbb or aarrggbb.")
-        public String backgroundColor = "383838";
+                "In the form of hex #rrggbb or #aarrggbb.")
+        public String backgroundColor = "#383838";
         @Comment("This will only be applied to ProgressBar with style property 'outlineColor' left empty.\n" +
-                "In the form of hex rrggbb or aarrggbb.")
-        public String outlineColor = "232323";
+                "In the form of hex #rrggbb or #aarrggbb.")
+        public String outlineColor = "#232323";
 
         public transient int parsedFillerColor;
         public transient int parsedBackgroundColor;
@@ -166,23 +166,23 @@ public final class ThemeConfig
         public static class McVanilla
         {
             @Comment("This will only be applied to Button with style property 'defaultColor' left empty when using this style.\n" +
-                    "In the form of hex rrggbb or aarrggbb.")
-            public String defaultColor = "ffffff";
+                    "In the form of hex #rrggbb or #aarrggbb.")
+            public String defaultColor = "#ffffff";
             @Comment("This will only be applied to Button with style property 'hoverColor' left empty when using this style.\n" +
-                    "In the form of hex rrggbb or aarrggbb.")
-            public String hoverColor = "bec7ff";
+                    "In the form of hex #rrggbb or #aarrggbb.")
+            public String hoverColor = "#bec7ff";
             @Comment("This will only be applied to Button with style property 'holdColor' left empty when using this style.\n" +
-                    "In the form of hex rrggbb or aarrggbb.")
-            public String holdColor = "232323";
+                    "In the form of hex #rrggbb or #aarrggbb.")
+            public String holdColor = "#232323";
             @Comment("This will only be applied to Button with style property 'defaultTextColor' left empty when using this style.\n" +
-                    "In the form of hex rrggbb or aarrggbb.")
-            public String defaultTextColor = "ffffff";
+                    "In the form of hex #rrggbb or #aarrggbb.")
+            public String defaultTextColor = "#ffffff";
             @Comment("This will only be applied to Button with style property 'hoverTextColor' left empty when using this style.\n" +
-                    "In the form of hex rrggbb or aarrggbb.")
-            public String hoverTextColor = "ffffa0";
+                    "In the form of hex #rrggbb or #aarrggbb.")
+            public String hoverTextColor = "#ffffa0";
             @Comment("This will only be applied to Button with style property 'holdTextColor' left empty when using this style.\n" +
-                    "In the form of hex rrggbb or aarrggbb.")
-            public String holdTextColor = "383838";
+                    "In the form of hex #rrggbb or #aarrggbb.")
+            public String holdTextColor = "#383838";
 
             public transient int parsedDefaultColor;
             public transient int parsedHoverColor;
@@ -195,23 +195,23 @@ public final class ThemeConfig
         public static class Simple
         {
             @Comment("This will only be applied to Button with style property 'defaultColor' left empty when using this style.\n" +
-                    "In the form of hex rrggbb or aarrggbb.")
-            public String defaultColor = "383838";
+                    "In the form of hex #rrggbb or #aarrggbb.")
+            public String defaultColor = "#383838";
             @Comment("This will only be applied to Button with style property 'hoverColor' left empty when using this style.\n" +
-                    "In the form of hex rrggbb or aarrggbb.")
-            public String hoverColor = "d2d2d2";
+                    "In the form of hex #rrggbb or #aarrggbb.")
+            public String hoverColor = "#d2d2d2";
             @Comment("This will only be applied to Button with style property 'holdColor' left empty when using this style.\n" +
-                    "In the form of hex rrggbb or aarrggbb.")
-            public String holdColor = "232323";
+                    "In the form of hex #rrggbb or #aarrggbb.")
+            public String holdColor = "#232323";
             @Comment("This will only be applied to Button with style property 'defaultTextColor' left empty when using this style.\n" +
-                    "In the form of hex rrggbb or aarrggbb.")
-            public String defaultTextColor = "383838";
+                    "In the form of hex #rrggbb or #aarrggbb.")
+            public String defaultTextColor = "#383838";
             @Comment("This will only be applied to Button with style property 'hoverTextColor' left empty when using this style.\n" +
-                    "In the form of hex rrggbb or aarrggbb.")
-            public String hoverTextColor = "d2d2d2";
+                    "In the form of hex #rrggbb or #aarrggbb.")
+            public String hoverTextColor = "#d2d2d2";
             @Comment("This will only be applied to Button with style property 'holdTextColor' left empty when using this style.\n" +
-                    "In the form of hex rrggbb or aarrggbb.")
-            public String holdTextColor = "232323";
+                    "In the form of hex #rrggbb or #aarrggbb.")
+            public String holdTextColor = "#232323";
 
             public transient int parsedDefaultColor;
             public transient int parsedHoverColor;

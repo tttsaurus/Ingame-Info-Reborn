@@ -12,6 +12,7 @@ public final class ThemeConfigUpdater
     {
         if (hex == null) return 0;
         if (hex.isEmpty()) return 0;
+        if (hex.startsWith("#")) hex = hex.substring(1);
         if (hex.length() == 6)
             return 0xff000000 | Integer.parseInt(hex, 16);
         if (hex.length() == 8)
