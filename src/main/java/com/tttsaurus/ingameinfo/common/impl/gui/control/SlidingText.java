@@ -124,6 +124,8 @@ public class SlidingText extends Sized
     @Override
     public void onRenderUpdate(boolean focused)
     {
+        super.onRenderUpdate(focused);
+
         if (!onDemandSliding || needSliding)
         {
             mask.startMasking();

@@ -57,6 +57,7 @@ public class Image extends Sized
     @Override
     public void onRenderUpdate(boolean focused)
     {
+        super.onRenderUpdate(focused);
         if (rounded)
             mask.startMasking();
         imageRenderer.render();

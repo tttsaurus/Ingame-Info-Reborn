@@ -179,9 +179,9 @@ public abstract class Element
     public abstract void calcWidthHeight();
 
     public abstract void onFixedUpdate(double deltaTime);
-    public abstract void onRenderUpdate(boolean focused);
+    public void onRenderUpdate(boolean focused) { renderBackground(); }
 
-    public void renderBackground()
+    private void renderBackground()
     {
         if (backgroundStyle.isEmpty()) return;
         if (!drawBackground) return;

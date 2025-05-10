@@ -46,6 +46,7 @@ public class ProgressBar extends Sized
     @Override
     public void onRenderUpdate(boolean focused)
     {
+        super.onRenderUpdate(focused);
         if (rect.width == 0 || rect.height == 0) return;
         RenderUtils.renderRoundedRect(rect.x, rect.y, rect.width, rect.height, rect.height / 2f, backgroundColor);
         if (percentage != 0)

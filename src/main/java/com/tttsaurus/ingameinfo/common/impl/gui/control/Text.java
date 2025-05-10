@@ -82,6 +82,7 @@ public class Text extends Element
     @Override
     public void onRenderUpdate(boolean focused)
     {
+        super.onRenderUpdate(focused);
         textRenderer.render();
     }
 

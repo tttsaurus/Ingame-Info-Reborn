@@ -97,7 +97,6 @@ public class IgiGuiContainer
             mainGroup.finishReCalc();
         }
 
-        mainGroup.renderBackground();
         mainGroup.onRenderUpdate(focused);
 
         if (debug) mainGroup.renderDebugRect();

@@ -96,6 +96,7 @@ public class AnimText extends Element
     @Override
     public void onRenderUpdate(boolean focused)
     {
+        super.onRenderUpdate(focused);
         animTextRenderer.render();
     }
 

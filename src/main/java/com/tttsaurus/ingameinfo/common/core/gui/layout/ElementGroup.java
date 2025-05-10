@@ -62,17 +62,10 @@ public abstract class ElementGroup extends Element
     public void onRenderUpdate(boolean focused)
     {
         if (!enabled) return;
+        super.onRenderUpdate(focused);
         for (Element element: elements)
             if (element.enabled)
                 element.onRenderUpdate(focused);
-    }
-
-    @Override
-    public void renderBackground()
-    {
-        super.renderBackground();
-        for (Element element: elements)
-            element.renderBackground();
     }
 
     @Override

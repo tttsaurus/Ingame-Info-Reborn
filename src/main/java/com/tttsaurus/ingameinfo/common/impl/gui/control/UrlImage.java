@@ -56,6 +56,7 @@ public class UrlImage extends Sized
     @Override
     public void onRenderUpdate(boolean focused)
     {
+        super.onRenderUpdate(focused);
         if (rounded)
             mask.startMasking();
         urlImageRenderer.render();

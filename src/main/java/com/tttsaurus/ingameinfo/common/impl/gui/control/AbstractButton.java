@@ -81,6 +81,8 @@ public abstract class AbstractButton extends Sized
     @Override
     public void onRenderUpdate(boolean focused)
     {
+        super.onRenderUpdate(focused);
+
         if (!focused) return;
 
         int x = MouseUtils.getMouseX();

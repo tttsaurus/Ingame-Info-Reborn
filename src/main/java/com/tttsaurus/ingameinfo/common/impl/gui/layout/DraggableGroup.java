@@ -11,8 +11,10 @@ import com.tttsaurus.ingameinfo.common.core.input.MouseUtils;
 @RegisterElement
 public class DraggableGroup extends DraggableContainerGroup
 {
-    protected float overrideX;
-    protected float overrideY;
+    @StyleProperty
+    public float overrideX = 0f;
+    @StyleProperty
+    public float overrideY = 0f;
 
     private float startDragPosX = 0f;
     private float startDragPosY = 0f;
@@ -62,6 +64,8 @@ public class DraggableGroup extends DraggableContainerGroup
     @Override
     public void onRenderUpdate(boolean focused)
     {
+        super.onRenderUpdate(focused);
+
         if (!enabled) return;
         if (focused)
         {
