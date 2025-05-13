@@ -40,8 +40,8 @@ import java.nio.charset.StandardCharsets;
 import java.util.*;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
-import static com.tttsaurus.ingameinfo.common.core.render.CommonBuffers.intBuffer;
-import static com.tttsaurus.ingameinfo.common.core.render.CommonBuffers.floatBuffer;
+import static com.tttsaurus.ingameinfo.common.core.render.CommonBuffers.INT_BUFFER_16;
+import static com.tttsaurus.ingameinfo.common.core.render.CommonBuffers.FLOAT_BUFFER_16;
 
 @SuppressWarnings("all")
 public final class IgiGuiLifeCycle
@@ -295,8 +295,8 @@ public final class IgiGuiLifeCycle
 
         cpuTimeStopwatch.stop();
         GL15.glEndQuery(GL33.GL_TIME_ELAPSED);
-        GL15.glGetQueryObject(gpuTimeQueryID, GL15.GL_QUERY_RESULT, intBuffer);
-        long gpuTimeNano = intBuffer.get(0);
+        GL15.glGetQueryObject(gpuTimeQueryID, GL15.GL_QUERY_RESULT, INT_BUFFER_16);
+        long gpuTimeNano = INT_BUFFER_16.get(0);
         long cpuTimeNano = cpuTimeStopwatch.getNanoTime();
         if (timeNanoArrayIndex == 50)
         {
@@ -490,12 +490,12 @@ public final class IgiGuiLifeCycle
     {
         shaderProgram.use();
 
-        GL11.glGetInteger(GL13.GL_ACTIVE_TEXTURE, intBuffer);
-        int texUnit = intBuffer.get(0);
+        GL11.glGetInteger(GL13.GL_ACTIVE_TEXTURE, INT_BUFFER_16);
+        int texUnit = INT_BUFFER_16.get(0);
 
         GlStateManager.setActiveTexture(GL13.GL_TEXTURE1);
-        GL11.glGetInteger(GL11.GL_TEXTURE_BINDING_2D, intBuffer);
-        texUnit1TextureID = intBuffer.get(0);
+        GL11.glGetInteger(GL11.GL_TEXTURE_BINDING_2D, INT_BUFFER_16);
+        texUnit1TextureID = INT_BUFFER_16.get(0);
 
         if (enableMultisampleOnFbo) RenderHints.multisampleTexBind();
         fbo.bindFramebufferTexture();
@@ -515,8 +515,8 @@ public final class IgiGuiLifeCycle
     }
     private static void deactivateShader()
     {
-        GL11.glGetInteger(GL13.GL_ACTIVE_TEXTURE, intBuffer);
-        int texUnit = intBuffer.get(0);
+        GL11.glGetInteger(GL13.GL_ACTIVE_TEXTURE, INT_BUFFER_16);
+        int texUnit = INT_BUFFER_16.get(0);
 
         GlStateManager.setActiveTexture(GL13.GL_TEXTURE1);
         GlStateManager.bindTexture(texUnit1TextureID);
@@ -548,33 +548,33 @@ public final class IgiGuiLifeCycle
     //<editor-fold desc="gl state management">
     private static void storeCommonGlStates()
     {
-        GL11.glGetInteger(GL11.GL_TEXTURE_BINDING_2D, intBuffer);
-        textureID = intBuffer.get(0);
-        GL11.glGetFloat(GL11.GL_CURRENT_COLOR, floatBuffer);
-        r = floatBuffer.get(0);
-        g = floatBuffer.get(1);
-        b = floatBuffer.get(2);
-        a = floatBuffer.get(3);
+        GL11.glGetInteger(GL11.GL_TEXTURE_BINDING_2D, INT_BUFFER_16);
+        textureID = INT_BUFFER_16.get(0);
+        GL11.glGetFloat(GL11.GL_CURRENT_COLOR, FLOAT_BUFFER_16);
+        r = FLOAT_BUFFER_16.get(0);
+        g = FLOAT_BUFFER_16.get(1);
+        b = FLOAT_BUFFER_16.get(2);
+        a = FLOAT_BUFFER_16.get(3);
         blend = GL11.glIsEnabled(GL11.GL_BLEND);
         lighting = GL11.glIsEnabled(GL11.GL_LIGHTING);
         texture2D = GL11.glIsEnabled(GL11.GL_TEXTURE_2D);
         alphaTest = GL11.glIsEnabled(GL11.GL_ALPHA_TEST);
-        GL11.glGetInteger(GL11.GL_SHADE_MODEL, intBuffer);
-        shadeModel = intBuffer.get(0);
+        GL11.glGetInteger(GL11.GL_SHADE_MODEL, INT_BUFFER_16);
+        shadeModel = INT_BUFFER_16.get(0);
         depthTest = GL11.glIsEnabled(GL11.GL_DEPTH_TEST);
         cullFace = GL11.glIsEnabled(GL11.GL_CULL_FACE);
-        GL11.glGetInteger(GL14.GL_BLEND_SRC_RGB, intBuffer);
-        blendSrcRgb = intBuffer.get(0);
-        GL11.glGetInteger(GL14.GL_BLEND_DST_RGB, intBuffer);
-        blendDstRgb = intBuffer.get(0);
-        GL11.glGetInteger(GL14.GL_BLEND_SRC_ALPHA, intBuffer);
-        blendSrcAlpha = intBuffer.get(0);
-        GL11.glGetInteger(GL14.GL_BLEND_DST_ALPHA, intBuffer);
-        blendDstAlpha = intBuffer.get(0);
-        GL11.glGetInteger(GL11.GL_ALPHA_TEST_FUNC, intBuffer);
-        alphaFunc = intBuffer.get(0);
-        GL11.glGetFloat(GL11.GL_ALPHA_TEST_REF, floatBuffer);
-        alphaRef = floatBuffer.get(0);
+        GL11.glGetInteger(GL14.GL_BLEND_SRC_RGB, INT_BUFFER_16);
+        blendSrcRgb = INT_BUFFER_16.get(0);
+        GL11.glGetInteger(GL14.GL_BLEND_DST_RGB, INT_BUFFER_16);
+        blendDstRgb = INT_BUFFER_16.get(0);
+        GL11.glGetInteger(GL14.GL_BLEND_SRC_ALPHA, INT_BUFFER_16);
+        blendSrcAlpha = INT_BUFFER_16.get(0);
+        GL11.glGetInteger(GL14.GL_BLEND_DST_ALPHA, INT_BUFFER_16);
+        blendDstAlpha = INT_BUFFER_16.get(0);
+        GL11.glGetInteger(GL11.GL_ALPHA_TEST_FUNC, INT_BUFFER_16);
+        alphaFunc = INT_BUFFER_16.get(0);
+        GL11.glGetFloat(GL11.GL_ALPHA_TEST_REF, FLOAT_BUFFER_16);
+        alphaRef = FLOAT_BUFFER_16.get(0);
     }
     private static void restoreCommonGlStates()
     {

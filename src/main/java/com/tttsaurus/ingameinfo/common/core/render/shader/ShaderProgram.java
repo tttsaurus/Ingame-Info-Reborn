@@ -143,8 +143,8 @@ public class ShaderProgram implements Comparable<ShaderProgram>, IGlDisposable
         cpuTimeMs = stopWatch.getTime();
 
         GL15.glEndQuery(GL33.GL_TIME_ELAPSED);
-        GL15.glGetQueryObject(gpuTimeQueryID, GL15.GL_QUERY_RESULT, CommonBuffers.intBuffer);
-        gpuTimeMs = CommonBuffers.intBuffer.get(0) / 1.0E6d;
+        GL15.glGetQueryObject(gpuTimeQueryID, GL15.GL_QUERY_RESULT, CommonBuffers.INT_BUFFER_16);
+        gpuTimeMs = CommonBuffers.INT_BUFFER_16.get(0) / 1.0E6d;
 
         setup = true;
 

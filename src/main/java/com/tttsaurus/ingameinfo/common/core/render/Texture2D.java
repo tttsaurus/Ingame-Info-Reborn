@@ -3,7 +3,7 @@ package com.tttsaurus.ingameinfo.common.core.render;
 import net.minecraft.client.renderer.GlStateManager;
 import org.lwjgl.opengl.*;
 import java.nio.ByteBuffer;
-import static com.tttsaurus.ingameinfo.common.core.render.CommonBuffers.intBuffer;
+import static com.tttsaurus.ingameinfo.common.core.render.CommonBuffers.INT_BUFFER_16;
 
 public final class Texture2D implements IGlDisposable
 {
@@ -45,8 +45,8 @@ public final class Texture2D implements IGlDisposable
 
     public Texture2D(int width, int height, ByteBuffer byteBuffer)
     {
-        GL11.glGetInteger(GL11.GL_TEXTURE_BINDING_2D, intBuffer);
-        int textureID = intBuffer.get(0);
+        GL11.glGetInteger(GL11.GL_TEXTURE_BINDING_2D, INT_BUFFER_16);
+        int textureID = INT_BUFFER_16.get(0);
 
         glTextureID = GL11.glGenTextures();
         this.width = width;

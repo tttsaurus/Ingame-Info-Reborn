@@ -17,7 +17,7 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.nio.ByteBuffer;
-import static com.tttsaurus.ingameinfo.common.core.render.CommonBuffers.intBuffer;
+import static com.tttsaurus.ingameinfo.common.core.render.CommonBuffers.INT_BUFFER_16;
 
 public final class RenderUtils
 {
@@ -514,8 +514,8 @@ public final class RenderUtils
         float g = (float)(color >> 8 & 255) / 255.0F;
         float b = (float)(color & 255) / 255.0F;
 
-        GL11.glGetInteger(GL11.GL_TEXTURE_BINDING_2D, intBuffer);
-        int textureID = intBuffer.get(0);
+        GL11.glGetInteger(GL11.GL_TEXTURE_BINDING_2D, INT_BUFFER_16);
+        int textureID = INT_BUFFER_16.get(0);
 
         GlStateManager.enableTexture2D();
         GlStateManager.disableLighting();
@@ -558,8 +558,8 @@ public final class RenderUtils
         float g = (float)(color >> 8 & 255) / 255.0F;
         float b = (float)(color & 255) / 255.0F;
 
-        GL11.glGetInteger(GL11.GL_TEXTURE_BINDING_2D, intBuffer);
-        int textureID = intBuffer.get(0);
+        GL11.glGetInteger(GL11.GL_TEXTURE_BINDING_2D, INT_BUFFER_16);
+        int textureID = INT_BUFFER_16.get(0);
 
         ScaledResolution resolution = new ScaledResolution(Minecraft.getMinecraft());
         double width = resolution.getScaledWidth_double();
