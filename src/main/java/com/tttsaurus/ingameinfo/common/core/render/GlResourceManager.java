@@ -32,7 +32,7 @@ public final class GlResourceManager
     {
         int error;
         while ((error = GL11.glGetError()) != GL11.GL_NO_ERROR)
-            logger.info("[OpenGL Error] " + getErrorString(error));
+            logger.warn("OpenGL Error: " + getErrorString(error));
     }
 
     private static String getErrorString(int error)
