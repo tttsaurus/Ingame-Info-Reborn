@@ -1,6 +1,5 @@
 package com.tttsaurus.ingameinfo.demo.eg1;
 
-import com.tttsaurus.ingameinfo.InGameInfoReborn;
 import com.tttsaurus.ingameinfo.common.core.gui.delegate.button.IMouseClickButton;
 import com.tttsaurus.ingameinfo.common.core.mvvm.binding.Reactive;
 import com.tttsaurus.ingameinfo.common.core.mvvm.binding.ReactiveCollection;

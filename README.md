@@ -19,7 +19,7 @@ This is a library mod that helps you to create in-game overlaid (or focused) GUI
 ![Snipaste_2025-01-12_12-53-07](https://github.com/user-attachments/assets/581f0727-bba8-4ff5-9780-8fdbfaf587fd)
 (Nothing will pop up with the default configuration!)
 
-Declarative GUI example:
+### Declarative GUI Example:
 ```xml
 <VerticalGroup>
     <HorizontalGroup>
@@ -43,7 +43,8 @@ EventCenter.gameFpsEvent.addListener((fps) ->
 {
     fpsText.set("FPS: " + fps);
 });
-...
+
+... more bindings
 ```
 
 ## Wiki
@@ -51,7 +52,7 @@ EventCenter.gameFpsEvent.addListener((fps) ->
 
 ## Todo List / Features
 <details>
-<summary>Click to expand</summary>
+<summary>Click to Expand</summary>
 
 My Detailed Todo List:
 - https://trello.com/b/MTLHeyGn/ingameinfo
