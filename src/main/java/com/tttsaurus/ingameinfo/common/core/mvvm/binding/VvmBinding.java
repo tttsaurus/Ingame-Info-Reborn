@@ -41,24 +41,13 @@ public class VvmBinding<TView extends View>
         return guiLayout;
     }
 
-    public void bindReactiveCollection(Reactive reactive, ReactiveCollection reactiveCollection)
-    {
-        int index = 0;
-        List<Element> elements = view.getElements(reactive.targetUid());
-        for (Element element: elements)
-        {
-            if (reactive.ordinal() != -1 && reactive.ordinal() != index++) continue;
-
-            if (ElementGroup.class.isAssignableFrom(element.getClass()))
-            {
-                reactiveCollection.group = (ElementGroup)element;
-            }
-        }
-    }
-
+    //<editor-fold desc="binding methods (inject data)">
     public <T> void bindReactiveObject(Reactive reactive, ReactiveObject<T> reactiveObject)
     {
+        if (reactiveObject == null) return;
         if (reactive.targetUid().isEmpty()) return;
+        if (reactive.property().isEmpty()) return;
+
         Class<T> reactiveObjectParameter;
         try
         {
@@ -106,4 +95,41 @@ public class VvmBinding<TView extends View>
             }
         }
     }
+
+    public void bindReactiveCollection(Reactive reactive, ReactiveCollection reactiveCollection)
+    {
+        if (reactiveCollection == null) return;
+        if (reactive.targetUid().isEmpty()) return;
+
+        int index = 0;
+        List<Element> elements = view.getElements(reactive.targetUid());
+        for (Element element: elements)
+        {
+            if (reactive.ordinal() != -1 && reactive.ordinal() != index++) continue;
+
+            if (ElementGroup.class.isAssignableFrom(element.getClass()))
+            {
+                reactiveCollection.group = (ElementGroup)element;
+            }
+        }
+    }
+
+    public void bindSlotAccessor(Reactive reactive, SlotAccessor slotAccessor)
+    {
+        if (slotAccessor == null) return;
+        if (reactive.targetUid().isEmpty()) return;
+
+        int index = 0;
+        List<Element> elements = view.getElements(reactive.targetUid());
+        for (Element element: elements)
+        {
+            if (reactive.ordinal() != -1 && reactive.ordinal() != index++) continue;
+
+            if (ElementGroup.class.isAssignableFrom(element.getClass()))
+            {
+                slotAccessor.group = (ElementGroup)element;
+            }
+        }
+    }
+    //</editor-fold>
 }

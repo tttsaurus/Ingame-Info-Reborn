@@ -12,6 +12,9 @@ import java.util.Map;
 
 public final class RegistryUtils
 {
+    private static final MethodHandles.Lookup lookup = MethodHandles.lookup();
+    private static final Class<Reactive> annotation = Reactive.class;
+
     public static Map<Reactive, IReactiveObjectGetter> findReactiveObjects(String mvvmRegistryName, Class<? extends ViewModel<?>> clazz)
     {
         Map<Reactive, IReactiveObjectGetter> reactiveObjects = new HashMap<>();
@@ -26,13 +29,10 @@ public final class RegistryUtils
             return reactiveObjects;
         }
 
-        Class<Reactive> annotation = Reactive.class;
-
         for (Field field: clazz.getDeclaredFields())
             if (field.isAnnotationPresent(annotation))
             {
                 Reactive reactive = field.getAnnotation(annotation);
-                MethodHandles.Lookup lookup = MethodHandles.lookup();
                 try
                 {
                     Class<?> fieldClass = field.getType();
@@ -61,13 +61,10 @@ public final class RegistryUtils
     {
         Map<Reactive, IReactiveCollectionGetter> reactiveCollections = new HashMap<>();
 
-        Class<Reactive> annotation = Reactive.class;
-
         for (Field field: clazz.getDeclaredFields())
             if (field.isAnnotationPresent(annotation))
             {
                 Reactive reactive = field.getAnnotation(annotation);
-                MethodHandles.Lookup lookup = MethodHandles.lookup();
                 try
                 {
                     Class<?> fieldClass = field.getType();
@@ -90,5 +87,37 @@ public final class RegistryUtils
             }
 
         return reactiveCollections;
+    }
+
+    public static Map<Reactive, ISlotAccessorGetter> findSlotAccessors(String mvvmRegistryName, Class<? extends ViewModel<?>> clazz)
+    {
+        Map<Reactive, ISlotAccessorGetter> slotAccessors = new HashMap<>();
+
+        for (Field field: clazz.getDeclaredFields())
+            if (field.isAnnotationPresent(annotation))
+            {
+                Reactive reactive = field.getAnnotation(annotation);
+                try
+                {
+                    Class<?> fieldClass = field.getType();
+                    String fieldName = field.getName();
+                    if (SlotAccessor.class.equals(fieldClass))
+                    {
+                        MethodHandle getter = lookup.findGetter(clazz, fieldName, fieldClass);
+                        ISlotAccessorGetter wrappedGetter = (target) ->
+                        {
+                            try
+                            {
+                                return (SlotAccessor)getter.invoke(target);
+                            }
+                            catch (Throwable ignored) { return null; }
+                        };
+                        slotAccessors.put(reactive, wrappedGetter);
+                    }
+                }
+                catch (Exception ignored) { }
+            }
+
+        return slotAccessors;
     }
 }

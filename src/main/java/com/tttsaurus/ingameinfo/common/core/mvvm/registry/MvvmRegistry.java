@@ -6,6 +6,7 @@ import com.tttsaurus.ingameinfo.common.core.gui.IgiGuiContainer;
 import com.tttsaurus.ingameinfo.common.core.internal.InternalMethods;
 import com.tttsaurus.ingameinfo.common.core.mvvm.binding.IReactiveCollectionGetter;
 import com.tttsaurus.ingameinfo.common.core.mvvm.binding.IReactiveObjectGetter;
+import com.tttsaurus.ingameinfo.common.core.mvvm.binding.ISlotAccessorGetter;
 import com.tttsaurus.ingameinfo.common.core.mvvm.binding.Reactive;
 import com.tttsaurus.ingameinfo.common.core.mvvm.viewmodel.ViewModel;
 import javax.annotation.Nonnull;
@@ -25,7 +26,7 @@ public final class MvvmRegistry
         if (!isMvvmRegistered(mvvmRegistryName)) return null;
         return igiGuiContainerCache.get(mvvmRegistryName);
     }
-    public static void setIgiGuiContainer(String mvvmRegistryName, @Nonnull ViewModel<?> viewModel)
+    public static void cacheIgiGuiContainer(String mvvmRegistryName, @Nonnull ViewModel<?> viewModel)
     {
         GuiLayout guiLayout = InternalMethods.instance.ViewModel$init.invoke(viewModel, mvvmRegistryName);
         IgiGuiContainer igiGuiContainer = InternalMethods.instance.GuiLayout$igiGuiContainer$getter.invoke(guiLayout);
@@ -36,7 +37,9 @@ public final class MvvmRegistry
     // key: mvvm registry name
     private static final Map<String, Map<Reactive, IReactiveObjectGetter>> registeredReactiveObjects = new HashMap<>();
     private static final Map<String, Map<Reactive, IReactiveCollectionGetter>> registeredReactiveCollections = new HashMap<>();
+    private static final Map<String, Map<Reactive, ISlotAccessorGetter>> registeredSlotAccessors = new HashMap<>();
 
+    //<editor-fold desc="getters">
     public static Map<Reactive, IReactiveObjectGetter> getRegisteredReactiveObjects(String mvvmRegistryName)
     {
         Map<Reactive, IReactiveObjectGetter> map = registeredReactiveObjects.get(mvvmRegistryName);
@@ -49,6 +52,13 @@ public final class MvvmRegistry
         if (map == null) return new HashMap<>();
         return map;
     }
+    public static Map<Reactive, ISlotAccessorGetter> getRegisteredSlotAccessors(String mvvmRegistryName)
+    {
+        Map<Reactive, ISlotAccessorGetter> map = registeredSlotAccessors.get(mvvmRegistryName);
+        if (map == null) return new HashMap<>();
+        return map;
+    }
+    //</editor-fold>
 
     private static final Map<String, Class<? extends ViewModel<?>>> viewModelClasses = new HashMap<>();
 
@@ -71,6 +81,7 @@ public final class MvvmRegistry
         viewModelClasses.put(mvvmRegistryName, viewModelClass);
         registeredReactiveObjects.put(mvvmRegistryName, RegistryUtils.findReactiveObjects(mvvmRegistryName, viewModelClass));
         registeredReactiveCollections.put(mvvmRegistryName, RegistryUtils.findReactiveCollections(mvvmRegistryName, viewModelClass));
+        registeredSlotAccessors.put(mvvmRegistryName, RegistryUtils.findSlotAccessors(mvvmRegistryName, viewModelClass));
 
         return true;
     }
@@ -79,7 +90,7 @@ public final class MvvmRegistry
     public static boolean autoRegister(String mvvmRegistryName, Class<? extends ViewModel<?>> viewModelClass)
     {
         if (!manualRegister(mvvmRegistryName, viewModelClass)) return false;
-        setIgiGuiContainer(mvvmRegistryName, newViewModel(mvvmRegistryName));
+        cacheIgiGuiContainer(mvvmRegistryName, newViewModel(mvvmRegistryName));
         return true;
     }
 }

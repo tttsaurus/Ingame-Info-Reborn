@@ -14,6 +14,7 @@ import com.tttsaurus.ingameinfo.common.core.render.RenderUtils;
 import com.tttsaurus.ingameinfo.common.impl.gui.GuiResources;
 import com.tttsaurus.ingameinfo.common.impl.render.renderer.TextRenderer;
 
+// todo: refactor -> FSM
 @RegisterElement
 public class Button extends AbstractButton
 {

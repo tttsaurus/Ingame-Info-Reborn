@@ -92,7 +92,7 @@ public class ClientProxy extends CommonProxy
         //<editor-fold desc="shutdown hooks">
         ShutdownHooks.hooks.add(() ->
         {
-            logger.info("Starts disposing OpenGL resources");
+            logger.info("Start disposing OpenGL resources");
             GlResourceManager.disposeAll(logger);
             logger.info("OpenGL resources disposed");
         });

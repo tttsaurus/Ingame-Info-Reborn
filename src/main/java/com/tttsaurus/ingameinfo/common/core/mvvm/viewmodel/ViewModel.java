@@ -16,7 +16,7 @@ public abstract class ViewModel<T extends View>
 {
     protected String mvvmRegistryName;
 
-    // getters & setters for communication with gui container
+    // getters & setters for communication with IgiGuiContainer
     // will be init before start()
     private IAction_1Param<Boolean> isActiveSetter = null;
     private IFunc<Boolean> isActiveGetter = null;
@@ -52,7 +52,7 @@ public abstract class ViewModel<T extends View>
 
     private VvmBinding<T> binding = new VvmBinding<>();
 
-    // register entry point
+    // MvvmRegistry.cacheIgiGuiContainer() calls init
     private GuiLayout init(String mvvmRegistryName)
     {
         this.mvvmRegistryName = mvvmRegistryName;
@@ -65,6 +65,10 @@ public abstract class ViewModel<T extends View>
         Map<Reactive, IReactiveCollectionGetter> reactiveCollections = MvvmRegistry.getRegisteredReactiveCollections(mvvmRegistryName);
         for (Map.Entry<Reactive, IReactiveCollectionGetter> entry: reactiveCollections.entrySet())
             binding.bindReactiveCollection(entry.getKey(), entry.getValue().get(this));
+
+        Map<Reactive, ISlotAccessorGetter> slotAccessors = MvvmRegistry.getRegisteredSlotAccessors(mvvmRegistryName);
+        for (Map.Entry<Reactive, ISlotAccessorGetter> entry: slotAccessors.entrySet())
+            binding.bindSlotAccessor(entry.getKey(), entry.getValue().get(this));
 
         return guiLayout;
     }
@@ -88,6 +92,14 @@ public abstract class ViewModel<T extends View>
             ReactiveCollection reactiveCollection = entry.getValue().get(this);
             InternalMethods.instance.ReactiveCollection$group$setter.invoke(reactiveCollection, null);
             binding.bindReactiveCollection(entry.getKey(), reactiveCollection);
+        }
+
+        Map<Reactive, ISlotAccessorGetter> slotAccessors = MvvmRegistry.getRegisteredSlotAccessors(mvvmRegistryName);
+        for (Map.Entry<Reactive, ISlotAccessorGetter> entry: slotAccessors.entrySet())
+        {
+            SlotAccessor slotAccessor = entry.getValue().get(this);
+            InternalMethods.instance.SlotAccessor$group$setter.invoke(slotAccessor, null);
+            binding.bindSlotAccessor(entry.getKey(), slotAccessor);
         }
     }
 

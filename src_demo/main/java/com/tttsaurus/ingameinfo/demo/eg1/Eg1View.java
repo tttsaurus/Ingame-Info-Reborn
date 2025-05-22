@@ -24,6 +24,7 @@ public class Eg1View extends View
                     </Group>
                     <Button uid = "switch" text = "Switch">
                 </Group>
+                <Slot uid = "mySlot">
                 """;
     }
 }

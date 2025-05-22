@@ -13,7 +13,7 @@ import java.util.*;
 @SuppressWarnings("all")
 public final class ElementRegistry
 {
-    // key: element class name
+    // key: element class name (not the simple name)
     private static final Map<String, Map<String, IStylePropertySetter>> stylePropertySetters = new HashMap<>();
 
     // IStylePropertySetter is the primary key here

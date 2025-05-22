@@ -1,9 +1,11 @@
 package com.tttsaurus.ingameinfo.demo.eg1;
 
+import com.tttsaurus.ingameinfo.InGameInfoReborn;
 import com.tttsaurus.ingameinfo.common.core.gui.delegate.button.IMouseClickButton;
 import com.tttsaurus.ingameinfo.common.core.mvvm.binding.Reactive;
 import com.tttsaurus.ingameinfo.common.core.mvvm.binding.ReactiveCollection;
 import com.tttsaurus.ingameinfo.common.core.mvvm.binding.ReactiveObject;
+import com.tttsaurus.ingameinfo.common.core.mvvm.binding.SlotAccessor;
 import com.tttsaurus.ingameinfo.common.core.mvvm.viewmodel.ViewModel;
 import com.tttsaurus.ingameinfo.common.impl.igievent.EventCenter;
 
@@ -23,6 +25,9 @@ public class Eg1ViewModel extends ViewModel<Eg1View>
 
     @Reactive(targetUid = "list")
     public ReactiveCollection list = new ReactiveCollection();
+
+    @Reactive(targetUid = "mySlot")
+    public SlotAccessor slot = new SlotAccessor();
 
     private boolean flag = false;
 
@@ -59,6 +64,8 @@ public class Eg1ViewModel extends ViewModel<Eg1View>
                 flag = !flag;
             }
         });
+
+        slot.setComposeBlock();
     }
 
     @Override

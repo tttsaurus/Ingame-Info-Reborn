@@ -10,6 +10,7 @@ import com.tttsaurus.ingameinfo.common.core.gui.style.IStylePropertySyncTo;
 import com.tttsaurus.ingameinfo.common.core.mvvm.binding.IReactiveCallback;
 import com.tttsaurus.ingameinfo.common.core.mvvm.binding.ReactiveCollection;
 import com.tttsaurus.ingameinfo.common.core.mvvm.binding.ReactiveObject;
+import com.tttsaurus.ingameinfo.common.core.mvvm.binding.SlotAccessor;
 import com.tttsaurus.ingameinfo.common.core.mvvm.view.View;
 import com.tttsaurus.ingameinfo.common.core.mvvm.viewmodel.ViewModel;
 import com.tttsaurus.ingameinfo.common.impl.gui.IgiGuiLifeCycle;
@@ -43,6 +44,7 @@ public class InternalMethods
     public IAction_2Param<ViewModel, IAction_1Param<Boolean>> ViewModel$isFocusedSetter$setter;
     public IAction_2Param<ViewModel, IFunc<Boolean>> ViewModel$isFocusedGetter$setter;
     public IAction_2Param<ReactiveCollection, ElementGroup> ReactiveCollection$group$setter;
+    public IAction_2Param<SlotAccessor, ElementGroup> SlotAccessor$group$setter;
 
     public IFunc_2Param<GuiLayout, ViewModel, String> ViewModel$init;
     public IFunc_1Param<GuiLayout, View> View$init;
@@ -332,6 +334,26 @@ public class InternalMethods
         {
             ReactiveCollection$group$setter = null;
             InGameInfoReborn.logger.error("Reflection setup failed for ReactiveCollection$group$setter: " + exception.getMessage());
+        }
+
+        try
+        {
+            Field field = SlotAccessor.class.getDeclaredField("group");
+            field.setAccessible(true);
+            MethodHandle handle = lookup.unreflectSetter(field);
+            SlotAccessor$group$setter = (arg0, arg1) ->
+            {
+                try
+                {
+                    handle.invoke(arg0, arg1);
+                }
+                catch (Throwable ignored) { }
+            };
+        }
+        catch (Exception exception)
+        {
+            SlotAccessor$group$setter = null;
+            InGameInfoReborn.logger.error("Reflection setup failed for SlotAccessor$group$setter: " + exception.getMessage());
         }
         //</editor-fold>
 

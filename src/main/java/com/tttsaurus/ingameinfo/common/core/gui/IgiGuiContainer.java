@@ -21,6 +21,7 @@ public class IgiGuiContainer
     protected boolean useHeldItemBlacklist = false;
     protected final List<GhostableItem> heldItemBlacklist = new ArrayList<>();
 
+    // alias of View.mainGroup
     protected MainGroup mainGroup = new MainGroup();
     protected boolean debug = false;
     protected int exitKeyForFocusedGui = Keyboard.KEY_ESCAPE;

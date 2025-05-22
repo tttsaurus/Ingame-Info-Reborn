@@ -20,7 +20,7 @@ public final class MvvmRegisterEventHandler
             MvvmRegistry.manualRegister(mvvm, CrtViewModel.class);
             CrtViewModel crtViewModel = (CrtViewModel)MvvmRegistry.newViewModel(mvvm);
             crtViewModel.runtimeMvvm = mvvm;
-            MvvmRegistry.setIgiGuiContainer(mvvm, crtViewModel);
+            MvvmRegistry.cacheIgiGuiContainer(mvvm, crtViewModel);
         }
 
         if (IgiConfig.ENABLE_SPOTIFY_INTEGRATION)

@@ -17,6 +17,7 @@ import java.util.List;
 @SuppressWarnings("all")
 public abstract class View
 {
+    // alias of IgiGuiContainer.mainGroup
     private MainGroup mainGroup = null;
 
     public final List<Element> getElements(String uid)
@@ -52,7 +53,7 @@ public abstract class View
 
     public String getDefaultIxml() { return ""; }
 
-    // searching the file under ./config/ingameinfo/
+    // creating the file under ./config/ingameinfo/
     // and .ixml is the suffix
     public abstract String getIxmlFileName();
 
