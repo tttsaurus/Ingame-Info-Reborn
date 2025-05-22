@@ -54,6 +54,9 @@ EventCenter.gameFpsEvent.addListener((fps) ->
 <details>
 <summary>Click to Expand</summary>
 
+_**Currently working on the architecture.**_<br>
+_**Not adding controls or QoL updates.**_
+
 My Detailed Todo List:
 - https://trello.com/b/MTLHeyGn/ingameinfo
 
