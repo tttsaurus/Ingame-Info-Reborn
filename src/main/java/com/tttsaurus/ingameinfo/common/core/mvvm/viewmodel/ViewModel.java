@@ -7,6 +7,8 @@ import com.tttsaurus.ingameinfo.common.core.internal.InternalMethods;
 import com.tttsaurus.ingameinfo.common.core.mvvm.binding.*;
 import com.tttsaurus.ingameinfo.common.core.mvvm.view.View;
 import com.tttsaurus.ingameinfo.common.core.mvvm.registry.MvvmRegistry;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 // only do one inheritance; don't do nested inheritance
@@ -14,10 +16,13 @@ import java.util.Map;
 @SuppressWarnings("all")
 public abstract class ViewModel<T extends View>
 {
-    protected String mvvmRegistryName;
+    private String mvvmRegistryName;
+    public String getMvvmRegistryName() { return mvvmRegistryName; }
+
+    private final List<SlotAccessor> slotAccessors = new ArrayList<>();
 
     // getters & setters for communication with IgiGuiContainer
-    // will be init before start()
+    // will be injected from IgiGuiContainer before start()
     private IAction_1Param<Boolean> isActiveSetter = null;
     private IFunc<Boolean> isActiveGetter = null;
     private IAction_1Param<IFunc<Boolean>> exitCallbackSetter = null;
@@ -66,9 +71,14 @@ public abstract class ViewModel<T extends View>
         for (Map.Entry<Reactive, IReactiveCollectionGetter> entry: reactiveCollections.entrySet())
             binding.bindReactiveCollection(entry.getKey(), entry.getValue().get(this));
 
+        this.slotAccessors.clear();
         Map<Reactive, ISlotAccessorGetter> slotAccessors = MvvmRegistry.getRegisteredSlotAccessors(mvvmRegistryName);
         for (Map.Entry<Reactive, ISlotAccessorGetter> entry: slotAccessors.entrySet())
-            binding.bindSlotAccessor(entry.getKey(), entry.getValue().get(this));
+        {
+            SlotAccessor slotAccessor = entry.getValue().get(this);
+            this.slotAccessors.add(slotAccessor);
+            binding.bindSlotAccessor(entry.getKey(), slotAccessor);
+        }
 
         return guiLayout;
     }
@@ -83,6 +93,7 @@ public abstract class ViewModel<T extends View>
         {
             ReactiveObject<?> reactiveObject = entry.getValue().get(this);
             InternalMethods.instance.ReactiveObject$initiativeCallbacks$getter.invoke(reactiveObject).clear();
+            InternalMethods.instance.ReactiveObject$passiveCallbacks$getter.invoke(reactiveObject).clear();
             binding.bindReactiveObject(entry.getKey(), reactiveObject);
         }
 
@@ -94,10 +105,12 @@ public abstract class ViewModel<T extends View>
             binding.bindReactiveCollection(entry.getKey(), reactiveCollection);
         }
 
+        this.slotAccessors.clear();
         Map<Reactive, ISlotAccessorGetter> slotAccessors = MvvmRegistry.getRegisteredSlotAccessors(mvvmRegistryName);
         for (Map.Entry<Reactive, ISlotAccessorGetter> entry: slotAccessors.entrySet())
         {
             SlotAccessor slotAccessor = entry.getValue().get(this);
+            this.slotAccessors.add(slotAccessor);
             InternalMethods.instance.SlotAccessor$group$setter.invoke(slotAccessor, null);
             binding.bindSlotAccessor(entry.getKey(), slotAccessor);
         }

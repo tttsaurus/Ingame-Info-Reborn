@@ -3,6 +3,7 @@ package com.tttsaurus.ingameinfo.common.core.gui;
 import com.tttsaurus.ingameinfo.common.core.function.IFunc;
 import com.tttsaurus.ingameinfo.common.core.internal.InternalMethods;
 import com.tttsaurus.ingameinfo.common.core.item.GhostableItem;
+import com.tttsaurus.ingameinfo.common.core.mvvm.binding.SlotAccessor;
 import com.tttsaurus.ingameinfo.common.core.mvvm.viewmodel.ViewModel;
 import com.tttsaurus.ingameinfo.common.core.gui.layout.MainGroup;
 import com.tttsaurus.ingameinfo.common.core.render.RenderUtils;
@@ -76,6 +77,15 @@ public class IgiGuiContainer
     public void onFixedUpdate(double deltaTime)
     {
         if (!isActive) return;
+
+        List<SlotAccessor> slotAccessors = InternalMethods.instance.ViewModel$slotAccessors$getter.invoke(viewModel);
+        for (SlotAccessor slotAccessor: slotAccessors)
+        {
+            if (slotAccessor.getComposeBlock() != null)
+            {
+                // update
+            }
+        }
 
         viewModel.onFixedUpdate(deltaTime);
         mainGroup.onFixedUpdate(deltaTime);

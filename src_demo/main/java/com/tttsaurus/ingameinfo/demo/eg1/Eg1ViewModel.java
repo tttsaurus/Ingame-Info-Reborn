@@ -64,7 +64,7 @@ public class Eg1ViewModel extends ViewModel<Eg1View>
             }
         });
 
-        slot.setComposeBlock();
+        slot.initComposeBlock(null);
     }
 
     @Override

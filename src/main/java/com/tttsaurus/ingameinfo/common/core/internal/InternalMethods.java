@@ -34,7 +34,9 @@ public class InternalMethods
     public IFunc_1Param<IgiGuiContainer, GuiLayout> GuiLayout$igiGuiContainer$getter;
     public IFunc_1Param<Map<String, IStylePropertySyncTo>, Element> Element$syncToMap$getter;
     public IFunc_1Param<List<IReactiveCallback>, ReactiveObject> ReactiveObject$initiativeCallbacks$getter;
+    public IFunc_1Param<List<IReactiveCallback>, ReactiveObject> ReactiveObject$passiveCallbacks$getter;
     public IFunc<Map<String, IgiGuiContainer>> IgiGuiLifeCycle$openedGuiMap$getter;
+    public IFunc_1Param<List<SlotAccessor>, ViewModel> ViewModel$slotAccessors$getter;
 
     public IAction_2Param<IgiGuiContainer, ViewModel> IgiGuiContainer$viewModel$setter;
     public IAction_2Param<View, MainGroup> View$mainGroup$setter;
@@ -151,7 +153,27 @@ public class InternalMethods
         catch (Exception exception)
         {
             ReactiveObject$initiativeCallbacks$getter = null;
-            InGameInfoReborn.logger.error("Reflection setup failed for ReactiveObject$setterCallbacks$getter: " + exception.getMessage());
+            InGameInfoReborn.logger.error("Reflection setup failed for ReactiveObject$initiativeCallbacks$getter: " + exception.getMessage());
+        }
+
+        try
+        {
+            Field field = ReactiveObject.class.getDeclaredField("passiveCallbacks");
+            field.setAccessible(true);
+            MethodHandle handle = lookup.unreflectGetter(field);
+            ReactiveObject$passiveCallbacks$getter = (arg0) ->
+            {
+                try
+                {
+                    return (List<IReactiveCallback>)handle.invoke(arg0);
+                }
+                catch (Throwable ignored) { return null; }
+            };
+        }
+        catch (Exception exception)
+        {
+            ReactiveObject$passiveCallbacks$getter = null;
+            InGameInfoReborn.logger.error("Reflection setup failed for ReactiveObject$passiveCallbacks$getter: " + exception.getMessage());
         }
 
         try
@@ -172,6 +194,26 @@ public class InternalMethods
         {
             IgiGuiLifeCycle$openedGuiMap$getter = null;
             InGameInfoReborn.logger.error("Reflection setup failed for IgiGuiLifeCycle$openedGuiMap$getter: " + exception.getMessage());
+        }
+
+        try
+        {
+            Field field = ViewModel.class.getDeclaredField("slotAccessors");
+            field.setAccessible(true);
+            MethodHandle handle = lookup.unreflectGetter(field);
+            ViewModel$slotAccessors$getter = (arg0) ->
+            {
+                try
+                {
+                    return (List<SlotAccessor>)handle.invoke(arg0);
+                }
+                catch (Throwable ignored) { return null; }
+            };
+        }
+        catch (Exception exception)
+        {
+            ViewModel$slotAccessors$getter = null;
+            InGameInfoReborn.logger.error("Reflection setup failed for ViewModel$slotAccessors$getter: " + exception.getMessage());
         }
         //</editor-fold>
 
