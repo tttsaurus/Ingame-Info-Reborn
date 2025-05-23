@@ -135,7 +135,7 @@ public class ClientProxy extends CommonProxy
         logger.info("Registered serviceable elements: ");
         List<Class<? extends Element>> constructableElements = ElementRegistry.getConstructableElements();
         for (Class<? extends Element> clazz: constructableElements)
-            logger.info("  - " + (TypeUtils.isFromParentPackage(clazz, myPackage) ? clazz.getSimpleName() : clazz.getName()));
+            logger.info("- " + (TypeUtils.isFromParentPackage(clazz, myPackage) ? clazz.getSimpleName() : clazz.getName()));
 
         logger.info("");
         logger.info("Notice:");

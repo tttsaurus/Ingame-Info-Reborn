@@ -4,7 +4,7 @@ import com.tttsaurus.ingameinfo.common.core.function.IFunc;
 import com.tttsaurus.ingameinfo.common.core.internal.InternalMethods;
 import com.tttsaurus.ingameinfo.common.core.item.GhostableItem;
 import com.tttsaurus.ingameinfo.common.core.mvvm.viewmodel.ViewModel;
-import com.tttsaurus.ingameinfo.common.impl.gui.layout.MainGroup;
+import com.tttsaurus.ingameinfo.common.core.gui.layout.MainGroup;
 import com.tttsaurus.ingameinfo.common.core.render.RenderUtils;
 import com.tttsaurus.ingameinfo.common.core.gui.theme.registry.ThemeRegistry;
 import net.minecraft.client.renderer.GlStateManager;

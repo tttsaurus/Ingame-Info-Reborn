@@ -14,7 +14,7 @@ import com.tttsaurus.ingameinfo.common.core.mvvm.binding.SlotAccessor;
 import com.tttsaurus.ingameinfo.common.core.mvvm.view.View;
 import com.tttsaurus.ingameinfo.common.core.mvvm.viewmodel.ViewModel;
 import com.tttsaurus.ingameinfo.common.impl.gui.IgiGuiLifeCycle;
-import com.tttsaurus.ingameinfo.common.impl.gui.layout.MainGroup;
+import com.tttsaurus.ingameinfo.common.core.gui.layout.MainGroup;
 import java.lang.invoke.MethodHandle;
 import java.lang.invoke.MethodHandles;
 import java.lang.reflect.Constructor;
