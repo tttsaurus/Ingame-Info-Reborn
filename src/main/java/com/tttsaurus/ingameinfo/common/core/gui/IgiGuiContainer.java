@@ -80,15 +80,19 @@ public class IgiGuiContainer
 
         List<SlotAccessor> slotAccessors = InternalMethods.instance.ViewModel$slotAccessors$getter.invoke(viewModel);
         for (SlotAccessor slotAccessor: slotAccessors)
-        {
             if (slotAccessor.getComposeBlock() != null)
-            {
-                // update
-            }
-        }
+                slotAccessor.getComposeBlock().update(ThemeRegistry.getTheme(themeName));
 
         viewModel.onFixedUpdate(deltaTime);
         mainGroup.onFixedUpdate(deltaTime);
+
+        if (mainGroup.getNeedReCalc())
+        {
+            mainGroup.resetRenderInfo();
+            mainGroup.calcWidthHeight();
+            mainGroup.calcRenderPos(mainGroup.rect);
+            mainGroup.finishReCalc();
+        }
     }
     public void onRenderUpdate(boolean focused)
     {
@@ -98,14 +102,6 @@ public class IgiGuiContainer
         {
             GlStateManager.tryBlendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ONE);
             RenderUtils.renderRectFullScreen(backgroundColor);
-        }
-
-        if (mainGroup.getNeedReCalc())
-        {
-            mainGroup.resetRenderInfo();
-            mainGroup.calcWidthHeight();
-            mainGroup.calcRenderPos(mainGroup.rect);
-            mainGroup.finishReCalc();
         }
 
         mainGroup.onRenderUpdate(focused);

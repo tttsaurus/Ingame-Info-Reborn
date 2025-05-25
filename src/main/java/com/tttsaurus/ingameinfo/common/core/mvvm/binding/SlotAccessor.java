@@ -22,9 +22,9 @@ public class SlotAccessor
             Constructor<? extends ComposeBlock> constructor = clazz.getConstructor(ElementGroup.class);
             composeBlock = constructor.newInstance(group);
         }
-        catch (Exception ignored)
+        catch (Throwable throwable)
         {
-            throw new RuntimeException("Failed to initialize the compose block.");
+            throw new RuntimeException("Failed to initialize the compose block.", throwable);
         }
     }
 }

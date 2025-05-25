@@ -23,8 +23,8 @@ public class Eg1View extends View
                         <Text uid = "memory">
                     </Group>
                     <Button uid = "switch" text = "Switch">
+                    <Slot uid = "mySlot">
                 </Group>
-                <Slot uid = "mySlot">
                 """;
     }
 }

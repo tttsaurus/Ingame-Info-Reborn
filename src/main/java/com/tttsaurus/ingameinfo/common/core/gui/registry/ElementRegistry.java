@@ -81,7 +81,7 @@ public final class ElementRegistry
     }
 
     @Nullable
-    public static IAction_1Param<Object> getStylePropertySetterFullCallback(Element element, String propertyName)
+    public static IAction_1Param<Object> getStylePropertySetterFullCallback(@Nonnull Element element, String propertyName)
     {
         IStylePropertySetter setter = ElementRegistry.getStylePropertySetter(element.getClass(), propertyName);
         if (setter == null)
