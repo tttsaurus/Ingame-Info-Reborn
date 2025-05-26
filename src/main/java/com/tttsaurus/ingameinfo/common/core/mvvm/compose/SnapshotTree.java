@@ -52,7 +52,7 @@ public class SnapshotTree
             recursiveToString(node, builder, depth + 1);
     }
 
-    //<editor-fold desc="update plan algorithm">
+    //<editor-fold desc="diffing algorithm">
 
     private static void swaps(List<UpdatePlan> updatePlans, List<ComposeNode> nodes, Map<Integer, Integer> perm)
     {

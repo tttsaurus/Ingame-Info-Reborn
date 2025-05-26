@@ -1,6 +1,5 @@
 package com.tttsaurus.ingameinfo.common.core.mvvm.compose;
 
-import com.tttsaurus.ingameinfo.InGameInfoReborn;
 import com.tttsaurus.ingameinfo.common.core.gui.Element;
 import com.tttsaurus.ingameinfo.common.core.gui.layout.ElementGroup;
 import com.tttsaurus.ingameinfo.common.core.gui.registry.ElementRegistry;
@@ -8,54 +7,54 @@ import com.tttsaurus.ingameinfo.common.core.gui.theme.ThemeConfig;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public abstract class ComposeBlock
 {
     private final ElementGroup root;
-
     private SnapshotTree prevSnapshot = null;
     private SnapshotTree currSnapshot = new SnapshotTree();
-
-    private AtomicInteger sysKeyCounter = new AtomicInteger(0);
+    private final AtomicInteger sysKeyCounter = new AtomicInteger(0);
+    private final ComposeValidator validator;
+    private final AtomicBoolean abortThisFrame = new AtomicBoolean(false);
 
     private ThemeConfig themeConfig;
 
     public ComposeBlock(ElementGroup root)
     {
         this.root = root;
+        ComposeValidator.init();
+        validator = ComposeValidator.getInstance();
     }
-
-    static boolean debug = true;
 
     public final void update(ThemeConfig themeConfig)
     {
         this.themeConfig = themeConfig;
 
-        // modify curret snapshot
         compose();
 
+        boolean abort = abortThisFrame.get();
         sysKeyCounter.set(0);
+        abortThisFrame.set(false);
 
-        List<UpdatePlan> updatePlans;
-        if (prevSnapshot == null)
-            updatePlans = currSnapshot.addAll();
-        else
-            updatePlans = prevSnapshot.diff(currSnapshot);
-
-        //if (debug)
+        if (abort)
         {
-            debug = false;
-            InGameInfoReborn.logger.info(currSnapshot.toString());
-            InGameInfoReborn.logger.info("update plans: ");
-            for (UpdatePlan plan: updatePlans)
-                InGameInfoReborn.logger.info(plan.toString());
+            currSnapshot = new SnapshotTree();
         }
+        else
+        {
+            List<UpdatePlan> updatePlans;
+            if (prevSnapshot == null)
+                updatePlans = currSnapshot.addAll();
+            else
+                updatePlans = prevSnapshot.diff(currSnapshot);
 
-        prevSnapshot = currSnapshot;
-        currSnapshot = new SnapshotTree();
+            prevSnapshot = currSnapshot;
+            currSnapshot = new SnapshotTree();
 
-        if (reConstruct(updatePlans)) root.requestReCalc();
+            if (reConstruct(updatePlans)) root.requestReCalc();
+        }
     }
 
     private void recursiveReConstruct(ElementGroup root, List<UpdatePlan> updatePlans, AtomicInteger indexCounter)
@@ -70,7 +69,6 @@ public abstract class ComposeBlock
                 Element element = ElementRegistry.newElement(plan.newElementName);
                 if (element != null)
                 {
-                    // todo: move theme loading else where
                     element.loadTheme(themeConfig);
                     root.elements.add(element);
                     for (Map.Entry<String, Object> entry: plan.newStyleProperties.entrySet())
@@ -97,7 +95,6 @@ public abstract class ComposeBlock
             case GOTO_NEXT_LAYER ->
             {
                 indexCounter.incrementAndGet();
-                // todo: ElementGroup check
                 recursiveReConstruct((ElementGroup)root.elements.get(plan.index), updatePlans, indexCounter);
             }
             case GOTO_PREV_LAYER ->
@@ -124,8 +121,6 @@ public abstract class ComposeBlock
             }
         }
 
-        InGameInfoReborn.logger.info("re calc: " + needReCalc);
-
         recursiveReConstruct(root, updatePlans, new AtomicInteger(0));
 
         return needReCalc;
@@ -135,6 +130,17 @@ public abstract class ComposeBlock
 
     protected final ComposeNodeWorkspace ui(String name)
     {
-        return new ComposeNodeWorkspace(currSnapshot.add(name, sysKeyCounter.getAndIncrement()), currSnapshot, sysKeyCounter);
+        if (!validator.element(name))
+        {
+            validator.error(name + " is not a valid Element. This frame will be aborted.");
+            abortThisFrame.set(true);
+        }
+
+        return new ComposeNodeWorkspace(
+                currSnapshot.add(name, sysKeyCounter.getAndIncrement()),
+                currSnapshot,
+                sysKeyCounter,
+                validator,
+                abortThisFrame);
     }
 }

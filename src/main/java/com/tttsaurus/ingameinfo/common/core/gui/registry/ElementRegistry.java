@@ -40,6 +40,9 @@ public final class ElementRegistry
         else
             return null;
     }
+
+    // not frequently used
+    //<editor-fold desc="getters">
     @Nullable
     public static IDeserializer<?> getStylePropertyDeserializer(IStylePropertySetter setter)
     {
@@ -65,6 +68,8 @@ public final class ElementRegistry
     {
         return stylePropertyGetters.get(setter);
     }
+    //</editor-fold>
+
     @Nullable
     public static Element newElement(String name)
     {
@@ -111,11 +116,13 @@ public final class ElementRegistry
         };
     }
 
+    //<editor-fold desc="map getters">
     public static ImmutableMap<String, Map<String, IStylePropertySetter>> getStylePropertySetters() { return ImmutableMap.copyOf(stylePropertySetters); }
     public static ImmutableMap<IStylePropertySetter, IDeserializer<?>> getStylePropertyDeserializers() { return ImmutableMap.copyOf(stylePropertyDeserializers); }
     public static ImmutableMap<IStylePropertySetter, IStylePropertyCallbackPre> getStylePropertySetterCallbacksPre() { return ImmutableMap.copyOf(stylePropertySetterCallbacksPre); }
     public static ImmutableMap<IStylePropertySetter, IStylePropertyCallbackPost> getStylePropertySetterCallbacksPost() { return ImmutableMap.copyOf(stylePropertySetterCallbacksPost); }
     public static ImmutableMap<IStylePropertySetter, Class<?>> getStylePropertyClasses() { return ImmutableMap.copyOf(stylePropertyClasses); }
+    //</editor-fold>
 
     public static ImmutableList<Class<? extends Element>> getRegisteredElements() { return ImmutableList.copyOf(registeredElements.values()); }
     public static List<Class<? extends Element>> getConstructableElements()
