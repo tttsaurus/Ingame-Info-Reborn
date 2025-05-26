@@ -1,7 +1,7 @@
 package com.tttsaurus.ingameinfo.common.impl.serialization;
 
 import com.tttsaurus.ingameinfo.common.core.gui.Element;
-import com.tttsaurus.ingameinfo.common.core.gui.ElementStyle;
+import com.tttsaurus.ingameinfo.common.core.gui.ElementProperty;
 import com.tttsaurus.ingameinfo.common.core.gui.GuiLayout;
 import com.tttsaurus.ingameinfo.common.core.gui.layout.ElementGroup;
 import com.tttsaurus.ingameinfo.common.core.gui.layout.Slot;
@@ -81,14 +81,14 @@ public class GuiLayoutDeserializer implements IDeserializer<GuiLayout>
             Element element = ElementRegistry.newElement(pair.getFirst());
             if (element != null)
             {
-                List<ElementStyle> styles = (new ElementStylesDeserializer(element.getClass())).deserialize(pair.getSecond());
+                List<ElementProperty> properties = (new ElementPropertiesDeserializer(element.getClass())).deserialize(pair.getSecond());
 
                 if (element.getClass().equals(Slot.class))
-                    guiLayout.addElement(element, styles);
+                    guiLayout.addElement(element, properties);
                 else if (ElementGroup.class.isAssignableFrom(element.getClass()))
-                    guiLayout.startGroup((ElementGroup)element, styles);
+                    guiLayout.startGroup((ElementGroup)element, properties);
                 else
-                    guiLayout.addElement(element, styles);
+                    guiLayout.addElement(element, properties);
             }
         }
 

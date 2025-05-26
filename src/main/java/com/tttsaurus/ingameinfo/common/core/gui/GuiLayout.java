@@ -97,9 +97,9 @@ public final class GuiLayout
         startGroupInternal(group);
         return this;
     }
-    public GuiLayout startGroup(ElementGroup group, List<ElementStyle> styles)
+    public GuiLayout startGroup(ElementGroup group, List<ElementProperty> properties)
     {
-        injectStyles(group, styles);
+        injectStyleProperties(group, properties);
         startGroupInternal(group);
         return this;
     }
@@ -116,17 +116,17 @@ public final class GuiLayout
         addElementInternal(element);
         return this;
     }
-    public GuiLayout addElement(Element element, List<ElementStyle> styles)
+    public GuiLayout addElement(Element element, List<ElementProperty> properties)
     {
-        injectStyles(element, styles);
+        injectStyleProperties(element, properties);
         addElementInternal(element);
         return this;
     }
 
     // todo: add inject priority
-    private void injectStyles(Element element, List<ElementStyle> styles)
+    private void injectStyleProperties(Element element, List<ElementProperty> properties)
     {
-        for (ElementStyle style: styles)
+        for (ElementProperty style: properties)
         {
             IAction_1Param<Object> action = ElementRegistry.getStylePropertySetterFullCallback(element, style.name);
             if (action != null)

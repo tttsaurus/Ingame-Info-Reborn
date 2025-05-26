@@ -6,7 +6,6 @@ import com.tttsaurus.ingameinfo.common.core.file.FileUtils;
 import com.tttsaurus.ingameinfo.common.core.gui.theme.ThemeConfig;
 import com.tttsaurus.ingameinfo.common.core.gui.theme.ThemeConfigSerDesUtils;
 import com.tttsaurus.ingameinfo.common.core.gui.theme.ThemeConfigUpdater;
-import com.tttsaurus.ingameinfo.config.IgiCommonConfig;
 import com.tttsaurus.ingameinfo.config.IgiSpotifyIntegrationConfig;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import java.io.File;
