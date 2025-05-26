@@ -2,8 +2,8 @@ package com.tttsaurus.ingameinfo.common.impl.gui.control;
 
 import com.tttsaurus.ingameinfo.common.core.gui.layout.Rect;
 import com.tttsaurus.ingameinfo.common.core.gui.registry.RegisterElement;
-import com.tttsaurus.ingameinfo.common.core.gui.style.CallbackInfo;
-import com.tttsaurus.ingameinfo.common.core.gui.style.StyleProperty;
+import com.tttsaurus.ingameinfo.common.core.gui.property.CallbackInfo;
+import com.tttsaurus.ingameinfo.common.core.gui.property.StyleProperty;
 import com.tttsaurus.ingameinfo.common.core.gui.theme.ThemeConfig;
 import com.tttsaurus.ingameinfo.common.core.render.RenderUtils;
 import com.tttsaurus.ingameinfo.common.core.render.RenderMask;

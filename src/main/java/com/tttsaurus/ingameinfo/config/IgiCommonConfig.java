@@ -1,5 +1,6 @@
 package com.tttsaurus.ingameinfo.config;
 
+import com.tttsaurus.ingameinfo.InGameInfoReborn;
 import com.tttsaurus.ingameinfo.common.core.gui.GuiLifecycleProvider;
 import net.minecraftforge.common.config.Configuration;
 
@@ -18,16 +19,16 @@ public final class IgiCommonConfig
         {
             CONFIG.load();
 
-            String GUI_LIFECYCLE_PROVIDER = CONFIG.getString("GUI Lifecycle Provider Class", "default", "com.tttsaurus.ingameinfo.common.impl.gui.DefaultLifecycleProvider", "The lifecycle provider");
+            String className = CONFIG.getString("GUI Lifecycle Provider Class", "default", "com.tttsaurus.ingameinfo.common.impl.gui.DefaultLifecycleProvider", "The lifecycle provider");
             try
             {
-                Class<?> clazz = Class.forName(GUI_LIFECYCLE_PROVIDER);
+                Class<?> clazz = Class.forName(className);
                 Class<? extends GuiLifecycleProvider> providerClass = clazz.asSubclass(GuiLifecycleProvider.class);
                 IgiCommonConfig.GUI_LIFECYCLE_PROVIDER = providerClass.getConstructor().newInstance();
             }
             catch (Throwable throwable)
             {
-                throw new RuntimeException("An invalid GUI Lifecycle Provider Class is provided.", throwable);
+                InGameInfoReborn.logger.error("An invalid GUI Lifecycle Provider Class is provided.", throwable);
             }
 
             FIXED_UPDATE_LIMIT = CONFIG.getInt("GUI Fixed Update Limit", "default", 30, 30, 300, "It represents how many updates will be called per second \nand this limit is for animation calculations & other \"fixed\" calculations \nNotice: this limit should be smaller than or equal to \"GUI Render Update Limit\" \nand becomes meaningless when it's greater than \"GUI Render Update Limit\" \nRecommended values: 30, 60, 125, 240\n");

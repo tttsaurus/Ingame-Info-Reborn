@@ -2,7 +2,7 @@ package com.tttsaurus.ingameinfo.common.impl.serialization;
 
 import com.tttsaurus.ingameinfo.common.core.gui.Element;
 import com.tttsaurus.ingameinfo.common.core.gui.ElementStyle;
-import com.tttsaurus.ingameinfo.common.core.gui.style.IStylePropertySetter;
+import com.tttsaurus.ingameinfo.common.core.gui.property.IStylePropertySetter;
 import com.tttsaurus.ingameinfo.common.core.serialization.IDeserializer;
 import com.tttsaurus.ingameinfo.common.core.gui.registry.ElementRegistry;
 import net.minecraft.util.Tuple;

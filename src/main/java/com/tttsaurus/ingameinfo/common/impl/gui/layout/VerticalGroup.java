@@ -6,9 +6,9 @@ import com.tttsaurus.ingameinfo.common.core.gui.layout.ElementGroup;
 import com.tttsaurus.ingameinfo.common.core.gui.layout.Rect;
 import com.tttsaurus.ingameinfo.common.core.gui.layout.Skewness;
 import com.tttsaurus.ingameinfo.common.core.gui.registry.RegisterElement;
-import com.tttsaurus.ingameinfo.common.core.gui.style.CallbackInfo;
-import com.tttsaurus.ingameinfo.common.core.gui.style.StyleProperty;
-import com.tttsaurus.ingameinfo.common.core.gui.style.StylePropertyCallback;
+import com.tttsaurus.ingameinfo.common.core.gui.property.CallbackInfo;
+import com.tttsaurus.ingameinfo.common.core.gui.property.StyleProperty;
+import com.tttsaurus.ingameinfo.common.core.gui.property.StylePropertyCallback;
 
 @RegisterElement
 public class VerticalGroup extends ElementGroup

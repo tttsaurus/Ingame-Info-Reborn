@@ -24,6 +24,8 @@ public class CommonProxy
         //<editor-fold desc="config setup">
         IgiCommonConfig.CONFIG = new Configuration(FileUtils.makeFile("common.cfg"));
         IgiCommonConfig.loadConfig();
+        // crash game immediately if the lifecycle provider was null
+        IgiCommonConfig.GUI_LIFECYCLE_PROVIDER.getClass();
 
         IgiDefaultLifecycleProviderConfig.CONFIG = new Configuration(FileUtils.makeFile("default_lifecycle_provider.cfg"));
         IgiDefaultLifecycleProviderConfig.loadConfig();

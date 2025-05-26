@@ -3,7 +3,7 @@ package com.tttsaurus.ingameinfo.common.core.mvvm.binding;
 import com.tttsaurus.ingameinfo.common.core.gui.Element;
 import com.tttsaurus.ingameinfo.common.core.gui.GuiLayout;
 import com.tttsaurus.ingameinfo.common.core.gui.layout.ElementGroup;
-import com.tttsaurus.ingameinfo.common.core.gui.style.*;
+import com.tttsaurus.ingameinfo.common.core.gui.property.*;
 import com.tttsaurus.ingameinfo.common.core.function.IAction_1Param;
 import com.tttsaurus.ingameinfo.common.core.internal.InternalMethods;
 import com.tttsaurus.ingameinfo.common.core.mvvm.view.View;

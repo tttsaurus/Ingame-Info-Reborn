@@ -2,8 +2,8 @@ package com.tttsaurus.ingameinfo.common.core.gui.registry;
 
 import com.tttsaurus.ingameinfo.InGameInfoReborn;
 import com.tttsaurus.ingameinfo.common.core.gui.Element;
-import com.tttsaurus.ingameinfo.common.core.gui.style.*;
-import com.tttsaurus.ingameinfo.common.core.gui.style.wrapped.IWrappedStyleProperty;
+import com.tttsaurus.ingameinfo.common.core.gui.property.*;
+import com.tttsaurus.ingameinfo.common.core.gui.property.wrapped.IWrappedStyleProperty;
 import com.tttsaurus.ingameinfo.common.core.reflection.TypeUtils;
 import com.tttsaurus.ingameinfo.common.core.serialization.Deserializer;
 import com.tttsaurus.ingameinfo.common.core.serialization.IDeserializer;

@@ -1,4 +1,4 @@
-package com.tttsaurus.ingameinfo.common.core.gui.style.wrapped;
+package com.tttsaurus.ingameinfo.common.core.gui.property.wrapped;
 
 // only do one inheritance; don't do nested inheritance
 public abstract class IWrappedStyleProperty<T>

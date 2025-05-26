@@ -3,7 +3,7 @@ package com.tttsaurus.ingameinfo.common.core.gui.registry;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import com.tttsaurus.ingameinfo.common.core.gui.Element;
-import com.tttsaurus.ingameinfo.common.core.gui.style.*;
+import com.tttsaurus.ingameinfo.common.core.gui.property.*;
 import com.tttsaurus.ingameinfo.common.core.function.IAction_1Param;
 import com.tttsaurus.ingameinfo.common.core.serialization.IDeserializer;
 import javax.annotation.Nonnull;

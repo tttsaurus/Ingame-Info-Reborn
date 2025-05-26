@@ -6,9 +6,9 @@ import com.tttsaurus.ingameinfo.common.core.appcommunication.spotify.SpotifyOAut
 import com.tttsaurus.ingameinfo.common.core.event.MvvmRegisterEvent;
 import com.tttsaurus.ingameinfo.common.core.gui.Element;
 import com.tttsaurus.ingameinfo.common.core.gui.IgiGuiManager;
-import com.tttsaurus.ingameinfo.common.core.gui.style.IStylePropertyCallbackPost;
-import com.tttsaurus.ingameinfo.common.core.gui.style.IStylePropertyCallbackPre;
-import com.tttsaurus.ingameinfo.common.core.gui.style.IStylePropertySetter;
+import com.tttsaurus.ingameinfo.common.core.gui.property.IStylePropertyCallbackPost;
+import com.tttsaurus.ingameinfo.common.core.gui.property.IStylePropertyCallbackPre;
+import com.tttsaurus.ingameinfo.common.core.gui.property.IStylePropertySetter;
 import com.tttsaurus.ingameinfo.common.core.reflection.TypeUtils;
 import com.tttsaurus.ingameinfo.common.core.render.GlResourceManager;
 import com.tttsaurus.ingameinfo.common.core.render.RenderHints;

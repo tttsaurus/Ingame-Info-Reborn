@@ -2,9 +2,9 @@ package com.tttsaurus.ingameinfo.common.impl.gui.control;
 
 import com.tttsaurus.ingameinfo.common.core.gui.delegate.button.*;
 import com.tttsaurus.ingameinfo.common.core.gui.registry.RegisterElement;
-import com.tttsaurus.ingameinfo.common.core.gui.style.CallbackInfo;
-import com.tttsaurus.ingameinfo.common.core.gui.style.StyleProperty;
-import com.tttsaurus.ingameinfo.common.core.gui.style.StylePropertyCallback;
+import com.tttsaurus.ingameinfo.common.core.gui.property.CallbackInfo;
+import com.tttsaurus.ingameinfo.common.core.gui.property.StyleProperty;
+import com.tttsaurus.ingameinfo.common.core.gui.property.StylePropertyCallback;
 import com.tttsaurus.ingameinfo.common.core.input.MouseUtils;
 import java.util.ArrayList;
 import java.util.List;
