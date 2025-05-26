@@ -21,7 +21,9 @@ import com.tttsaurus.ingameinfo.common.core.gui.theme.registry.ThemeRegistry;
 import com.tttsaurus.ingameinfo.common.impl.gui.DefaultLifecycleProvider;
 import com.tttsaurus.ingameinfo.common.impl.mvvm.command.RefreshVvmCommand;
 import com.tttsaurus.ingameinfo.common.impl.mvvm.registry.MvvmRegisterEventHandler;
-import com.tttsaurus.ingameinfo.config.IgiConfig;
+import com.tttsaurus.ingameinfo.config.IgiCommonConfig;
+import com.tttsaurus.ingameinfo.config.IgiDefaultLifecycleProviderConfig;
+import com.tttsaurus.ingameinfo.config.IgiSpotifyIntegrationConfig;
 import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraftforge.client.ClientCommandHandler;
 import net.minecraftforge.common.MinecraftForge;
@@ -38,26 +40,12 @@ public class ClientProxy extends CommonProxy
     {
         super.preInit(event, logger);
 
-        //<editor-fold desc="gl setup">
+        //<editor-fold desc="rendering setup">
         int majorGlVersion = RenderHints.getMajorGlVersion();
         int minorGlVersion = RenderHints.getMinorGlVersion();
 
         logger.info("Raw OpenGL version: " + RenderHints.getRawGlVersion());
         logger.info(String.format("OpenGL version: %d.%d", majorGlVersion, minorGlVersion));
-
-        boolean enableFbo = IgiConfig.ENABLE_FRAMEBUFFER && OpenGlHelper.framebufferSupported;
-        // at least gl 33
-        boolean enablePostProcessing = IgiConfig.ENABLE_POST_PROCESSING_SHADER && ((majorGlVersion == 3 && minorGlVersion >= 3) || majorGlVersion > 3);
-        // at least gl 40
-        boolean enableMsfbo = IgiConfig.ENABLE_MSFRAMEBUFFER && majorGlVersion >= 4;
-
-        // framebuffer is the prerequisite
-        enablePostProcessing = enableFbo && enablePostProcessing;
-        enableMsfbo = enableFbo && enableMsfbo;
-
-        logger.info("[IGI Render Feature] Framebuffer is " + (enableFbo ? "ON" : "OFF"));
-        logger.info("[IGI Render Feature] Post-Processing on framebuffer is " + (enablePostProcessing ? "ON" : "OFF") + " (requires GL33 and framebuffer)");
-        logger.info("[IGI Render Feature] Multisampling on framebuffer is " + (enableMsfbo ? "ON" : "OFF") + " (requires GL40 and framebuffer)");
 
         // init getters
         RenderHints.getModelViewMatrix();
@@ -67,25 +55,44 @@ public class ClientProxy extends CommonProxy
         //</editor-fold>
 
         //<editor-fold desc="lifecycle provider setup">
-        DefaultLifecycleProvider lifecycleProvider = new DefaultLifecycleProvider();
+        if (IgiCommonConfig.GUI_LIFECYCLE_PROVIDER instanceof DefaultLifecycleProvider provider)
+        {
+            logger.info("Default GUI Lifecycle Provider is in use.");
 
-        lifecycleProvider.setEnableFbo(enableFbo);
-        lifecycleProvider.setEnableShader(enablePostProcessing);
-        lifecycleProvider.setEnableMultisampleOnFbo(enableMsfbo);
-        RenderHints.fboSampleNum(IgiConfig.FRAMEBUFFER_SAMPLE_NUM);
+            boolean enableFbo = IgiDefaultLifecycleProviderConfig.ENABLE_FRAMEBUFFER && OpenGlHelper.framebufferSupported;
+            // at least gl 33
+            boolean enablePostProcessing = IgiDefaultLifecycleProviderConfig.ENABLE_POST_PROCESSING_SHADER && ((majorGlVersion == 3 && minorGlVersion >= 3) || majorGlVersion > 3);
+            // at least gl 40
+            boolean enableMsfbo = IgiDefaultLifecycleProviderConfig.ENABLE_MSFRAMEBUFFER && majorGlVersion >= 4;
 
-        lifecycleProvider.setMaxFps_FixedUpdate(IgiConfig.FIXED_UPDATE_LIMIT);
-        lifecycleProvider.setMaxFps_RenderUpdate(IgiConfig.RENDER_UPDATE_LIMIT);
+            // framebuffer is the prerequisite
+            enablePostProcessing = enableFbo && enablePostProcessing;
+            enableMsfbo = enableFbo && enableMsfbo;
 
-        IgiGuiManager.setLifecycleProvider(lifecycleProvider);
+            logger.info("Default GUI Lifecycle Provider: Framebuffer is " + (enableFbo ? "ON" : "OFF"));
+            logger.info("Default GUI Lifecycle Provider: Post-Processing on framebuffer is " + (enablePostProcessing ? "ON" : "OFF") + " (requires GL33 and framebuffer)");
+            logger.info("Default GUI Lifecycle Provider: Multisampling on framebuffer is " + (enableMsfbo ? "ON" : "OFF") + " (requires GL40 and framebuffer)");
+
+            provider.setEnableFbo(enableFbo);
+            provider.setEnableShader(enablePostProcessing);
+            provider.setEnableMultisampleOnFbo(enableMsfbo);
+            RenderHints.fboSampleNum(IgiDefaultLifecycleProviderConfig.FRAMEBUFFER_SAMPLE_NUM);
+        }
+        else
+            logger.info("Default GUI Lifecycle Provider is not in use.");
+
+        IgiCommonConfig.GUI_LIFECYCLE_PROVIDER.setMaxFps_FixedUpdate(IgiCommonConfig.FIXED_UPDATE_LIMIT);
+        IgiCommonConfig.GUI_LIFECYCLE_PROVIDER.setMaxFps_RenderUpdate(IgiCommonConfig.RENDER_UPDATE_LIMIT);
+        IgiGuiManager.setLifecycleProvider(IgiCommonConfig.GUI_LIFECYCLE_PROVIDER);
+
         logger.info("GUI Lifecycle Provider is ready.");
         //</editor-fold>
 
         //<editor-fold desc="spotify setup">
-        if (IgiConfig.ENABLE_SPOTIFY_INTEGRATION)
+        if (IgiSpotifyIntegrationConfig.ENABLE_SPOTIFY_INTEGRATION)
         {
-            SpotifyOAuthUtils.CLIENT_ID = IgiConfig.SPOTIFY_CLIENT_ID;
-            SpotifyOAuthUtils.CLIENT_SECRET = IgiConfig.SPOTIFY_CLIENT_SECRET;
+            SpotifyOAuthUtils.CLIENT_ID = IgiSpotifyIntegrationConfig.SPOTIFY_CLIENT_ID;
+            SpotifyOAuthUtils.CLIENT_SECRET = IgiSpotifyIntegrationConfig.SPOTIFY_CLIENT_SECRET;
         }
         //</editor-fold>
     }
@@ -113,7 +120,7 @@ public class ClientProxy extends CommonProxy
         //</editor-fold>
 
         //<editor-fold desc="app communication">
-        if (IgiConfig.ENABLE_SPOTIFY_INTEGRATION)
+        if (IgiSpotifyIntegrationConfig.ENABLE_SPOTIFY_INTEGRATION)
             MinecraftForge.EVENT_BUS.register(SpotifyCommandHandler.class);
         //</editor-fold>
 

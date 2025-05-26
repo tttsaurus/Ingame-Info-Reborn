@@ -6,7 +6,8 @@ import com.tttsaurus.ingameinfo.common.core.file.FileUtils;
 import com.tttsaurus.ingameinfo.common.core.gui.theme.ThemeConfig;
 import com.tttsaurus.ingameinfo.common.core.gui.theme.ThemeConfigSerDesUtils;
 import com.tttsaurus.ingameinfo.common.core.gui.theme.ThemeConfigUpdater;
-import com.tttsaurus.ingameinfo.config.IgiConfig;
+import com.tttsaurus.ingameinfo.config.IgiCommonConfig;
+import com.tttsaurus.ingameinfo.config.IgiSpotifyIntegrationConfig;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import java.io.File;
 import java.io.RandomAccessFile;
@@ -91,7 +92,7 @@ public final class ThemeRegistry
             ThemeRegistry.defaultTheme = defaultTheme;
         }
 
-        if (IgiConfig.ENABLE_SPOTIFY_INTEGRATION)
+        if (IgiSpotifyIntegrationConfig.ENABLE_SPOTIFY_INTEGRATION)
         {
             try
             {

@@ -1,7 +1,7 @@
 package com.tttsaurus.ingameinfo.common.impl.appcommunication.spotify;
 
 import com.tttsaurus.ingameinfo.common.core.file.FileUtils;
-import com.tttsaurus.ingameinfo.config.IgiConfig;
+import com.tttsaurus.ingameinfo.config.IgiCommonConfig;
 import com.tttsaurus.ingameinfo.common.core.appcommunication.spotify.SpotifyAccessUtils;
 import com.tttsaurus.ingameinfo.common.core.appcommunication.spotify.SpotifyOAuthUtils;
 import com.tttsaurus.ingameinfo.common.core.appcommunication.spotify.SpotifyUserInfo;
@@ -12,6 +12,7 @@ import com.tttsaurus.ingameinfo.common.core.mvvm.binding.Reactive;
 import com.tttsaurus.ingameinfo.common.core.mvvm.binding.ReactiveObject;
 import com.tttsaurus.ingameinfo.common.core.mvvm.viewmodel.ViewModel;
 import com.tttsaurus.ingameinfo.common.impl.igievent.EventCenter;
+import com.tttsaurus.ingameinfo.config.IgiSpotifyIntegrationConfig;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.util.text.TextComponentString;
@@ -188,7 +189,7 @@ public class SpotifyViewModel extends ViewModel<SpotifyView>
     }
     private void switchLayout()
     {
-        if (IgiConfig.SPOTIFY_EXTENDED_LAYOUT)
+        if (IgiSpotifyIntegrationConfig.SPOTIFY_EXTENDED_LAYOUT)
         {
             trackTitleGroupEnabled.set(false);
             albumImageGroupPadding.set(new Padding(5f, 5f, 0f, 0f));
@@ -230,14 +231,14 @@ public class SpotifyViewModel extends ViewModel<SpotifyView>
 
         editButtonAddClickListener.set((IMouseClickButton)(() ->
         {
-            if (IgiConfig.SPOTIFY_EXTENDED_LAYOUT)
+            if (IgiSpotifyIntegrationConfig.SPOTIFY_EXTENDED_LAYOUT)
             {
-                IgiConfig.useSpotifyExtendedLayout(false);
+                IgiSpotifyIntegrationConfig.useSpotifyExtendedLayout(false);
                 switchLayout();
             }
             else
             {
-                IgiConfig.useSpotifyExtendedLayout(true);
+                IgiSpotifyIntegrationConfig.useSpotifyExtendedLayout(true);
                 switchLayout();
             }
         }));
@@ -349,7 +350,7 @@ public class SpotifyViewModel extends ViewModel<SpotifyView>
                             SpotifyUserInfo.userName = SpotifyAccessUtils.getUserName(SpotifyUserInfo.token.accessToken);
                         }
                         catch (Exception ignored) { }
-                        if (IgiConfig.SPOTIFY_AUTO_DISPLAY)
+                        if (IgiSpotifyIntegrationConfig.SPOTIFY_AUTO_DISPLAY)
                             EventCenter.spotifyOverlayEvent.trigger(true);
                     }
                     return null;

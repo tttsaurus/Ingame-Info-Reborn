@@ -17,7 +17,8 @@ import com.tttsaurus.ingameinfo.common.core.render.shader.ShaderLoadingUtils;
 import com.tttsaurus.ingameinfo.common.core.render.shader.ShaderProgram;
 import com.tttsaurus.ingameinfo.common.impl.igievent.EventCenter;
 import com.tttsaurus.ingameinfo.common.impl.network.IgiNetwork;
-import com.tttsaurus.ingameinfo.config.IgiConfig;
+import com.tttsaurus.ingameinfo.config.IgiCommonConfig;
+import com.tttsaurus.ingameinfo.config.IgiDefaultLifecycleProviderConfig;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.client.gui.ScaledResolution;
@@ -496,8 +497,8 @@ public final class DefaultLifecycleProvider extends GuiLifecycleProvider
             shaderProgram.setUniform("screenTexture", 1);
             if (enableMultisampleOnFbo)
                 shaderProgram.setUniform("sampleNum", RenderHints.getHint_Framebuffer$FramebufferSampleNum());
-            shaderProgram.setUniform("enableAlpha", IgiConfig.ENABLE_PP_ALPHA);
-            shaderProgram.setUniform("targetAlpha", IgiConfig.PP_ALPHA);
+            shaderProgram.setUniform("enableAlpha", IgiDefaultLifecycleProviderConfig.ENABLE_PP_ALPHA);
+            shaderProgram.setUniform("targetAlpha", IgiDefaultLifecycleProviderConfig.PP_ALPHA);
         }
     }
     private void deactivateShader()

@@ -1,10 +1,13 @@
 package com.tttsaurus.ingameinfo.proxy;
 
 import com.tttsaurus.ingameinfo.InGameInfoReborn;
+import com.tttsaurus.ingameinfo.common.core.file.FileUtils;
 import com.tttsaurus.ingameinfo.common.impl.network.IgiNetwork;
 import com.tttsaurus.ingameinfo.config.ForgeConfigWriter;
-import com.tttsaurus.ingameinfo.config.IgiConfig;
+import com.tttsaurus.ingameinfo.config.IgiCommonConfig;
 import com.tttsaurus.ingameinfo.common.core.internal.InternalMethods;
+import com.tttsaurus.ingameinfo.config.IgiDefaultLifecycleProviderConfig;
+import com.tttsaurus.ingameinfo.config.IgiSpotifyIntegrationConfig;
 import com.tttsaurus.ingameinfo.plugin.crt.impl.CrtEventManager;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.config.Configuration;
@@ -19,10 +22,17 @@ public class CommonProxy
     public void preInit(FMLPreInitializationEvent event, Logger logger)
     {
         //<editor-fold desc="config setup">
-        File file = event.getSuggestedConfigurationFile();
-        IgiConfig.CONFIG = new Configuration(file);
-        IgiConfig.loadConfig();
-        IgiConfig.CONFIG_WRITER = new ForgeConfigWriter(file);
+        IgiCommonConfig.CONFIG = new Configuration(FileUtils.makeFile("common.cfg"));
+        IgiCommonConfig.loadConfig();
+
+        IgiDefaultLifecycleProviderConfig.CONFIG = new Configuration(FileUtils.makeFile("default_lifecycle_provider.cfg"));
+        IgiDefaultLifecycleProviderConfig.loadConfig();
+
+        File spotifyConfig = FileUtils.makeFile("spotify_integration.cfg");
+        IgiSpotifyIntegrationConfig.CONFIG = new Configuration(spotifyConfig);
+        IgiSpotifyIntegrationConfig.CONFIG_WRITER = new ForgeConfigWriter(spotifyConfig);
+        IgiSpotifyIntegrationConfig.loadConfig();
+
         logger.info("In-Game Info Reborn config loaded.");
         //</editor-fold>
     }
