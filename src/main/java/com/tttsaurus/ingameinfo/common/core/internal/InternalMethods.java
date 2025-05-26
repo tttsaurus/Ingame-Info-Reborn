@@ -4,6 +4,7 @@ import com.tttsaurus.ingameinfo.InGameInfoReborn;
 import com.tttsaurus.ingameinfo.common.core.function.*;
 import com.tttsaurus.ingameinfo.common.core.gui.Element;
 import com.tttsaurus.ingameinfo.common.core.gui.GuiLayout;
+import com.tttsaurus.ingameinfo.common.core.gui.GuiLifecycleProvider;
 import com.tttsaurus.ingameinfo.common.core.gui.IgiGuiContainer;
 import com.tttsaurus.ingameinfo.common.core.gui.layout.ElementGroup;
 import com.tttsaurus.ingameinfo.common.core.gui.style.IStylePropertySyncTo;
@@ -13,7 +14,6 @@ import com.tttsaurus.ingameinfo.common.core.mvvm.binding.ReactiveObject;
 import com.tttsaurus.ingameinfo.common.core.mvvm.binding.SlotAccessor;
 import com.tttsaurus.ingameinfo.common.core.mvvm.view.View;
 import com.tttsaurus.ingameinfo.common.core.mvvm.viewmodel.ViewModel;
-import com.tttsaurus.ingameinfo.common.impl.gui.IgiGuiLifeCycle;
 import com.tttsaurus.ingameinfo.common.core.gui.layout.MainGroup;
 import java.lang.invoke.MethodHandle;
 import java.lang.invoke.MethodHandles;
@@ -35,7 +35,7 @@ public class InternalMethods
     public IFunc_1Param<Map<String, IStylePropertySyncTo>, Element> Element$syncToMap$getter;
     public IFunc_1Param<List<IReactiveCallback>, ReactiveObject> ReactiveObject$initiativeCallbacks$getter;
     public IFunc_1Param<List<IReactiveCallback>, ReactiveObject> ReactiveObject$passiveCallbacks$getter;
-    public IFunc<Map<String, IgiGuiContainer>> IgiGuiLifeCycle$openedGuiMap$getter;
+    public IFunc_1Param<Map<String, IgiGuiContainer>, GuiLifecycleProvider> GuiLifecycleProvider$openedGuiMap$getter;
     public IFunc_1Param<List<SlotAccessor>, ViewModel> ViewModel$slotAccessors$getter;
 
     public IAction_2Param<IgiGuiContainer, ViewModel> IgiGuiContainer$viewModel$setter;
@@ -178,22 +178,22 @@ public class InternalMethods
 
         try
         {
-            Method method = IgiGuiLifeCycle.class.getDeclaredMethod("getOpenedGuiMap", new Class[0]);
-            method.setAccessible(true);
-            MethodHandle handle = lookup.unreflect(method);
-            IgiGuiLifeCycle$openedGuiMap$getter = () ->
+            Field field = GuiLifecycleProvider.class.getDeclaredField("openedGuiMap");
+            field.setAccessible(true);
+            MethodHandle handle = lookup.unreflectGetter(field);
+            GuiLifecycleProvider$openedGuiMap$getter = (arg0) ->
             {
                 try
                 {
-                    return (Map<String, IgiGuiContainer>)handle.invoke();
+                    return (Map<String, IgiGuiContainer>)handle.invoke(arg0);
                 }
                 catch (Throwable ignored) { return null; }
             };
         }
         catch (Exception exception)
         {
-            IgiGuiLifeCycle$openedGuiMap$getter = null;
-            InGameInfoReborn.logger.error("Reflection setup failed for IgiGuiLifeCycle$openedGuiMap$getter: " + exception.getMessage());
+            GuiLifecycleProvider$openedGuiMap$getter = null;
+            InGameInfoReborn.logger.error("Reflection setup failed for GuiLifecycleProvider$openedGuiMap$getter: " + exception.getMessage());
         }
 
         try

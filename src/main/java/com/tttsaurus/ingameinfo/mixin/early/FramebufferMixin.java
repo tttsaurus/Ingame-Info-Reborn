@@ -27,7 +27,7 @@ public class FramebufferMixin implements IGlDisposable
                     value = "INVOKE",
                     target = "Lnet/minecraft/client/renderer/GlStateManager;glTexImage2D(IIIIIIIILjava/nio/IntBuffer;)V"
             ))
-    public void mixin_createFramebuffer_GlStateManager$glTexImage2D(int target, int level, int internalFormat, int width, int height, int border, int format, int type, IntBuffer pixels, Operation<Void> original)
+    public void wrap_createFramebuffer_GlStateManager$glTexImage2D(int target, int level, int internalFormat, int width, int height, int border, int format, int type, IntBuffer pixels, Operation<Void> original)
     {
         if (RenderHints.getHint_Framebuffer$CreateFramebufferHint() == RenderHints.Framebuffer.CreateFramebufferHint.TEXTURE_2D)
             original.call(target, level, internalFormat, width, height, border, format, type, pixels);
@@ -41,7 +41,7 @@ public class FramebufferMixin implements IGlDisposable
                     value = "INVOKE",
                     target = "Lnet/minecraft/client/renderer/OpenGlHelper;glFramebufferTexture2D(IIIII)V"
             ))
-    public void mixin_createFramebuffer_OpenGlHelper$glFramebufferTexture2D(int target, int attachment, int textarget, int texture, int level, Operation<Void> original)
+    public void wrap_createFramebuffer_OpenGlHelper$glFramebufferTexture2D(int target, int attachment, int textarget, int texture, int level, Operation<Void> original)
     {
         if (RenderHints.getHint_Framebuffer$CreateFramebufferHint() == RenderHints.Framebuffer.CreateFramebufferHint.TEXTURE_2D)
             original.call(target, attachment, textarget, texture, level);
@@ -55,7 +55,7 @@ public class FramebufferMixin implements IGlDisposable
                     value = "INVOKE",
                     target = "Lnet/minecraft/client/shader/Framebuffer;setFramebufferFilter(I)V"
             ))
-    public void mixin_createFramebuffer_Framebuffer$setFramebufferFilter(Framebuffer instance, int framebufferFilterIn, Operation<Void> original)
+    public void wrap_createFramebuffer_Framebuffer$setFramebufferFilter(Framebuffer instance, int framebufferFilterIn, Operation<Void> original)
     {
         if (RenderHints.getHint_Framebuffer$CreateFramebufferHint() == RenderHints.Framebuffer.CreateFramebufferHint.TEXTURE_2D)
             original.call(instance, framebufferFilterIn);
@@ -72,7 +72,7 @@ public class FramebufferMixin implements IGlDisposable
                     target = "Lnet/minecraft/client/renderer/OpenGlHelper;glRenderbufferStorage(IIII)V",
                     ordinal = 0
             ))
-    public void mixin_createFramebuffer_OpenGlHelper$glRenderbufferStorage_0(int target, int internalFormat, int width, int height, Operation<Void> original)
+    public void wrap_createFramebuffer_OpenGlHelper$glRenderbufferStorage_0(int target, int internalFormat, int width, int height, Operation<Void> original)
     {
         if (RenderHints.getHint_Framebuffer$CreateFramebufferHint() == RenderHints.Framebuffer.CreateFramebufferHint.TEXTURE_2D)
             original.call(target, internalFormat, width, height);
@@ -87,7 +87,7 @@ public class FramebufferMixin implements IGlDisposable
                     target = "Lnet/minecraft/client/renderer/OpenGlHelper;glRenderbufferStorage(IIII)V",
                     ordinal = 1
             ))
-    public void mixin_createFramebuffer_OpenGlHelper$glRenderbufferStorage_1(int target, int internalFormat, int width, int height, Operation<Void> original)
+    public void wrap_createFramebuffer_OpenGlHelper$glRenderbufferStorage_1(int target, int internalFormat, int width, int height, Operation<Void> original)
     {
         if (RenderHints.getHint_Framebuffer$CreateFramebufferHint() == RenderHints.Framebuffer.CreateFramebufferHint.TEXTURE_2D)
             original.call(target, internalFormat, width, height);
@@ -101,7 +101,7 @@ public class FramebufferMixin implements IGlDisposable
                     value = "INVOKE",
                     target = "Lnet/minecraft/client/shader/Framebuffer;unbindFramebuffer()V"
             ))
-    public void mixin_framebufferClear_Framebuffer$unbindFramebuffer(Framebuffer instance, Operation<Void> original)
+    public void wrap_framebufferClear_Framebuffer$unbindFramebuffer(Framebuffer instance, Operation<Void> original)
     {
         if (RenderHints.getHint_Framebuffer$FramebufferClearHint() == RenderHints.Framebuffer.FramebufferClearHint.UNBIND_FBO)
             original.call(instance);

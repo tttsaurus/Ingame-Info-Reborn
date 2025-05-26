@@ -1,24 +1,23 @@
 package com.tttsaurus.ingameinfo.common.impl.gui;
 
 import com.tttsaurus.ingameinfo.InGameInfoReborn;
-import com.tttsaurus.ingameinfo.common.core.event.IgiGuiInitEvent;
-import com.tttsaurus.ingameinfo.common.core.event.RegainScreenFocusEvent;
-import com.tttsaurus.ingameinfo.common.core.gui.IgiGuiContainer;
-import com.tttsaurus.ingameinfo.common.core.gui.delegate.placeholder.IPlaceholderDrawScreen;
-import com.tttsaurus.ingameinfo.common.core.gui.delegate.placeholder.IPlaceholderKeyTyped;
 import com.tttsaurus.ingameinfo.common.core.function.IFunc;
+import com.tttsaurus.ingameinfo.common.core.gui.GuiLifecycleProvider;
+import com.tttsaurus.ingameinfo.common.core.gui.IgiGuiContainer;
+import com.tttsaurus.ingameinfo.common.core.gui.delegate.dummy.IDummyDrawScreen;
+import com.tttsaurus.ingameinfo.common.core.gui.delegate.dummy.IDummyKeyTyped;
 import com.tttsaurus.ingameinfo.common.core.item.GhostableItem;
+import com.tttsaurus.ingameinfo.common.core.reader.RlReaderUtils;
 import com.tttsaurus.ingameinfo.common.core.render.GlResourceManager;
 import com.tttsaurus.ingameinfo.common.core.render.IGlDisposable;
 import com.tttsaurus.ingameinfo.common.core.render.RenderHints;
 import com.tttsaurus.ingameinfo.common.core.render.RenderUtils;
+import com.tttsaurus.ingameinfo.common.core.render.shader.Shader;
+import com.tttsaurus.ingameinfo.common.core.render.shader.ShaderLoadingUtils;
+import com.tttsaurus.ingameinfo.common.core.render.shader.ShaderProgram;
 import com.tttsaurus.ingameinfo.common.impl.igievent.EventCenter;
 import com.tttsaurus.ingameinfo.common.impl.network.IgiNetwork;
 import com.tttsaurus.ingameinfo.config.IgiConfig;
-import com.tttsaurus.ingameinfo.common.core.reader.RlReaderUtils;
-import com.tttsaurus.ingameinfo.common.core.render.shader.Shader;
-import com.tttsaurus.ingameinfo.common.core.render.shader.ShaderProgram;
-import com.tttsaurus.ingameinfo.common.core.render.shader.ShaderLoadingUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.client.gui.ScaledResolution;
@@ -29,100 +28,82 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.biome.Biome;
-import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.FMLCommonHandler;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import org.apache.commons.lang3.time.StopWatch;
 import org.lwjgl.opengl.*;
 import java.io.RandomAccessFile;
 import java.nio.charset.StandardCharsets;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.atomic.AtomicBoolean;
-import static com.tttsaurus.ingameinfo.common.core.render.CommonBuffers.INT_BUFFER_16;
-import static com.tttsaurus.ingameinfo.common.core.render.CommonBuffers.FLOAT_BUFFER_16;
 
-@SuppressWarnings("all")
-public final class IgiGuiLifeCycle
+import static com.tttsaurus.ingameinfo.common.core.render.CommonBuffers.FLOAT_BUFFER_16;
+import static com.tttsaurus.ingameinfo.common.core.render.CommonBuffers.INT_BUFFER_16;
+
+public final class DefaultLifecycleProvider extends GuiLifecycleProvider
 {
-    private static Minecraft minecraft = Minecraft.getMinecraft();
-    private static ScaledResolution resolution = new ScaledResolution(Minecraft.getMinecraft());
+    private static final Minecraft MC = Minecraft.getMinecraft();
+
+    private ScaledResolution resolution = new ScaledResolution(MC);
 
     //<editor-fold desc="fixed update timing variables">
-    // all in second
-    private static int maxFps_FixedUpdate = 125;
-    private static double timePerFrame_FixedUpdate = 1d / maxFps_FixedUpdate;
-    public static void setMaxFps_FixedUpdate(int fps)
-    {
-        maxFps_FixedUpdate = fps;
-        timePerFrame_FixedUpdate = 1d / maxFps_FixedUpdate;
-    }
-    private static int estimatedFps_FixedUpdate = 0;
-    private static double deltaTime_FixedUpdate = 0d;
-    private static double excessTime_FixedUpdate = 0d;
-    private static final StopWatch stopwatch_FixedUpdate = new StopWatch();
+    // units are all in second
+    private int estimatedFps_FixedUpdate = 0;
+    private double deltaTime_FixedUpdate = 0d;
+    private double excessTime_FixedUpdate = 0d;
     //</editor-fold>
 
-    //<editor-fold desc="refresh fbo timing variables">
-    // all in second
-    private static int maxFps_RefreshFbo = 240;
-    private static double timePerFrame_RefreshFbo = 1d / maxFps_RefreshFbo;
-    public static void setMaxFps_RefreshFbo(int fps)
-    {
-        maxFps_RefreshFbo = fps;
-        timePerFrame_RefreshFbo = 1d / maxFps_RefreshFbo;
-    }
-    private static int estimatedFps_RefreshFbo = 0;
-    private static double excessTime_RefreshFbo = 0d;
-    private static final StopWatch stopwatch_RefreshFbo = new StopWatch();
-    private static int estimatedUnlimitedFps = 1;
-    private static float estimatedFboRefreshRate = 0f;
+    //<editor-fold desc="render update timing variables">
+    // units are all in second
+    private int estimatedFps_RenderUpdate = 0;
+    private double excessTime_RenderUpdate = 0d;
+    private int estimatedUnlimitedFps = 1;
+    private float estimatedFboRefreshRate = 0f;
     //</editor-fold>
 
     //<editor-fold desc="fbo variables">
-    private static boolean enableFbo = true;
-    public static void setEnableFbo(boolean flag) { enableFbo = flag; }
-    public static boolean getEnableFbo() { return enableFbo; }
-    private static boolean refreshFbo = true;
-    private static Framebuffer fbo = null;
-    private static Framebuffer shaderFbo = null;
-    private static boolean enableMultisampleOnFbo = true;
-    public static void setEnableMultisampleOnFbo(boolean flag) { enableMultisampleOnFbo = flag; }
-    public static boolean getEnableMultisampleOnFbo() { return enableMultisampleOnFbo; }
-    private static Framebuffer resolvedFbo = null;
+    private boolean enableFbo = true;
+    public void setEnableFbo(boolean flag) { enableFbo = flag; }
+    private boolean refreshFbo = true;
+    private Framebuffer fbo = null;
+    private Framebuffer shaderFbo = null;
+    private boolean enableMultisampleOnFbo = true;
+    public void setEnableMultisampleOnFbo(boolean flag) { enableMultisampleOnFbo = flag; }
+    private Framebuffer resolvedFbo = null;
     //</editor-fold>
 
     //<editor-fold desc="shader variables">
-    private static boolean enableShader = true;
-    public static void setEnableShader(boolean flag) { enableShader = flag; }
-    private static ShaderProgram shaderProgram = null;
-    private static int texUnit1TextureID;
-    private static boolean uniformsPassed = false;
+    private boolean enableShader = true;
+    public void setEnableShader(boolean flag) { enableShader = flag; }
+    private ShaderProgram shaderProgram = null;
+    private int texUnit1TextureID;
+    private boolean uniformsPassed = false;
     //</editor-fold>
 
     //<editor-fold desc="render time debug variables">
-    // all in nanosecond
-    private static boolean renderTimeDebug = false;
-    public static void setRenderTimeDebug(boolean flag) { renderTimeDebug = flag; }
-    private static final StopWatch cpuTimeStopwatch = new StopWatch();
-    private static final long[] cpuTimeNanoFor50Frames = new long[50];
-    private static final long[] gpuTimeNanoFor50Frames = new long[50];
-    private static int timeNanoArrayIndex = 0;
-    private static RandomAccessFile renderTimeDebugFile = null;
+    // units are all in nanosecond
+    private boolean renderTimeDebug = false;
+    public void setRenderTimeDebug(boolean flag) { renderTimeDebug = flag; }
+    private final StopWatch cpuTimeStopwatch = new StopWatch();
+    private final long[] cpuTimeNanoFor50Frames = new long[50];
+    private final long[] gpuTimeNanoFor50Frames = new long[50];
+    private int timeNanoArrayIndex = 0;
+    private RandomAccessFile renderTimeDebugFile = null;
     //</editor-fold>
 
     //<editor-fold desc="igi event calls">
-    private static String lastBiomeRegistryName = "";
-    private static void triggerIgiEvents()
+    private String lastBiomeRegistryName = "";
+    private void triggerIgiEvents()
     {
         // works on sp client
-        EventCenter.igiGuiFpsEvent.trigger(estimatedFps_FixedUpdate, estimatedFps_RefreshFbo);
+        EventCenter.igiGuiFpsEvent.trigger(estimatedFps_FixedUpdate, estimatedFps_RenderUpdate);
         EventCenter.igiGuiFboRefreshRateEvent.trigger(estimatedFboRefreshRate);
         EventCenter.gameFpsEvent.trigger(Minecraft.getDebugFPS());
         Runtime runtime = Runtime.getRuntime();
         EventCenter.gameMemoryEvent.trigger(runtime.totalMemory() - runtime.freeMemory(), runtime.totalMemory());
-        EntityPlayerSP player = minecraft.player;
+        EntityPlayerSP player = MC.player;
         if (player != null)
         {
             Biome biome = player.world.getBiome(player.getPosition());
@@ -163,8 +144,10 @@ public final class IgiGuiLifeCycle
     //</editor-fold>
 
     //<editor-fold desc="fixed & render updates">
-    private static double timer = 0.5f;
-    private static void onFixedUpdate()
+    private double timer = 0.5f;
+
+    @Override
+    protected void onFixedUpdate()
     {
         //<editor-fold desc="gui container fixed update">
         for (IgiGuiContainer container: openedGuiMap.values())
@@ -178,7 +161,9 @@ public final class IgiGuiLifeCycle
             triggerIgiEvents();
         }
     }
-    private static void onRenderUpdate()
+
+    @Override
+    protected void onRenderUpdate()
     {
         if (enableFbo)
         {
@@ -204,7 +189,7 @@ public final class IgiGuiLifeCycle
 
         //<editor-fold desc="gui container render update">
         ItemStack heldItemMainhand = null;
-        EntityPlayerSP player = minecraft.player;
+        EntityPlayerSP player = MC.player;
         if (player != null)
             heldItemMainhand = player.getHeldItemMainhand();
 
@@ -272,7 +257,8 @@ public final class IgiGuiLifeCycle
             }
         }
     }
-    private static void onRenderUpdateDebug()
+
+    private void onRenderUpdateDebug()
     {
         if (renderTimeDebugFile == null)
         {
@@ -300,16 +286,16 @@ public final class IgiGuiLifeCycle
         long cpuTimeNano = cpuTimeStopwatch.getNanoTime();
         if (timeNanoArrayIndex == 50)
         {
-            long avgCpuTimeNano = Arrays.stream(cpuTimeNanoFor50Frames).sum() / 50l;
-            long avgGpuTimeNano = Arrays.stream(gpuTimeNanoFor50Frames).sum() / 50l;
+            long avgCpuTimeNano = Arrays.stream(cpuTimeNanoFor50Frames).sum() / 50L;
+            long avgGpuTimeNano = Arrays.stream(gpuTimeNanoFor50Frames).sum() / 50L;
 
             try
             {
                 renderTimeDebugFile.write((
                         cpuTimeNanoFor50Frames[timeNanoArrayIndex - 1] + "," +
-                        gpuTimeNanoFor50Frames[timeNanoArrayIndex - 1] + "," +
-                        avgCpuTimeNano + "," +
-                        avgGpuTimeNano + "\n").getBytes(StandardCharsets.UTF_8));
+                                gpuTimeNanoFor50Frames[timeNanoArrayIndex - 1] + "," +
+                                avgCpuTimeNano + "," +
+                                avgGpuTimeNano + "\n").getBytes(StandardCharsets.UTF_8));
             }
             catch (Exception ignored) { }
 
@@ -327,7 +313,7 @@ public final class IgiGuiLifeCycle
             {
                 renderTimeDebugFile.write((
                         cpuTimeNano + "," +
-                        gpuTimeNano + ",0,0\n").getBytes(StandardCharsets.UTF_8));
+                                gpuTimeNano + ",0,0\n").getBytes(StandardCharsets.UTF_8));
             }
             catch (Exception ignored) { }
             cpuTimeNanoFor50Frames[timeNanoArrayIndex] = cpuTimeNano;
@@ -335,7 +321,8 @@ public final class IgiGuiLifeCycle
             timeNanoArrayIndex++;
         }
     }
-    private static void onRenderUpdateWrapped()
+
+    private void onRenderUpdateWrapped()
     {
         storeCommonGlStates();
         if (renderTimeDebug)
@@ -347,12 +334,12 @@ public final class IgiGuiLifeCycle
     //</editor-fold>
 
     //<editor-fold desc="fbo methods">
-    private static void resolveMultisampledFbo()
+    private void resolveMultisampledFbo()
     {
         // init resolvedFbo
         if (resolvedFbo == null)
         {
-            resolvedFbo = new Framebuffer(minecraft.displayWidth, minecraft.displayHeight, true);
+            resolvedFbo = new Framebuffer(MC.displayWidth, MC.displayHeight, true);
             resolvedFbo.framebufferColor[0] = 0f;
             resolvedFbo.framebufferColor[1] = 0f;
             resolvedFbo.framebufferColor[2] = 0f;
@@ -362,9 +349,9 @@ public final class IgiGuiLifeCycle
             GlResourceManager.addDisposable((IGlDisposable)resolvedFbo);
         }
 
-        if (resolvedFbo.framebufferWidth != minecraft.displayWidth || resolvedFbo.framebufferHeight != minecraft.displayHeight)
+        if (resolvedFbo.framebufferWidth != MC.displayWidth || resolvedFbo.framebufferHeight != MC.displayHeight)
         {
-            resolvedFbo.createBindFramebuffer(minecraft.displayWidth, minecraft.displayHeight);
+            resolvedFbo.createBindFramebuffer(MC.displayWidth, MC.displayHeight);
             resolvedFbo.unbindFramebuffer();
         }
 
@@ -373,12 +360,12 @@ public final class IgiGuiLifeCycle
 
         GL30.glBlitFramebuffer(0, 0, resolvedFbo.framebufferWidth, resolvedFbo.framebufferHeight, 0, 0, resolvedFbo.framebufferWidth, resolvedFbo.framebufferHeight, GL11.GL_COLOR_BUFFER_BIT, GL11.GL_NEAREST);
     }
-    private static void bindShaderFbo()
+    private void bindShaderFbo()
     {
         // init shaderFbo
         if (shaderFbo == null)
         {
-            shaderFbo = new Framebuffer(minecraft.displayWidth, minecraft.displayHeight, true);
+            shaderFbo = new Framebuffer(MC.displayWidth, MC.displayHeight, true);
             shaderFbo.framebufferColor[0] = 0f;
             shaderFbo.framebufferColor[1] = 0f;
             shaderFbo.framebufferColor[2] = 0f;
@@ -388,9 +375,9 @@ public final class IgiGuiLifeCycle
             GlResourceManager.addDisposable((IGlDisposable)shaderFbo);
         }
 
-        if (shaderFbo.framebufferWidth != minecraft.displayWidth || shaderFbo.framebufferHeight != minecraft.displayHeight)
+        if (shaderFbo.framebufferWidth != MC.displayWidth || shaderFbo.framebufferHeight != MC.displayHeight)
         {
-            shaderFbo.createBindFramebuffer(minecraft.displayWidth, minecraft.displayHeight);
+            shaderFbo.createBindFramebuffer(MC.displayWidth, MC.displayHeight);
             shaderFbo.bindFramebuffer(true);
         }
         else
@@ -400,7 +387,7 @@ public final class IgiGuiLifeCycle
             RenderHints.clearFboWithUnbind();
         }
     }
-    private static void bindFbo()
+    private void bindFbo()
     {
         // init fbo
         if (fbo == null)
@@ -410,7 +397,7 @@ public final class IgiGuiLifeCycle
                 RenderHints.multisampleTexBind();
                 RenderHints.multisampleFbo();
             }
-            fbo = new Framebuffer(minecraft.displayWidth, minecraft.displayHeight, true);
+            fbo = new Framebuffer(MC.displayWidth, MC.displayHeight, true);
             fbo.framebufferColor[0] = 0f;
             fbo.framebufferColor[1] = 0f;
             fbo.framebufferColor[2] = 0f;
@@ -425,14 +412,14 @@ public final class IgiGuiLifeCycle
             GlResourceManager.addDisposable((IGlDisposable)fbo);
         }
 
-        if (fbo.framebufferWidth != minecraft.displayWidth || fbo.framebufferHeight != minecraft.displayHeight)
+        if (fbo.framebufferWidth != MC.displayWidth || fbo.framebufferHeight != MC.displayHeight)
         {
             if (enableMultisampleOnFbo)
             {
                 RenderHints.multisampleTexBind();
                 RenderHints.multisampleFbo();
             }
-            fbo.createBindFramebuffer(minecraft.displayWidth, minecraft.displayHeight);
+            fbo.createBindFramebuffer(MC.displayWidth, MC.displayHeight);
             if (enableMultisampleOnFbo)
             {
                 RenderHints.defaultTexBind();
@@ -447,19 +434,19 @@ public final class IgiGuiLifeCycle
             RenderHints.clearFboWithUnbind();
         }
     }
-    private static void bindMcFbo()
+    private void bindMcFbo()
     {
-        Framebuffer mcFbo = minecraft.getFramebuffer();
+        Framebuffer mcFbo = MC.getFramebuffer();
 
-        if (mcFbo.framebufferWidth != minecraft.displayWidth || mcFbo.framebufferHeight != minecraft.displayHeight)
-            mcFbo.createBindFramebuffer(minecraft.displayWidth, minecraft.displayHeight);
+        if (mcFbo.framebufferWidth != MC.displayWidth || mcFbo.framebufferHeight != MC.displayHeight)
+            mcFbo.createBindFramebuffer(MC.displayWidth, MC.displayHeight);
 
         mcFbo.bindFramebuffer(true);
     }
     //</editor-fold>
 
     //<editor-fold desc="shader methods">
-    private static void compileShader()
+    private void compileShader()
     {
         // init shader program
         if (shaderProgram == null)
@@ -486,7 +473,7 @@ public final class IgiGuiLifeCycle
             InGameInfoReborn.logger.info(shaderProgram.getSetupDebugReport());
         }
     }
-    private static void activateShader()
+    private void activateShader()
     {
         shaderProgram.use();
 
@@ -513,7 +500,7 @@ public final class IgiGuiLifeCycle
             shaderProgram.setUniform("targetAlpha", IgiConfig.PP_ALPHA);
         }
     }
-    private static void deactivateShader()
+    private void deactivateShader()
     {
         GL11.glGetInteger(GL13.GL_ACTIVE_TEXTURE, INT_BUFFER_16);
         int texUnit = INT_BUFFER_16.get(0);
@@ -528,25 +515,25 @@ public final class IgiGuiLifeCycle
     //</editor-fold>
 
     //<editor-fold desc="gl states">
-    private static int textureID = 0;
-    private static float r = 0, g = 0, b = 0, a = 0;
-    private static boolean blend = false;
-    private static boolean lighting = false;
-    private static boolean texture2D = false;
-    private static boolean alphaTest = false;
-    private static int shadeModel = 0;
-    private static boolean depthTest = false;
-    private static boolean cullFace = false;
-    private static int blendSrcRgb;
-    private static int blendDstRgb;
-    private static int blendSrcAlpha;
-    private static int blendDstAlpha;
-    private static int alphaFunc;
-    private static float alphaRef;
+    private int textureID = 0;
+    private float r = 0, g = 0, b = 0, a = 0;
+    private boolean blend = false;
+    private boolean lighting = false;
+    private boolean texture2D = false;
+    private boolean alphaTest = false;
+    private int shadeModel = 0;
+    private boolean depthTest = false;
+    private boolean cullFace = false;
+    private int blendSrcRgb;
+    private int blendDstRgb;
+    private int blendSrcAlpha;
+    private int blendDstAlpha;
+    private int alphaFunc;
+    private float alphaRef;
     //</editor-fold>
 
     //<editor-fold desc="gl state management">
-    private static void storeCommonGlStates()
+    private void storeCommonGlStates()
     {
         GL11.glGetInteger(GL11.GL_TEXTURE_BINDING_2D, INT_BUFFER_16);
         textureID = INT_BUFFER_16.get(0);
@@ -576,7 +563,7 @@ public final class IgiGuiLifeCycle
         GL11.glGetFloat(GL11.GL_ALPHA_TEST_REF, FLOAT_BUFFER_16);
         alphaRef = FLOAT_BUFFER_16.get(0);
     }
-    private static void restoreCommonGlStates()
+    private void restoreCommonGlStates()
     {
         GlStateManager.alphaFunc(alphaFunc, alphaRef);
         GlStateManager.tryBlendFuncSeparate(blendSrcRgb, blendDstRgb, blendSrcAlpha, blendDstAlpha);
@@ -610,15 +597,53 @@ public final class IgiGuiLifeCycle
     }
     //</editor-fold>
 
-    //<editor-fold desc="screen focus">
-    private static boolean listenRegainScreenFocus = false;
+    //<editor-fold desc="dummy mc gui container">
+    private boolean isDummyGuiOn = false;
+    private DummyMcGui getDummyGui()
+    {
+        DummyMcGui dummyGui = new DummyMcGui();
+        dummyGui.setDrawAction(new IDummyDrawScreen()
+        {
+            @Override
+            public void draw()
+            {
+                onRenderUpdateWrapped();
+            }
+        });
+        dummyGui.setTypeAction(new IDummyKeyTyped()
+        {
+            @Override
+            public void type(int keycode)
+            {
+                List<Map.Entry<String, IgiGuiContainer>> entryList = new ArrayList<>(openedGuiMap.entrySet());
+                String key = "";
+                IFunc<Boolean> exitCallback = null;
+                for (int i = entryList.size() - 1; i >= 0; i--)
+                {
+                    Map.Entry<String, IgiGuiContainer> entry = entryList.get(i);
+                    IgiGuiContainer container = entry.getValue();
+                    if (container.getFocused())
+                        if (keycode == container.getExitKeyForFocusedGui())
+                        {
+                            key = entry.getKey();
+                            exitCallback = container.getExitCallback();
+                            break;
+                        }
+                }
+                if (!key.isEmpty())
+                {
+                    if (exitCallback.invoke())
+                        openedGuiMap.remove(key);
+                }
+            }
+        });
+        return dummyGui;
+    }
     //</editor-fold>
 
-    @SubscribeEvent
-    public static void onRenderGameOverlay(RenderGameOverlayEvent.Post event)
+    @Override
+    protected void updateInternal()
     {
-        if (event.getType() != RenderGameOverlayEvent.ElementType.ALL) return;
-
         //<editor-fold desc="gui container init">
         for (IgiGuiContainer container : openedGuiMap.values())
             if (!container.getInitFlag())
@@ -626,11 +651,12 @@ public final class IgiGuiLifeCycle
         //</editor-fold>
 
         //<editor-fold desc="gui container resize">
-        if (resolution.getScaleFactor() != event.getResolution().getScaleFactor() ||
-            resolution.getScaledWidth() != event.getResolution().getScaledWidth() ||
-            resolution.getScaledHeight() != event.getResolution().getScaledHeight())
+        ScaledResolution newResolution = new ScaledResolution(MC);
+        if (resolution.getScaleFactor() != newResolution.getScaleFactor() ||
+                resolution.getScaledWidth() != newResolution.getScaledWidth() ||
+                resolution.getScaledHeight() != newResolution.getScaledHeight())
         {
-            resolution = event.getResolution();
+            resolution = newResolution;
             for (IgiGuiContainer container: openedGuiMap.values())
                 container.onScaledResolutionResize();
         }
@@ -659,53 +685,53 @@ public final class IgiGuiLifeCycle
             excessTime_FixedUpdate %= timePerFrame_FixedUpdate;
         //</editor-fold>
 
-        //<editor-fold desc="refresh fbo timing">
+        //<editor-fold desc="render update timing">
         if (enableFbo)
         {
-            if (!stopwatch_RefreshFbo.isStarted())
+            if (!stopwatch_RenderUpdate.isStarted())
             {
-                stopwatch_RefreshFbo.start();
-                stopwatch_RefreshFbo.split();
+                stopwatch_RenderUpdate.start();
+                stopwatch_RenderUpdate.split();
             }
 
             // unit: second
-            currentTime = stopwatch_RefreshFbo.getNanoTime() / 1.0E9d;
-            estimatedFboRefreshRate = (Math.min(((float)estimatedFps_RefreshFbo) / ((float)estimatedUnlimitedFps), 1f) + estimatedFboRefreshRate) / 2f;
-            double lastSplitTime = stopwatch_RefreshFbo.getSplitNanoTime() / 1.0E9d;
-            stopwatch_RefreshFbo.split();
+            currentTime = stopwatch_RenderUpdate.getNanoTime() / 1.0E9d;
+            estimatedFboRefreshRate = (Math.min(((float) estimatedFps_RenderUpdate) / ((float)estimatedUnlimitedFps), 1f) + estimatedFboRefreshRate) / 2f;
+            double lastSplitTime = stopwatch_RenderUpdate.getSplitNanoTime() / 1.0E9d;
+            stopwatch_RenderUpdate.split();
             if (currentTime - lastSplitTime > 0d)
                 estimatedUnlimitedFps = ((int)(1d / (currentTime - lastSplitTime)) + estimatedUnlimitedFps) / 2;
-            if (currentTime + excessTime_RefreshFbo >= timePerFrame_RefreshFbo)
+            if (currentTime + excessTime_RenderUpdate >= timePerFrame_RenderUpdate)
             {
-                stopwatch_RefreshFbo.stop();
-                stopwatch_RefreshFbo.reset();
-                stopwatch_RefreshFbo.start();
-                stopwatch_RefreshFbo.split();
+                stopwatch_RenderUpdate.stop();
+                stopwatch_RenderUpdate.reset();
+                stopwatch_RenderUpdate.start();
+                stopwatch_RenderUpdate.split();
 
-                estimatedFps_RefreshFbo = ((int)(1d / (currentTime + excessTime_RefreshFbo)) + estimatedFps_RefreshFbo) / 2;
+                estimatedFps_RenderUpdate = ((int)(1d / (currentTime + excessTime_RenderUpdate)) + estimatedFps_RenderUpdate) / 2;
 
                 refreshFbo = true;
 
-                excessTime_RefreshFbo = currentTime + excessTime_RefreshFbo - timePerFrame_RefreshFbo;
+                excessTime_RenderUpdate = currentTime + excessTime_RenderUpdate - timePerFrame_RenderUpdate;
             }
-            if (excessTime_RefreshFbo >= timePerFrame_RefreshFbo)
-                excessTime_RefreshFbo %= timePerFrame_RefreshFbo;
+            if (excessTime_RenderUpdate >= timePerFrame_RenderUpdate)
+                excessTime_RenderUpdate %= timePerFrame_RenderUpdate;
         }
         //</editor-fold>
 
-        //<editor-fold desc="placeholder gui">
-        if (!isPlaceholderGuiOn)
+        //<editor-fold desc="dummy gui">
+        if (!isDummyGuiOn)
             onRenderUpdateWrapped();
+
         if (FMLCommonHandler.instance().getSide().isClient())
         {
-            // close placeholder
-            if (isPlaceholderGuiOn)
+            // close dummy
+            if (isDummyGuiOn)
             {
                 if (openedGuiMap.isEmpty())
                 {
-                    isPlaceholderGuiOn = false;
-                    placeholderGui = null;
-                    minecraft.displayGuiScreen(null);
+                    isDummyGuiOn = false;
+                    MC.displayGuiScreen(null);
                 }
                 else
                 {
@@ -714,97 +740,24 @@ public final class IgiGuiLifeCycle
 
                     if (!focus.get())
                     {
-                        isPlaceholderGuiOn = false;
-                        placeholderGui = null;
-                        minecraft.displayGuiScreen(null);
+                        isDummyGuiOn = false;
+                        MC.displayGuiScreen(null);
                     }
                 }
             }
-            // open placeholder
-            else if (!openedGuiMap.isEmpty() && minecraft.currentScreen == null)
+            // open dummy
+            else if (!openedGuiMap.isEmpty() && MC.currentScreen == null)
             {
                 AtomicBoolean focus = new AtomicBoolean(false);
                 openedGuiMap.forEach((uuid, guiContainer) -> focus.set(focus.get() || (guiContainer.getFocused() && guiContainer.getActive())));
 
                 if (focus.get())
                 {
-                    placeholderGui = new PlaceholderMcGui();
-                    placeholderGui.setDrawAction(new IPlaceholderDrawScreen()
-                    {
-                        @Override
-                        public void draw()
-                        {
-                            onRenderUpdateWrapped();
-                        }
-                    });
-                    placeholderGui.setTypeAction(new IPlaceholderKeyTyped()
-                    {
-                        @Override
-                        public void type(int keycode)
-                        {
-                            List<Map.Entry<String, IgiGuiContainer>> entryList = new ArrayList<>(openedGuiMap.entrySet());
-                            String key = "";
-                            IFunc<Boolean> exitCallback = null;
-                            for (int i = entryList.size() - 1; i >= 0; i--)
-                            {
-                                Map.Entry<String, IgiGuiContainer> entry = entryList.get(i);
-                                IgiGuiContainer container = entry.getValue();
-                                if (container.getFocused())
-                                    if (keycode == container.getExitKeyForFocusedGui())
-                                    {
-                                        key = entry.getKey();
-                                        exitCallback = container.getExitCallback();
-                                        break;
-                                    }
-                            }
-                            if (!key.isEmpty())
-                            {
-                                if (exitCallback.invoke())
-                                    openedGuiMap.remove(key);
-                            }
-                        }
-                    });
-                    minecraft.displayGuiScreen(placeholderGui);
-                    isPlaceholderGuiOn = true;
+                    MC.displayGuiScreen(getDummyGui());
+                    isDummyGuiOn = true;
                 }
             }
         }
         //</editor-fold>
-
-        //<editor-fold desc="regain screen focus event">
-        if (!Display.isActive() && !listenRegainScreenFocus)
-            listenRegainScreenFocus = true;
-        if (Display.isActive() && listenRegainScreenFocus)
-        {
-            listenRegainScreenFocus = false;
-            MinecraftForge.EVENT_BUS.post(new RegainScreenFocusEvent());
-        }
-        //</editor-fold>
-
-        if (initFlag)
-        {
-            initFlag = false;
-            MinecraftForge.EVENT_BUS.post(new IgiGuiInitEvent());
-        }
-    }
-
-    private static boolean initFlag = true;
-
-    // placeholder related
-    private static boolean isPlaceholderGuiOn = false;
-    private static PlaceholderMcGui placeholderGui;
-
-    // key: mvvm registry name
-    private static final Map<String, IgiGuiContainer> openedGuiMap = new LinkedHashMap<>();
-    private static Map<String, IgiGuiContainer> getOpenedGuiMap() { return openedGuiMap; }
-
-    public static void openIgiGui(String mvvmRegistryName, IgiGuiContainer guiContainer)
-    {
-        if (openedGuiMap.containsKey(mvvmRegistryName)) return;
-        openedGuiMap.put(mvvmRegistryName, guiContainer);
-    }
-    public static void closeIgiGui(String mvvmRegistryName)
-    {
-        openedGuiMap.remove(mvvmRegistryName);
     }
 }

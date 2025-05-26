@@ -12,7 +12,6 @@ import com.tttsaurus.ingameinfo.common.core.gui.style.StylePropertyCallback;
 import com.tttsaurus.ingameinfo.common.core.gui.style.StyleProperty;
 import com.tttsaurus.ingameinfo.common.core.gui.theme.ThemeConfig;
 import com.tttsaurus.ingameinfo.common.core.render.RenderUtils;
-import com.tttsaurus.ingameinfo.common.impl.gui.GuiResources;
 import com.tttsaurus.ingameinfo.common.core.gui.registry.ElementRegistry;
 import java.awt.*;
 import java.util.HashMap;
@@ -181,6 +180,7 @@ public abstract class Element
     public abstract void onFixedUpdate(double deltaTime);
     public void onRenderUpdate(boolean focused) { renderBackground(); }
 
+    // todo: abstract and extract rendering logic
     private void renderBackground()
     {
         if (backgroundStyle.isEmpty()) return;
@@ -194,11 +194,11 @@ public abstract class Element
                 RenderUtils.renderRect(rect.x, rect.y, rect.width, rect.height, themeConfig.backgroundStyles.boxWithOutline.parsedColor);
                 RenderUtils.renderRectOutline(rect.x, rect.y, rect.width, rect.height, 1.0f, themeConfig.backgroundStyles.boxWithOutline.parsedOutlineColor);
             }
-            case "rounded-box" -> RenderUtils.renderRoundedRect(rect.x, rect.y, rect.width, rect.height, themeConfig.backgroundStyles.roundedBox.cornerRadius, themeConfig.backgroundStyles.roundedBox.parsedColor);
+            case "rounded-box" -> RenderUtils.renderRoundedRect(rect.x, rect.y, rect.width, rect.height, themeConfig.backgroundStyles.roundedBox.cornerRadius, themeConfig.backgroundStyles.roundedBox.parsedColor, true);
             case "rounded-box-with-outline" ->
             {
-                RenderUtils.renderRoundedRect(rect.x, rect.y, rect.width, rect.height, themeConfig.backgroundStyles.roundedBoxWithOutline.cornerRadius, themeConfig.backgroundStyles.roundedBoxWithOutline.parsedColor);
-                RenderUtils.renderRoundedRectOutline(rect.x, rect.y, rect.width, rect.height, themeConfig.backgroundStyles.roundedBoxWithOutline.cornerRadius, 1.0f, themeConfig.backgroundStyles.roundedBoxWithOutline.parsedOutlineColor);
+                RenderUtils.renderRoundedRect(rect.x, rect.y, rect.width, rect.height, themeConfig.backgroundStyles.roundedBoxWithOutline.cornerRadius, themeConfig.backgroundStyles.roundedBoxWithOutline.parsedColor, true);
+                RenderUtils.renderRoundedRectOutline(rect.x, rect.y, rect.width, rect.height, themeConfig.backgroundStyles.roundedBoxWithOutline.cornerRadius, 1.0f, themeConfig.backgroundStyles.roundedBoxWithOutline.parsedOutlineColor, true);
             }
             case "mc-vanilla" -> RenderUtils.renderNinePatchBorderByPixel(rect.x, rect.y, rect.width, rect.height, GuiResources.mcVanillaBg, themeConfig.backgroundStyles.mcVanilla.parsedColor);
         }

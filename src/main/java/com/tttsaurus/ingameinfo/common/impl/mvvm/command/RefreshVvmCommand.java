@@ -1,6 +1,7 @@
 package com.tttsaurus.ingameinfo.common.impl.mvvm.command;
 
 import com.tttsaurus.ingameinfo.common.core.gui.IgiGuiContainer;
+import com.tttsaurus.ingameinfo.common.core.gui.IgiGuiManager;
 import com.tttsaurus.ingameinfo.common.core.internal.InternalMethods;
 import net.minecraft.client.Minecraft;
 import net.minecraft.command.CommandBase;
@@ -11,6 +12,7 @@ import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.text.TextFormatting;
 import java.util.Map;
 
+@SuppressWarnings("all")
 public class RefreshVvmCommand extends CommandBase
 {
     @Override
@@ -30,7 +32,7 @@ public class RefreshVvmCommand extends CommandBase
     {
         if (args.length == 1)
         {
-            Map<String, IgiGuiContainer> map = InternalMethods.instance.IgiGuiLifeCycle$openedGuiMap$getter.invoke();
+            Map<String, IgiGuiContainer> map = InternalMethods.instance.GuiLifecycleProvider$openedGuiMap$getter.invoke(IgiGuiManager.getLifecycleProvider());
             if (map.containsKey(args[0]))
             {
                 map.get(args[0]).refreshVvm();

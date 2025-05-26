@@ -5,6 +5,7 @@ import com.google.common.collect.ImmutableMap;
 import com.tttsaurus.ingameinfo.common.core.appcommunication.spotify.SpotifyOAuthUtils;
 import com.tttsaurus.ingameinfo.common.core.event.MvvmRegisterEvent;
 import com.tttsaurus.ingameinfo.common.core.gui.Element;
+import com.tttsaurus.ingameinfo.common.core.gui.IgiGuiManager;
 import com.tttsaurus.ingameinfo.common.core.gui.style.IStylePropertyCallbackPost;
 import com.tttsaurus.ingameinfo.common.core.gui.style.IStylePropertyCallbackPre;
 import com.tttsaurus.ingameinfo.common.core.gui.style.IStylePropertySetter;
@@ -14,10 +15,10 @@ import com.tttsaurus.ingameinfo.common.core.render.RenderHints;
 import com.tttsaurus.ingameinfo.common.core.serialization.IDeserializer;
 import com.tttsaurus.ingameinfo.common.core.shutdown.ShutdownHooks;
 import com.tttsaurus.ingameinfo.common.impl.appcommunication.spotify.SpotifyCommandHandler;
-import com.tttsaurus.ingameinfo.common.impl.gui.GuiResources;
-import com.tttsaurus.ingameinfo.common.impl.gui.IgiGuiLifeCycle;
+import com.tttsaurus.ingameinfo.common.core.gui.GuiResources;
 import com.tttsaurus.ingameinfo.common.core.gui.registry.ElementRegistry;
 import com.tttsaurus.ingameinfo.common.core.gui.theme.registry.ThemeRegistry;
+import com.tttsaurus.ingameinfo.common.impl.gui.DefaultLifecycleProvider;
 import com.tttsaurus.ingameinfo.common.impl.mvvm.command.RefreshVvmCommand;
 import com.tttsaurus.ingameinfo.common.impl.mvvm.registry.MvvmRegisterEventHandler;
 import com.tttsaurus.ingameinfo.config.IgiConfig;
@@ -65,14 +66,19 @@ public class ClientProxy extends CommonProxy
         logger.info("The getter of private partial tick field is ready.");
         //</editor-fold>
 
-        //<editor-fold desc="igi gui lifecycle setup">
-        IgiGuiLifeCycle.setEnableFbo(enableFbo);
-        IgiGuiLifeCycle.setEnableShader(enablePostProcessing);
-        IgiGuiLifeCycle.setEnableMultisampleOnFbo(enableMsfbo);
+        //<editor-fold desc="lifecycle provider setup">
+        DefaultLifecycleProvider lifecycleProvider = new DefaultLifecycleProvider();
+
+        lifecycleProvider.setEnableFbo(enableFbo);
+        lifecycleProvider.setEnableShader(enablePostProcessing);
+        lifecycleProvider.setEnableMultisampleOnFbo(enableMsfbo);
         RenderHints.fboSampleNum(IgiConfig.FRAMEBUFFER_SAMPLE_NUM);
 
-        IgiGuiLifeCycle.setMaxFps_FixedUpdate(IgiConfig.FIXED_UPDATE_LIMIT);
-        IgiGuiLifeCycle.setMaxFps_RefreshFbo(IgiConfig.RENDER_UPDATE_LIMIT);
+        lifecycleProvider.setMaxFps_FixedUpdate(IgiConfig.FIXED_UPDATE_LIMIT);
+        lifecycleProvider.setMaxFps_RenderUpdate(IgiConfig.RENDER_UPDATE_LIMIT);
+
+        IgiGuiManager.setLifecycleProvider(lifecycleProvider);
+        logger.info("GUI Lifecycle Provider is ready.");
         //</editor-fold>
 
         //<editor-fold desc="spotify setup">
@@ -100,7 +106,7 @@ public class ClientProxy extends CommonProxy
         //</editor-fold>
 
         //<editor-fold desc="core events">
-        MinecraftForge.EVENT_BUS.register(IgiGuiLifeCycle.class);
+        MinecraftForge.EVENT_BUS.register(IgiGuiManager.class);
         MinecraftForge.EVENT_BUS.register(MvvmRegisterEventHandler.class);
         MinecraftForge.EVENT_BUS.register(ThemeRegistry.class);
         logger.info("Core event listeners registered.");
@@ -187,7 +193,7 @@ public class ClientProxy extends CommonProxy
         //</editor-fold>
 
         //<editor-fold desc="mvvm">
-        logger.info("Starts registering mvvm.");
+        logger.info("Start registering mvvm.");
         MinecraftForge.EVENT_BUS.post(new MvvmRegisterEvent());
         //</editor-fold>
     }

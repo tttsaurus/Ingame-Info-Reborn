@@ -1,4 +1,4 @@
-package com.tttsaurus.ingameinfo.common.impl.gui;
+package com.tttsaurus.ingameinfo.common.core.gui;
 
 import com.tttsaurus.ingameinfo.common.core.render.RenderHints;
 import com.tttsaurus.ingameinfo.common.core.render.RenderUtils;

@@ -43,19 +43,20 @@ public class ProgressBar extends Sized
 
     }
 
+    // todo: abstract and extract rendering logic
     @Override
     public void onRenderUpdate(boolean focused)
     {
         super.onRenderUpdate(focused);
         if (rect.width == 0 || rect.height == 0) return;
-        RenderUtils.renderRoundedRect(rect.x, rect.y, rect.width, rect.height, rect.height / 2f, backgroundColor);
+        RenderUtils.renderRoundedRect(rect.x, rect.y, rect.width, rect.height, rect.height / 2f, backgroundColor, true);
         if (percentage != 0)
         {
             mask.startMasking();
             RenderUtils.renderRect(rect.x, rect.y, rect.width * percentage, rect.height, fillerColor);
             mask.endMasking();
         }
-        RenderUtils.renderRoundedRectOutline(rect.x, rect.y, rect.width, rect.height, rect.height / 2f, 1.0f, outlineColor);
+        RenderUtils.renderRoundedRectOutline(rect.x, rect.y, rect.width, rect.height, rect.height / 2f, 1.0f, outlineColor, true);
     }
 
     @Override

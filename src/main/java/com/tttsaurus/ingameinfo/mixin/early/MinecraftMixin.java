@@ -12,7 +12,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 public class MinecraftMixin
 {
     @Inject(method = "shutdown", at = @At("HEAD"))
-    public void shutdown(CallbackInfo ci)
+    public void beforeShutdown(CallbackInfo ci)
     {
         for (IAction action: ShutdownHooks.hooks)
             action.invoke();

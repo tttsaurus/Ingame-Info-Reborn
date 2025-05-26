@@ -1,7 +1,6 @@
 package com.tttsaurus.ingameinfo.common.core.render;
 
 import com.tttsaurus.ingameinfo.common.core.function.IFunc;
-import com.tttsaurus.ingameinfo.common.impl.gui.IgiGuiLifeCycle;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.ActiveRenderInfo;
 import net.minecraft.entity.Entity;
@@ -201,8 +200,9 @@ public final class RenderHints
     public static Texture2D.WrapMode getHint_Texture2D$WrapMode() { return hint_Texture2D$WrapMode; }
     public static float getHint_pixelPerUnit() { return hint_pixelPerUnit; }
 
-    public static boolean getHint_LineSmoothHint() { return !IgiGuiLifeCycle.getEnableFbo() || IgiGuiLifeCycle.getEnableMultisampleOnFbo(); }
-    public static boolean getHint_PolygonSmoothHint() { return !IgiGuiLifeCycle.getEnableFbo() || IgiGuiLifeCycle.getEnableMultisampleOnFbo(); }
+    // todo: abstract and extract rendering logic
+    //public static boolean getHint_LineSmoothHint() { return !IgiGuiLifeCycle.getEnableFbo() || IgiGuiLifeCycle.getEnableMultisampleOnFbo(); }
+    //public static boolean getHint_PolygonSmoothHint() { return !IgiGuiLifeCycle.getEnableFbo() || IgiGuiLifeCycle.getEnableMultisampleOnFbo(); }
     //</editor-fold>
 
     //<editor-fold desc="active render info">

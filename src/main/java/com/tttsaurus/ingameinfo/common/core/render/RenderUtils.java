@@ -162,7 +162,7 @@ public final class RenderUtils
     //</editor-fold>
 
     //<editor-fold desc="rounded rect">
-    public static void renderRoundedRect(float x, float y, float width, float height, float radius, int color)
+    public static void renderRoundedRect(float x, float y, float width, float height, float radius, int color, boolean smoothHint)
     {
         int segments = Math.max(3, (int)(radius / 2f));
         float a = (float)(color >> 24 & 255) / 255.0F;
@@ -177,7 +177,7 @@ public final class RenderUtils
         GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
         GlStateManager.color(r, g, b, a);
 
-        if (RenderHints.getHint_PolygonSmoothHint())
+        if (smoothHint)
         {
             GlStateManager.glPolygonMode(GL11.GL_FRONT_AND_BACK, GL11.GL_FILL);
             GL11.glEnable(GL11.GL_POLYGON_SMOOTH);
@@ -207,9 +207,9 @@ public final class RenderUtils
 
         GlStateManager.popMatrix();
 
-        if (RenderHints.getHint_PolygonSmoothHint()) GL11.glDisable(GL11.GL_POLYGON_SMOOTH);
+        if (smoothHint) GL11.glDisable(GL11.GL_POLYGON_SMOOTH);
     }
-    public static void renderRoundedRectOutline(float x, float y, float width, float height, float radius, float thickness, int color)
+    public static void renderRoundedRectOutline(float x, float y, float width, float height, float radius, float thickness, int color, boolean smoothHint)
     {
         int segments = Math.max(3, (int)(radius / 2f));
         float a = (float)(color >> 24 & 255) / 255.0F;
@@ -225,7 +225,7 @@ public final class RenderUtils
         GlStateManager.glLineWidth(thickness * (float)(new ScaledResolution(Minecraft.getMinecraft())).getScaleFactor());
         GlStateManager.color(r, g, b, a);
 
-        if (RenderHints.getHint_LineSmoothHint())
+        if (smoothHint)
         {
             GL11.glEnable(GL11.GL_LINE_SMOOTH);
             GL11.glHint(GL11.GL_LINE_SMOOTH_HINT, GL11.GL_NICEST);
@@ -255,7 +255,7 @@ public final class RenderUtils
 
         GlStateManager.popMatrix();
 
-        if (RenderHints.getHint_LineSmoothHint()) GL11.glDisable(GL11.GL_LINE_SMOOTH);
+        if (smoothHint) GL11.glDisable(GL11.GL_LINE_SMOOTH);
     }
     //</editor-fold>
 

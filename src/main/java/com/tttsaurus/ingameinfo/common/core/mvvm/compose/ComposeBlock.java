@@ -69,6 +69,7 @@ public abstract class ComposeBlock
                 Element element = ElementRegistry.newElement(plan.newElementName);
                 if (element != null)
                 {
+                    // todo: move theme loading else where
                     element.loadTheme(themeConfig);
                     root.elements.add(element);
                     for (Map.Entry<String, Object> entry: plan.newStyleProperties.entrySet())

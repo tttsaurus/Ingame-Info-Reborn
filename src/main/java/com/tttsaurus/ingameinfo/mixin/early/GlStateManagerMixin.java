@@ -16,9 +16,10 @@ public class GlStateManagerMixin
             method = "bindTexture",
             at = @At(
                     value = "INVOKE",
-                    target = "Lorg/lwjgl/opengl/GL11;glBindTexture(II)V"
+                    target = "Lorg/lwjgl/opengl/GL11;glBindTexture(II)V",
+                    remap = false
             ))
-    private static void mixin_bindTexture_GL11$glBindTexture(int target, int texture, Operation<Void> original)
+    private static void wrap_bindTexture_GL11$glBindTexture(int target, int texture, Operation<Void> original)
     {
         if (RenderHints.getHint_GlStateManager$BindTextureHint() == RenderHints.GlStateManager.BindTextureHint.TEXTURE_2D)
             original.call(target, texture);

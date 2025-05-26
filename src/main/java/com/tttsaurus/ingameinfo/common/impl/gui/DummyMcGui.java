@@ -1,18 +1,18 @@
 package com.tttsaurus.ingameinfo.common.impl.gui;
 
-import com.tttsaurus.ingameinfo.common.core.gui.delegate.placeholder.IPlaceholderDrawScreen;
-import com.tttsaurus.ingameinfo.common.core.gui.delegate.placeholder.IPlaceholderKeyTyped;
+import com.tttsaurus.ingameinfo.common.core.gui.delegate.dummy.IDummyDrawScreen;
+import com.tttsaurus.ingameinfo.common.core.gui.delegate.dummy.IDummyKeyTyped;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiScreen;
 import java.io.IOException;
 
-public class PlaceholderMcGui extends GuiScreen
+public final class DummyMcGui extends GuiScreen
 {
-    private IPlaceholderDrawScreen drawAction = null;
-    private IPlaceholderKeyTyped typeAction = null;
+    private IDummyDrawScreen drawAction = null;
+    private IDummyKeyTyped typeAction = null;
 
-    public void setDrawAction(IPlaceholderDrawScreen drawAction) { this.drawAction = drawAction; }
-    public void setTypeAction(IPlaceholderKeyTyped typeAction) { this.typeAction = typeAction; }
+    public void setDrawAction(IDummyDrawScreen drawAction) { this.drawAction = drawAction; }
+    public void setTypeAction(IDummyKeyTyped typeAction) { this.typeAction = typeAction; }
 
     @Override
     protected void keyTyped(char typedChar, int keyCode) throws IOException
