@@ -1,5 +1,6 @@
 package com.tttsaurus.ingameinfo.common.core.mvvm.view;
 
+import com.tttsaurus.ingameinfo.common.core.file.FileUtils;
 import com.tttsaurus.ingameinfo.common.core.gui.Element;
 import com.tttsaurus.ingameinfo.common.core.gui.GuiLayout;
 import com.tttsaurus.ingameinfo.common.core.gui.layout.ElementGroup;
@@ -53,7 +54,7 @@ public abstract class View
 
     public String getDefaultIxml() { return ""; }
 
-    // creating the file under ./config/ingameinfo/
+    // creating the file under ./config/ingameinfo/ixml/
     // and .ixml is the suffix
     public abstract String getIxmlFileName();
 
@@ -61,14 +62,10 @@ public abstract class View
     {
         try
         {
-            File directory = new File("config/ingameinfo");
-            if (!directory.exists()) directory.mkdirs();
-
-            String filePath = "config/ingameinfo/" + getIxmlFileName() + ".ixml";
-            File testFile = new File(filePath);
+            File testFile = FileUtils.getFile(getIxmlFileName() + ".ixml", "ixml");
             boolean writeDefault = !testFile.exists();
 
-            RandomAccessFile file = new RandomAccessFile(filePath, "rw");
+            RandomAccessFile file = new RandomAccessFile(testFile, "rw");
             StringBuilder builder = new StringBuilder();
 
             if (writeDefault)

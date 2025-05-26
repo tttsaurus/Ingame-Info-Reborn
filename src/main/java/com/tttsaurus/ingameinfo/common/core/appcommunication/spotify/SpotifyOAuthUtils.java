@@ -3,6 +3,7 @@ package com.tttsaurus.ingameinfo.common.core.appcommunication.spotify;
 import com.sun.net.httpserver.HttpServer;
 import com.sun.net.httpserver.HttpHandler;
 import com.sun.net.httpserver.HttpExchange;
+import com.tttsaurus.ingameinfo.common.core.file.FileUtils;
 import com.tttsaurus.ingameinfo.common.core.serialization.json.RawJsonUtils;
 import java.io.*;
 import java.net.*;
@@ -46,11 +47,9 @@ public final class SpotifyOAuthUtils
                     SpotifyUserInfo.token = getToken(authorizationCode);
 
                     // write it to local cache
-                    File directory = new File("config/ingameinfo/cache");
-                    if (!directory.exists()) directory.mkdirs();
                     try
                     {
-                        RandomAccessFile file = new RandomAccessFile("config/ingameinfo/cache/spotify_refresh_token.txt", "rw");
+                        RandomAccessFile file = new RandomAccessFile(FileUtils.getFile("spotify_refresh_token.txt", "cache"), "rw");
                         file.setLength(0);
                         file.seek(0);
                         file.write(SpotifyUserInfo.token.refreshToken.getBytes(StandardCharsets.UTF_8));

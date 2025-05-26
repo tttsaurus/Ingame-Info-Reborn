@@ -1,5 +1,6 @@
 package com.tttsaurus.ingameinfo.common.impl.appcommunication.spotify;
 
+import com.tttsaurus.ingameinfo.common.core.file.FileUtils;
 import com.tttsaurus.ingameinfo.config.IgiConfig;
 import com.tttsaurus.ingameinfo.common.core.appcommunication.spotify.SpotifyAccessUtils;
 import com.tttsaurus.ingameinfo.common.core.appcommunication.spotify.SpotifyOAuthUtils;
@@ -15,7 +16,6 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.text.TextFormatting;
-import java.io.File;
 import java.io.RandomAccessFile;
 import java.time.Duration;
 import java.time.LocalDateTime;
@@ -313,11 +313,9 @@ public class SpotifyViewModel extends ViewModel<SpotifyView>
         });
 
         // read refresh token and refresh
-        File directory = new File("config/ingameinfo/cache");
-        if (!directory.exists()) directory.mkdirs();
         try
         {
-            RandomAccessFile file = new RandomAccessFile("config/ingameinfo/cache/spotify_refresh_token.txt", "rw");
+            RandomAccessFile file = new RandomAccessFile(FileUtils.getFile("spotify_refresh_token.txt", "cache"), "rw");
             StringBuilder builder = new StringBuilder();
             String line = file.readLine();
             while (line != null)

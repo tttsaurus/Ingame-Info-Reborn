@@ -2,6 +2,7 @@ package com.tttsaurus.ingameinfo.common.core.gui.theme.registry;
 
 import com.tttsaurus.ingameinfo.InGameInfoReborn;
 import com.tttsaurus.ingameinfo.common.core.event.RegainScreenFocusEvent;
+import com.tttsaurus.ingameinfo.common.core.file.FileUtils;
 import com.tttsaurus.ingameinfo.common.core.gui.theme.ThemeConfig;
 import com.tttsaurus.ingameinfo.common.core.gui.theme.ThemeConfigSerDesUtils;
 import com.tttsaurus.ingameinfo.common.core.gui.theme.ThemeConfigUpdater;
@@ -46,10 +47,7 @@ public final class ThemeRegistry
 
             try
             {
-                File directory = new File("config/ingameinfo/themes");
-                if (!directory.exists()) directory.mkdirs();
-
-                File defaultFile = new File("config/ingameinfo/themes/default.itheme");
+                File defaultFile = FileUtils.getFile("default.itheme", "themes");
                 boolean writeDefault = !defaultFile.exists();
 
                 RandomAccessFile file = new RandomAccessFile(defaultFile, "rw");
@@ -97,10 +95,7 @@ public final class ThemeRegistry
         {
             try
             {
-                File directory = new File("config/ingameinfo/themes");
-                if (!directory.exists()) directory.mkdirs();
-
-                File spotify = new File("config/ingameinfo/themes/spotify.itheme");
+                File spotify = FileUtils.getFile("spotify.itheme", "themes");
                 if (!spotify.exists())
                 {
                     RandomAccessFile file = new RandomAccessFile(spotify, "rw");
@@ -124,10 +119,7 @@ public final class ThemeRegistry
             }
         }
 
-        File directory = new File("config/ingameinfo/themes");
-        if (!directory.exists()) directory.mkdirs();
-
-        File[] files = directory.listFiles();
+        File[] files = FileUtils.makeDir("themes").listFiles();
         if (files != null)
         {
             for (File file: files)
@@ -180,10 +172,7 @@ public final class ThemeRegistry
     {
         InGameInfoReborn.logger.info("Regain screen focus. Trying to reload theme configs...");
 
-        File directory = new File("config/ingameinfo/themes");
-        if (!directory.exists()) return;
-
-        File[] files = directory.listFiles();
+        File[] files = FileUtils.makeDir("themes").listFiles();
         if (files != null)
         {
             for (File file: files)
