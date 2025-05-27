@@ -4,6 +4,7 @@ import com.tttsaurus.ingameinfo.common.core.gui.layout.Rect;
 import com.tttsaurus.ingameinfo.common.core.gui.registry.RegisterElement;
 import com.tttsaurus.ingameinfo.common.core.gui.property.CallbackInfo;
 import com.tttsaurus.ingameinfo.common.core.gui.property.StyleProperty;
+import com.tttsaurus.ingameinfo.common.core.gui.render.RenderOpQueue;
 import com.tttsaurus.ingameinfo.common.core.gui.theme.ThemeConfig;
 import com.tttsaurus.ingameinfo.common.core.render.RenderUtils;
 import com.tttsaurus.ingameinfo.common.core.render.RenderMask;
@@ -45,9 +46,9 @@ public class ProgressBar extends Sized
 
     // todo: abstract and extract rendering logic
     @Override
-    public void onRenderUpdate(boolean focused)
+    public void onRenderUpdate(RenderOpQueue queue, boolean focused)
     {
-        super.onRenderUpdate(focused);
+        super.onRenderUpdate(queue, focused);
         if (rect.width == 0 || rect.height == 0) return;
         RenderUtils.renderRoundedRect(rect.x, rect.y, rect.width, rect.height, rect.height / 2f, backgroundColor, true);
         if (percentage != 0)

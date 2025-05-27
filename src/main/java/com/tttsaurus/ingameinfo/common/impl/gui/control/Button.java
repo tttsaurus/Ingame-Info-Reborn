@@ -9,6 +9,7 @@ import com.tttsaurus.ingameinfo.common.core.gui.registry.RegisterElement;
 import com.tttsaurus.ingameinfo.common.core.gui.property.CallbackInfo;
 import com.tttsaurus.ingameinfo.common.core.gui.property.StyleProperty;
 import com.tttsaurus.ingameinfo.common.core.gui.property.StylePropertyCallback;
+import com.tttsaurus.ingameinfo.common.core.gui.render.RenderOpQueue;
 import com.tttsaurus.ingameinfo.common.core.gui.theme.ThemeConfig;
 import com.tttsaurus.ingameinfo.common.core.render.RenderUtils;
 import com.tttsaurus.ingameinfo.common.core.gui.GuiResources;
@@ -113,9 +114,9 @@ public class Button extends AbstractButton
     }
 
     @Override
-    public void onRenderUpdate(boolean focused)
+    public void onRenderUpdate(RenderOpQueue queue, boolean focused)
     {
-        super.onRenderUpdate(focused);
+        super.onRenderUpdate(queue, focused);
 
         RenderUtils.renderNinePatchBorderByPixel(rect.x, rect.y, rect.width, rect.height, GuiResources.mcVanillaButton, currentColor);
         textRenderer.setColor(currentTextColor);

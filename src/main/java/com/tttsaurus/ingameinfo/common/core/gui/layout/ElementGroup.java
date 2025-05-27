@@ -1,6 +1,7 @@
 package com.tttsaurus.ingameinfo.common.core.gui.layout;
 
 import com.tttsaurus.ingameinfo.common.core.gui.Element;
+import com.tttsaurus.ingameinfo.common.core.gui.render.RenderOpQueue;
 import com.tttsaurus.ingameinfo.common.core.gui.theme.ThemeConfig;
 import com.tttsaurus.ingameinfo.common.core.render.RenderUtils;
 import java.awt.*;
@@ -59,13 +60,13 @@ public abstract class ElementGroup extends Element
                 element.onFixedUpdate(deltaTime);
     }
     @Override
-    public void onRenderUpdate(boolean focused)
+    public void onRenderUpdate(RenderOpQueue queue, boolean focused)
     {
         if (!enabled) return;
-        super.onRenderUpdate(focused);
+        super.onRenderUpdate(queue, focused);
         for (Element element: elements)
             if (element.enabled)
-                element.onRenderUpdate(focused);
+                element.onRenderUpdate(queue, focused);
     }
 
     @Override

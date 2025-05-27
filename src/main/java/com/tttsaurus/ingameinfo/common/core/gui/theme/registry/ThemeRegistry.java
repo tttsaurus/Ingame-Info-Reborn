@@ -1,7 +1,7 @@
 package com.tttsaurus.ingameinfo.common.core.gui.theme.registry;
 
 import com.tttsaurus.ingameinfo.InGameInfoReborn;
-import com.tttsaurus.ingameinfo.common.core.event.RegainScreenFocusEvent;
+import com.tttsaurus.ingameinfo.common.core.event.IgiGuiRegainScreenFocusEvent;
 import com.tttsaurus.ingameinfo.common.core.file.FileUtils;
 import com.tttsaurus.ingameinfo.common.core.gui.theme.ThemeConfig;
 import com.tttsaurus.ingameinfo.common.core.gui.theme.ThemeConfigSerDesUtils;
@@ -168,7 +168,7 @@ public final class ThemeRegistry
 
     // auto-reload
     @SubscribeEvent
-    public static void onRegainScreenFocus(RegainScreenFocusEvent event)
+    public static void onRegainScreenFocus(IgiGuiRegainScreenFocusEvent event)
     {
         InGameInfoReborn.logger.info("Regain screen focus. Trying to reload theme configs...");
 

@@ -1,4 +1,4 @@
-package com.tttsaurus.ingameinfo.common.impl.gui;
+package com.tttsaurus.ingameinfo.common.core.gui;
 
 import com.tttsaurus.ingameinfo.common.core.gui.delegate.dummy.IDummyDrawScreen;
 import com.tttsaurus.ingameinfo.common.core.gui.delegate.dummy.IDummyKeyTyped;

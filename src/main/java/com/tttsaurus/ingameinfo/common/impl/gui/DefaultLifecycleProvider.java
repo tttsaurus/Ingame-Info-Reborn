@@ -1,12 +1,8 @@
 package com.tttsaurus.ingameinfo.common.impl.gui;
 
 import com.tttsaurus.ingameinfo.InGameInfoReborn;
-import com.tttsaurus.ingameinfo.common.core.function.IFunc;
 import com.tttsaurus.ingameinfo.common.core.gui.GuiLifecycleProvider;
-import com.tttsaurus.ingameinfo.common.core.gui.IgiGuiContainer;
 import com.tttsaurus.ingameinfo.common.core.gui.delegate.dummy.IDummyDrawScreen;
-import com.tttsaurus.ingameinfo.common.core.gui.delegate.dummy.IDummyKeyTyped;
-import com.tttsaurus.ingameinfo.common.core.item.GhostableItem;
 import com.tttsaurus.ingameinfo.common.core.reader.RlReaderUtils;
 import com.tttsaurus.ingameinfo.common.core.render.GlResourceManager;
 import com.tttsaurus.ingameinfo.common.core.render.IGlDisposable;
@@ -17,15 +13,12 @@ import com.tttsaurus.ingameinfo.common.core.render.shader.ShaderLoadingUtils;
 import com.tttsaurus.ingameinfo.common.core.render.shader.ShaderProgram;
 import com.tttsaurus.ingameinfo.common.impl.igievent.EventCenter;
 import com.tttsaurus.ingameinfo.common.impl.network.IgiNetwork;
-import com.tttsaurus.ingameinfo.config.IgiCommonConfig;
 import com.tttsaurus.ingameinfo.config.IgiDefaultLifecycleProviderConfig;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;
-import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.shader.Framebuffer;
-import net.minecraft.item.ItemStack;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.biome.Biome;
@@ -34,21 +27,13 @@ import org.apache.commons.lang3.time.StopWatch;
 import org.lwjgl.opengl.*;
 import java.io.RandomAccessFile;
 import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
-import java.util.concurrent.atomic.AtomicBoolean;
 
 import static com.tttsaurus.ingameinfo.common.core.render.CommonBuffers.FLOAT_BUFFER_16;
 import static com.tttsaurus.ingameinfo.common.core.render.CommonBuffers.INT_BUFFER_16;
 
 public final class DefaultLifecycleProvider extends GuiLifecycleProvider
 {
-    private static final Minecraft MC = Minecraft.getMinecraft();
-
-    private ScaledResolution resolution = new ScaledResolution(MC);
-
     //<editor-fold desc="fixed update timing variables">
     // units are all in second
     private int estimatedFps_FixedUpdate = 0;
@@ -147,13 +132,9 @@ public final class DefaultLifecycleProvider extends GuiLifecycleProvider
     //<editor-fold desc="fixed & render updates">
     private double timer = 0.5f;
 
-    @Override
-    protected void onFixedUpdate()
+    private void fixedUpdate()
     {
-        //<editor-fold desc="gui container fixed update">
-        for (IgiGuiContainer container: openedGuiMap.values())
-            container.onFixedUpdate(deltaTime_FixedUpdate);
-        //</editor-fold>
+        definedFixedUpdate(deltaTime_FixedUpdate);
 
         timer += deltaTime_FixedUpdate;
         if (timer >= 0.5d)
@@ -163,12 +144,11 @@ public final class DefaultLifecycleProvider extends GuiLifecycleProvider
         }
     }
 
-    @Override
-    protected void onRenderUpdate()
+    private void renderUpdate()
     {
         if (enableFbo)
         {
-            compileShader();
+            compileShaders();
             if (!refreshFbo)
             {
                 if (enableShader)
@@ -188,60 +168,16 @@ public final class DefaultLifecycleProvider extends GuiLifecycleProvider
             bindFbo();
         }
 
-        //<editor-fold desc="gui container render update">
-        ItemStack heldItemMainhand = null;
-        EntityPlayerSP player = MC.player;
-        if (player != null)
-            heldItemMainhand = player.getHeldItemMainhand();
-
-        List<Map.Entry<String, IgiGuiContainer>> entryList = new ArrayList<>(openedGuiMap.entrySet());
-        String firstFocused = "";
-        for (int i = entryList.size() - 1; i >= 0; i--)
-        {
-            Map.Entry<String, IgiGuiContainer> entry = entryList.get(i);
-            if (entry.getValue().getFocused())
-            {
-                firstFocused = entry.getKey();
-                break;
-            }
-        }
-        for (Map.Entry<String, IgiGuiContainer> entry: openedGuiMap.entrySet())
-        {
-            IgiGuiContainer container = entry.getValue();
-            boolean display = true;
-
-            if (heldItemMainhand != null)
-            {
-                if (container.getUseHeldItemWhitelist())
-                {
-                    display = false;
-                    for (GhostableItem item: container.getHeldItemWhitelist())
-                        if (item.getItemStack() != null)
-                            if (item.getItemStack().isItemEqual(heldItemMainhand))
-                                display = true;
-                }
-                if (container.getUseHeldItemBlacklist())
-                {
-                    for (GhostableItem item: container.getHeldItemBlacklist())
-                        if (item.getItemStack() != null)
-                            if (item.getItemStack().isItemEqual(heldItemMainhand))
-                                display = false;
-                }
-            }
-
-            if (display)
-                container.onRenderUpdate(entry.getKey().equals(firstFocused));
-        }
-        //</editor-fold>
+        definedRenderUpdate();
 
         if (enableFbo)
         {
             if (enableShader)
             {
                 bindShaderFbo();
-                activateShader();
+                activateShaders();
                 RenderUtils.renderFbo(resolution, fbo, false);
-                deactivateShader();
+                deactivateShaders();
                 bindMcFbo();
 
                 RenderUtils.renderFbo(resolution, shaderFbo, true);
@@ -259,7 +195,7 @@ public final class DefaultLifecycleProvider extends GuiLifecycleProvider
         }
     }
 
-    private void onRenderUpdateDebug()
+    private void renderUpdateDebug()
     {
         if (renderTimeDebugFile == null)
         {
@@ -278,7 +214,7 @@ public final class DefaultLifecycleProvider extends GuiLifecycleProvider
         cpuTimeStopwatch.reset();
         cpuTimeStopwatch.start();
 
-        onRenderUpdate();
+        renderUpdate();
 
         cpuTimeStopwatch.stop();
         GL15.glEndQuery(GL33.GL_TIME_ELAPSED);
@@ -323,13 +259,13 @@ public final class DefaultLifecycleProvider extends GuiLifecycleProvider
         }
     }
 
-    private void onRenderUpdateWrapped()
+    private void renderUpdateWrapped()
     {
         storeCommonGlStates();
         if (renderTimeDebug)
-            onRenderUpdateDebug();
+            renderUpdateDebug();
         else
-            onRenderUpdate();
+            renderUpdate();
         restoreCommonGlStates();
     }
     //</editor-fold>
@@ -447,7 +383,7 @@ public final class DefaultLifecycleProvider extends GuiLifecycleProvider
     //</editor-fold>
 
     //<editor-fold desc="shader methods">
-    private void compileShader()
+    private void compileShaders()
     {
         // init shader program
         if (shaderProgram == null)
@@ -474,7 +410,7 @@ public final class DefaultLifecycleProvider extends GuiLifecycleProvider
             InGameInfoReborn.logger.info(shaderProgram.getSetupDebugReport());
         }
     }
-    private void activateShader()
+    private void activateShaders()
     {
         shaderProgram.use();
 
@@ -501,7 +437,7 @@ public final class DefaultLifecycleProvider extends GuiLifecycleProvider
             shaderProgram.setUniform("targetAlpha", IgiDefaultLifecycleProviderConfig.PP_ALPHA);
         }
     }
-    private void deactivateShader()
+    private void deactivateShaders()
     {
         GL11.glGetInteger(GL13.GL_ACTIVE_TEXTURE, INT_BUFFER_16);
         int texUnit = INT_BUFFER_16.get(0);
@@ -598,71 +534,22 @@ public final class DefaultLifecycleProvider extends GuiLifecycleProvider
     }
     //</editor-fold>
 
-    //<editor-fold desc="dummy mc gui container">
-    private boolean isDummyGuiOn = false;
-    private DummyMcGui getDummyGui()
+    @Override
+    protected IDummyDrawScreen getDummyGuiDrawScreen()
     {
-        DummyMcGui dummyGui = new DummyMcGui();
-        dummyGui.setDrawAction(new IDummyDrawScreen()
+        return new IDummyDrawScreen()
         {
             @Override
             public void draw()
             {
-                onRenderUpdateWrapped();
+                renderUpdateWrapped();
             }
-        });
-        dummyGui.setTypeAction(new IDummyKeyTyped()
-        {
-            @Override
-            public void type(int keycode)
-            {
-                List<Map.Entry<String, IgiGuiContainer>> entryList = new ArrayList<>(openedGuiMap.entrySet());
-                String key = "";
-                IFunc<Boolean> exitCallback = null;
-                for (int i = entryList.size() - 1; i >= 0; i--)
-                {
-                    Map.Entry<String, IgiGuiContainer> entry = entryList.get(i);
-                    IgiGuiContainer container = entry.getValue();
-                    if (container.getFocused())
-                        if (keycode == container.getExitKeyForFocusedGui())
-                        {
-                            key = entry.getKey();
-                            exitCallback = container.getExitCallback();
-                            break;
-                        }
-                }
-                if (!key.isEmpty())
-                {
-                    if (exitCallback.invoke())
-                        openedGuiMap.remove(key);
-                }
-            }
-        });
-        return dummyGui;
+        };
     }
-    //</editor-fold>
 
     @Override
     protected void updateInternal()
     {
-        //<editor-fold desc="gui container init">
-        for (IgiGuiContainer container : openedGuiMap.values())
-            if (!container.getInitFlag())
-                container.onInit();
-        //</editor-fold>
-
-        //<editor-fold desc="gui container resize">
-        ScaledResolution newResolution = new ScaledResolution(MC);
-        if (resolution.getScaleFactor() != newResolution.getScaleFactor() ||
-                resolution.getScaledWidth() != newResolution.getScaledWidth() ||
-                resolution.getScaledHeight() != newResolution.getScaledHeight())
-        {
-            resolution = newResolution;
-            for (IgiGuiContainer container: openedGuiMap.values())
-                container.onScaledResolutionResize();
-        }
-        //</editor-fold>
-
         //<editor-fold desc="fixed update timing">
         if (!stopwatch_FixedUpdate.isStarted())
             stopwatch_FixedUpdate.start();
@@ -678,7 +565,7 @@ public final class DefaultLifecycleProvider extends GuiLifecycleProvider
             deltaTime_FixedUpdate = currentTime;
             estimatedFps_FixedUpdate = ((int)(1d / (currentTime + excessTime_FixedUpdate)) + estimatedFps_FixedUpdate) / 2;
 
-            onFixedUpdate();
+            fixedUpdate();
 
             excessTime_FixedUpdate = currentTime + excessTime_FixedUpdate - timePerFrame_FixedUpdate;
         }
@@ -720,45 +607,7 @@ public final class DefaultLifecycleProvider extends GuiLifecycleProvider
         }
         //</editor-fold>
 
-        //<editor-fold desc="dummy gui">
-        if (!isDummyGuiOn)
-            onRenderUpdateWrapped();
-
-        if (FMLCommonHandler.instance().getSide().isClient())
-        {
-            // close dummy
-            if (isDummyGuiOn)
-            {
-                if (openedGuiMap.isEmpty())
-                {
-                    isDummyGuiOn = false;
-                    MC.displayGuiScreen(null);
-                }
-                else
-                {
-                    AtomicBoolean focus = new AtomicBoolean(false);
-                    openedGuiMap.forEach((uuid, guiContainer) -> focus.set(focus.get() || (guiContainer.getFocused() && guiContainer.getActive())));
-
-                    if (!focus.get())
-                    {
-                        isDummyGuiOn = false;
-                        MC.displayGuiScreen(null);
-                    }
-                }
-            }
-            // open dummy
-            else if (!openedGuiMap.isEmpty() && MC.currentScreen == null)
-            {
-                AtomicBoolean focus = new AtomicBoolean(false);
-                openedGuiMap.forEach((uuid, guiContainer) -> focus.set(focus.get() || (guiContainer.getFocused() && guiContainer.getActive())));
-
-                if (focus.get())
-                {
-                    MC.displayGuiScreen(getDummyGui());
-                    isDummyGuiOn = true;
-                }
-            }
-        }
-        //</editor-fold>
+        if (!isDummyGuiOn())
+            renderUpdateWrapped();
     }
 }

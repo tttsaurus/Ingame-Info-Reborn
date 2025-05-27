@@ -5,6 +5,7 @@ import com.tttsaurus.ingameinfo.common.core.gui.registry.RegisterElement;
 import com.tttsaurus.ingameinfo.common.core.gui.property.CallbackInfo;
 import com.tttsaurus.ingameinfo.common.core.gui.property.StyleProperty;
 import com.tttsaurus.ingameinfo.common.core.gui.property.StylePropertyCallback;
+import com.tttsaurus.ingameinfo.common.core.gui.render.RenderOpQueue;
 import com.tttsaurus.ingameinfo.common.core.render.RenderMask;
 import com.tttsaurus.ingameinfo.common.impl.render.renderer.UrlImageRenderer;
 
@@ -54,9 +55,9 @@ public class UrlImage extends Sized
     }
 
     @Override
-    public void onRenderUpdate(boolean focused)
+    public void onRenderUpdate(RenderOpQueue queue, boolean focused)
     {
-        super.onRenderUpdate(focused);
+        super.onRenderUpdate(queue, focused);
         if (rounded)
             mask.startMasking();
         urlImageRenderer.render();

@@ -6,6 +6,7 @@ import com.tttsaurus.ingameinfo.common.core.gui.registry.RegisterElement;
 import com.tttsaurus.ingameinfo.common.core.gui.property.CallbackInfo;
 import com.tttsaurus.ingameinfo.common.core.gui.property.StyleProperty;
 import com.tttsaurus.ingameinfo.common.core.gui.property.StylePropertyCallback;
+import com.tttsaurus.ingameinfo.common.core.gui.render.RenderOpQueue;
 import com.tttsaurus.ingameinfo.common.core.gui.theme.ThemeConfig;
 import com.tttsaurus.ingameinfo.common.impl.render.renderer.TextRenderer;
 
@@ -80,9 +81,9 @@ public class Text extends Element
     }
 
     @Override
-    public void onRenderUpdate(boolean focused)
+    public void onRenderUpdate(RenderOpQueue queue, boolean focused)
     {
-        super.onRenderUpdate(focused);
+        super.onRenderUpdate(queue, focused);
         textRenderer.render();
     }
 

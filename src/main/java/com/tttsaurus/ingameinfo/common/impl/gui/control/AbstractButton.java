@@ -5,6 +5,7 @@ import com.tttsaurus.ingameinfo.common.core.gui.registry.RegisterElement;
 import com.tttsaurus.ingameinfo.common.core.gui.property.CallbackInfo;
 import com.tttsaurus.ingameinfo.common.core.gui.property.StyleProperty;
 import com.tttsaurus.ingameinfo.common.core.gui.property.StylePropertyCallback;
+import com.tttsaurus.ingameinfo.common.core.gui.render.RenderOpQueue;
 import com.tttsaurus.ingameinfo.common.core.input.MouseUtils;
 import java.util.ArrayList;
 import java.util.List;
@@ -79,9 +80,9 @@ public abstract class AbstractButton extends Sized
     }
 
     @Override
-    public void onRenderUpdate(boolean focused)
+    public void onRenderUpdate(RenderOpQueue queue, boolean focused)
     {
-        super.onRenderUpdate(focused);
+        super.onRenderUpdate(queue, focused);
 
         if (!focused) return;
 

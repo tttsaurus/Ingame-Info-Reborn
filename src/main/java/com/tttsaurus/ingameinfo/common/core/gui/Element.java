@@ -10,6 +10,7 @@ import com.tttsaurus.ingameinfo.common.core.gui.property.CallbackInfo;
 import com.tttsaurus.ingameinfo.common.core.gui.property.IStylePropertySyncTo;
 import com.tttsaurus.ingameinfo.common.core.gui.property.StylePropertyCallback;
 import com.tttsaurus.ingameinfo.common.core.gui.property.StyleProperty;
+import com.tttsaurus.ingameinfo.common.core.gui.render.RenderOpQueue;
 import com.tttsaurus.ingameinfo.common.core.gui.theme.ThemeConfig;
 import com.tttsaurus.ingameinfo.common.core.render.RenderUtils;
 import com.tttsaurus.ingameinfo.common.core.gui.registry.ElementRegistry;
@@ -178,7 +179,10 @@ public abstract class Element
     public abstract void calcWidthHeight();
 
     public abstract void onFixedUpdate(double deltaTime);
-    public void onRenderUpdate(boolean focused) { renderBackground(); }
+    public void onRenderUpdate(RenderOpQueue queue, boolean focused)
+    {
+        renderBackground();
+    }
 
     // todo: abstract and extract rendering logic
     private void renderBackground()

@@ -1,6 +1,7 @@
 package com.tttsaurus.ingameinfo.common.core.gui;
 
 import com.tttsaurus.ingameinfo.common.core.function.IFunc;
+import com.tttsaurus.ingameinfo.common.core.gui.render.RenderOpQueue;
 import com.tttsaurus.ingameinfo.common.core.internal.InternalMethods;
 import com.tttsaurus.ingameinfo.common.core.item.GhostableItem;
 import com.tttsaurus.ingameinfo.common.core.mvvm.binding.SlotAccessor;
@@ -94,9 +95,9 @@ public class IgiGuiContainer
             mainGroup.finishReCalc();
         }
     }
-    public void onRenderUpdate(boolean focused)
+    public RenderOpQueue onRenderUpdate(boolean focused)
     {
-        if (!isActive) return;
+        if (!isActive) return new RenderOpQueue();
 
         if (isFocused && hasFocusBackground)
         {
@@ -104,9 +105,12 @@ public class IgiGuiContainer
             RenderUtils.renderRectFullScreen(backgroundColor);
         }
 
-        mainGroup.onRenderUpdate(focused);
+        RenderOpQueue queue = new RenderOpQueue();
+        mainGroup.onRenderUpdate(queue, focused);
 
         if (debug) mainGroup.renderDebugRect();
+
+        return queue;
     }
 
     // can't refresh <Def> content

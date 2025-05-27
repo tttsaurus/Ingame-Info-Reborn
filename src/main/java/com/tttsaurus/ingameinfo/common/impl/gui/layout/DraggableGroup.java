@@ -6,6 +6,7 @@ import com.tttsaurus.ingameinfo.common.core.gui.layout.Pivot;
 import com.tttsaurus.ingameinfo.common.core.gui.layout.Rect;
 import com.tttsaurus.ingameinfo.common.core.gui.registry.RegisterElement;
 import com.tttsaurus.ingameinfo.common.core.gui.property.StyleProperty;
+import com.tttsaurus.ingameinfo.common.core.gui.render.RenderOpQueue;
 import com.tttsaurus.ingameinfo.common.core.input.MouseUtils;
 
 @RegisterElement
@@ -62,9 +63,9 @@ public class DraggableGroup extends DraggableContainerGroup
     }
 
     @Override
-    public void onRenderUpdate(boolean focused)
+    public void onRenderUpdate(RenderOpQueue queue, boolean focused)
     {
-        super.onRenderUpdate(focused);
+        super.onRenderUpdate(queue, focused);
 
         if (!enabled) return;
         if (focused)
@@ -89,6 +90,6 @@ public class DraggableGroup extends DraggableContainerGroup
         }
         else
             unlockDragging = false;
-        super.onRenderUpdate(focused);
+        super.onRenderUpdate(queue, focused);
     }
 }

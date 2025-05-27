@@ -7,6 +7,7 @@ import com.tttsaurus.ingameinfo.common.core.gui.registry.RegisterElement;
 import com.tttsaurus.ingameinfo.common.core.gui.property.CallbackInfo;
 import com.tttsaurus.ingameinfo.common.core.gui.property.StyleProperty;
 import com.tttsaurus.ingameinfo.common.core.gui.property.StylePropertyCallback;
+import com.tttsaurus.ingameinfo.common.core.gui.render.RenderOpQueue;
 import com.tttsaurus.ingameinfo.common.core.render.RenderMask;
 
 @RegisterElement
@@ -72,12 +73,12 @@ public class SizedGroup extends ElementGroup
     }
 
     @Override
-    public void onRenderUpdate(boolean focused)
+    public void onRenderUpdate(RenderOpQueue queue, boolean focused)
     {
         if (!enabled) return;
         if (useMask)
             mask.startMasking();
-        super.onRenderUpdate(focused);
+        super.onRenderUpdate(queue, focused);
         if (useMask)
             mask.endMasking();
     }
