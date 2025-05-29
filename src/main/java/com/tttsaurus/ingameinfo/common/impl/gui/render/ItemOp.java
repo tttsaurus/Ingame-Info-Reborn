@@ -1,0 +1,30 @@
+package com.tttsaurus.ingameinfo.common.impl.gui.render;
+
+import com.tttsaurus.ingameinfo.common.core.gui.render.IRenderOp;
+import com.tttsaurus.ingameinfo.common.core.gui.render.RenderContext;
+import com.tttsaurus.ingameinfo.common.core.item.GhostableItem;
+import com.tttsaurus.ingameinfo.common.core.render.RenderUtils;
+
+public class ItemOp implements IRenderOp
+{
+    public GhostableItem item;
+    public float x, y, scaleX, scaleY;
+
+    public ItemOp(GhostableItem item, float x, float y, float scaleX, float scaleY)
+    {
+        this.item = item;
+        this.x = x;
+        this.y = y;
+        this.scaleX = scaleX;
+        this.scaleY = scaleY;
+    }
+
+    @Override
+    public void execute(RenderContext context)
+    {
+        if (item == null) return;
+        if (item.getItemStack() == null) return;
+
+        RenderUtils.renderItem(item.getItemStack(), x, y, scaleX, scaleY);
+    }
+}

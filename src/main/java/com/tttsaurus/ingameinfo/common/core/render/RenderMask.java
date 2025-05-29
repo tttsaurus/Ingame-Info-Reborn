@@ -19,6 +19,10 @@ public final class RenderMask
         }
         return stencilValueCounter;
     }
+    public static void resetStencilCounter()
+    {
+        stencilValueCounter = 0;
+    }
 
     public enum MaskShape
     {
@@ -121,7 +125,7 @@ public final class RenderMask
 
         RenderUtils.prepareStencilToRender(stencilValue);
     }
-    public void endMasking()
+    public static void endMasking()
     {
         RenderUtils.endStencil();
         maskStack.pop();

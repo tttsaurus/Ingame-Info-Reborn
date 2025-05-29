@@ -1,32 +1,23 @@
 package com.tttsaurus.ingameinfo.common.impl.gui.control;
 
 import com.tttsaurus.ingameinfo.common.core.gui.Element;
-import com.tttsaurus.ingameinfo.common.core.gui.layout.Rect;
 import com.tttsaurus.ingameinfo.common.core.gui.registry.RegisterElement;
 import com.tttsaurus.ingameinfo.common.core.gui.property.CallbackInfo;
 import com.tttsaurus.ingameinfo.common.core.gui.property.StyleProperty;
 import com.tttsaurus.ingameinfo.common.core.gui.property.StylePropertyCallback;
 import com.tttsaurus.ingameinfo.common.core.gui.render.RenderOpQueue;
-import com.tttsaurus.ingameinfo.common.core.gui.theme.ThemeConfig;
-import com.tttsaurus.ingameinfo.common.impl.render.renderer.TextRenderer;
+import com.tttsaurus.ingameinfo.common.core.render.RenderUtils;
+import com.tttsaurus.ingameinfo.common.impl.gui.render.TextOp;
 
 @RegisterElement
 public class Text extends Element
 {
-    private final TextRenderer textRenderer = new TextRenderer();
-
     @StylePropertyCallback
     public void textValidation(String value, CallbackInfo callbackInfo)
     {
         if (value == null) callbackInfo.cancel = true;
     }
-    @StylePropertyCallback
-    public void setTextCallback()
-    {
-        textRenderer.setText(text);
-        requestReCalc();
-    }
-    @StyleProperty(setterCallbackPost = "setTextCallback", setterCallbackPre = "textValidation")
+    @StyleProperty(setterCallbackPost = "requestReCalc", setterCallbackPre = "textValidation")
     public String text;
 
     @StylePropertyCallback
@@ -34,67 +25,26 @@ public class Text extends Element
     {
         if (value < 0) callbackInfo.cancel = true;
     }
-    @StylePropertyCallback
-    public void setScaleCallback()
-    {
-        textRenderer.setScale(scale);
-        requestReCalc();
-    }
-    @StyleProperty(setterCallbackPost = "setScaleCallback", setterCallbackPre = "scaleValidation")
-    public float scale;
+    @StyleProperty(setterCallbackPost = "requestReCalc", setterCallbackPre = "scaleValidation")
+    public float scale = 1;
 
-    @StylePropertyCallback
-    public void setColorCallback()
-    {
-        textRenderer.setColor(color);
-    }
-    @StyleProperty(setterCallbackPost = "setColorCallback")
+    @StyleProperty
     public int color;
 
-    @StylePropertyCallback
-    public void setShadowCallback()
-    {
-        textRenderer.setShadow(shadow);
-    }
-    @StyleProperty(setterCallbackPost = "setShadowCallback")
+    @StyleProperty
     public boolean shadow;
-
-    @Override
-    public void calcRenderPos(Rect contextRect)
-    {
-        super.calcRenderPos(contextRect);
-        textRenderer.setX(rect.x);
-        textRenderer.setY(rect.y);
-    }
 
     @Override
     public void calcWidthHeight()
     {
-        rect.width = textRenderer.simulateWidth();
-        rect.height = textRenderer.simulateHeight();
-    }
-
-    @Override
-    public void onFixedUpdate(double deltaTime)
-    {
-
+        rect.width = RenderUtils.simulateTextWidth(text, scale);
+        rect.height = RenderUtils.simulateTextHeight(scale);
     }
 
     @Override
     public void onRenderUpdate(RenderOpQueue queue, boolean focused)
     {
         super.onRenderUpdate(queue, focused);
-        textRenderer.render();
-    }
-
-    @Override
-    public void loadTheme(ThemeConfig themeConfig)
-    {
-        super.loadTheme(themeConfig);
-
-        if (scale == 0f)
-            setStyleProperty("scale", themeConfig.text.scale);
-        if (color == 0)
-            setStyleProperty("color", themeConfig.text.parsedColor);
+        queue.enqueue(new TextOp(text, rect.x, rect.y, scale, color, shadow));
     }
 }

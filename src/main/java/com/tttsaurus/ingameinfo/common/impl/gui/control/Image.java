@@ -1,20 +1,25 @@
 package com.tttsaurus.ingameinfo.common.impl.gui.control;
 
-import com.tttsaurus.ingameinfo.common.core.gui.layout.Rect;
 import com.tttsaurus.ingameinfo.common.core.gui.registry.RegisterElement;
 import com.tttsaurus.ingameinfo.common.core.gui.property.CallbackInfo;
 import com.tttsaurus.ingameinfo.common.core.gui.property.StyleProperty;
 import com.tttsaurus.ingameinfo.common.core.gui.property.StylePropertyCallback;
 import com.tttsaurus.ingameinfo.common.core.gui.render.RenderOpQueue;
-import com.tttsaurus.ingameinfo.common.core.render.RenderMask;
-import com.tttsaurus.ingameinfo.common.impl.render.renderer.ImageRenderer;
+import com.tttsaurus.ingameinfo.common.core.render.RenderUtils;
+import com.tttsaurus.ingameinfo.common.core.render.Texture2D;
+import com.tttsaurus.ingameinfo.common.impl.gui.render.ImageOp;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.resources.IResource;
 import net.minecraft.util.ResourceLocation;
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
+import java.io.IOException;
+import java.io.InputStream;
 
 @RegisterElement
 public class Image extends Sized
 {
-    private final ImageRenderer imageRenderer = new ImageRenderer();
-    private final RenderMask mask = new RenderMask(RenderMask.MaskShape.ROUNDED_RECT);
+    private Texture2D texture = null;
 
     @StyleProperty
     public boolean rounded;
@@ -27,42 +32,26 @@ public class Image extends Sized
     @StylePropertyCallback
     public void setRlCallback()
     {
-        imageRenderer.updateRl(new ResourceLocation(rl));
+        ResourceLocation resourceLocation = new ResourceLocation(rl);
+        if (texture != null) texture.dispose();
+        try
+        {
+            IResource resource = Minecraft.getMinecraft().getResourceManager().getResource(resourceLocation);
+            InputStream inputStream = resource.getInputStream();
+
+            BufferedImage bufferedImage = ImageIO.read(inputStream);
+
+            texture = RenderUtils.createTexture2D(bufferedImage);
+        }
+        catch (IOException ignored) { }
     }
     @StyleProperty(setterCallbackPost = "setRlCallback", setterCallbackPre = "rlValidation")
     public String rl;
 
     @Override
-    public void onFixedUpdate(double deltaTime)
-    {
-
-    }
-
-    @Override
-    public void calcRenderPos(Rect contextRect)
-    {
-        super.calcRenderPos(contextRect);
-        imageRenderer.setX(rect.x);
-        imageRenderer.setY(rect.y);
-        mask.setRoundedRectMask(rect.x, rect.y, rect.width, rect.height, themeConfig.image.cornerRadius);
-    }
-
-    @Override
-    public void calcWidthHeight()
-    {
-        super.calcWidthHeight();
-        imageRenderer.setWidth(width);
-        imageRenderer.setHeight(height);
-    }
-
-    @Override
     public void onRenderUpdate(RenderOpQueue queue, boolean focused)
     {
         super.onRenderUpdate(queue, focused);
-        if (rounded)
-            mask.startMasking();
-        imageRenderer.render();
-        if (rounded)
-            mask.endMasking();
+        queue.enqueue(new ImageOp(rect, texture, rounded));
     }
 }

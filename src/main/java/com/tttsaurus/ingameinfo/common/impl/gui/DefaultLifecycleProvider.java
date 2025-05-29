@@ -535,6 +535,18 @@ public final class DefaultLifecycleProvider extends GuiLifecycleProvider
     //</editor-fold>
 
     @Override
+    protected boolean isUsingFramebuffer()
+    {
+        return enableFbo;
+    }
+
+    @Override
+    protected boolean isUsingMultisampleFramebuffer()
+    {
+        return enableMultisampleOnFbo;
+    }
+
+    @Override
     protected IDummyDrawScreen getDummyGuiDrawScreen()
     {
         return new IDummyDrawScreen()

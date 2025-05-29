@@ -1,14 +1,17 @@
 package com.tttsaurus.ingameinfo.common.core.render;
 
+import com.tttsaurus.ingameinfo.common.core.item.GhostableItem;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.client.shader.Framebuffer;
+import net.minecraft.item.ItemStack;
 import org.lwjgl.BufferUtils;
 import org.lwjgl.opengl.GL11;
 import javax.annotation.Nullable;
@@ -46,6 +49,19 @@ public final class RenderUtils
     // for all render methods, pivot is in the top-left corner
     // all methods use Minecraft scaled resolution's coordinate
 
+    //<editor-fold desc="item">
+    public static void renderItem(ItemStack item, float x, float y, float scaleX, float scaleY)
+    {
+        GlStateManager.pushMatrix();
+        GlStateManager.translate(x, y, zLevel);
+        GlStateManager.scale(scaleX, scaleY, 1f);
+        RenderHelper.enableGUIStandardItemLighting();
+        Minecraft.getMinecraft().getRenderItem().renderItemAndEffectIntoGUI(item, 0, 0);
+        RenderHelper.disableStandardItemLighting();
+        GlStateManager.popMatrix();
+    }
+    //</editor-fold>
+
     //<editor-fold desc="text">
     public static void renderText(String text, float x, float y, float scale, int color, boolean shadow)
     {
@@ -62,6 +78,14 @@ public final class RenderUtils
         GlStateManager.scale(scale, scale, 0);
         fontRenderer.drawString(text, 0, 0, color, shadow);
         GlStateManager.popMatrix();
+    }
+    public static float simulateTextHeight(float scale)
+    {
+        return fontRenderer.FONT_HEIGHT * scale;
+    }
+    public static float simulateTextWidth(String text, float scale)
+    {
+        return fontRenderer.getStringWidth(text) * scale;
     }
     //</editor-fold>
 
@@ -263,9 +287,6 @@ public final class RenderUtils
     //<editor-fold desc="stencil">
     public static void prepareStencilToWrite(int stencilValue)
     {
-//        if (!Minecraft.getMinecraft().getFramebuffer().isStencilEnabled())
-//            Minecraft.getMinecraft().getFramebuffer().enableStencil();
-
         GlStateManager.disableTexture2D();
         GlStateManager.disableCull();
 

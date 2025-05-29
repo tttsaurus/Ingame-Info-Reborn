@@ -5,7 +5,11 @@ import com.tttsaurus.ingameinfo.common.core.event.IgiGuiRegainScreenFocusEvent;
 import com.tttsaurus.ingameinfo.common.core.function.IFunc;
 import com.tttsaurus.ingameinfo.common.core.gui.delegate.dummy.IDummyDrawScreen;
 import com.tttsaurus.ingameinfo.common.core.gui.delegate.dummy.IDummyKeyTyped;
+import com.tttsaurus.ingameinfo.common.core.gui.render.IRenderOp;
+import com.tttsaurus.ingameinfo.common.core.gui.render.RenderContext;
+import com.tttsaurus.ingameinfo.common.core.gui.render.RenderOpQueue;
 import com.tttsaurus.ingameinfo.common.core.item.GhostableItem;
+import com.tttsaurus.ingameinfo.common.core.render.RenderMask;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.client.gui.ScaledResolution;
@@ -168,6 +172,7 @@ public abstract class GuiLifecycleProvider
                 break;
             }
         }
+
         for (Map.Entry<String, IgiGuiContainer> entry: openedGuiMap.entrySet())
         {
             IgiGuiContainer container = entry.getValue();
@@ -193,9 +198,24 @@ public abstract class GuiLifecycleProvider
             }
 
             if (display)
-                container.onRenderUpdate(entry.getKey().equals(firstFocused));
+            {
+                RenderMask.resetStencilCounter();
+
+                RenderContext context = new RenderContext(
+                        container.getThemeConfig(),
+                        !isUsingFramebuffer() || isUsingMultisampleFramebuffer(),
+                        !isUsingFramebuffer() || isUsingMultisampleFramebuffer());
+
+                RenderOpQueue queue = container.onRenderUpdate(entry.getKey().equals(firstFocused));
+                IRenderOp op;
+                while ((op = queue.dequeue()) != null)
+                    op.execute(context);
+            }
         }
     }
+
+    protected abstract boolean isUsingFramebuffer();
+    protected abstract boolean isUsingMultisampleFramebuffer();
 
     protected abstract IDummyDrawScreen getDummyGuiDrawScreen();
 

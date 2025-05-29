@@ -1,6 +1,7 @@
 package com.tttsaurus.ingameinfo.common.core.gui.layout;
 
 import com.tttsaurus.ingameinfo.common.core.gui.Element;
+import com.tttsaurus.ingameinfo.common.core.gui.render.RenderOpQueue;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.ScaledResolution;
 
@@ -37,6 +38,14 @@ public class MainGroup extends ElementGroup
         rect.width = (float)resolution.getScaledWidth_double();
         rect.height = (float)resolution.getScaledHeight_double();
         super.calcWidthHeight();
+    }
+
+    @Override
+    public void onRenderUpdate(RenderOpQueue queue, boolean focused)
+    {
+        for (Element element: elements)
+            if (element.enabled)
+                element.onRenderUpdate(queue, focused);
     }
 
     @Override

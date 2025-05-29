@@ -90,6 +90,6 @@ public class DraggableGroup extends DraggableContainerGroup
         }
         else
             unlockDragging = false;
-        super.onRenderUpdate(queue, focused);
+        //super.onRenderUpdate(queue, focused);
     }
 }

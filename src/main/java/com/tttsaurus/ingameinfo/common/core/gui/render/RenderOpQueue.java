@@ -11,7 +11,7 @@ public final class RenderOpQueue
     {
         deque.offerLast(op);
     }
-    public IRenderOp dequeue(IRenderOp op)
+    public IRenderOp dequeue()
     {
         return deque.pollFirst();
     }

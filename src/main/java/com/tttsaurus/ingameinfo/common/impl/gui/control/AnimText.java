@@ -1,21 +1,22 @@
 package com.tttsaurus.ingameinfo.common.impl.gui.control;
 
+import com.tttsaurus.ingameinfo.common.core.animation.text.CharInfo;
 import com.tttsaurus.ingameinfo.common.core.animation.text.ITextAnimDef;
 import com.tttsaurus.ingameinfo.common.core.gui.Element;
-import com.tttsaurus.ingameinfo.common.core.gui.layout.Rect;
 import com.tttsaurus.ingameinfo.common.core.gui.registry.RegisterElement;
 import com.tttsaurus.ingameinfo.common.core.gui.property.CallbackInfo;
 import com.tttsaurus.ingameinfo.common.core.gui.property.StyleProperty;
 import com.tttsaurus.ingameinfo.common.core.gui.property.StylePropertyCallback;
 import com.tttsaurus.ingameinfo.common.core.gui.render.RenderOpQueue;
-import com.tttsaurus.ingameinfo.common.core.gui.theme.ThemeConfig;
-import com.tttsaurus.ingameinfo.common.impl.gui.style.wrapped.DoubleProperty;
-import com.tttsaurus.ingameinfo.common.impl.render.renderer.AnimTextRenderer;
+import com.tttsaurus.ingameinfo.common.core.render.RenderUtils;
+import com.tttsaurus.ingameinfo.common.impl.gui.render.AnimTextOp;
+import com.tttsaurus.ingameinfo.common.core.gui.property.wrapped.DoubleProperty;
+import java.util.Arrays;
 
 @RegisterElement
 public class AnimText extends Element
 {
-    private final AnimTextRenderer animTextRenderer = new AnimTextRenderer();
+    private CharInfo[] charInfos = new CharInfo[0];
     private final DoubleProperty timer = new DoubleProperty();
 
     @StylePropertyCallback
@@ -34,7 +35,26 @@ public class AnimText extends Element
     @StylePropertyCallback
     public void setTextCallback()
     {
-        animTextRenderer.setText(text);
+        int oldLength = charInfos.length;
+        int length = text.length();
+
+        float width = 0;
+        for (int i = 0; i < oldLength; i++)
+        {
+            char c = text.charAt(i);
+            charInfos[i].x = width;
+            width += RenderUtils.fontRenderer.getCharWidth(c) * charInfos[i].scale;
+        }
+
+        charInfos = Arrays.copyOf(charInfos, length);
+
+        for (int i = oldLength; i < length; i++)
+        {
+            char c = text.charAt(i);
+            charInfos[i] = new CharInfo(width, 0f, scale, color, shadow);
+            width += RenderUtils.fontRenderer.getCharWidth(c) * scale;
+        }
+
         requestReCalc();
     }
     @StyleProperty(setterCallbackPost = "setTextCallback", setterCallbackPre = "textValidation")
@@ -48,16 +68,25 @@ public class AnimText extends Element
     @StylePropertyCallback
     public void setScaleCallback()
     {
-        animTextRenderer.setScale(scale);
+        float width = 0;
+        for (int i = 0; i < charInfos.length; i++)
+        {
+            char c = text.charAt(i);
+            charInfos[i].x = width;
+            charInfos[i].scale = scale;
+            width += RenderUtils.fontRenderer.getCharWidth(c) * charInfos[i].scale;
+        }
+
         requestReCalc();
     }
     @StyleProperty(setterCallbackPost = "setScaleCallback", setterCallbackPre = "scaleValidation")
-    public float scale;
+    public float scale = 1;
 
     @StylePropertyCallback
     public void setColorCallback()
     {
-        animTextRenderer.setColor(color);
+        for (CharInfo info : charInfos)
+            info.color = color;
     }
     @StyleProperty(setterCallbackPost = "setColorCallback")
     public int color;
@@ -65,24 +94,17 @@ public class AnimText extends Element
     @StylePropertyCallback
     public void setShadowCallback()
     {
-        animTextRenderer.setShadow(shadow);
+        for (CharInfo info : charInfos)
+            info.shadow = shadow;
     }
     @StyleProperty(setterCallbackPost = "setShadowCallback")
     public boolean shadow;
 
     @Override
-    public void calcRenderPos(Rect contextRect)
-    {
-        super.calcRenderPos(contextRect);
-        animTextRenderer.setX(rect.x);
-        animTextRenderer.setY(rect.y);
-    }
-
-    @Override
     public void calcWidthHeight()
     {
-        rect.width = animTextRenderer.simulateWidth();
-        rect.height = animTextRenderer.simulateHeight();
+        rect.width = RenderUtils.simulateTextWidth(text, scale);
+        rect.height = RenderUtils.simulateTextHeight(scale);
     }
 
     @Override
@@ -90,7 +112,7 @@ public class AnimText extends Element
     {
         if (timer.get() == null || timer.get() == Double.POSITIVE_INFINITY)
             timer.set(0d);
-        animDef.calcAnim(animTextRenderer.getCharacterInfos(), timer, deltaTime);
+        animDef.calcAnim(charInfos, timer, deltaTime);
         timer.set(timer.get() + deltaTime);
     }
 
@@ -98,17 +120,6 @@ public class AnimText extends Element
     public void onRenderUpdate(RenderOpQueue queue, boolean focused)
     {
         super.onRenderUpdate(queue, focused);
-        animTextRenderer.render();
-    }
-
-    @Override
-    public void loadTheme(ThemeConfig themeConfig)
-    {
-        super.loadTheme(themeConfig);
-
-        if (scale == 0f)
-            setStyleProperty("scale", themeConfig.animText.scale);
-        if (color == 0)
-            setStyleProperty("color", themeConfig.animText.parsedColor);
+        queue.enqueue(new AnimTextOp(text, rect.x, rect.y, scale, color, charInfos));
     }
 }

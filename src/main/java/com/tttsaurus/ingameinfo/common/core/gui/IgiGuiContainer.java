@@ -2,6 +2,7 @@ package com.tttsaurus.ingameinfo.common.core.gui;
 
 import com.tttsaurus.ingameinfo.common.core.function.IFunc;
 import com.tttsaurus.ingameinfo.common.core.gui.render.RenderOpQueue;
+import com.tttsaurus.ingameinfo.common.core.gui.theme.ThemeConfig;
 import com.tttsaurus.ingameinfo.common.core.internal.InternalMethods;
 import com.tttsaurus.ingameinfo.common.core.item.GhostableItem;
 import com.tttsaurus.ingameinfo.common.core.mvvm.binding.SlotAccessor;
@@ -32,6 +33,8 @@ public class IgiGuiContainer
     protected int backgroundColor = -1072689136;
     protected String themeName = "default";
 
+    private ThemeConfig themeConfig;
+
     private boolean initFlag = false;
     private boolean isActive = true;
     private IFunc<Boolean> exitCallback = () -> true;
@@ -46,6 +49,7 @@ public class IgiGuiContainer
     public boolean getUseHeldItemBlacklist() { return useHeldItemBlacklist; }
     public List<GhostableItem> getHeldItemWhitelist() { return heldItemWhitelist; }
     public List<GhostableItem> getHeldItemBlacklist() { return heldItemBlacklist; }
+    public ThemeConfig getThemeConfig() { return themeConfig; }
     //</editor-fold>
 
     protected IgiGuiContainer() { }
@@ -54,6 +58,8 @@ public class IgiGuiContainer
     {
         if (initFlag) return;
         initFlag = true;
+
+        themeConfig = ThemeRegistry.getTheme(themeName);
 
         mainGroup.loadTheme(ThemeRegistry.getTheme(themeName));
 

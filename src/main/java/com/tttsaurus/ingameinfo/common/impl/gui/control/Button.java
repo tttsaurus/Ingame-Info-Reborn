@@ -4,7 +4,6 @@ import com.tttsaurus.ingameinfo.common.core.gui.delegate.button.IMouseEnterButto
 import com.tttsaurus.ingameinfo.common.core.gui.delegate.button.IMouseLeaveButton;
 import com.tttsaurus.ingameinfo.common.core.gui.delegate.button.IMousePressButton;
 import com.tttsaurus.ingameinfo.common.core.gui.delegate.button.IMouseReleaseButton;
-import com.tttsaurus.ingameinfo.common.core.gui.layout.Rect;
 import com.tttsaurus.ingameinfo.common.core.gui.registry.RegisterElement;
 import com.tttsaurus.ingameinfo.common.core.gui.property.CallbackInfo;
 import com.tttsaurus.ingameinfo.common.core.gui.property.StyleProperty;
@@ -12,15 +11,12 @@ import com.tttsaurus.ingameinfo.common.core.gui.property.StylePropertyCallback;
 import com.tttsaurus.ingameinfo.common.core.gui.render.RenderOpQueue;
 import com.tttsaurus.ingameinfo.common.core.gui.theme.ThemeConfig;
 import com.tttsaurus.ingameinfo.common.core.render.RenderUtils;
-import com.tttsaurus.ingameinfo.common.core.gui.GuiResources;
-import com.tttsaurus.ingameinfo.common.impl.render.renderer.TextRenderer;
+import com.tttsaurus.ingameinfo.common.impl.gui.render.ButtonOp;
 
-// todo: refactor -> FSM
+// todo: another ButtonPro to handle complicated logic
 @RegisterElement
 public class Button extends AbstractButton
 {
-    private final TextRenderer textRenderer = new TextRenderer();
-
     private int currentColor;
 
     @StyleProperty
@@ -51,25 +47,18 @@ public class Button extends AbstractButton
     @StylePropertyCallback
     public void setTextCallback()
     {
-        textRenderer.setText(text);
-        width = textRenderer.simulateWidth() + 10;
-        height = textRenderer.simulateHeight() + 10;
+        width = RenderUtils.simulateTextWidth(text, 1f) + 10;
+        height = RenderUtils.simulateTextHeight(1f) + 10;
         requestReCalc();
     }
     @StyleProperty(setterCallbackPost = "setTextCallback", setterCallbackPre = "textValidation")
     public String text;
 
-    @StylePropertyCallback
-    public void setShadowCallback()
-    {
-        textRenderer.setShadow(shadow);
-    }
-    @StyleProperty(setterCallbackPost = "setShadowCallback")
+    @StyleProperty
     public boolean shadow = true;
 
     public Button()
     {
-        textRenderer.setShadow(true);
         addListener(new IMouseEnterButton()
         {
             @Override
@@ -106,23 +95,21 @@ public class Button extends AbstractButton
     }
 
     @Override
-    public void calcRenderPos(Rect contextRect)
-    {
-        super.calcRenderPos(contextRect);
-        textRenderer.setX(rect.x + (rect.width - textRenderer.simulateWidth()) / 2f);
-        textRenderer.setY(rect.y + (rect.height - textRenderer.simulateHeight()) / 2f);
-    }
-
-    @Override
     public void onRenderUpdate(RenderOpQueue queue, boolean focused)
     {
         super.onRenderUpdate(queue, focused);
-
-        RenderUtils.renderNinePatchBorderByPixel(rect.x, rect.y, rect.width, rect.height, GuiResources.mcVanillaButton, currentColor);
-        textRenderer.setColor(currentTextColor);
-        textRenderer.render();
+        queue.enqueue(new ButtonOp(
+                rect,
+                currentColor,
+                text,
+                rect.x + (rect.width - RenderUtils.simulateTextWidth(text, 1f)) / 2f,
+                rect.y + (rect.height - RenderUtils.simulateTextHeight(1f)) / 2f,
+                1f,
+                currentTextColor,
+                shadow));
     }
 
+    // todo: a stage to handle logic theme + applyThemeEarly
     @Override
     public void loadTheme(ThemeConfig themeConfig)
     {

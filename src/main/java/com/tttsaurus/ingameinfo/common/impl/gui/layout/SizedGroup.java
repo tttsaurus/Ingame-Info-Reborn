@@ -7,27 +7,19 @@ import com.tttsaurus.ingameinfo.common.core.gui.registry.RegisterElement;
 import com.tttsaurus.ingameinfo.common.core.gui.property.CallbackInfo;
 import com.tttsaurus.ingameinfo.common.core.gui.property.StyleProperty;
 import com.tttsaurus.ingameinfo.common.core.gui.property.StylePropertyCallback;
+import com.tttsaurus.ingameinfo.common.core.gui.render.MaskEndOp;
+import com.tttsaurus.ingameinfo.common.core.gui.render.MaskStartOp;
 import com.tttsaurus.ingameinfo.common.core.gui.render.RenderOpQueue;
-import com.tttsaurus.ingameinfo.common.core.render.RenderMask;
 
 @RegisterElement
 public class SizedGroup extends ElementGroup
 {
     // pivot doesn't change how the layout is calculated
 
-    private final RenderMask mask = new RenderMask(RenderMask.MaskShape.RECT);
-
     @StyleProperty
     public boolean useMask = true;
 
-    public void setIsMaskRoundedCallback()
-    {
-        if (isMaskRounded)
-            mask.maskShape = RenderMask.MaskShape.ROUNDED_RECT;
-        else
-            mask.maskShape = RenderMask.MaskShape.RECT;
-    }
-    @StyleProperty(setterCallbackPost = "setIsMaskRoundedCallback")
+    @StyleProperty
     public boolean isMaskRounded = false;
 
     @StylePropertyCallback
@@ -57,11 +49,6 @@ public class SizedGroup extends ElementGroup
             if (element.pivot.horizontal == 1 || element.pivot.horizontal == 0.5f) element.rect.y -= element.padding.bottom;
             element.calcRenderPos(rect);
         }
-
-        if (isMaskRounded)
-            mask.setRoundedRectMask(rect.x, rect.y, rect.width, rect.height, 3f);
-        else
-            mask.setRectMask(rect.x, rect.y, rect.width, rect.height);
     }
 
     @Override
@@ -76,10 +63,18 @@ public class SizedGroup extends ElementGroup
     public void onRenderUpdate(RenderOpQueue queue, boolean focused)
     {
         if (!enabled) return;
+
         if (useMask)
-            mask.startMasking();
+        {
+            if (isMaskRounded)
+                queue.enqueue(new MaskStartOp(rect, 3f));
+            else
+                queue.enqueue(new MaskStartOp(rect));
+        }
+
         super.onRenderUpdate(queue, focused);
+
         if (useMask)
-            mask.endMasking();
+            queue.enqueue(new MaskEndOp());
     }
 }

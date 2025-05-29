@@ -199,10 +199,6 @@ public final class RenderHints
     public static Texture2D.FilterMode getHint_Texture2D$FilterMode() { return hint_Texture2D$FilterMode; }
     public static Texture2D.WrapMode getHint_Texture2D$WrapMode() { return hint_Texture2D$WrapMode; }
     public static float getHint_pixelPerUnit() { return hint_pixelPerUnit; }
-
-    // todo: abstract and extract rendering logic
-    //public static boolean getHint_LineSmoothHint() { return !IgiGuiLifeCycle.getEnableFbo() || IgiGuiLifeCycle.getEnableMultisampleOnFbo(); }
-    //public static boolean getHint_PolygonSmoothHint() { return !IgiGuiLifeCycle.getEnableFbo() || IgiGuiLifeCycle.getEnableMultisampleOnFbo(); }
     //</editor-fold>
 
     //<editor-fold desc="active render info">

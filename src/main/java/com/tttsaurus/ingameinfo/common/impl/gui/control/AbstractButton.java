@@ -74,12 +74,6 @@ public abstract class AbstractButton extends Sized
     public AbstractButton addListener(IMouseClickButton action) { click.add(action); return this; }
 
     @Override
-    public void onFixedUpdate(double deltaTime)
-    {
-
-    }
-
-    @Override
     public void onRenderUpdate(RenderOpQueue queue, boolean focused)
     {
         super.onRenderUpdate(queue, focused);

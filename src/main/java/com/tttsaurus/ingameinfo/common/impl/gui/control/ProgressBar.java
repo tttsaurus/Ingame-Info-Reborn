@@ -1,19 +1,14 @@
 package com.tttsaurus.ingameinfo.common.impl.gui.control;
 
-import com.tttsaurus.ingameinfo.common.core.gui.layout.Rect;
 import com.tttsaurus.ingameinfo.common.core.gui.registry.RegisterElement;
 import com.tttsaurus.ingameinfo.common.core.gui.property.CallbackInfo;
 import com.tttsaurus.ingameinfo.common.core.gui.property.StyleProperty;
 import com.tttsaurus.ingameinfo.common.core.gui.render.RenderOpQueue;
-import com.tttsaurus.ingameinfo.common.core.gui.theme.ThemeConfig;
-import com.tttsaurus.ingameinfo.common.core.render.RenderUtils;
-import com.tttsaurus.ingameinfo.common.core.render.RenderMask;
+import com.tttsaurus.ingameinfo.common.impl.gui.render.ProgressBarOp;
 
 @RegisterElement
 public class ProgressBar extends Sized
 {
-    private final RenderMask mask = new RenderMask(RenderMask.MaskShape.ROUNDED_RECT);
-
     @StyleProperty
     public int fillerColor;
 
@@ -32,44 +27,10 @@ public class ProgressBar extends Sized
     public float percentage = 0f;
 
     @Override
-    public void calcRenderPos(Rect contextRect)
-    {
-        super.calcRenderPos(contextRect);
-        mask.setRoundedRectMask(rect.x, rect.y, rect.width, rect.height, rect.height / 2f);
-    }
-
-    @Override
-    public void onFixedUpdate(double deltaTime)
-    {
-
-    }
-
-    // todo: abstract and extract rendering logic
-    @Override
     public void onRenderUpdate(RenderOpQueue queue, boolean focused)
     {
         super.onRenderUpdate(queue, focused);
         if (rect.width == 0 || rect.height == 0) return;
-        RenderUtils.renderRoundedRect(rect.x, rect.y, rect.width, rect.height, rect.height / 2f, backgroundColor, true);
-        if (percentage != 0)
-        {
-            mask.startMasking();
-            RenderUtils.renderRect(rect.x, rect.y, rect.width * percentage, rect.height, fillerColor);
-            mask.endMasking();
-        }
-        RenderUtils.renderRoundedRectOutline(rect.x, rect.y, rect.width, rect.height, rect.height / 2f, 1.0f, outlineColor, true);
-    }
-
-    @Override
-    public void loadTheme(ThemeConfig themeConfig)
-    {
-        super.loadTheme(themeConfig);
-
-        if (fillerColor == 0)
-            setStyleProperty("fillerColor", themeConfig.progressBar.parsedFillerColor);
-        if (backgroundColor == 0)
-            setStyleProperty("backgroundColor", themeConfig.progressBar.parsedBackgroundColor);
-        if (outlineColor == 0)
-            setStyleProperty("outlineColor", themeConfig.progressBar.parsedOutlineColor);
+        queue.enqueue(new ProgressBarOp(rect, percentage, backgroundColor, fillerColor, outlineColor));
     }
 }

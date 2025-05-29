@@ -93,8 +93,6 @@ public final class ThemeConfig
     @ConfigSerializable
     public static class Text
     {
-        @Comment("This will only be applied to Text with style property 'scale' left empty.")
-        public float scale = 1f;
         @Comment("This will only be applied to Text with style property 'color' left empty.\n" +
                 "In the form of hex #rrggbb or #aarrggbb.")
         public String color = "#d2d2d2";
@@ -105,8 +103,6 @@ public final class ThemeConfig
     @ConfigSerializable
     public static class SlidingText
     {
-        @Comment("This will only be applied to SlidingText with style property 'scale' left empty.")
-        public float scale = 1f;
         @Comment("This will only be applied to SlidingText with style property 'color' left empty.\n" +
                 "In the form of hex #rrggbb or #aarrggbb.")
         public String color = "#d2d2d2";
@@ -117,8 +113,6 @@ public final class ThemeConfig
     @ConfigSerializable
     public static class AnimText
     {
-        @Comment("This will only be applied to AnimText with style property 'scale' left empty.")
-        public float scale = 1f;
         @Comment("This will only be applied to AnimText with style property 'color' left empty.\n" +
                 "In the form of hex #rrggbb or #aarrggbb.")
         public String color = "#d2d2d2";

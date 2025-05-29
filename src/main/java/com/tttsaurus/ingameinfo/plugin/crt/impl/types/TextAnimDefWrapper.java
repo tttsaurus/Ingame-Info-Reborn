@@ -1,8 +1,8 @@
 package com.tttsaurus.ingameinfo.plugin.crt.impl.types;
 
+import com.tttsaurus.ingameinfo.common.core.animation.text.CharInfo;
 import com.tttsaurus.ingameinfo.common.core.animation.text.ITextAnimDef;
-import com.tttsaurus.ingameinfo.common.impl.gui.style.wrapped.DoubleProperty;
-import com.tttsaurus.ingameinfo.common.impl.render.renderer.AnimTextRenderer;
+import com.tttsaurus.ingameinfo.common.core.gui.property.wrapped.DoubleProperty;
 import crafttweaker.annotations.ZenRegister;
 import stanhebben.zenscript.annotations.ZenClass;
 import stanhebben.zenscript.annotations.ZenMethod;
@@ -25,8 +25,8 @@ public final class TextAnimDefWrapper
         @ZenClass("mods.ingameinfo.animation.text.CharInfo")
         public static class CharInfoWrapper
         {
-            public final AnimTextRenderer.CharInfo charInfo;
-            public CharInfoWrapper(AnimTextRenderer.CharInfo charInfo)
+            public final CharInfo charInfo;
+            public CharInfoWrapper(CharInfo charInfo)
             {
                 this.charInfo = charInfo;
             }
@@ -53,8 +53,8 @@ public final class TextAnimDefWrapper
             public void setShadow(boolean shadow) { charInfo.shadow = shadow; }
         }
 
-        public final AnimTextRenderer.CharInfo[] charInfos;
-        public CharInfosWrapper(AnimTextRenderer.CharInfo[] charInfos)
+        public final CharInfo[] charInfos;
+        public CharInfosWrapper(CharInfo[] charInfos)
         {
             this.charInfos = charInfos;
         }

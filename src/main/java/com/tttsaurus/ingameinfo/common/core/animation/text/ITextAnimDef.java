@@ -1,9 +1,8 @@
 package com.tttsaurus.ingameinfo.common.core.animation.text;
 
-import com.tttsaurus.ingameinfo.common.impl.gui.style.wrapped.DoubleProperty;
-import com.tttsaurus.ingameinfo.common.impl.render.renderer.AnimTextRenderer;
+import com.tttsaurus.ingameinfo.common.core.gui.property.wrapped.DoubleProperty;
 
 public interface ITextAnimDef
 {
-    void calcAnim(AnimTextRenderer.CharInfo[] charInfos, DoubleProperty timer, double deltaTime);
+    void calcAnim(CharInfo[] charInfos, DoubleProperty timer, double deltaTime);
 }

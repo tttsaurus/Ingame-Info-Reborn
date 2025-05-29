@@ -1,19 +1,24 @@
 package com.tttsaurus.ingameinfo.common.impl.gui.control;
 
-import com.tttsaurus.ingameinfo.common.core.gui.layout.Rect;
 import com.tttsaurus.ingameinfo.common.core.gui.registry.RegisterElement;
 import com.tttsaurus.ingameinfo.common.core.gui.property.CallbackInfo;
 import com.tttsaurus.ingameinfo.common.core.gui.property.StyleProperty;
 import com.tttsaurus.ingameinfo.common.core.gui.property.StylePropertyCallback;
 import com.tttsaurus.ingameinfo.common.core.gui.render.RenderOpQueue;
-import com.tttsaurus.ingameinfo.common.core.render.RenderMask;
-import com.tttsaurus.ingameinfo.common.impl.render.renderer.UrlImageRenderer;
+import com.tttsaurus.ingameinfo.common.core.render.RenderUtils;
+import com.tttsaurus.ingameinfo.common.core.render.Texture2D;
+import com.tttsaurus.ingameinfo.common.impl.gui.render.UrlImageOp;
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
+import java.io.InputStream;
+import java.net.URL;
+import java.util.concurrent.CompletableFuture;
 
 @RegisterElement
 public class UrlImage extends Sized
 {
-    private final UrlImageRenderer urlImageRenderer = new UrlImageRenderer();
-    private final RenderMask mask = new RenderMask(RenderMask.MaskShape.ROUNDED_RECT);
+    private BufferedImage asyncImage = null;
+    private Texture2D texture = null;
 
     @StyleProperty
     public boolean rounded;
@@ -26,42 +31,39 @@ public class UrlImage extends Sized
     @StylePropertyCallback
     public void setUrlCallback()
     {
-        urlImageRenderer.updateUrlAsync(url);
+        if (url.isEmpty()) return;
+        CompletableFuture.supplyAsync(() ->
+        {
+            try
+            {
+                URL imageUrl = new URL(url);
+                InputStream in = imageUrl.openStream();
+                return ImageIO.read(in);
+            }
+            catch (Exception e)
+            {
+                return null;
+            }
+        }).thenAccept(image ->
+        {
+            if (image != null) asyncImage = image;
+        });
     }
     @StyleProperty(setterCallbackPost = "setUrlCallback", setterCallbackPre = "urlValidation")
     public String url;
 
     @Override
-    public void calcRenderPos(Rect contextRect)
-    {
-        super.calcRenderPos(contextRect);
-        urlImageRenderer.setX(rect.x);
-        urlImageRenderer.setY(rect.y);
-        mask.setRoundedRectMask(rect.x, rect.y, rect.width, rect.height, themeConfig.urlImage.cornerRadius);
-    }
-
-    @Override
-    public void calcWidthHeight()
-    {
-        super.calcWidthHeight();
-        urlImageRenderer.setWidth(width);
-        urlImageRenderer.setHeight(height);
-    }
-
-    @Override
-    public void onFixedUpdate(double deltaTime)
-    {
-
-    }
-
-    @Override
     public void onRenderUpdate(RenderOpQueue queue, boolean focused)
     {
         super.onRenderUpdate(queue, focused);
-        if (rounded)
-            mask.startMasking();
-        urlImageRenderer.render();
-        if (rounded)
-            mask.endMasking();
+
+        if (asyncImage != null)
+        {
+            if (texture != null) texture.dispose();
+            texture = RenderUtils.createTexture2D(asyncImage);
+            asyncImage = null;
+        }
+
+        queue.enqueue(new UrlImageOp(rect, texture, rounded));
     }
 }
