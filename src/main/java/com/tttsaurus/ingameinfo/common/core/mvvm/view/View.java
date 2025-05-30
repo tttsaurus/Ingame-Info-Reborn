@@ -55,7 +55,7 @@ public abstract class View
         GuiLayout guiLayout = init(container);
         MainGroup mainGroup = InternalMethods.instance.GuiLayout$mainGroup$getter.invoke(guiLayout);
 
-        // doesnt change the alias relationship between IgiGuiContainer.mainGroup and View.mainGroup
+        // doesnt break the alias relationship between IgiGuiContainer.mainGroup and View.mainGroup
         this.mainGroup.elements.clear();
         for (Element element: mainGroup.elements)
             this.mainGroup.add(element);

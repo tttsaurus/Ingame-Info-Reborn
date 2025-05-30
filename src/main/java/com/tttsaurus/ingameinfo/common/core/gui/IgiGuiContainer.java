@@ -114,7 +114,7 @@ public class IgiGuiContainer
         RenderOpQueue queue = new RenderOpQueue();
         mainGroup.onRenderUpdate(queue, focused);
 
-        if (debug) mainGroup.renderDebugRect();
+        if (debug) mainGroup.renderDebugRect(queue);
 
         return queue;
     }

@@ -1,6 +1,7 @@
 package com.tttsaurus.ingameinfo.common.core.gui.layout;
 
 import com.tttsaurus.ingameinfo.common.core.gui.Element;
+import com.tttsaurus.ingameinfo.common.core.gui.render.DebugRectOp;
 import com.tttsaurus.ingameinfo.common.core.gui.render.RenderOpQueue;
 import com.tttsaurus.ingameinfo.common.core.gui.theme.ThemeConfig;
 import com.tttsaurus.ingameinfo.common.core.render.RenderUtils;
@@ -86,11 +87,10 @@ public abstract class ElementGroup extends Element
     }
 
     @Override
-    public void renderDebugRect()
+    public void renderDebugRect(RenderOpQueue queue)
     {
-        RenderUtils.renderRectOutline(rect.x, rect.y, rect.width, rect.height, 1.0f, Color.ORANGE.getRGB());
-        RenderUtils.renderRect(pivotPosX - 1, pivotPosY - 1, 3, 3, Color.GREEN.getRGB());
         for (Element element: elements)
-            element.renderDebugRect();
+            element.renderDebugRect(queue);
+        queue.enqueue(new DebugRectOp(true, rect, pivotPosX, pivotPosY));
     }
 }

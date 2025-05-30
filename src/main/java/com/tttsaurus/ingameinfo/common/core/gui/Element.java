@@ -11,11 +11,10 @@ import com.tttsaurus.ingameinfo.common.core.gui.property.IStylePropertySyncTo;
 import com.tttsaurus.ingameinfo.common.core.gui.property.StylePropertyCallback;
 import com.tttsaurus.ingameinfo.common.core.gui.property.StyleProperty;
 import com.tttsaurus.ingameinfo.common.core.gui.render.BackgroundOp;
+import com.tttsaurus.ingameinfo.common.core.gui.render.DebugRectOp;
 import com.tttsaurus.ingameinfo.common.core.gui.render.RenderOpQueue;
 import com.tttsaurus.ingameinfo.common.core.gui.theme.ThemeConfig;
-import com.tttsaurus.ingameinfo.common.core.render.RenderUtils;
 import com.tttsaurus.ingameinfo.common.core.gui.registry.ElementRegistry;
-import java.awt.*;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -194,9 +193,8 @@ public abstract class Element
             setStyleProperty("backgroundStyle", themeConfig.element.backgroundStyle);
     }
 
-    public void renderDebugRect()
+    public void renderDebugRect(RenderOpQueue queue)
     {
-        RenderUtils.renderRectOutline(rect.x, rect.y, rect.width, rect.height, 1.0f, (new Color(241, 58, 30, 128)).getRGB());
-        RenderUtils.renderRect(pivotPosX - 1, pivotPosY - 1, 3, 3, Color.GREEN.getRGB());
+        queue.enqueue(new DebugRectOp(false, rect, pivotPosX, pivotPosY));
     }
 }

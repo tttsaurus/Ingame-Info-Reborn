@@ -49,9 +49,9 @@ public class MainGroup extends ElementGroup
     }
 
     @Override
-    public void renderDebugRect()
+    public void renderDebugRect(RenderOpQueue queue)
     {
         for (Element element: elements)
-            element.renderDebugRect();
+            element.renderDebugRect(queue);
     }
 }
