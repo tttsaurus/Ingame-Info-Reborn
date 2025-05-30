@@ -54,6 +54,9 @@ public final class ThemeConfigUpdater
     {
         config.backgroundStyles.roundedBox.cornerRadius = Math.max(0f, config.backgroundStyles.roundedBox.cornerRadius);
         config.backgroundStyles.roundedBoxWithOutline.cornerRadius = Math.max(0f, config.backgroundStyles.roundedBoxWithOutline.cornerRadius);
+        config.text.scale = Math.max(0f, config.text.scale);
+        config.slidingText.scale = Math.max(0f, config.slidingText.scale);
+        config.animText.scale = Math.max(0f, config.animText.scale);
         config.image.cornerRadius = Math.max(0f, config.image.cornerRadius);
         config.urlImage.cornerRadius = Math.max(0f, config.urlImage.cornerRadius);
     }

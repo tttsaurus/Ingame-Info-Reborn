@@ -109,11 +109,10 @@ public class Button extends AbstractButton
                 shadow));
     }
 
-    // todo: a stage to handle logic theme + applyThemeEarly
     @Override
-    public void loadTheme(ThemeConfig themeConfig)
+    public void applyLogicTheme(ThemeConfig themeConfig)
     {
-        super.loadTheme(themeConfig);
+        super.applyLogicTheme(themeConfig);
 
         if (defaultColor == 0)
             setStyleProperty("defaultColor", themeConfig.button.parsedDefaultColor);

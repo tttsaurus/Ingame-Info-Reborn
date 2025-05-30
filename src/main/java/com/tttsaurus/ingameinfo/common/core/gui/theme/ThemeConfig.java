@@ -96,6 +96,8 @@ public final class ThemeConfig
         @Comment("This will only be applied to Text with style property 'color' left empty.\n" +
                 "In the form of hex #rrggbb or #aarrggbb.")
         public String color = "#d2d2d2";
+        @Comment("This will only be applied to Text with style property 'scale' left empty.")
+        public float scale = 1f;
 
         public transient int parsedColor;
     }
@@ -106,6 +108,8 @@ public final class ThemeConfig
         @Comment("This will only be applied to SlidingText with style property 'color' left empty.\n" +
                 "In the form of hex #rrggbb or #aarrggbb.")
         public String color = "#d2d2d2";
+        @Comment("This will only be applied to SlidingText with style property 'scale' left empty.")
+        public float scale = 1f;
 
         public transient int parsedColor;
     }
@@ -116,6 +120,8 @@ public final class ThemeConfig
         @Comment("This will only be applied to AnimText with style property 'color' left empty.\n" +
                 "In the form of hex #rrggbb or #aarrggbb.")
         public String color = "#d2d2d2";
+        @Comment("This will only be applied to AnimText with style property 'scale' left empty.")
+        public float scale = 1f;
 
         public transient int parsedColor;
     }

@@ -15,8 +15,8 @@ public abstract class ComposeBlock
     private final ElementGroup root;
     private SnapshotTree prevSnapshot = null;
     private SnapshotTree currSnapshot = new SnapshotTree();
-    private final AtomicInteger sysKeyCounter = new AtomicInteger(0);
     private final ComposeValidator validator;
+    private final AtomicInteger sysKeyCounter = new AtomicInteger(0);
     private final AtomicBoolean abortThisFrame = new AtomicBoolean(false);
 
     private ThemeConfig themeConfig;
@@ -26,6 +26,15 @@ public abstract class ComposeBlock
         this.root = root;
         ComposeValidator.init();
         validator = ComposeValidator.getInstance();
+    }
+
+    public final void clear()
+    {
+        root.elements.clear();
+        prevSnapshot = null;
+        currSnapshot = new SnapshotTree();
+        sysKeyCounter.set(0);
+        abortThisFrame.set(false);
     }
 
     public final void update(ThemeConfig themeConfig)
@@ -69,8 +78,7 @@ public abstract class ComposeBlock
                 Element element = ElementRegistry.newElement(plan.newElementName);
                 if (element != null)
                 {
-                    // todo: move theme loading else where
-                    element.loadTheme(themeConfig);
+                    element.applyLogicTheme(themeConfig);
                     root.elements.add(element);
                     for (Map.Entry<String, Object> entry: plan.newStyleProperties.entrySet())
                         element.setStyleProperty(entry.getKey(), entry.getValue());

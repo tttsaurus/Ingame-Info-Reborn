@@ -44,10 +44,6 @@ public abstract class Element
     // vvm binding will inject callbacks to here
     @SuppressWarnings("all")
     private Map<String, IStylePropertySyncTo> syncToMap = new HashMap<>();
-
-    // theme reference
-    @SuppressWarnings("all")
-    protected ThemeConfig themeConfig = null;
     //</editor-fold>
 
     //<editor-fold desc="style properties">
@@ -192,10 +188,8 @@ public abstract class Element
     public boolean getNeedReCalc() { return needReCalc; }
     public void finishReCalc() { needReCalc = false; }
 
-    public void loadTheme(ThemeConfig themeConfig)
+    public void applyLogicTheme(ThemeConfig themeConfig)
     {
-        this.themeConfig = themeConfig;
-
         if (backgroundStyle.isEmpty())
             setStyleProperty("backgroundStyle", themeConfig.element.backgroundStyle);
     }

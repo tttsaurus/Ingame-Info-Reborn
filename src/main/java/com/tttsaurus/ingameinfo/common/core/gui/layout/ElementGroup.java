@@ -18,11 +18,11 @@ public abstract class ElementGroup extends Element
     }
 
     @Override
-    public void loadTheme(ThemeConfig themeConfig)
+    public void applyLogicTheme(ThemeConfig themeConfig)
     {
-        super.loadTheme(themeConfig);
+        super.applyLogicTheme(themeConfig);
         for (Element element: elements)
-            element.loadTheme(themeConfig);
+            element.applyLogicTheme(themeConfig);
     }
 
     @Override

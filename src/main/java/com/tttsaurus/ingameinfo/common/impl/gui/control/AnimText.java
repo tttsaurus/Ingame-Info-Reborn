@@ -8,6 +8,7 @@ import com.tttsaurus.ingameinfo.common.core.gui.property.CallbackInfo;
 import com.tttsaurus.ingameinfo.common.core.gui.property.StyleProperty;
 import com.tttsaurus.ingameinfo.common.core.gui.property.StylePropertyCallback;
 import com.tttsaurus.ingameinfo.common.core.gui.render.RenderOpQueue;
+import com.tttsaurus.ingameinfo.common.core.gui.theme.ThemeConfig;
 import com.tttsaurus.ingameinfo.common.core.render.RenderUtils;
 import com.tttsaurus.ingameinfo.common.impl.gui.render.AnimTextOp;
 import com.tttsaurus.ingameinfo.common.core.gui.property.wrapped.DoubleProperty;
@@ -80,7 +81,7 @@ public class AnimText extends Element
         requestReCalc();
     }
     @StyleProperty(setterCallbackPost = "setScaleCallback", setterCallbackPre = "scaleValidation")
-    public float scale = 1;
+    public float scale = 0;
 
     @StylePropertyCallback
     public void setColorCallback()
@@ -114,6 +115,15 @@ public class AnimText extends Element
             timer.set(0d);
         animDef.calcAnim(charInfos, timer, deltaTime);
         timer.set(timer.get() + deltaTime);
+    }
+
+    @Override
+    public void applyLogicTheme(ThemeConfig themeConfig)
+    {
+        super.applyLogicTheme(themeConfig);
+
+        if (scale == 0)
+            setStyleProperty("scale", themeConfig.animText.scale);
     }
 
     @Override

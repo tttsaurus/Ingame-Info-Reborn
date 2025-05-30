@@ -34,7 +34,7 @@ public class VvmBinding<TView extends View>
         if (CrtView.class.isAssignableFrom(viewClass))
             ((CrtView)view).runtimeMvvm = mvvmRegistryName;
 
-        GuiLayout guiLayout = InternalMethods.instance.View$init.invoke(view);
+        GuiLayout guiLayout = InternalMethods.instance.View$init.invoke(view, null);
         MainGroup mainGroup = InternalMethods.instance.GuiLayout$mainGroup$getter.invoke(guiLayout);
         InternalMethods.instance.View$mainGroup$setter.invoke(view, mainGroup);
 

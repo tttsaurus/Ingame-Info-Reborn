@@ -6,6 +6,7 @@ import com.tttsaurus.ingameinfo.common.core.gui.property.CallbackInfo;
 import com.tttsaurus.ingameinfo.common.core.gui.property.StyleProperty;
 import com.tttsaurus.ingameinfo.common.core.gui.property.StylePropertyCallback;
 import com.tttsaurus.ingameinfo.common.core.gui.render.RenderOpQueue;
+import com.tttsaurus.ingameinfo.common.core.gui.theme.ThemeConfig;
 import com.tttsaurus.ingameinfo.common.core.render.RenderUtils;
 import com.tttsaurus.ingameinfo.common.impl.gui.render.TextOp;
 
@@ -26,7 +27,7 @@ public class Text extends Element
         if (value < 0) callbackInfo.cancel = true;
     }
     @StyleProperty(setterCallbackPost = "requestReCalc", setterCallbackPre = "scaleValidation")
-    public float scale = 1;
+    public float scale = 0;
 
     @StyleProperty
     public int color;
@@ -39,6 +40,15 @@ public class Text extends Element
     {
         rect.width = RenderUtils.simulateTextWidth(text, scale);
         rect.height = RenderUtils.simulateTextHeight(scale);
+    }
+
+    @Override
+    public void applyLogicTheme(ThemeConfig themeConfig)
+    {
+        super.applyLogicTheme(themeConfig);
+
+        if (scale == 0)
+            setStyleProperty("scale", themeConfig.text.scale);
     }
 
     @Override

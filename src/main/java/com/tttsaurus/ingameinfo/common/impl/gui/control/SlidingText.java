@@ -5,6 +5,7 @@ import com.tttsaurus.ingameinfo.common.core.gui.property.CallbackInfo;
 import com.tttsaurus.ingameinfo.common.core.gui.property.StyleProperty;
 import com.tttsaurus.ingameinfo.common.core.gui.property.StylePropertyCallback;
 import com.tttsaurus.ingameinfo.common.core.gui.render.RenderOpQueue;
+import com.tttsaurus.ingameinfo.common.core.gui.theme.ThemeConfig;
 import com.tttsaurus.ingameinfo.common.core.render.RenderUtils;
 import com.tttsaurus.ingameinfo.common.core.gui.render.MaskEndOp;
 import com.tttsaurus.ingameinfo.common.core.gui.render.MaskStartOp;
@@ -69,13 +70,22 @@ public class SlidingText extends Sized
         requestReCalc();
     }
     @StyleProperty(setterCallbackPost = "setScaleCallback", setterCallbackPre = "nonNegativeFloatValidation")
-    public float scale = 1;
+    public float scale = 0;
 
     @StyleProperty
     public int color;
 
     @StyleProperty
     public boolean shadow;
+
+    @Override
+    public void applyLogicTheme(ThemeConfig themeConfig)
+    {
+        super.applyLogicTheme(themeConfig);
+
+        if (scale == 0)
+            setStyleProperty("scale", themeConfig.slidingText.scale);
+    }
 
     @Override
     public void onFixedUpdate(double deltaTime)

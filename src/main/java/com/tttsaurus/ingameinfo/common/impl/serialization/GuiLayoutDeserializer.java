@@ -3,6 +3,7 @@ package com.tttsaurus.ingameinfo.common.impl.serialization;
 import com.tttsaurus.ingameinfo.common.core.gui.Element;
 import com.tttsaurus.ingameinfo.common.core.gui.ElementProperty;
 import com.tttsaurus.ingameinfo.common.core.gui.GuiLayout;
+import com.tttsaurus.ingameinfo.common.core.gui.IgiGuiContainer;
 import com.tttsaurus.ingameinfo.common.core.gui.layout.ElementGroup;
 import com.tttsaurus.ingameinfo.common.core.gui.layout.Slot;
 import com.tttsaurus.ingameinfo.common.core.internal.InternalMethods;
@@ -12,14 +13,24 @@ import com.tttsaurus.ingameinfo.common.core.serialization.ixml.RawIxmlUtils;
 import com.tttsaurus.ingameinfo.common.core.serialization.json.RawJsonUtils;
 import com.tttsaurus.ingameinfo.common.core.gui.registry.ElementRegistry;
 import net.minecraft.util.Tuple;
+import javax.annotation.Nullable;
 import java.util.List;
 
 public class GuiLayoutDeserializer implements IDeserializer<GuiLayout>
 {
+    private final IgiGuiContainer container;
+
+    public GuiLayoutDeserializer(@Nullable IgiGuiContainer container)
+    {
+        this.container = container;
+    }
+
     @Override
     public GuiLayout deserialize(String raw)
     {
         GuiLayout guiLayout = InternalMethods.instance.GuiLayout$constructor.invoke();
+        if (container != null)
+            InternalMethods.instance.GuiLayout$igiGuiContainer$setter.invoke(guiLayout, container);
 
         if (raw.isEmpty()) return guiLayout;
 

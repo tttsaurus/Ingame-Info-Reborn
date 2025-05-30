@@ -6,6 +6,7 @@ import com.tttsaurus.ingameinfo.common.core.gui.theme.ThemeConfig;
 import com.tttsaurus.ingameinfo.common.core.internal.InternalMethods;
 import com.tttsaurus.ingameinfo.common.core.item.GhostableItem;
 import com.tttsaurus.ingameinfo.common.core.mvvm.binding.SlotAccessor;
+import com.tttsaurus.ingameinfo.common.core.mvvm.compose.ComposeBlock;
 import com.tttsaurus.ingameinfo.common.core.mvvm.viewmodel.ViewModel;
 import com.tttsaurus.ingameinfo.common.core.gui.layout.MainGroup;
 import com.tttsaurus.ingameinfo.common.core.render.RenderUtils;
@@ -60,8 +61,7 @@ public class IgiGuiContainer
         initFlag = true;
 
         themeConfig = ThemeRegistry.getTheme(themeName);
-
-        mainGroup.loadTheme(ThemeRegistry.getTheme(themeName));
+        mainGroup.applyLogicTheme(themeConfig);
 
         mainGroup.calcWidthHeight();
         mainGroup.calcRenderPos(mainGroup.rect);
@@ -88,7 +88,7 @@ public class IgiGuiContainer
         List<SlotAccessor> slotAccessors = InternalMethods.instance.ViewModel$slotAccessors$getter.invoke(viewModel);
         for (SlotAccessor slotAccessor: slotAccessors)
             if (slotAccessor.getComposeBlock() != null)
-                slotAccessor.getComposeBlock().update(ThemeRegistry.getTheme(themeName));
+                slotAccessor.getComposeBlock().update(themeConfig);
 
         viewModel.onFixedUpdate(deltaTime);
         mainGroup.onFixedUpdate(deltaTime);
@@ -119,13 +119,24 @@ public class IgiGuiContainer
         return queue;
     }
 
-    // can't refresh <Def> content
     // viewModel.start() may not work properly due to the lack of `undo` function
     // todo: state preserving hotswap
     public void refreshVvm()
     {
-        viewModel.refresh();
-        mainGroup.loadTheme(ThemeRegistry.getTheme(themeName));
+        viewModel.refresh(this);
+
+        themeConfig = ThemeRegistry.getTheme(themeName);
+        mainGroup.applyLogicTheme(themeConfig);
+
+        List<SlotAccessor> slotAccessors = InternalMethods.instance.ViewModel$slotAccessors$getter.invoke(viewModel);
+        for (SlotAccessor slotAccessor: slotAccessors)
+            if (slotAccessor.getComposeBlock() != null)
+            {
+                ComposeBlock compose = slotAccessor.getComposeBlock();
+                compose.clear();
+                compose.update(themeConfig);
+            }
+
         viewModel.start();
     }
 }

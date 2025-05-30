@@ -3,11 +3,13 @@ package com.tttsaurus.ingameinfo.common.core.mvvm.view;
 import com.tttsaurus.ingameinfo.common.core.file.FileUtils;
 import com.tttsaurus.ingameinfo.common.core.gui.Element;
 import com.tttsaurus.ingameinfo.common.core.gui.GuiLayout;
+import com.tttsaurus.ingameinfo.common.core.gui.IgiGuiContainer;
 import com.tttsaurus.ingameinfo.common.core.gui.layout.ElementGroup;
 import com.tttsaurus.ingameinfo.common.core.internal.InternalMethods;
 import com.tttsaurus.ingameinfo.common.core.serialization.ixml.RawIxmlUtils;
 import com.tttsaurus.ingameinfo.common.core.gui.layout.MainGroup;
 import com.tttsaurus.ingameinfo.common.impl.serialization.GuiLayoutDeserializer;
+import javax.annotation.Nullable;
 import java.io.File;
 import java.io.RandomAccessFile;
 import java.nio.charset.StandardCharsets;
@@ -18,6 +20,7 @@ import java.util.List;
 @SuppressWarnings("all")
 public abstract class View
 {
+    // injected by VvmBinding.init()
     // alias of IgiGuiContainer.mainGroup
     private MainGroup mainGroup = null;
 
@@ -42,11 +45,17 @@ public abstract class View
         return list;
     }
 
-    public final void refreshMainGroup()
+    public final void refresh(IgiGuiContainer container)
     {
         if (mainGroup == null) return;
-        GuiLayout guiLayout = init();
+
+        container.getHeldItemWhitelist().clear();
+        container.getHeldItemBlacklist().clear();
+
+        GuiLayout guiLayout = init(container);
         MainGroup mainGroup = InternalMethods.instance.GuiLayout$mainGroup$getter.invoke(guiLayout);
+
+        // doesnt change the alias relationship between IgiGuiContainer.mainGroup and View.mainGroup
         this.mainGroup.elements.clear();
         for (Element element: mainGroup.elements)
             this.mainGroup.add(element);
@@ -58,7 +67,7 @@ public abstract class View
     // and .ixml is the suffix
     public abstract String getIxmlFileName();
 
-    private final GuiLayout init()
+    private final GuiLayout init(@Nullable IgiGuiContainer container)
     {
         try
         {
@@ -85,7 +94,7 @@ public abstract class View
 
             file.close();
 
-            return (new GuiLayoutDeserializer()).deserialize(RawIxmlUtils.deleteComments(builder.toString()));
+            return (new GuiLayoutDeserializer(container)).deserialize(RawIxmlUtils.deleteComments(builder.toString()));
         }
         catch (Exception ignored) { return InternalMethods.instance.GuiLayout$constructor.invoke(); }
     }

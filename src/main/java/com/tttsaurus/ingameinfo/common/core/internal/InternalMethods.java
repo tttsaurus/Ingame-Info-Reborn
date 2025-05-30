@@ -47,9 +47,10 @@ public class InternalMethods
     public IAction_2Param<ViewModel, IFunc<Boolean>> ViewModel$isFocusedGetter$setter;
     public IAction_2Param<ReactiveCollection, ElementGroup> ReactiveCollection$group$setter;
     public IAction_2Param<SlotAccessor, ElementGroup> SlotAccessor$group$setter;
+    public IAction_2Param<GuiLayout, IgiGuiContainer> GuiLayout$igiGuiContainer$setter;
 
     public IFunc_2Param<GuiLayout, ViewModel, String> ViewModel$init;
-    public IFunc_1Param<GuiLayout, View> View$init;
+    public IFunc_2Param<GuiLayout, View, IgiGuiContainer> View$init;
 
     public InternalMethods()
     {
@@ -397,6 +398,26 @@ public class InternalMethods
             SlotAccessor$group$setter = null;
             InGameInfoReborn.logger.error("Reflection setup failed for SlotAccessor$group$setter: " + exception.getMessage());
         }
+
+        try
+        {
+            Field field = GuiLayout.class.getDeclaredField("igiGuiContainer");
+            field.setAccessible(true);
+            MethodHandle handle = lookup.unreflectSetter(field);
+            GuiLayout$igiGuiContainer$setter = (arg0, arg1) ->
+            {
+                try
+                {
+                    handle.invoke(arg0, arg1);
+                }
+                catch (Throwable ignored) { }
+            };
+        }
+        catch (Exception exception)
+        {
+            GuiLayout$igiGuiContainer$setter = null;
+            InGameInfoReborn.logger.error("Reflection setup failed for GuiLayout$igiGuiContainer$setter: " + exception.getMessage());
+        }
         //</editor-fold>
 
         //<editor-fold desc="methods">
@@ -422,14 +443,14 @@ public class InternalMethods
 
         try
         {
-            Method method = View.class.getDeclaredMethod("init", new Class[0]);
+            Method method = View.class.getDeclaredMethod("init", IgiGuiContainer.class);
             method.setAccessible(true);
             MethodHandle handle = lookup.unreflect(method);
-            View$init = (arg0) ->
+            View$init = (arg0, arg1) ->
             {
                 try
                 {
-                    return (GuiLayout)handle.invoke(arg0);
+                    return (GuiLayout)handle.invoke(arg0, arg1);
                 }
                 catch (Throwable ignored) { return null; }
             };

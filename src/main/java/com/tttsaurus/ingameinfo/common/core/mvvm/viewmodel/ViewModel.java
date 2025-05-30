@@ -3,6 +3,7 @@ package com.tttsaurus.ingameinfo.common.core.mvvm.viewmodel;
 import com.tttsaurus.ingameinfo.common.core.gui.GuiLayout;
 import com.tttsaurus.ingameinfo.common.core.function.IAction_1Param;
 import com.tttsaurus.ingameinfo.common.core.function.IFunc;
+import com.tttsaurus.ingameinfo.common.core.gui.IgiGuiContainer;
 import com.tttsaurus.ingameinfo.common.core.internal.InternalMethods;
 import com.tttsaurus.ingameinfo.common.core.mvvm.binding.*;
 import com.tttsaurus.ingameinfo.common.core.mvvm.view.View;
@@ -83,10 +84,10 @@ public abstract class ViewModel<T extends View>
         return guiLayout;
     }
 
-    public final void refresh()
+    public final void refresh(IgiGuiContainer container)
     {
         if (binding.view == null) return;
-        binding.view.refreshMainGroup();
+        binding.view.refresh(container);
 
         Map<Reactive, IReactiveObjectGetter> reactiveObjects = MvvmRegistry.getRegisteredReactiveObjects(mvvmRegistryName);
         for (Map.Entry<Reactive, IReactiveObjectGetter> entry: reactiveObjects.entrySet())
