@@ -4,8 +4,6 @@ import com.tttsaurus.ingameinfo.common.core.gui.Element;
 import com.tttsaurus.ingameinfo.common.core.gui.render.DebugRectOp;
 import com.tttsaurus.ingameinfo.common.core.gui.render.RenderOpQueue;
 import com.tttsaurus.ingameinfo.common.core.gui.theme.ThemeConfig;
-import com.tttsaurus.ingameinfo.common.core.render.RenderUtils;
-import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 

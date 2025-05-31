@@ -15,6 +15,10 @@ import com.tttsaurus.ingameinfo.common.core.gui.render.DebugRectOp;
 import com.tttsaurus.ingameinfo.common.core.gui.render.RenderOpQueue;
 import com.tttsaurus.ingameinfo.common.core.gui.theme.ThemeConfig;
 import com.tttsaurus.ingameinfo.common.core.gui.registry.ElementRegistry;
+import com.tttsaurus.ingameinfo.common.core.mvvm.binding.Reactive;
+import com.tttsaurus.ingameinfo.common.core.mvvm.binding.ReactiveObject;
+import com.tttsaurus.ingameinfo.common.core.mvvm.binding.VvmBinding;
+import com.tttsaurus.ingameinfo.common.core.gui.render.IRenderOp;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -22,25 +26,59 @@ import java.util.Map;
 public abstract class Element
 {
     //<editor-fold desc="runtime variables">
+    /**
+     * <code>cachedWidth</code> stores the width of this element when <code>enabled</code> is set to false.
+     */
+    public float cachedWidth = 0f;
 
-    // stores width & height when `enabled` is false
-    public float cachedWidth = 0f, cachedHeight = 0f;
+    /**
+     * <code>cachedHeight</code> stores the height of this element when <code>enabled</code> is set to false.
+     */
+    public float cachedHeight = 0f;
 
-    // stores padding when `enabled` is false
+    /**
+     * <code>cachedPadding</code> stores the padding of this element when <code>enabled</code> is set to false.
+     */
     public Padding cachedPadding = new Padding(0f, 0f, 0f, 0f);
 
-    // stores the actual render pos (top-left) and size
+    /**
+     * <code>rect</code> stores the actual render position (upper-left corner), <code>x</code> <code>y</code>, and <code>width</code> <code>height</code> of this element.
+     * They are under Minecraft's scaled resolution coordinate system.
+     */
     public Rect rect = new Rect(0f, 0f, 0f, 0f);
 
-    // stores the actual render pos before applying the pivot
-    public float pivotPosX = 0f, pivotPosY = 0f;
+    /**
+     * <code>pivotPosX</code> stores the pivot position x of this element.
+     * Pivot position will be used to calculate the actual render position (upper-left corner) during {@link Element#calcRenderPos(Rect)}.
+     */
+    public float pivotPosX = 0f;
 
-    // stores the rect of the parent group
+    /**
+     * <code>pivotPosY</code> stores the pivot position y of this element.
+     * Pivot position will be used to calculate the actual render position (upper-left corner) during {@link Element#calcRenderPos(Rect)}.
+     */
+    public float pivotPosY = 0f;
+
+    /**
+     * <code>contextRect</code> stores the position and size of its parent, which is a {@link com.tttsaurus.ingameinfo.common.core.gui.layout.ElementGroup}.
+     */
     public Rect contextRect = new Rect(0f, 0f, 0f, 0f);
 
+    /**
+     * This is the indicator of whether the layout of this element needs to be calculated again.
+     * Set <code>needReCalc</code> by {@link Element#requestReCalc()}.
+     */
     private boolean needReCalc = false;
 
-    // vvm binding will inject callbacks to here
+    /**
+     * <code>syncToMap</code> stores callbacks of setting style properties of this element.
+     * Those callbacks sync the style properties from <code>View</code> (which is this element) to <code>ViewModel</code>.
+     * Those callbacks will be injected by {@link VvmBinding#bindReactiveObject(Reactive, ReactiveObject)}.
+     * {@link Element#setStyleProperty(String, Object)} mostly relies on <code>syncToMap</code>, and <code>syncToMap</code> will be ready at an early stage.
+     * As a result, you can safely call {@link Element#setStyleProperty(String, Object)} to set style properties with syncing on.
+     *
+     * @see Element#setStyleProperty(String, Object)
+     */
     @SuppressWarnings("all")
     private Map<String, IStylePropertySyncTo> syncToMap = new HashMap<>();
     //</editor-fold>
@@ -103,11 +141,6 @@ public abstract class Element
     public Pivot pivot = Pivot.TOP_LEFT;
 
     @StylePropertyCallback
-    public void paddingValidation(Padding value, CallbackInfo callbackInfo)
-    {
-        if (value == null) callbackInfo.cancel = true;
-    }
-    @StylePropertyCallback
     public void setPaddingCallbackPre(Padding value, CallbackInfo callbackInfo)
     {
         if (value == null)
@@ -137,6 +170,13 @@ public abstract class Element
     public boolean drawBackground = false;
     //</editor-fold>
 
+    /**
+     * The most safe way to set style properties since this method guarantees the
+     * callbacks and syncing between <code>View</code> and <code>ViewModel</code> to be handled correctly.
+     *
+     * @param propertyName The name of the style property.
+     * @param value The value to be set.
+     */
     public final void setStyleProperty(String propertyName, Object value)
     {
         IAction_1Param<Object> action = ElementRegistry.getStylePropertySetterFullCallback(this, propertyName);
@@ -148,6 +188,10 @@ public abstract class Element
         }
     }
 
+    /**
+     * Reset {@link Element#rect}, {@link Element#contextRect}, {@link Element#pivotPosX} and {@link Element#pivotPosY}.
+     * This method will be called before re-calculate the layout.
+     */
     public void resetRenderInfo()
     {
         rect.set(0, 0, 0, 0);
@@ -156,8 +200,15 @@ public abstract class Element
         pivotPosY = 0;
     }
 
-    // this requires calcWidthHeight() to be called first
-    // uses pivot to calculate the actual render pos
+    /**
+     * {@link Element#calcWidthHeight()} will be called before calling this method, so
+     * <code>width</code> and <code>height</code> from {@link Element#rect} will be ready during this method.
+     * This method by itself uses pivot position to calculate the actual render position, which are <code>x</code> and <code>y</code> from {@link Element#rect}.
+     * You should override this method if you want to further manipulate the render position.
+     *
+     * @see Element#calcWidthHeight()
+     * @param contextRect The position and size of its parent.
+     */
     public void calcRenderPos(Rect contextRect)
     {
         this.contextRect.set(contextRect.x, contextRect.y, contextRect.width, contextRect.height);
@@ -169,30 +220,76 @@ public abstract class Element
         rect.y -= rect.height * pivot.horizontal;
     }
 
-    // update rect.width and rect.height here
-    // don't touch rect.x and rect.y
-    // they are handled in calcRenderPos()
+    /**
+     * You should set <code>width</code> and <code>height</code> from {@link Element#rect} in this method.
+     * Must not touch <code>x</code> and <code>y</code> from {@link Element#rect} during this method.
+     * 
+     * @see Element#calcRenderPos(Rect)
+     */
     public abstract void calcWidthHeight();
 
+    /**
+     * Override to handle animation calculation and stuff here.
+     *
+     * @see IgiGuiContainer#onFixedUpdate(double)
+     * @param deltaTime The time between the last fixed update and this one.
+     */
     public void onFixedUpdate(double deltaTime)
     {
 
     }
+
+    /**
+     * Override to enqueue {@link IRenderOp} to {@link RenderOpQueue}.
+     * All rendering logic are handled in {@link IRenderOp}.
+     * Must not render stuff explicitly in this method.
+     *
+     * @see IRenderOp
+     * @see IgiGuiContainer#onRenderUpdate(boolean)
+     * @param queue The queue that stores all the render commands of this {@link IgiGuiContainer}.
+     * @param focused Whether this {@link IgiGuiContainer} is focused and stack at the top.
+     */
     public void onRenderUpdate(RenderOpQueue queue, boolean focused)
     {
         if (drawBackground)
             queue.enqueue(new BackgroundOp(backgroundStyle, rect));
     }
 
+    /**
+     * Whether the layout of this element needs to be re-calculated.
+     *
+     * @return {@link Element#needReCalc}
+     */
     public boolean getNeedReCalc() { return needReCalc; }
+
+    /**
+     * Set {@link Element#needReCalc} to <code>true</code>.
+     */
     public void finishReCalc() { needReCalc = false; }
 
+    /**
+     * {@link ThemeConfig} should be split into Logic Theme and Visual Theme
+     * where Visual Theme is handled during {@link Element#onRenderUpdate(RenderOpQueue, boolean)} inside {@link IRenderOp}.
+     * Logic Theme affects how the layout is being calculated and should be applied at an early stage which is this method.
+     * Only override this method to apply Logic Theme (probably using {@link Element#setStyleProperty(String, Object)}.)
+     *
+     * @see Element#setStyleProperty(String, Object)
+     * @param themeConfig The GUI theme.
+     */
     public void applyLogicTheme(ThemeConfig themeConfig)
     {
         if (backgroundStyle.isEmpty())
             setStyleProperty("backgroundStyle", themeConfig.element.backgroundStyle);
     }
 
+    /**
+     * Similar to {@link Element#onRenderUpdate(RenderOpQueue, boolean)}, but
+     * this method will only be called when {@link IgiGuiContainer#debug} equals <code>true</code>.
+     *
+     * @see Element#onRenderUpdate(RenderOpQueue, boolean)
+     * @see IgiGuiContainer#debug
+     * @param queue The queue that stores all the render commands of this {@link IgiGuiContainer}.
+     */
     public void renderDebugRect(RenderOpQueue queue)
     {
         queue.enqueue(new DebugRectOp(false, rect, pivotPosX, pivotPosY));
