@@ -1,6 +1,6 @@
 package com.tttsaurus.ingameinfo.common.core.animation.text;
 
-import com.tttsaurus.ingameinfo.common.core.gui.property.wrapped.DoubleProperty;
+import com.tttsaurus.ingameinfo.common.core.gui.property.style.wrapped.DoubleProperty;
 
 public interface ITextAnimDef
 {

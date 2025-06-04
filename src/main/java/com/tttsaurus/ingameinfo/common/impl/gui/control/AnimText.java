@@ -4,14 +4,14 @@ import com.tttsaurus.ingameinfo.common.core.animation.text.CharInfo;
 import com.tttsaurus.ingameinfo.common.core.animation.text.ITextAnimDef;
 import com.tttsaurus.ingameinfo.common.core.gui.Element;
 import com.tttsaurus.ingameinfo.common.core.gui.registry.RegisterElement;
-import com.tttsaurus.ingameinfo.common.core.gui.property.CallbackInfo;
-import com.tttsaurus.ingameinfo.common.core.gui.property.StyleProperty;
-import com.tttsaurus.ingameinfo.common.core.gui.property.StylePropertyCallback;
+import com.tttsaurus.ingameinfo.common.core.gui.property.style.CallbackInfo;
+import com.tttsaurus.ingameinfo.common.core.gui.property.style.StyleProperty;
+import com.tttsaurus.ingameinfo.common.core.gui.property.style.StylePropertyCallback;
 import com.tttsaurus.ingameinfo.common.core.gui.render.RenderOpQueue;
 import com.tttsaurus.ingameinfo.common.core.gui.theme.ThemeConfig;
 import com.tttsaurus.ingameinfo.common.core.render.RenderUtils;
 import com.tttsaurus.ingameinfo.common.impl.gui.render.AnimTextOp;
-import com.tttsaurus.ingameinfo.common.core.gui.property.wrapped.DoubleProperty;
+import com.tttsaurus.ingameinfo.common.core.gui.property.style.wrapped.DoubleProperty;
 import java.util.Arrays;
 
 @RegisterElement

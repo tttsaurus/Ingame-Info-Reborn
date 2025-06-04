@@ -2,8 +2,8 @@ package com.tttsaurus.ingameinfo.common.core.gui.registry;
 
 import com.tttsaurus.ingameinfo.InGameInfoReborn;
 import com.tttsaurus.ingameinfo.common.core.gui.Element;
-import com.tttsaurus.ingameinfo.common.core.gui.property.*;
-import com.tttsaurus.ingameinfo.common.core.gui.property.wrapped.IWrappedStyleProperty;
+import com.tttsaurus.ingameinfo.common.core.gui.property.style.*;
+import com.tttsaurus.ingameinfo.common.core.gui.property.style.wrapped.WrappedStyleProperty;
 import com.tttsaurus.ingameinfo.common.core.reflection.TypeUtils;
 import com.tttsaurus.ingameinfo.common.core.serialization.Deserializer;
 import com.tttsaurus.ingameinfo.common.core.serialization.IDeserializer;
@@ -66,14 +66,14 @@ public final class RegistryUtils
                 //<editor-fold desc="setter">
                 try
                 {
-                    if (IWrappedStyleProperty.class.isAssignableFrom(fieldClass))
+                    if (WrappedStyleProperty.class.isAssignableFrom(fieldClass))
                     {
                         MethodHandle getter = lookup.findGetter(clazz, fieldName, fieldClass);
                         wrappedSetter = (target, value) ->
                         {
                             try
                             {
-                                IWrappedStyleProperty fieldValue = (IWrappedStyleProperty)getter.invoke(target);
+                                WrappedStyleProperty fieldValue = (WrappedStyleProperty)getter.invoke(target);
                                 fieldValue.set(value);
                             }
                             catch (Throwable ignored) { }
@@ -118,7 +118,7 @@ public final class RegistryUtils
                 boolean isWrappedClassPrimitive = false;
                 Class<?> wrappedClass = null;
 
-                if (IWrappedStyleProperty.class.isAssignableFrom(fieldClass))
+                if (WrappedStyleProperty.class.isAssignableFrom(fieldClass))
                 {
                     hasWrappedClass = true;
                     wrappedClass = (Class<?>)((ParameterizedType)fieldClass.getGenericSuperclass()).getActualTypeArguments()[0];

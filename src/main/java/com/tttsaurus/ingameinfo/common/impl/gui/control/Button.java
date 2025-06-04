@@ -5,9 +5,9 @@ import com.tttsaurus.ingameinfo.common.core.gui.delegate.button.IMouseLeaveButto
 import com.tttsaurus.ingameinfo.common.core.gui.delegate.button.IMousePressButton;
 import com.tttsaurus.ingameinfo.common.core.gui.delegate.button.IMouseReleaseButton;
 import com.tttsaurus.ingameinfo.common.core.gui.registry.RegisterElement;
-import com.tttsaurus.ingameinfo.common.core.gui.property.CallbackInfo;
-import com.tttsaurus.ingameinfo.common.core.gui.property.StyleProperty;
-import com.tttsaurus.ingameinfo.common.core.gui.property.StylePropertyCallback;
+import com.tttsaurus.ingameinfo.common.core.gui.property.style.CallbackInfo;
+import com.tttsaurus.ingameinfo.common.core.gui.property.style.StyleProperty;
+import com.tttsaurus.ingameinfo.common.core.gui.property.style.StylePropertyCallback;
 import com.tttsaurus.ingameinfo.common.core.gui.render.RenderOpQueue;
 import com.tttsaurus.ingameinfo.common.core.gui.theme.ThemeConfig;
 import com.tttsaurus.ingameinfo.common.core.render.RenderUtils;

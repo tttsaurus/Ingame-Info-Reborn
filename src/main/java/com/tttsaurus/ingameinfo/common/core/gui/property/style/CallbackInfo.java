@@ -1,4 +1,4 @@
-package com.tttsaurus.ingameinfo.common.core.gui.property;
+package com.tttsaurus.ingameinfo.common.core.gui.property.style;
 
 public class CallbackInfo
 {

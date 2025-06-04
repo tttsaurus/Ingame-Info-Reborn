@@ -5,7 +5,7 @@ import com.tttsaurus.ingameinfo.common.core.gui.render.RenderOpQueue;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.ScaledResolution;
 
-public class MainGroup extends ElementGroup
+public final class MainGroup extends ElementGroup
 {
     public MainGroup()
     {

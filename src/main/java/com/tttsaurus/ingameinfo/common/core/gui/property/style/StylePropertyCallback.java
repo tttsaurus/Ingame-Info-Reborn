@@ -1,4 +1,4 @@
-package com.tttsaurus.ingameinfo.common.core.gui.property;
+package com.tttsaurus.ingameinfo.common.core.gui.property.style;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

@@ -7,7 +7,7 @@ import com.tttsaurus.ingameinfo.common.core.gui.GuiLayout;
 import com.tttsaurus.ingameinfo.common.core.gui.GuiLifecycleProvider;
 import com.tttsaurus.ingameinfo.common.core.gui.IgiGuiContainer;
 import com.tttsaurus.ingameinfo.common.core.gui.layout.ElementGroup;
-import com.tttsaurus.ingameinfo.common.core.gui.property.IStylePropertySyncTo;
+import com.tttsaurus.ingameinfo.common.core.gui.property.style.IStylePropertySyncTo;
 import com.tttsaurus.ingameinfo.common.core.mvvm.binding.IReactiveCallback;
 import com.tttsaurus.ingameinfo.common.core.mvvm.binding.ReactiveCollection;
 import com.tttsaurus.ingameinfo.common.core.mvvm.binding.ReactiveObject;

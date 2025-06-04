@@ -1,4 +1,4 @@
-package com.tttsaurus.ingameinfo.common.core.gui.property;
+package com.tttsaurus.ingameinfo.common.core.gui.property.style;
 
 import com.tttsaurus.ingameinfo.common.core.gui.Element;
 

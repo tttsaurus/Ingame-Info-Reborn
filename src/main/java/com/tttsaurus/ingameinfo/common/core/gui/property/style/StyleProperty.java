@@ -1,4 +1,4 @@
-package com.tttsaurus.ingameinfo.common.core.gui.property;
+package com.tttsaurus.ingameinfo.common.core.gui.property.style;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -27,11 +27,13 @@ public @interface StyleProperty
      * Fill the style property setter's pre callback method name here.
      * The pre callback method signature can be
      * <pre><code>
-     *     public void funcName(StylePropertyType arg0) { }
+     *     // where T is the type of that style property
+     *     public void funcName(T arg0) { }
      * </code></pre>
      * or
      * <pre><code>
-     *     public void funcName(StylePropertyType arg0, CallbackInfo arg1) { }
+     *     // where T is the type of that style property
+     *     public void funcName(T arg0, CallbackInfo arg1) { }
      * </code></pre>
      * You can abort the setting process, which is denying a value to be set, by using {@link CallbackInfo},
      * and this is why pre callback is special. You can use pre callback to do value validation.
@@ -46,7 +48,8 @@ public @interface StyleProperty
      * Fill the style property setter's post callback method name here.
      * The post callback method signature must be
      * <pre><code>
-     *     public void funcName(StylePropertyType arg0) { }
+     *     // where T is the type of that style property
+     *     public void funcName(T arg0) { }
      * </code></pre>
      * Post callbacks happen when the value is already being set.
      *

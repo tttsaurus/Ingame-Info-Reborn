@@ -4,7 +4,7 @@ import com.tttsaurus.ingameinfo.common.core.gui.Element;
 import com.tttsaurus.ingameinfo.common.core.gui.registry.RegisterElement;
 
 @RegisterElement
-public class Slot extends ElementGroup
+public final class Slot extends ElementGroup
 {
     // width and height = 0, which is just a slot
 

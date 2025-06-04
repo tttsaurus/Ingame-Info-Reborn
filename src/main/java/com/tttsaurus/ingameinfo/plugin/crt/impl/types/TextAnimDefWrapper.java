@@ -2,7 +2,7 @@ package com.tttsaurus.ingameinfo.plugin.crt.impl.types;
 
 import com.tttsaurus.ingameinfo.common.core.animation.text.CharInfo;
 import com.tttsaurus.ingameinfo.common.core.animation.text.ITextAnimDef;
-import com.tttsaurus.ingameinfo.common.core.gui.property.wrapped.DoubleProperty;
+import com.tttsaurus.ingameinfo.common.core.gui.property.style.wrapped.DoubleProperty;
 import crafttweaker.annotations.ZenRegister;
 import stanhebben.zenscript.annotations.ZenClass;
 import stanhebben.zenscript.annotations.ZenMethod;
