@@ -2,6 +2,9 @@ package com.tttsaurus.ingameinfo.common.core.gui.registry;
 
 import com.tttsaurus.ingameinfo.InGameInfoReborn;
 import com.tttsaurus.ingameinfo.common.core.gui.Element;
+import com.tttsaurus.ingameinfo.common.core.gui.property.lerp.ILerpablePropertyGetter;
+import com.tttsaurus.ingameinfo.common.core.gui.property.lerp.LerpTarget;
+import com.tttsaurus.ingameinfo.common.core.gui.property.lerp.LerpableProperty;
 import com.tttsaurus.ingameinfo.common.core.gui.property.style.*;
 import com.tttsaurus.ingameinfo.common.core.gui.property.style.wrapped.WrappedStyleProperty;
 import com.tttsaurus.ingameinfo.common.core.reflection.TypeUtils;
@@ -18,6 +21,8 @@ import java.util.*;
 @SuppressWarnings("all")
 public final class RegistryUtils
 {
+    private static MethodHandles.Lookup lookup = MethodHandles.lookup();
+
     public static Map<String, Class<? extends Element>> handleRegisteredElements(Map<Class<? extends Element>, RegisterElement> elementAnnotations)
     {
         Map<String, Class<? extends Element>> annotatedClasses = new HashMap<>();
@@ -56,7 +61,6 @@ public final class RegistryUtils
             if (field.isAnnotationPresent(StyleProperty.class))
             {
                 StyleProperty styleProperty = field.getAnnotation(StyleProperty.class);
-                MethodHandles.Lookup lookup = MethodHandles.lookup();
 
                 Class<?> fieldClass = field.getType();
                 String fieldName = field.getName();
@@ -287,5 +291,34 @@ public final class RegistryUtils
             }
 
         return setters;
+    }
+
+    public static Map<ILerpablePropertyGetter, LerpTarget> handleLerpableProperties(Class<? extends Element> clazz)
+    {
+        Map<ILerpablePropertyGetter, LerpTarget> getters = new HashMap<>();
+
+        for (Field field : clazz.getDeclaredFields())
+            if (field.isAnnotationPresent(LerpTarget.class) && LerpableProperty.class.isAssignableFrom(field.getType()))
+            {
+                LerpTarget lerpTarget = field.getAnnotation(LerpTarget.class);
+
+                try
+                {
+                    field.setAccessible(true);
+                    MethodHandle getter = lookup.unreflectGetter(field);
+                    ILerpablePropertyGetter wrappedGetter = (target) ->
+                    {
+                        try
+                        {
+                            return (LerpableProperty<?>)getter.invoke(target);
+                        }
+                        catch (Throwable ignored) { return null; }
+                    };
+                    getters.put(wrappedGetter, lerpTarget);
+                }
+                catch (Exception ignored) { }
+            }
+
+        return getters;
     }
 }

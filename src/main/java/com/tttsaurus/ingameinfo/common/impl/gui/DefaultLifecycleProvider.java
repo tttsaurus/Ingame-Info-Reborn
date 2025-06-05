@@ -36,6 +36,7 @@ public final class DefaultLifecycleProvider extends GuiLifecycleProvider
 {
     //<editor-fold desc="fixed update timing variables">
     // units are all in second
+    private final StopWatch stopwatch_FixedUpdate = new StopWatch();
     private int estimatedFps_FixedUpdate = 0;
     private double deltaTime_FixedUpdate = 0d;
     private double excessTime_FixedUpdate = 0d;
@@ -43,10 +44,12 @@ public final class DefaultLifecycleProvider extends GuiLifecycleProvider
 
     //<editor-fold desc="render update timing variables">
     // units are all in second
+    private final StopWatch stopwatch_RenderUpdate = new StopWatch();
     private int estimatedFps_RenderUpdate = 0;
     private double excessTime_RenderUpdate = 0d;
     private int estimatedUnlimitedFps = 1;
     private float estimatedFboRefreshRate = 0f;
+    private float renderUpdateAlpha = 0f;
     //</editor-fold>
 
     //<editor-fold desc="fbo variables">
@@ -560,6 +563,12 @@ public final class DefaultLifecycleProvider extends GuiLifecycleProvider
     }
 
     @Override
+    public float getRenderLerpAlpha()
+    {
+        return renderUpdateAlpha;
+    }
+
+    @Override
     protected void updateInternal()
     {
         //<editor-fold desc="fixed update timing">
@@ -596,7 +605,7 @@ public final class DefaultLifecycleProvider extends GuiLifecycleProvider
 
             // unit: second
             currentTime = stopwatch_RenderUpdate.getNanoTime() / 1.0E9d;
-            estimatedFboRefreshRate = (Math.min(((float) estimatedFps_RenderUpdate) / ((float)estimatedUnlimitedFps), 1f) + estimatedFboRefreshRate) / 2f;
+            estimatedFboRefreshRate = (Math.min(((float)estimatedFps_RenderUpdate) / ((float)estimatedUnlimitedFps), 1f) + estimatedFboRefreshRate) / 2f;
             double lastSplitTime = stopwatch_RenderUpdate.getSplitNanoTime() / 1.0E9d;
             stopwatch_RenderUpdate.split();
             if (currentTime - lastSplitTime > 0d)
@@ -612,10 +621,24 @@ public final class DefaultLifecycleProvider extends GuiLifecycleProvider
 
                 refreshFbo = true;
 
+                double fixedUpdateTime = stopwatch_FixedUpdate.getNanoTime() / 1.0E9d;
+                if (fixedUpdateTime + excessTime_FixedUpdate >= timePerFrame_FixedUpdate)
+                    renderUpdateAlpha = 1f;
+                else
+                    renderUpdateAlpha = (float)((fixedUpdateTime + excessTime_FixedUpdate) / timePerFrame_FixedUpdate);
+
                 excessTime_RenderUpdate = currentTime + excessTime_RenderUpdate - timePerFrame_RenderUpdate;
             }
             if (excessTime_RenderUpdate >= timePerFrame_RenderUpdate)
                 excessTime_RenderUpdate %= timePerFrame_RenderUpdate;
+        }
+        else
+        {
+            double fixedUpdateTime = stopwatch_FixedUpdate.getNanoTime() / 1.0E9d;
+            if (fixedUpdateTime + excessTime_FixedUpdate >= timePerFrame_FixedUpdate)
+                renderUpdateAlpha = 1f;
+            else
+                renderUpdateAlpha = (float)((fixedUpdateTime + excessTime_FixedUpdate) / timePerFrame_FixedUpdate);
         }
         //</editor-fold>
 

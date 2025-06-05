@@ -16,7 +16,6 @@ import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.FMLCommonHandler;
-import org.apache.commons.lang3.time.StopWatch;
 import org.lwjgl.opengl.Display;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
@@ -133,7 +132,6 @@ public abstract class GuiLifecycleProvider
         maxFps_FixedUpdate = fps;
         timePerFrame_FixedUpdate = 1d / maxFps_FixedUpdate;
     }
-    protected final StopWatch stopwatch_FixedUpdate = new StopWatch();
     //</editor-fold>
 
     protected final void definedFixedUpdate(double deltaTime)
@@ -151,7 +149,6 @@ public abstract class GuiLifecycleProvider
         maxFps_RenderUpdate = fps;
         timePerFrame_RenderUpdate = 1d / maxFps_RenderUpdate;
     }
-    protected final StopWatch stopwatch_RenderUpdate = new StopWatch();
     //</editor-fold>
 
     protected final void definedRenderUpdate()
@@ -203,6 +200,7 @@ public abstract class GuiLifecycleProvider
 
                 RenderContext context = new RenderContext(
                         container.getThemeConfig(),
+                        getRenderLerpAlpha(),
                         !isUsingFramebuffer() || isUsingMultisampleFramebuffer(),
                         !isUsingFramebuffer() || isUsingMultisampleFramebuffer());
 
@@ -252,4 +250,6 @@ public abstract class GuiLifecycleProvider
         });
         return dummyGui;
     }
+
+    public abstract float getRenderLerpAlpha();
 }

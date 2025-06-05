@@ -4,6 +4,8 @@ import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import com.tttsaurus.ingameinfo.common.core.gui.Element;
 import com.tttsaurus.ingameinfo.common.core.function.IAction_1Param;
+import com.tttsaurus.ingameinfo.common.core.gui.property.lerp.ILerpablePropertyGetter;
+import com.tttsaurus.ingameinfo.common.core.gui.property.lerp.LerpTarget;
 import com.tttsaurus.ingameinfo.common.core.gui.property.style.*;
 import com.tttsaurus.ingameinfo.common.core.serialization.IDeserializer;
 import javax.annotation.Nonnull;
@@ -42,7 +44,7 @@ public final class ElementRegistry
     }
 
     // not frequently used
-    //<editor-fold desc="getters">
+    //<editor-fold desc="style property getters">
     @Nullable
     public static IDeserializer<?> getStylePropertyDeserializer(IStylePropertySetter setter)
     {
@@ -116,7 +118,7 @@ public final class ElementRegistry
         };
     }
 
-    //<editor-fold desc="map getters">
+    //<editor-fold desc="style property map getters">
     public static ImmutableMap<String, Map<String, IStylePropertySetter>> getStylePropertySetters() { return ImmutableMap.copyOf(stylePropertySetters); }
     public static ImmutableMap<IStylePropertySetter, IDeserializer<?>> getStylePropertyDeserializers() { return ImmutableMap.copyOf(stylePropertyDeserializers); }
     public static ImmutableMap<IStylePropertySetter, IStylePropertyCallbackPre> getStylePropertySetterCallbacksPre() { return ImmutableMap.copyOf(stylePropertySetterCallbacksPre); }
@@ -136,6 +138,24 @@ public final class ElementRegistry
                     list.add(clazz);
         }
         return list;
+    }
+
+    // key: element class name (not the simple name)
+    private static final Map<String, Map<ILerpablePropertyGetter, LerpTarget>> lerpablePropertyGetters = new HashMap<>();
+
+    public static List<ILerpablePropertyGetter> getLerpablePropertyGetters(Class<? extends Element> clazz)
+    {
+        Map<ILerpablePropertyGetter, LerpTarget> map = lerpablePropertyGetters.get(clazz.getName());
+        if (map == null) return new ArrayList<>();
+        return new ArrayList<>(map.keySet());
+    }
+
+    @Nullable
+    public static LerpTarget getLerpTarget(Class<? extends Element> clazz, ILerpablePropertyGetter getter)
+    {
+        Map<ILerpablePropertyGetter, LerpTarget> map = lerpablePropertyGetters.get(clazz.getName());
+        if (map == null) return null;
+        return map.get(getter);
     }
 
     public static void register()
@@ -160,5 +180,10 @@ public final class ElementRegistry
                     stylePropertySetterCallbacksPost,
                     stylePropertyClasses,
                     stylePropertyGetters));
+
+        lerpablePropertyGetters.clear();
+
+        for (Class<? extends Element> clazz: registeredElements.values())
+            lerpablePropertyGetters.put(clazz.getName(), RegistryUtils.handleLerpableProperties(clazz));
     }
 }
