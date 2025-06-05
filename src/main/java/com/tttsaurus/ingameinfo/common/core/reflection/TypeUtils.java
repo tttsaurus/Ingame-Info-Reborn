@@ -1,5 +1,7 @@
 package com.tttsaurus.ingameinfo.common.core.reflection;
 
+import javax.annotation.Nullable;
+
 public final class TypeUtils
 {
     public static boolean looseTypeCheck(Class<?> clazz1, Class<?> clazz2)
@@ -24,10 +26,12 @@ public final class TypeUtils
             return true;
         return false;
     }
+
     public static boolean isFromParentPackage(Class<?> clazz, String packageName)
     {
         return clazz.getName().startsWith(packageName);
     }
+
     public static boolean isPrimitiveOrWrappedPrimitive(Class<?> clazz)
     {
         return clazz.isPrimitive() ||
@@ -40,6 +44,50 @@ public final class TypeUtils
                 clazz == Character.class ||
                 clazz == Boolean.class;
     }
+
+    public static boolean isWrappedPrimitive(Class<?> clazz)
+    {
+        return clazz == Integer.class ||
+                clazz == Long.class ||
+                clazz == Short.class ||
+                clazz == Byte.class ||
+                clazz == Double.class ||
+                clazz == Float.class ||
+                clazz == Character.class ||
+                clazz == Boolean.class;
+    }
+
+    @Nullable
+    public static Class<?> toWrappedPrimitive(Class<?> primitiveClass)
+    {
+        return switch (primitiveClass.getName())
+        {
+            case "int" -> Integer.class;
+            case "long" -> Long.class;
+            case "short" -> Short.class;
+            case "byte" -> Byte.class;
+            case "double" -> Double.class;
+            case "float" -> Float.class;
+            case "char" -> Character.class;
+            case "boolean" -> Boolean.class;
+            default -> null;
+        };
+    }
+
+    @Nullable
+    public static Class<?> toPrimitive(Class<?> wrappedPrimitiveClass)
+    {
+        if (wrappedPrimitiveClass == Integer.class) return int.class;
+        if (wrappedPrimitiveClass == Long.class) return long.class;
+        if (wrappedPrimitiveClass == Short.class) return short.class;
+        if (wrappedPrimitiveClass == Byte.class) return byte.class;
+        if (wrappedPrimitiveClass == Double.class) return double.class;
+        if (wrappedPrimitiveClass == Float.class) return float.class;
+        if (wrappedPrimitiveClass == Character.class) return char.class;
+        if (wrappedPrimitiveClass == Boolean.class) return boolean.class;
+        return null;
+    }
+
     public static boolean isIntOrWrappedInt(Class<?> clazz)
     {
         return clazz.getName().equals("int") || clazz.equals(Integer.class);

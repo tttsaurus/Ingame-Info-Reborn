@@ -100,20 +100,35 @@ public final class RegistryUtils
                 try
                 {
                     MethodHandle getter = lookup.findGetter(clazz, fieldName, fieldClass);
-                    IStylePropertyGetter wrappedGetter = (target) ->
+                    IStylePropertyGetter wrappedGetter;
+                    if (WrappedStyleProperty.class.isAssignableFrom(fieldClass))
                     {
-                        try
+                        wrappedGetter = (target) ->
                         {
-                            return getter.invoke(target);
-                        }
-                        catch (Throwable ignored) { return null; }
-                    };
+                            try
+                            {
+                                return ((WrappedStyleProperty)getter.invoke(target)).get();
+                            }
+                            catch (Throwable ignored) { return null; }
+                        };
+                    }
+                    else
+                    {
+                        wrappedGetter = (target) ->
+                        {
+                            try
+                            {
+                                return getter.invoke(target);
+                            }
+                            catch (Throwable ignored) { return null; }
+                        };
+                    }
                     stylePropertyGetters.put(wrappedSetter, wrappedGetter);
                 }
                 catch (Exception ignored) { }
                 //</editor-fold>
 
-                //<editor-fold desc="deserializer">
+                //<editor-fold desc="parse wrapped class">
                 boolean hasWrappedClass = false;
                 boolean isWrappedClassPrimitive = false;
                 Class<?> wrappedClass = null;
@@ -123,8 +138,11 @@ public final class RegistryUtils
                     hasWrappedClass = true;
                     wrappedClass = (Class<?>)((ParameterizedType)fieldClass.getGenericSuperclass()).getActualTypeArguments()[0];
                     if (TypeUtils.isPrimitiveOrWrappedPrimitive(wrappedClass) || wrappedClass.equals(String.class)) isWrappedClassPrimitive = true;
+                    if (TypeUtils.isWrappedPrimitive(wrappedClass)) wrappedClass = TypeUtils.toPrimitive(wrappedClass);
                 }
+                //</editor-fold>
 
+                //<editor-fold desc="deserializer">
                 if (hasWrappedClass && isWrappedClassPrimitive)
                     stylePropertyDeserializers.put(wrappedSetter, new BuiltinTypesDeserializer<>(wrappedClass));
                 else if (hasWrappedClass && wrappedClass.isAnnotationPresent(Deserializer.class))
