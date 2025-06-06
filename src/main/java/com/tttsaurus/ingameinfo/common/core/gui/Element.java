@@ -23,6 +23,7 @@ import com.tttsaurus.ingameinfo.common.core.mvvm.binding.ReactiveObject;
 import com.tttsaurus.ingameinfo.common.core.mvvm.binding.VvmBinding;
 import com.tttsaurus.ingameinfo.common.core.gui.render.IRenderOp;
 import com.tttsaurus.ingameinfo.common.core.gui.property.lerp.LerpableProperty;
+import com.tttsaurus.ingameinfo.common.core.reflection.FieldUtils;
 import java.lang.invoke.MethodHandle;
 import java.lang.invoke.MethodHandles;
 import java.lang.reflect.Field;
@@ -260,7 +261,7 @@ public abstract class Element
      * to update {@link LerpableProperty} for interpolation purposes.
      *
      * @see LerpableProperty
-     * @see IgiGuiContainer#onCollectLerpInfo()
+     * @see IgiGuiContainer#onFixedUpdate(double)
      */
     public void onCollectLerpInfo()
     {
@@ -279,8 +280,7 @@ public abstract class Element
 
                 try
                 {
-                    Field field = getClass().getField(lerpTarget.value());
-                    field.setAccessible(true);
+                    Field field = FieldUtils.getFieldByNameIncludingSuperclasses(getClass(), lerpTarget.value());
                     MethodHandle handle = lookup.unreflectGetter(field);
                     if (lerpTarget.inner0().isEmpty())
                     {
@@ -295,8 +295,7 @@ public abstract class Element
                     }
                     else
                     {
-                        Field fieldInner0 = field.getType().getField(lerpTarget.inner0());
-                        fieldInner0.setAccessible(true);
+                        Field fieldInner0 = FieldUtils.getFieldByNameIncludingSuperclasses(field.getType(), lerpTarget.inner0());
                         MethodHandle handleInner0 = lookup.unreflectGetter(fieldInner0);
                         if (lerpTarget.inner1().isEmpty())
                         {
@@ -311,8 +310,7 @@ public abstract class Element
                         }
                         else
                         {
-                            Field fieldInner1 = fieldInner0.getType().getField(lerpTarget.inner1());
-                            fieldInner1.setAccessible(true);
+                            Field fieldInner1 = FieldUtils.getFieldByNameIncludingSuperclasses(fieldInner0.getType(), lerpTarget.inner1());
                             MethodHandle handleInner1 = lookup.unreflectGetter(fieldInner1);
                             targetGetter = () ->
                             {
@@ -335,8 +333,13 @@ public abstract class Element
         {
             LerpableProperty<?> property = entry.getKey();
             ITargetingLerpTarget getter = entry.getValue();
-            property.setPrevValue(property.getCurrValue());
-            property.setCurrValue(getter.getTarget());
+
+            Object target = getter.getTarget();
+            if (property.getCurrValue() == null)
+                property.setPrevValue(target);
+            else
+                property.setPrevValue(property.getCurrValue());
+            property.setCurrValue(target);
         }
     }
 

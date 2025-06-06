@@ -7,6 +7,7 @@ import com.tttsaurus.ingameinfo.common.core.gui.property.lerp.LerpTarget;
 import com.tttsaurus.ingameinfo.common.core.gui.property.lerp.LerpableProperty;
 import com.tttsaurus.ingameinfo.common.core.gui.property.style.*;
 import com.tttsaurus.ingameinfo.common.core.gui.property.style.wrapped.WrappedStyleProperty;
+import com.tttsaurus.ingameinfo.common.core.reflection.FieldUtils;
 import com.tttsaurus.ingameinfo.common.core.reflection.TypeUtils;
 import com.tttsaurus.ingameinfo.common.core.serialization.Deserializer;
 import com.tttsaurus.ingameinfo.common.core.serialization.IDeserializer;
@@ -318,7 +319,7 @@ public final class RegistryUtils
 
                     Class<?> wrappedClass = (Class<?>)((ParameterizedType)genericParam).getActualTypeArguments()[0];
 
-                    Field targetField = clazz.getField(lerpTarget.value());
+                    Field targetField = FieldUtils.getFieldByNameIncludingSuperclasses(clazz, lerpTarget.value());
 
                     if (lerpTarget.inner0().isEmpty())
                     {
@@ -327,7 +328,7 @@ public final class RegistryUtils
                     }
                     else
                     {
-                        Field targetFieldInner0 = targetField.getType().getField(lerpTarget.inner0());
+                        Field targetFieldInner0 = FieldUtils.getFieldByNameIncludingSuperclasses(targetField.getType(), lerpTarget.inner0());
                         if (lerpTarget.inner1().isEmpty())
                         {
                             if (!TypeUtils.looseTypeCheck(targetFieldInner0.getType(), wrappedClass))
@@ -335,7 +336,7 @@ public final class RegistryUtils
                         }
                         else
                         {
-                            Field targetFieldInner1 = targetFieldInner0.getType().getField(lerpTarget.inner1());
+                            Field targetFieldInner1 = FieldUtils.getFieldByNameIncludingSuperclasses(targetFieldInner0.getType(), lerpTarget.inner1());
                             if (!TypeUtils.looseTypeCheck(targetFieldInner1.getType(), wrappedClass))
                                 continue;
                         }
@@ -343,6 +344,7 @@ public final class RegistryUtils
                 }
                 catch (NoSuchFieldException e)
                 {
+                    InGameInfoReborn.logger.throwing(e);
                     continue;
                 }
 

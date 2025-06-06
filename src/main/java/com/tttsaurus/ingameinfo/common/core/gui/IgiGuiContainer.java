@@ -63,9 +63,16 @@ public class IgiGuiContainer
         themeConfig = ThemeRegistry.getTheme(themeName);
         mainGroup.applyLogicTheme(themeConfig);
 
+        List<SlotAccessor> slotAccessors = InternalMethods.instance.ViewModel$slotAccessors$getter.invoke(viewModel);
+        for (SlotAccessor slotAccessor: slotAccessors)
+            if (slotAccessor.getComposeBlock() != null)
+                slotAccessor.getComposeBlock().update(themeConfig);
+
         mainGroup.calcWidthHeight();
         mainGroup.calcRenderPos(mainGroup.rect);
         mainGroup.finishReCalc();
+
+        mainGroup.onCollectLerpInfo();
 
         InternalMethods.instance.ViewModel$isActiveGetter$setter.invoke(viewModel, () -> isActive);
         InternalMethods.instance.ViewModel$isActiveSetter$setter.invoke(viewModel, (flag) -> isActive = flag);
@@ -100,9 +107,7 @@ public class IgiGuiContainer
             mainGroup.calcRenderPos(mainGroup.rect);
             mainGroup.finishReCalc();
         }
-    }
-    public void onCollectLerpInfo()
-    {
+
         mainGroup.onCollectLerpInfo();
     }
     public RenderOpQueue onRenderUpdate(boolean focused)
@@ -140,6 +145,12 @@ public class IgiGuiContainer
                 compose.clear();
                 compose.update(themeConfig);
             }
+
+        mainGroup.calcWidthHeight();
+        mainGroup.calcRenderPos(mainGroup.rect);
+        mainGroup.finishReCalc();
+
+        mainGroup.onCollectLerpInfo();
 
         viewModel.start();
     }

@@ -6,6 +6,8 @@ import com.tttsaurus.ingameinfo.common.core.appcommunication.spotify.SpotifyOAut
 import com.tttsaurus.ingameinfo.common.core.event.MvvmRegisterEvent;
 import com.tttsaurus.ingameinfo.common.core.gui.Element;
 import com.tttsaurus.ingameinfo.common.core.gui.IgiGuiManager;
+import com.tttsaurus.ingameinfo.common.core.gui.property.lerp.ILerpablePropertyGetter;
+import com.tttsaurus.ingameinfo.common.core.gui.property.lerp.LerpTarget;
 import com.tttsaurus.ingameinfo.common.core.gui.property.style.IStylePropertyCallbackPost;
 import com.tttsaurus.ingameinfo.common.core.gui.property.style.IStylePropertyCallbackPre;
 import com.tttsaurus.ingameinfo.common.core.gui.property.style.IStylePropertySetter;
@@ -144,17 +146,19 @@ public class ClientProxy extends CommonProxy
         ElementRegistry.register();
         logger.info("GUI elements registered.");
 
-        logger.info("");
-        logger.info("Registered serviceable elements: ");
+        StringBuilder builder = new StringBuilder();
+
+        builder.append("\n");
+        builder.append("Registered serviceable elements:\n");
         List<Class<? extends Element>> constructableElements = ElementRegistry.getConstructableElements();
         for (Class<? extends Element> clazz: constructableElements)
-            logger.info("- " + (TypeUtils.isFromParentPackage(clazz, myPackage) ? clazz.getSimpleName() : clazz.getName()));
+            builder.append("- ").append(TypeUtils.isFromParentPackage(clazz, myPackage) ? clazz.getSimpleName() : clazz.getName()).append("\n");
 
-        logger.info("");
-        logger.info("Notice:");
-        logger.info("1. Elements marked with * below are unserviceable in ixml.");
-        logger.info("2. You can access style properties from parent elements.");
-        logger.info("");
+        builder.append("\n");
+        builder.append("Notice:\n");
+        builder.append("1. Elements marked with * below are unserviceable in ixml.\n");
+        builder.append("2. You can access style properties from parent elements.\n");
+        builder.append("\n");
 
         ImmutableList<Class<? extends Element>> elementClasses = ElementRegistry.getRegisteredElements();
         ImmutableMap<String, Map<String, IStylePropertySetter>> setters = ElementRegistry.getStylePropertySetters();
@@ -162,6 +166,7 @@ public class ClientProxy extends CommonProxy
         ImmutableMap<IStylePropertySetter, IStylePropertyCallbackPre> setterCallbacksPre = ElementRegistry.getStylePropertySetterCallbacksPre();
         ImmutableMap<IStylePropertySetter, IStylePropertyCallbackPost> setterCallbacksPost = ElementRegistry.getStylePropertySetterCallbacksPost();
         ImmutableMap<IStylePropertySetter, Class<?>> classes = ElementRegistry.getStylePropertyClasses();
+        ImmutableMap<String, Map<ILerpablePropertyGetter, LerpTarget>> getters = ElementRegistry.getLerpablePropertyGetters();
 
         for (Class<? extends Element> clazz: elementClasses)
         {
@@ -171,32 +176,46 @@ public class ClientProxy extends CommonProxy
                     " extends " +
                     (TypeUtils.isFromParentPackage(clazz.getSuperclass(), myPackage) ? clazz.getSuperclass().getSimpleName() : clazz.getSuperclass().getName()) +
                     (constructableElements.contains(clazz.getSuperclass()) ? "" : "*");
-            logger.info("Element type: " +
-                    (TypeUtils.isFromParentPackage(clazz, myPackage) ? clazz.getSimpleName() : clazz.getName()) +
-                    (constructableElements.contains(clazz) ? "" : "*") +
-                    parentMsg);
+            builder.append("Element type: ").append(TypeUtils.isFromParentPackage(clazz, myPackage) ? clazz.getSimpleName() : clazz.getName()).append(constructableElements.contains(clazz) ? "" : "*").append(parentMsg).append("\n");
 
-            Map<String, IStylePropertySetter> map = setters.get(clazz.getName());
-            if (!map.isEmpty())
+            Map<String, IStylePropertySetter> map1 = setters.get(clazz.getName());
+            if (!map1.isEmpty())
             {
-                logger.info("- With style properties:");
-                for (Map.Entry<String, IStylePropertySetter> entry: map.entrySet())
+                builder.append("- With style properties:\n");
+                for (Map.Entry<String, IStylePropertySetter> entry: map1.entrySet())
                 {
                     IStylePropertySetter primaryKey = entry.getValue();
 
                     String suffix = "";
                     if (deserializers.containsKey(primaryKey))
                         suffix = " (with deserializer: " + (TypeUtils.isFromParentPackage(deserializers.get(primaryKey).getClass(), myPackage) ? deserializers.get(primaryKey).getClass().getSimpleName() : deserializers.get(primaryKey).getClass().getName()) + ")";
-                    logger.info("  - [" + classes.get(primaryKey).getSimpleName() + "] " + entry.getKey() + suffix);
+                    builder.append("  - [").append(classes.get(primaryKey).getSimpleName()).append("] ").append(entry.getKey()).append(suffix).append("\n");
                     if (setterCallbacksPre.containsKey(primaryKey))
-                        logger.info("    - Setter callback pre: " + setterCallbacksPre.get(primaryKey).name());
+                        builder.append("    - Setter callback pre: ").append(setterCallbacksPre.get(primaryKey).name()).append("\n");
                     if (setterCallbacksPost.containsKey(primaryKey))
-                        logger.info("    - Setter callback post: " + setterCallbacksPost.get(primaryKey).name());
+                        builder.append("    - Setter callback post: ").append(setterCallbacksPost.get(primaryKey).name()).append("\n");
                 }
             }
 
-            logger.info("");
+            Map<ILerpablePropertyGetter, LerpTarget> map2 = getters.get(clazz.getName());
+            if (!map2.isEmpty())
+            {
+                builder.append("- With lerpable properties:\n");
+                for (LerpTarget lerpTarget: map2.values())
+                {
+                    builder.append("  - ").append(lerpTarget.value());
+                    if (!lerpTarget.inner0().isEmpty())
+                        builder.append(".").append(lerpTarget.inner0());
+                    if (!lerpTarget.inner1().isEmpty())
+                        builder.append(".").append(lerpTarget.inner1());
+                    builder.append("\n");
+                }
+            }
+
+            builder.append("\n");
         }
+
+        logger.info(builder.toString());
         //</editor-fold>
 
         //<editor-fold desc="mvvm">

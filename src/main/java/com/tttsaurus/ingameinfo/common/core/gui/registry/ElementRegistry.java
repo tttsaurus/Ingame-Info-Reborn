@@ -143,6 +143,8 @@ public final class ElementRegistry
     // key: element class name (not the simple name)
     private static final Map<String, Map<ILerpablePropertyGetter, LerpTarget>> lerpablePropertyGetters = new HashMap<>();
 
+    public static ImmutableMap<String, Map<ILerpablePropertyGetter, LerpTarget>> getLerpablePropertyGetters() { return ImmutableMap.copyOf(lerpablePropertyGetters); }
+
     public static List<ILerpablePropertyGetter> getLerpablePropertyGetters(Class<? extends Element> clazz)
     {
         Map<ILerpablePropertyGetter, LerpTarget> map = lerpablePropertyGetters.get(clazz.getName());

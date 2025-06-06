@@ -1,5 +1,7 @@
 package com.tttsaurus.ingameinfo.common.impl.gui.control;
 
+import com.tttsaurus.ingameinfo.common.core.gui.property.lerp.LerpTarget;
+import com.tttsaurus.ingameinfo.common.core.gui.property.lerp.LerpableProperty;
 import com.tttsaurus.ingameinfo.common.core.gui.registry.RegisterElement;
 import com.tttsaurus.ingameinfo.common.core.gui.property.style.CallbackInfo;
 import com.tttsaurus.ingameinfo.common.core.gui.property.style.StyleProperty;
@@ -14,6 +16,16 @@ import com.tttsaurus.ingameinfo.common.impl.gui.render.SlidingTextOp;
 @RegisterElement
 public class SlidingText extends Sized
 {
+    @LerpTarget("xShift")
+    private LerpableProperty<Float> lerpableXShift = new LerpableProperty<Float>()
+    {
+        @Override
+        public Float lerp(float percentage)
+        {
+            return prevValue + percentage * (currValue - prevValue);
+        }
+    };
+
     private float xShift = 0;
     private boolean needSliding;
     private float simulatedWidth;
@@ -114,40 +126,36 @@ public class SlidingText extends Sized
 
             if (forwardSliding)
             {
-                float x = rect.x + xShift;
-                if (x < rect.x + rect.width)
-                    queue.enqueue(new SlidingTextOp(text, x, rect.y, scale, color, shadow));
+                if (rect.x + xShift < rect.x + rect.width)
+                    queue.enqueue(new SlidingTextOp(text, rect.x, rect.y, lerpableXShift, true, scale, color, shadow));
 
                 if (xShift > spareWidth)
                 {
-                    float secondX = rect.x - simulatedWidth - spareWidth + xShift;
-                    if (secondX >= rect.x)
+                    if (rect.x - simulatedWidth - spareWidth + xShift >= rect.x)
                     {
                         xShift = 0;
                         onFreezeTiming = true;
                         queue.enqueue(new SlidingTextOp(text, rect.x, rect.y, scale, color, shadow));
                     }
                     else
-                        queue.enqueue(new SlidingTextOp(text, secondX, rect.y, scale, color, shadow));
+                        queue.enqueue(new SlidingTextOp(text, rect.x - simulatedWidth - spareWidth, rect.y, lerpableXShift, true, scale, color, shadow));
                 }
             }
             else
             {
-                float x = rect.x - xShift;
-                if (x > rect.x - simulatedWidth)
-                    queue.enqueue(new SlidingTextOp(text, x, rect.y, scale, color, shadow));
+                if (rect.x - xShift > rect.x - simulatedWidth)
+                    queue.enqueue(new SlidingTextOp(text, rect.x, rect.y, lerpableXShift, false, scale, color, shadow));
 
                 if (xShift > spareWidth + simulatedWidth - rect.width)
                 {
-                    float secondX = rect.x + spareWidth + simulatedWidth - xShift;
-                    if (secondX <= rect.x)
+                    if (rect.x + spareWidth + simulatedWidth - xShift <= rect.x)
                     {
                         xShift = 0;
                         onFreezeTiming = true;
                         queue.enqueue(new SlidingTextOp(text, rect.x, rect.y, scale, color, shadow));
                     }
                     else
-                        queue.enqueue(new SlidingTextOp(text, secondX, rect.y, scale, color, shadow));
+                        queue.enqueue(new SlidingTextOp(text, rect.x + spareWidth + simulatedWidth, rect.y, lerpableXShift, false, scale, color, shadow));
                 }
             }
 

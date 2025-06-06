@@ -166,10 +166,7 @@ public abstract class GuiLifecycleProvider
     protected final void definedFixedUpdate(double deltaTime)
     {
         for (IgiGuiContainer container: openedGuiMap.values())
-        {
             container.onFixedUpdate(deltaTime);
-            container.onCollectLerpInfo();
-        }
     }
 
     //<editor-fold desc="render update variables">
