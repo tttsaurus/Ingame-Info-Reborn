@@ -63,11 +63,9 @@ public abstract class ElementGroup extends Element
     @Override
     public void onCollectLerpInfo()
     {
-        if (!enabled) return;
         super.onCollectLerpInfo();
         for (Element element: elements)
-            if (element.enabled)
-                element.onCollectLerpInfo();
+            element.onCollectLerpInfo();
     }
 
     @Override

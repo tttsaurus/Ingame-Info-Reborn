@@ -326,7 +326,12 @@ public abstract class Element
                 catch (Exception ignored) { }
 
                 if (targetGetter != null)
+                {
+                    // first method handle call will be slow
+                    // so comsuming it here
+                    targetGetter.getTarget();
                     lerpTargetGetters.put(property, targetGetter);
+                }
             }
         }
         for (Map.Entry<LerpableProperty<?>, ITargetingLerpTarget> entry: lerpTargetGetters.entrySet())

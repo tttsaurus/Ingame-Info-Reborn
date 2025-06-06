@@ -17,7 +17,7 @@ import com.tttsaurus.ingameinfo.common.impl.gui.render.SlidingTextOp;
 public class SlidingText extends Sized
 {
     @LerpTarget("xShift")
-    private LerpableProperty<Float> lerpableXShift = new LerpableProperty<Float>()
+    private final LerpableProperty<Float> lerpableXShift = new LerpableProperty<Float>()
     {
         @Override
         public Float lerp(float percentage)
