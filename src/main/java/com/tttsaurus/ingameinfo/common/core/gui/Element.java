@@ -5,6 +5,9 @@ import com.tttsaurus.ingameinfo.common.core.gui.layout.Alignment;
 import com.tttsaurus.ingameinfo.common.core.gui.layout.Padding;
 import com.tttsaurus.ingameinfo.common.core.gui.layout.Pivot;
 import com.tttsaurus.ingameinfo.common.core.gui.layout.Rect;
+import com.tttsaurus.ingameinfo.common.core.gui.property.lerp.ILerpablePropertyGetter;
+import com.tttsaurus.ingameinfo.common.core.gui.property.lerp.ITargetingLerpTarget;
+import com.tttsaurus.ingameinfo.common.core.gui.property.lerp.LerpTarget;
 import com.tttsaurus.ingameinfo.common.core.gui.registry.RegisterElement;
 import com.tttsaurus.ingameinfo.common.core.gui.property.style.CallbackInfo;
 import com.tttsaurus.ingameinfo.common.core.gui.property.style.IStylePropertySyncTo;
@@ -19,7 +22,13 @@ import com.tttsaurus.ingameinfo.common.core.mvvm.binding.Reactive;
 import com.tttsaurus.ingameinfo.common.core.mvvm.binding.ReactiveObject;
 import com.tttsaurus.ingameinfo.common.core.mvvm.binding.VvmBinding;
 import com.tttsaurus.ingameinfo.common.core.gui.render.IRenderOp;
+import com.tttsaurus.ingameinfo.common.core.gui.property.lerp.LerpableProperty;
+
+import java.lang.invoke.MethodHandle;
+import java.lang.invoke.MethodHandles;
+import java.lang.reflect.Field;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @RegisterElement(constructable = false)
@@ -81,6 +90,14 @@ public abstract class Element
      */
     @SuppressWarnings("all")
     private Map<String, IStylePropertySyncTo> syncToMap = new HashMap<>();
+
+    /**
+     * <code>lerpTargetGetters</code> stores the getters of {@link LerpableProperty}'s target.
+     * {@link Element#onCollectLerpInfo()} will cache getters to <code>lerpTargetGetters</code> at runtime.
+     *
+     * @see Element#onCollectLerpInfo()
+     */
+    private Map<LerpableProperty<?>, ITargetingLerpTarget> lerpTargetGetters = null;
     //</editor-fold>
 
     //<editor-fold desc="style properties">
@@ -237,6 +254,91 @@ public abstract class Element
     public void onFixedUpdate(double deltaTime)
     {
 
+    }
+
+    /**
+     * This method will be executed right after {@link Element#onFixedUpdate(double)}
+     * to update {@link LerpableProperty} for interpolation purposes.
+     *
+     * @see LerpableProperty
+     * @see IgiGuiContainer#onCollectLerpInfo()
+     */
+    public void onCollectLerpInfo()
+    {
+        if (lerpTargetGetters == null)
+        {
+            lerpTargetGetters = new HashMap<>();
+            MethodHandles.Lookup lookup = MethodHandles.lookup();
+            List<ILerpablePropertyGetter> getters = ElementRegistry.getLerpablePropertyGetters(getClass());
+            for (ILerpablePropertyGetter getter: getters)
+            {
+                LerpTarget lerpTarget = ElementRegistry.getLerpTarget(getClass(), getter);
+                if (lerpTarget == null) continue;
+
+                LerpableProperty<?> property = getter.get(this);
+                ITargetingLerpTarget targetGetter = null;
+
+                try
+                {
+                    Field field = getClass().getField(lerpTarget.value());
+                    field.setAccessible(true);
+                    MethodHandle handle = lookup.unreflectGetter(field);
+                    if (lerpTarget.inner0().isEmpty())
+                    {
+                        targetGetter = () ->
+                        {
+                            try
+                            {
+                                return handle.invoke(this);
+                            }
+                            catch (Throwable ignored) { return null; }
+                        };
+                    }
+                    else
+                    {
+                        Field fieldInner0 = field.getType().getField(lerpTarget.inner0());
+                        fieldInner0.setAccessible(true);
+                        MethodHandle handleInner0 = lookup.unreflectGetter(fieldInner0);
+                        if (lerpTarget.inner1().isEmpty())
+                        {
+                            targetGetter = () ->
+                            {
+                                try
+                                {
+                                    return handleInner0.invoke(handle.invoke(this));
+                                }
+                                catch (Throwable ignored) { return null; }
+                            };
+                        }
+                        else
+                        {
+                            Field fieldInner1 = fieldInner0.getType().getField(lerpTarget.inner1());
+                            fieldInner1.setAccessible(true);
+                            MethodHandle handleInner1 = lookup.unreflectGetter(fieldInner1);
+                            targetGetter = () ->
+                            {
+                                try
+                                {
+                                    return handleInner1.invoke(handleInner0.invoke(handle.invoke(this)));
+                                }
+                                catch (Throwable ignored) { return null; }
+                            };
+                        }
+                    }
+                }
+                catch (Exception ignored) { }
+
+                if (targetGetter != null)
+                    lerpTargetGetters.put(property, targetGetter);
+            }
+        }
+        for (Map.Entry<LerpableProperty<?>, ITargetingLerpTarget> entry: lerpTargetGetters.entrySet())
+        {
+            LerpableProperty<?> property = entry.getKey();
+            ITargetingLerpTarget getter = entry.getValue();
+            property.setPrevValue(property.getCurrValue());
+            property.setCurrValue(getter.getTarget());
+        }
     }
 
     /**

@@ -302,6 +302,39 @@ public final class RegistryUtils
             {
                 LerpTarget lerpTarget = field.getAnnotation(LerpTarget.class);
 
+                if (lerpTarget.value().isEmpty()) continue;
+
+                try
+                {
+                    Class<?> wrappedClass = (Class<?>)((ParameterizedType)field.getType().getGenericSuperclass()).getActualTypeArguments()[0];
+                    Field targetField = clazz.getField(lerpTarget.value());
+
+                    if (lerpTarget.inner0().isEmpty())
+                    {
+                        if (!TypeUtils.looseTypeCheck(targetField.getType(), wrappedClass))
+                            continue;
+                    }
+                    else
+                    {
+                        Field targetFieldInner0 = targetField.getType().getField(lerpTarget.inner0());
+                        if (lerpTarget.inner1().isEmpty())
+                        {
+                            if (!TypeUtils.looseTypeCheck(targetFieldInner0.getType(), wrappedClass))
+                                continue;
+                        }
+                        else
+                        {
+                            Field targetFieldInner1 = targetFieldInner0.getType().getField(lerpTarget.inner1());
+                            if (!TypeUtils.looseTypeCheck(targetFieldInner1.getType(), wrappedClass))
+                                continue;
+                        }
+                    }
+                }
+                catch (NoSuchFieldException e)
+                {
+                    continue;
+                }
+
                 try
                 {
                     field.setAccessible(true);

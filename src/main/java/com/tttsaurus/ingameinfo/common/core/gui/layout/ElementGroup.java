@@ -54,10 +54,22 @@ public abstract class ElementGroup extends Element
     public void onFixedUpdate(double deltaTime)
     {
         if (!enabled) return;
+        super.onFixedUpdate(deltaTime);
         for (Element element: elements)
             if (element.enabled)
                 element.onFixedUpdate(deltaTime);
     }
+
+    @Override
+    public void onCollectLerpInfo()
+    {
+        if (!enabled) return;
+        super.onCollectLerpInfo();
+        for (Element element: elements)
+            if (element.enabled)
+                element.onCollectLerpInfo();
+    }
+
     @Override
     public void onRenderUpdate(RenderOpQueue queue, boolean focused)
     {
@@ -76,6 +88,7 @@ public abstract class ElementGroup extends Element
             if (element.getNeedReCalc()) return true;
         return false;
     }
+
     @Override
     public void finishReCalc()
     {

@@ -11,4 +11,6 @@ public @interface LerpTarget
 {
     // field name
     String value() default "";
+    String inner0() default "";
+    String inner1() default "";
 }

@@ -101,6 +101,10 @@ public class IgiGuiContainer
             mainGroup.finishReCalc();
         }
     }
+    public void onCollectLerpInfo()
+    {
+        mainGroup.onCollectLerpInfo();
+    }
     public RenderOpQueue onRenderUpdate(boolean focused)
     {
         if (!isActive) return new RenderOpQueue();

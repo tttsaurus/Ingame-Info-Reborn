@@ -147,15 +147,29 @@ public final class ElementRegistry
     {
         Map<ILerpablePropertyGetter, LerpTarget> map = lerpablePropertyGetters.get(clazz.getName());
         if (map == null) return new ArrayList<>();
-        return new ArrayList<>(map.keySet());
+
+        if (Element.class.isAssignableFrom(clazz.getSuperclass()))
+        {
+            List<ILerpablePropertyGetter> list = getLerpablePropertyGetters((Class<? extends Element>)clazz.getSuperclass());
+            list.addAll(new ArrayList<>(map.keySet()));
+            return list;
+        }
+        else
+            return new ArrayList<>(map.keySet());
     }
 
     @Nullable
     public static LerpTarget getLerpTarget(Class<? extends Element> clazz, ILerpablePropertyGetter getter)
     {
-        Map<ILerpablePropertyGetter, LerpTarget> map = lerpablePropertyGetters.get(clazz.getName());
-        if (map == null) return null;
-        return map.get(getter);
+        if (lerpablePropertyGetters.containsKey(clazz.getName()))
+        {
+            Map<ILerpablePropertyGetter, LerpTarget> map = lerpablePropertyGetters.get(clazz.getName());
+            if (map.containsKey(getter)) return map.get(getter);
+        }
+        if (Element.class.isAssignableFrom(clazz.getSuperclass()))
+            return getLerpTarget((Class<? extends Element>)clazz.getSuperclass(), getter);
+        else
+            return null;
     }
 
     public static void register()

@@ -23,6 +23,35 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicBoolean;
 
+import com.tttsaurus.ingameinfo.common.impl.gui.DefaultLifecycleProvider;
+
+/**
+ * Provides the lifecycle foundation for an IGI GUI system.
+ *
+ * <p>This abstract class is designed to be extended by clients who want fine-grained control
+ * over GUI rendering and update timing.</p>
+ *
+ * <p>Responsibilities include:</p>
+ * <ul>
+ *     <li>Tracking and managing opened GUI containers</li>
+ *     <li>Handling GUI initialization and resolution resize detection</li>
+ *     <li>Managing dummy screen activation and deactivation based on GUI focus state</li>
+ *     <li>Calling fixed updates and render updates with customizable frame timing</li>
+ *     <li>Posting events of regained focus and initial setup through event bus</li>
+ * </ul>
+ *
+ * <p>Subclasses <b>must</b> implement:</p>
+ * <ul>
+ *     <li>{@link #updateInternal()} for frame-based logic</li>
+ *     <li>{@link #getRenderLerpAlpha()} to supply interpolation alpha for rendering</li>
+ *     <li>{@link #isUsingFramebuffer()} and {@link #isUsingMultisampleFramebuffer()} to guide render behavior</li>
+ *     <li>{@link #getDummyGuiDrawScreen()} to provide dummy GUI draw behavior</li>
+ * </ul>
+ *
+ * <p>Thread safety is not guaranteed; usage must occur on the Minecraft client thread.</p>
+ *
+ * @see DefaultLifecycleProvider
+ */
 public abstract class GuiLifecycleProvider
 {
     protected static final Minecraft MC = Minecraft.getMinecraft();
@@ -137,7 +166,10 @@ public abstract class GuiLifecycleProvider
     protected final void definedFixedUpdate(double deltaTime)
     {
         for (IgiGuiContainer container: openedGuiMap.values())
+        {
             container.onFixedUpdate(deltaTime);
+            container.onCollectLerpInfo();
+        }
     }
 
     //<editor-fold desc="render update variables">
