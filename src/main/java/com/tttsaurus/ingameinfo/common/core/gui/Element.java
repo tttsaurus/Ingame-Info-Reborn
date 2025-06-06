@@ -23,7 +23,6 @@ import com.tttsaurus.ingameinfo.common.core.mvvm.binding.ReactiveObject;
 import com.tttsaurus.ingameinfo.common.core.mvvm.binding.VvmBinding;
 import com.tttsaurus.ingameinfo.common.core.gui.render.IRenderOp;
 import com.tttsaurus.ingameinfo.common.core.gui.property.lerp.LerpableProperty;
-
 import java.lang.invoke.MethodHandle;
 import java.lang.invoke.MethodHandles;
 import java.lang.reflect.Field;

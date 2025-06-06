@@ -16,6 +16,7 @@ import java.lang.invoke.MethodHandles;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
 import java.util.*;
 
 @SuppressWarnings("all")
@@ -140,7 +141,12 @@ public final class RegistryUtils
                 if (WrappedStyleProperty.class.isAssignableFrom(fieldClass))
                 {
                     hasWrappedClass = true;
-                    wrappedClass = (Class<?>)((ParameterizedType)fieldClass.getGenericSuperclass()).getActualTypeArguments()[0];
+
+                    Type genericParam = fieldClass.getGenericSuperclass();
+                    if (!(genericParam instanceof ParameterizedType))
+                        genericParam = field.getGenericType();
+
+                    wrappedClass = (Class<?>)((ParameterizedType)genericParam).getActualTypeArguments()[0];
                     if (TypeUtils.isPrimitiveOrWrappedPrimitive(wrappedClass) || wrappedClass.equals(String.class)) isWrappedClassPrimitive = true;
                     if (TypeUtils.isWrappedPrimitive(wrappedClass)) wrappedClass = TypeUtils.toPrimitive(wrappedClass);
                 }
@@ -306,7 +312,12 @@ public final class RegistryUtils
 
                 try
                 {
-                    Class<?> wrappedClass = (Class<?>)((ParameterizedType)field.getType().getGenericSuperclass()).getActualTypeArguments()[0];
+                    Type genericParam = field.getType().getGenericSuperclass();
+                    if (!(genericParam instanceof ParameterizedType))
+                        genericParam = field.getGenericType();
+
+                    Class<?> wrappedClass = (Class<?>)((ParameterizedType)genericParam).getActualTypeArguments()[0];
+
                     Field targetField = clazz.getField(lerpTarget.value());
 
                     if (lerpTarget.inner0().isEmpty())
