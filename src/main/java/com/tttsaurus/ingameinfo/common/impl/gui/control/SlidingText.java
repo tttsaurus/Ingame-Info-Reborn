@@ -22,6 +22,7 @@ public class SlidingText extends Sized
         @Override
         public Float lerp(float percentage)
         {
+            if (currValue == 0f) prevValue = 0f;
             return prevValue + percentage * (currValue - prevValue);
         }
     };
@@ -106,6 +107,7 @@ public class SlidingText extends Sized
             xShift += (float)(deltaTime * xShiftSpeed);
         if (onFreezeTiming)
         {
+            xShift = 0;
             if (freezeTimer > freezeTime)
             {
                 freezeTimer = 0;
@@ -133,7 +135,6 @@ public class SlidingText extends Sized
                 {
                     if (rect.x - simulatedWidth - spareWidth + xShift >= rect.x)
                     {
-                        xShift = 0;
                         onFreezeTiming = true;
                         queue.enqueue(new SlidingTextOp(text, rect.x, rect.y, scale, color, shadow));
                     }
@@ -150,7 +151,6 @@ public class SlidingText extends Sized
                 {
                     if (rect.x + spareWidth + simulatedWidth - xShift <= rect.x)
                     {
-                        xShift = 0;
                         onFreezeTiming = true;
                         queue.enqueue(new SlidingTextOp(text, rect.x, rect.y, scale, color, shadow));
                     }
