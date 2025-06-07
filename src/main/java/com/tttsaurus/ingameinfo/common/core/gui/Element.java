@@ -5,9 +5,7 @@ import com.tttsaurus.ingameinfo.common.core.gui.layout.Alignment;
 import com.tttsaurus.ingameinfo.common.core.gui.layout.Padding;
 import com.tttsaurus.ingameinfo.common.core.gui.layout.Pivot;
 import com.tttsaurus.ingameinfo.common.core.gui.layout.Rect;
-import com.tttsaurus.ingameinfo.common.core.gui.property.lerp.ILerpablePropertyGetter;
-import com.tttsaurus.ingameinfo.common.core.gui.property.lerp.ITargetingLerpTarget;
-import com.tttsaurus.ingameinfo.common.core.gui.property.lerp.LerpTarget;
+import com.tttsaurus.ingameinfo.common.core.gui.property.lerp.*;
 import com.tttsaurus.ingameinfo.common.core.gui.registry.RegisterElement;
 import com.tttsaurus.ingameinfo.common.core.gui.property.style.CallbackInfo;
 import com.tttsaurus.ingameinfo.common.core.gui.property.style.IStylePropertySyncTo;
@@ -22,7 +20,6 @@ import com.tttsaurus.ingameinfo.common.core.mvvm.binding.Reactive;
 import com.tttsaurus.ingameinfo.common.core.mvvm.binding.ReactiveObject;
 import com.tttsaurus.ingameinfo.common.core.mvvm.binding.VvmBinding;
 import com.tttsaurus.ingameinfo.common.core.gui.render.IRenderOp;
-import com.tttsaurus.ingameinfo.common.core.gui.property.lerp.LerpableProperty;
 import com.tttsaurus.ingameinfo.common.core.reflection.FieldUtils;
 import java.lang.invoke.MethodHandle;
 import java.lang.invoke.MethodHandles;
@@ -282,13 +279,17 @@ public abstract class Element
                 {
                     Field field = FieldUtils.getFieldByNameIncludingSuperclasses(getClass(), lerpTarget.value());
                     MethodHandle handle = lookup.unreflectGetter(field);
+                    boolean copy = lerpTarget.copyIfPossible() && ICopyableLerpTarget.class.isAssignableFrom(field.getType());
+                    boolean copyArray = lerpTarget.copyIfPossible() && field.getType().getComponentType() != null && ICopyableLerpTarget.class.isAssignableFrom(field.getType().getComponentType());
                     if (lerpTarget.inner0().isEmpty())
                     {
                         targetGetter = () ->
                         {
                             try
                             {
-                                return handle.invoke(this);
+                                Object res = handle.invoke(this);
+                                if (copy || copyArray) return LerpTargetCopyUtils.copy(res);
+                                return res;
                             }
                             catch (Throwable ignored) { return null; }
                         };
@@ -297,13 +298,17 @@ public abstract class Element
                     {
                         Field fieldInner0 = FieldUtils.getFieldByNameIncludingSuperclasses(field.getType(), lerpTarget.inner0());
                         MethodHandle handleInner0 = lookup.unreflectGetter(fieldInner0);
+                        boolean copyInner0 = lerpTarget.copyIfPossible() && ICopyableLerpTarget.class.isAssignableFrom(fieldInner0.getType());
+                        boolean copyArrayInner0 = lerpTarget.copyIfPossible() && fieldInner0.getType().getComponentType() != null && ICopyableLerpTarget.class.isAssignableFrom(fieldInner0.getType().getComponentType());
                         if (lerpTarget.inner1().isEmpty())
                         {
                             targetGetter = () ->
                             {
                                 try
                                 {
-                                    return handleInner0.invoke(handle.invoke(this));
+                                    Object res = handleInner0.invoke(handle.invoke(this));
+                                    if (copyInner0 || copyArrayInner0) return LerpTargetCopyUtils.copy(res);
+                                    return res;
                                 }
                                 catch (Throwable ignored) { return null; }
                             };
@@ -312,11 +317,15 @@ public abstract class Element
                         {
                             Field fieldInner1 = FieldUtils.getFieldByNameIncludingSuperclasses(fieldInner0.getType(), lerpTarget.inner1());
                             MethodHandle handleInner1 = lookup.unreflectGetter(fieldInner1);
+                            boolean copyInner1 = lerpTarget.copyIfPossible() && ICopyableLerpTarget.class.isAssignableFrom(fieldInner1.getType());
+                            boolean copyArrayInner1 = lerpTarget.copyIfPossible() && fieldInner1.getType().getComponentType() != null && ICopyableLerpTarget.class.isAssignableFrom(fieldInner1.getType().getComponentType());
                             targetGetter = () ->
                             {
                                 try
                                 {
-                                    return handleInner1.invoke(handleInner0.invoke(handle.invoke(this)));
+                                    Object res = handleInner1.invoke(handleInner0.invoke(handle.invoke(this)));
+                                    if (copyInner1 || copyArrayInner1) return LerpTargetCopyUtils.copy(res);
+                                    return res;
                                 }
                                 catch (Throwable ignored) { return null; }
                             };

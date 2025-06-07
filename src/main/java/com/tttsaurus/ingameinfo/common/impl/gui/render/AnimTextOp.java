@@ -33,10 +33,11 @@ public class AnimTextOp implements IRenderOp
             overrideColor = true;
         }
 
-        for (int i = 0; i < text.length(); i++)
+        CharInfo[] charInfos1 = charInfos.lerp(context.lerpAlpha);
+        for (int i = 0; i < Math.min(charInfos1.length, text.length()); i++)
         {
             String c = String.valueOf(text.charAt(i));
-            CharInfo info = charInfos.lerp(context.lerpAlpha)[i];
+            CharInfo info = charInfos1[i];
             RenderUtils.renderText(c, x + info.x, y + info.y, info.scale, overrideColor ? color : info.color, info.shadow);
         }
     }

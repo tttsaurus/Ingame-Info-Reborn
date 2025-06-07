@@ -13,4 +13,5 @@ public @interface LerpTarget
     String value() default "";
     String inner0() default "";
     String inner1() default "";
+    boolean copyIfPossible() default true;
 }

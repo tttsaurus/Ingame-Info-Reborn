@@ -26,15 +26,17 @@ public class AnimText extends Element
         @Override
         public CharInfo[] lerp(float percentage)
         {
-            for (int i = 0; i < currValue.length; i++)
+            CharInfo[] out = new CharInfo[Math.min(prevValue.length, currValue.length)];
+            for (int i = 0; i < out.length; i++)
             {
                 CharInfo prevInfo = prevValue[i];
                 CharInfo currInfo = currValue[i];
-                currInfo.x = LerpCenter.lerp(prevInfo.x, currInfo.x, percentage);
-                currInfo.y = LerpCenter.lerp(prevInfo.y, currInfo.y, percentage);
-                currInfo.scale = LerpCenter.lerp(prevInfo.scale, currInfo.scale, percentage);
+                out[i] = (CharInfo)currInfo.copy();
+                out[i].x = LerpCenter.lerp(prevInfo.x, currInfo.x, percentage);
+                out[i].y = LerpCenter.lerp(prevInfo.y, currInfo.y, percentage);
+                out[i].scale = LerpCenter.lerp(prevInfo.scale, currInfo.scale, percentage);
             }
-            return currValue;
+            return out;
         }
     };
 
@@ -80,7 +82,7 @@ public class AnimText extends Element
         requestReCalc();
     }
     @StyleProperty(setterCallbackPost = "setTextCallback", setterCallbackPre = "textValidation")
-    public String text;
+    public String text = "";
 
     @StylePropertyCallback
     public void scaleValidation(float value, CallbackInfo callbackInfo)

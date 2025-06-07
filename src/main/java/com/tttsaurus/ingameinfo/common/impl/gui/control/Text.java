@@ -19,7 +19,7 @@ public class Text extends Element
         if (value == null) callbackInfo.cancel = true;
     }
     @StyleProperty(setterCallbackPost = "requestReCalc", setterCallbackPre = "textValidation")
-    public String text;
+    public String text = "";
 
     @StylePropertyCallback
     public void scaleValidation(float value, CallbackInfo callbackInfo)

@@ -1,6 +1,8 @@
 package com.tttsaurus.ingameinfo.common.core.animation.text;
 
-public class CharInfo
+import com.tttsaurus.ingameinfo.common.core.gui.property.lerp.ICopyableLerpTarget;
+
+public class CharInfo implements ICopyableLerpTarget
 {
     public float x;
     public float y;
@@ -15,5 +17,11 @@ public class CharInfo
         this.scale = scale;
         this.color = color;
         this.shadow = shadow;
+    }
+
+    @Override
+    public Object copy()
+    {
+        return new CharInfo(x, y, scale, color, shadow);
     }
 }

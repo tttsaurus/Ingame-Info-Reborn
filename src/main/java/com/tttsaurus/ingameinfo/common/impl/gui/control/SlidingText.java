@@ -73,7 +73,7 @@ public class SlidingText extends Sized
         requestReCalc();
     }
     @StyleProperty(setterCallbackPost = "setTextCallback", setterCallbackPre = "textValidation")
-    public String text;
+    public String text = "";
 
     @StylePropertyCallback
     public void setScaleCallback()
