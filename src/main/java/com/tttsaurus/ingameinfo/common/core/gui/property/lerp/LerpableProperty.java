@@ -10,5 +10,11 @@ public abstract class LerpableProperty<T>
     public final void setPrevValue(Object value) { prevValue = (T)value; }
     public final void setCurrValue(Object value) { currValue = (T)value; }
 
+    /**
+     * If <code>lerp</code> is being called during render update, then {@link #prevValue} and {@link #currValue} are non-null for sure.
+     *
+     * @param percentage The interpolation alpha. Range: [0, 1]
+     * @return The interpolated value.
+     */
     public abstract T lerp(float percentage);
 }

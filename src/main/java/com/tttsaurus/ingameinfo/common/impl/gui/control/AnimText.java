@@ -3,6 +3,9 @@ package com.tttsaurus.ingameinfo.common.impl.gui.control;
 import com.tttsaurus.ingameinfo.common.core.animation.text.CharInfo;
 import com.tttsaurus.ingameinfo.common.core.animation.text.ITextAnimDef;
 import com.tttsaurus.ingameinfo.common.core.gui.Element;
+import com.tttsaurus.ingameinfo.common.core.gui.property.lerp.LerpCenter;
+import com.tttsaurus.ingameinfo.common.core.gui.property.lerp.LerpTarget;
+import com.tttsaurus.ingameinfo.common.core.gui.property.lerp.LerpableProperty;
 import com.tttsaurus.ingameinfo.common.core.gui.registry.RegisterElement;
 import com.tttsaurus.ingameinfo.common.core.gui.property.style.CallbackInfo;
 import com.tttsaurus.ingameinfo.common.core.gui.property.style.StyleProperty;
@@ -17,6 +20,24 @@ import java.util.Arrays;
 @RegisterElement
 public class AnimText extends Element
 {
+    @LerpTarget("charInfos")
+    private final LerpableProperty<CharInfo[]> lerpableCharInfos = new LerpableProperty<CharInfo[]>()
+    {
+        @Override
+        public CharInfo[] lerp(float percentage)
+        {
+            for (int i = 0; i < currValue.length; i++)
+            {
+                CharInfo prevInfo = prevValue[i];
+                CharInfo currInfo = currValue[i];
+                currInfo.x = LerpCenter.lerp(prevInfo.x, currInfo.x, percentage);
+                currInfo.y = LerpCenter.lerp(prevInfo.y, currInfo.y, percentage);
+                currInfo.scale = LerpCenter.lerp(prevInfo.scale, currInfo.scale, percentage);
+            }
+            return currValue;
+        }
+    };
+
     private CharInfo[] charInfos = new CharInfo[0];
     private final DoubleProperty timer = new DoubleProperty();
 
@@ -130,6 +151,6 @@ public class AnimText extends Element
     public void onRenderUpdate(RenderOpQueue queue, boolean focused)
     {
         super.onRenderUpdate(queue, focused);
-        queue.enqueue(new AnimTextOp(text, rect.x, rect.y, scale, color, charInfos));
+        queue.enqueue(new AnimTextOp(text, rect.x, rect.y, color, lerpableCharInfos));
     }
 }

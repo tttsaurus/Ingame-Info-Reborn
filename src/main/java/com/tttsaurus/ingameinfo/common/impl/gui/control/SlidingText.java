@@ -1,5 +1,6 @@
 package com.tttsaurus.ingameinfo.common.impl.gui.control;
 
+import com.tttsaurus.ingameinfo.common.core.gui.property.lerp.LerpCenter;
 import com.tttsaurus.ingameinfo.common.core.gui.property.lerp.LerpTarget;
 import com.tttsaurus.ingameinfo.common.core.gui.property.lerp.LerpableProperty;
 import com.tttsaurus.ingameinfo.common.core.gui.registry.RegisterElement;
@@ -23,7 +24,7 @@ public class SlidingText extends Sized
         public Float lerp(float percentage)
         {
             if (currValue == 0f) prevValue = 0f;
-            return prevValue + percentage * (currValue - prevValue);
+            return LerpCenter.lerp(prevValue, currValue, percentage);
         }
     };
 

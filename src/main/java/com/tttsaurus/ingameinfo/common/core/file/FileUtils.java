@@ -5,7 +5,7 @@ import java.io.RandomAccessFile;
 
 public final class FileUtils
 {
-    private static String parentPath = "config/ingameinfo/";
+    private static final String parentPath = "config/ingameinfo/";
 
     private static File makeDir(String path)
     {
