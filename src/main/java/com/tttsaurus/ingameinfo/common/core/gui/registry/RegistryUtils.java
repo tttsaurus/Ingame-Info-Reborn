@@ -43,7 +43,7 @@ public final class RegistryUtils
             }
             catch (ClassNotFoundException e)
             {
-                InGameInfoReborn.logger.throwing(e);
+                InGameInfoReborn.LOGGER.throwing(e);
             }
         });
         return annotatedClasses;
@@ -344,7 +344,7 @@ public final class RegistryUtils
                 }
                 catch (NoSuchFieldException e)
                 {
-                    InGameInfoReborn.logger.throwing(e);
+                    InGameInfoReborn.LOGGER.throwing(e);
                     continue;
                 }
 

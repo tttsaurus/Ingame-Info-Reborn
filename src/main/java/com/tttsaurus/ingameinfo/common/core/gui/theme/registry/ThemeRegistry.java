@@ -83,8 +83,8 @@ public final class ThemeRegistry
             }
             catch (Exception exception)
             {
-                InGameInfoReborn.logger.error("Caught an exception when creating and loading the default theme.");
-                InGameInfoReborn.logger.throwing(exception);
+                InGameInfoReborn.LOGGER.error("Caught an exception when creating and loading the default theme.");
+                InGameInfoReborn.LOGGER.throwing(exception);
             }
 
             themeConfigs.put("default", defaultTheme);
@@ -114,8 +114,8 @@ public final class ThemeRegistry
             }
             catch (Exception exception)
             {
-                InGameInfoReborn.logger.error("Caught an exception when creating the spotify theme.");
-                InGameInfoReborn.logger.throwing(exception);
+                InGameInfoReborn.LOGGER.error("Caught an exception when creating the spotify theme.");
+                InGameInfoReborn.LOGGER.throwing(exception);
             }
         }
 
@@ -158,8 +158,8 @@ public final class ThemeRegistry
                     }
                     catch (Exception exception)
                     {
-                        InGameInfoReborn.logger.error("Caught an exception when loading the theme config '" + themeName + "'.");
-                        InGameInfoReborn.logger.throwing(exception);
+                        InGameInfoReborn.LOGGER.error("Caught an exception when loading the theme config '" + themeName + "'.");
+                        InGameInfoReborn.LOGGER.throwing(exception);
                     }
                 }
             }
@@ -170,7 +170,7 @@ public final class ThemeRegistry
     @SubscribeEvent
     public static void onRegainScreenFocus(IgiGuiRegainScreenFocusEvent event)
     {
-        InGameInfoReborn.logger.info("Regain screen focus. Trying to reload theme configs...");
+        InGameInfoReborn.LOGGER.info("Regain screen focus. Trying to reload theme configs...");
 
         File[] files = FileUtils.makeDir("themes").listFiles();
         if (files != null)
@@ -189,7 +189,7 @@ public final class ThemeRegistry
                     long fiveMinutesAgo = System.currentTimeMillis() - (5 * 60 * 1000);
                     if (lastModified > fiveMinutesAgo)
                     {
-                        InGameInfoReborn.logger.info("Theme config '" + themeName + "' was modified within 5 minutes. Start reloading.");
+                        InGameInfoReborn.LOGGER.info("Theme config '" + themeName + "' was modified within 5 minutes. Start reloading.");
                         try
                         {
                             RandomAccessFile raf = new RandomAccessFile(file, "rw");
@@ -213,12 +213,12 @@ public final class ThemeRegistry
                             themeConfigs.put(themeName, updater.getConfig());
 
                             raf.close();
-                            InGameInfoReborn.logger.info("Theme config '" + themeName + "' reloaded.");
+                            InGameInfoReborn.LOGGER.info("Theme config '" + themeName + "' reloaded.");
                         }
                         catch (Exception exception)
                         {
-                            InGameInfoReborn.logger.error("Caught an exception when reloading the theme config '" + themeName + "'.");
-                            InGameInfoReborn.logger.throwing(exception);
+                            InGameInfoReborn.LOGGER.error("Caught an exception when reloading the theme config '" + themeName + "'.");
+                            InGameInfoReborn.LOGGER.throwing(exception);
                         }
                     }
                 }

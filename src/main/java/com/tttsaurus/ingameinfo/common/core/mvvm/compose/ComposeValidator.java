@@ -72,6 +72,6 @@ public final class ComposeValidator
                     .append(')')
                     .append('\n');
 
-        InGameInfoReborn.logger.error(builder.toString());
+        InGameInfoReborn.LOGGER.error(builder.toString());
     }
 }

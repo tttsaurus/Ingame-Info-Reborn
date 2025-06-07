@@ -410,7 +410,7 @@ public final class DefaultLifecycleProvider extends GuiLifecycleProvider
             shaderProgram = new ShaderProgram(frag, vertex);
             shaderProgram.setup();
 
-            InGameInfoReborn.logger.info(shaderProgram.getSetupDebugReport());
+            InGameInfoReborn.LOGGER.info(shaderProgram.getSetupDebugReport());
         }
     }
     private void activateShaders()

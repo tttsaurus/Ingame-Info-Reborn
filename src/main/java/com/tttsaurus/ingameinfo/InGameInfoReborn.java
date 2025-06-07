@@ -6,6 +6,7 @@ import net.minecraftforge.fml.common.SidedProxy;
 import net.minecraftforge.fml.common.discovery.ASMDataTable;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
+import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import com.tttsaurus.ingameinfo.proxy.CommonProxy;
 
@@ -30,21 +31,42 @@ public final class InGameInfoReborn
     public static boolean toughasnailsLoaded;
     public static boolean simpledifficultyLoaded;
 
-    public static Logger logger;
+    public static Logger LOGGER = LogManager.getLogger(Tags.MODNAME);
     public static ASMDataTable asmDataTable;
+
+    private static Boolean isCleanroom = null;
+
+    public static boolean isCleanroom()
+    {
+        if (isCleanroom == null)
+        {
+            try
+            {
+                Class.forName("com.cleanroommc.boot.Main");
+                isCleanroom = true;
+                return true;
+            }
+            catch (ClassNotFoundException e)
+            {
+                isCleanroom = false;
+                return false;
+            }
+        }
+        else
+            return isCleanroom;
+    }
 
     @EventHandler
     public void preInit(FMLPreInitializationEvent event)
     {
-        logger = event.getModLog();
         asmDataTable = event.getAsmData();
-        proxy.preInit(event, logger);
+        proxy.preInit(event, LOGGER);
     }
 
     @EventHandler
     public void init(FMLInitializationEvent event)
     {
-        proxy.init(event, logger);
-        logger.info("In-Game Info Reborn initialized.");
+        proxy.init(event, LOGGER);
+        LOGGER.info("In-Game Info Reborn initialized.");
     }
 }
