@@ -4,6 +4,7 @@ import com.tttsaurus.ingameinfo.common.core.gui.Element;
 import com.tttsaurus.ingameinfo.common.core.gui.render.DebugRectOp;
 import com.tttsaurus.ingameinfo.common.core.gui.render.RenderOpQueue;
 import com.tttsaurus.ingameinfo.common.core.gui.theme.ThemeConfig;
+import com.tttsaurus.ingameinfo.common.core.internal.InternalMethods;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -13,6 +14,7 @@ public abstract class ElementGroup extends Element
 
     public void add(Element element)
     {
+        InternalMethods.instance.Element$parent$setter.invoke(element, this);
         elements.add(element);
     }
 

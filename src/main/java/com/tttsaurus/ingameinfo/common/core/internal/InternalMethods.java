@@ -48,6 +48,7 @@ public class InternalMethods
     public IAction_2Param<ReactiveCollection, ElementGroup> ReactiveCollection$group$setter;
     public IAction_2Param<SlotAccessor, ElementGroup> SlotAccessor$group$setter;
     public IAction_2Param<GuiLayout, IgiGuiContainer> GuiLayout$igiGuiContainer$setter;
+    public IAction_2Param<Element, ElementGroup> Element$parent$setter;
 
     public IFunc_2Param<GuiLayout, ViewModel, String> ViewModel$init;
     public IFunc_2Param<GuiLayout, View, IgiGuiContainer> View$init;
@@ -417,6 +418,26 @@ public class InternalMethods
         {
             GuiLayout$igiGuiContainer$setter = null;
             InGameInfoReborn.LOGGER.error("Reflection setup failed for GuiLayout$igiGuiContainer$setter: " + exception.getMessage());
+        }
+
+        try
+        {
+            Field field = Element.class.getDeclaredField("parent");
+            field.setAccessible(true);
+            MethodHandle handle = lookup.unreflectSetter(field);
+            Element$parent$setter = (arg0, arg1) ->
+            {
+                try
+                {
+                    handle.invoke(arg0, arg1);
+                }
+                catch (Throwable ignored) { }
+            };
+        }
+        catch (Exception exception)
+        {
+            Element$parent$setter = null;
+            InGameInfoReborn.LOGGER.error("Reflection setup failed for Element$parent$setter: " + exception.getMessage());
         }
         //</editor-fold>
 

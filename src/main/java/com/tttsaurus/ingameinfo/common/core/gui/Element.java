@@ -1,10 +1,7 @@
 package com.tttsaurus.ingameinfo.common.core.gui;
 
 import com.tttsaurus.ingameinfo.common.core.function.IAction_1Param;
-import com.tttsaurus.ingameinfo.common.core.gui.layout.Alignment;
-import com.tttsaurus.ingameinfo.common.core.gui.layout.Padding;
-import com.tttsaurus.ingameinfo.common.core.gui.layout.Pivot;
-import com.tttsaurus.ingameinfo.common.core.gui.layout.Rect;
+import com.tttsaurus.ingameinfo.common.core.gui.layout.*;
 import com.tttsaurus.ingameinfo.common.core.gui.property.lerp.*;
 import com.tttsaurus.ingameinfo.common.core.gui.registry.RegisterElement;
 import com.tttsaurus.ingameinfo.common.core.gui.property.style.CallbackInfo;
@@ -85,8 +82,7 @@ public abstract class Element
      *
      * @see Element#setStyleProperty(String, Object)
      */
-    @SuppressWarnings("all")
-    private Map<String, IStylePropertySyncTo> syncToMap = new HashMap<>();
+    private final Map<String, IStylePropertySyncTo> syncToMap = new HashMap<>();
 
     /**
      * <code>lerpTargetGetters</code> stores the getters of {@link LerpableProperty}'s target.
@@ -95,6 +91,11 @@ public abstract class Element
      * @see Element#onCollectLerpInfo()
      */
     private Map<LerpableProperty<?>, ITargetingLerpTarget> lerpTargetGetters = null;
+
+    /**
+     * The parent node. Will be injected by {@link ElementGroup#add(Element)}.
+     */
+    private ElementGroup parent;
     //</editor-fold>
 
     //<editor-fold desc="style properties">
@@ -411,5 +412,15 @@ public abstract class Element
     public void renderDebugRect(RenderOpQueue queue)
     {
         queue.enqueue(new DebugRectOp(false, rect, pivotPosX, pivotPosY));
+    }
+
+    /**
+     * Getter of the parent node.
+     *
+     * @return The parent node.
+     */
+    public ElementGroup getParent()
+    {
+        return parent;
     }
 }
