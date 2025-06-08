@@ -1,4 +1,4 @@
-package com.tttsaurus.ingameinfo.experimental;
+package com.tttsaurus.ingameinfo.nativeinterop.win;
 
 public class WindowsChecker
 {

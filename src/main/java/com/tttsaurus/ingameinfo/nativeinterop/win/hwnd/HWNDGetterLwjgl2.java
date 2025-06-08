@@ -1,4 +1,4 @@
-package com.tttsaurus.ingameinfo.experimental;
+package com.tttsaurus.ingameinfo.nativeinterop.win.hwnd;
 
 import org.lwjgl.opengl.Display;
 import java.lang.reflect.Field;
