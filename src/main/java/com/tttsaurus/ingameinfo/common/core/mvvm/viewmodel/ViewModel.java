@@ -6,6 +6,7 @@ import com.tttsaurus.ingameinfo.common.core.function.IFunc;
 import com.tttsaurus.ingameinfo.common.core.gui.IgiGuiContainer;
 import com.tttsaurus.ingameinfo.common.core.internal.InternalMethods;
 import com.tttsaurus.ingameinfo.common.core.mvvm.binding.*;
+import com.tttsaurus.ingameinfo.common.core.mvvm.context.SharedContext;
 import com.tttsaurus.ingameinfo.common.core.mvvm.view.View;
 import com.tttsaurus.ingameinfo.common.core.mvvm.registry.MvvmRegistry;
 import java.util.ArrayList;
@@ -22,8 +23,10 @@ public abstract class ViewModel<T extends View>
 
     private final List<SlotAccessor> slotAccessors = new ArrayList<>();
 
+    protected final SharedContext sharedContext = new SharedContext();
+
     // getters & setters for communication with IgiGuiContainer
-    // will be injected from IgiGuiContainer before start()
+    // will be injected by IgiGuiContainer before start()
     private IAction_1Param<Boolean> isActiveSetter = null;
     private IFunc<Boolean> isActiveGetter = null;
     private IAction_1Param<IFunc<Boolean>> exitCallbackSetter = null;

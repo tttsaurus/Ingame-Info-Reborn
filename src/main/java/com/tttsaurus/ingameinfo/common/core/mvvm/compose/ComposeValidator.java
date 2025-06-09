@@ -14,18 +14,22 @@ public final class ComposeValidator
     private static ComposeValidator instance;
     private static boolean init = false;
 
-    public static ComposeValidator getInstance() { return instance; }
+    protected static ComposeValidator getInstance()
+    {
+        init();
+        return instance;
+    }
 
     public final ImmutableList<String> validElementNames;
     public final ImmutableList<String> validElementGroupNames;
 
-    public ComposeValidator(ImmutableList<String> validElementNames, ImmutableList<String> validElementGroupNames)
+    private ComposeValidator(ImmutableList<String> validElementNames, ImmutableList<String> validElementGroupNames)
     {
         this.validElementNames = validElementNames;
         this.validElementGroupNames = validElementGroupNames;
     }
 
-    public static void init()
+    private static void init()
     {
         if (init) return;
 

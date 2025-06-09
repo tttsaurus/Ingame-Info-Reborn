@@ -65,8 +65,15 @@ public class IgiGuiContainer
 
         List<SlotAccessor> slotAccessors = InternalMethods.instance.ViewModel$slotAccessors$getter.invoke(viewModel);
         for (SlotAccessor slotAccessor: slotAccessors)
-            if (slotAccessor.getComposeBlock() != null)
-                slotAccessor.getComposeBlock().update(themeConfig);
+        {
+            ComposeBlock composeBlock = slotAccessor.getComposeBlock();
+            if (composeBlock != null)
+            {
+                composeBlock.updateTheme(themeConfig);
+                // first compose update is to add elements and applyLogicTheme
+                composeBlock.update(0d, InternalMethods.instance.ViewModel$sharedContext$getter.invoke(viewModel));
+            }
+        }
 
         mainGroup.calcWidthHeight();
         mainGroup.calcRenderPos(mainGroup.rect);
@@ -95,7 +102,7 @@ public class IgiGuiContainer
         List<SlotAccessor> slotAccessors = InternalMethods.instance.ViewModel$slotAccessors$getter.invoke(viewModel);
         for (SlotAccessor slotAccessor: slotAccessors)
             if (slotAccessor.getComposeBlock() != null)
-                slotAccessor.getComposeBlock().update(themeConfig);
+                slotAccessor.getComposeBlock().update(deltaTime, InternalMethods.instance.ViewModel$sharedContext$getter.invoke(viewModel));
 
         viewModel.onFixedUpdate(deltaTime);
         mainGroup.onFixedUpdate(deltaTime);
@@ -139,12 +146,16 @@ public class IgiGuiContainer
 
         List<SlotAccessor> slotAccessors = InternalMethods.instance.ViewModel$slotAccessors$getter.invoke(viewModel);
         for (SlotAccessor slotAccessor: slotAccessors)
-            if (slotAccessor.getComposeBlock() != null)
+        {
+            ComposeBlock composeBlock = slotAccessor.getComposeBlock();
+            if (composeBlock != null)
             {
-                ComposeBlock compose = slotAccessor.getComposeBlock();
-                compose.clear();
-                compose.update(themeConfig);
+                composeBlock.clear();
+                composeBlock.updateTheme(themeConfig);
+                // first compose update is to add elements and applyLogicTheme
+                composeBlock.update(0d, InternalMethods.instance.ViewModel$sharedContext$getter.invoke(viewModel));
             }
+        }
 
         mainGroup.calcWidthHeight();
         mainGroup.calcRenderPos(mainGroup.rect);

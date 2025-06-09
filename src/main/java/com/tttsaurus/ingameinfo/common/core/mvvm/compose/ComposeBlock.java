@@ -4,6 +4,7 @@ import com.tttsaurus.ingameinfo.common.core.gui.Element;
 import com.tttsaurus.ingameinfo.common.core.gui.layout.ElementGroup;
 import com.tttsaurus.ingameinfo.common.core.gui.registry.ElementRegistry;
 import com.tttsaurus.ingameinfo.common.core.gui.theme.ThemeConfig;
+import com.tttsaurus.ingameinfo.common.core.mvvm.context.SharedContext;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -24,7 +25,6 @@ public abstract class ComposeBlock
     public ComposeBlock(ElementGroup root)
     {
         this.root = root;
-        ComposeValidator.init();
         validator = ComposeValidator.getInstance();
     }
 
@@ -37,11 +37,14 @@ public abstract class ComposeBlock
         abortThisFrame.set(false);
     }
 
-    public final void update(ThemeConfig themeConfig)
+    public final void updateTheme(ThemeConfig themeConfig)
     {
         this.themeConfig = themeConfig;
+    }
 
-        compose();
+    public final void update(double deltaTime, SharedContext sharedContext)
+    {
+        compose(deltaTime, sharedContext);
 
         boolean abort = abortThisFrame.get();
         sysKeyCounter.set(0);
@@ -79,7 +82,7 @@ public abstract class ComposeBlock
                 if (element != null)
                 {
                     element.applyLogicTheme(themeConfig);
-                    root.elements.add(element);
+                    root.add(plan.index, element);
                     for (Map.Entry<String, Object> entry: plan.newStyleProperties.entrySet())
                         element.setStyleProperty(entry.getKey(), entry.getValue());
                 }
@@ -135,7 +138,7 @@ public abstract class ComposeBlock
         return needReCalc;
     }
 
-    public abstract void compose();
+    public abstract void compose(double deltaTime, SharedContext sharedContext);
 
     protected final ComposeNodeWorkspace ui(String name)
     {

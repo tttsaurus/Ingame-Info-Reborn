@@ -2,6 +2,7 @@ package com.tttsaurus.ingameinfo.demo.eg1;
 
 import com.tttsaurus.ingameinfo.common.core.gui.layout.ElementGroup;
 import com.tttsaurus.ingameinfo.common.core.mvvm.compose.ComposeBlock;
+import com.tttsaurus.ingameinfo.common.core.mvvm.context.SharedContext;
 
 public class Eg1Compose extends ComposeBlock
 {
@@ -11,7 +12,7 @@ public class Eg1Compose extends ComposeBlock
     }
 
     @Override
-    public void compose()
+    public void compose(double deltaTime, SharedContext sharedContext)
     {
         ui("VerticalGroup").wrap(() ->
         {

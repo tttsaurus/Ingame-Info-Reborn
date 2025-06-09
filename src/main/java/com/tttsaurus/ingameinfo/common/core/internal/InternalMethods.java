@@ -12,6 +12,7 @@ import com.tttsaurus.ingameinfo.common.core.mvvm.binding.IReactiveCallback;
 import com.tttsaurus.ingameinfo.common.core.mvvm.binding.ReactiveCollection;
 import com.tttsaurus.ingameinfo.common.core.mvvm.binding.ReactiveObject;
 import com.tttsaurus.ingameinfo.common.core.mvvm.binding.SlotAccessor;
+import com.tttsaurus.ingameinfo.common.core.mvvm.context.SharedContext;
 import com.tttsaurus.ingameinfo.common.core.mvvm.view.View;
 import com.tttsaurus.ingameinfo.common.core.mvvm.viewmodel.ViewModel;
 import com.tttsaurus.ingameinfo.common.core.gui.layout.MainGroup;
@@ -37,6 +38,7 @@ public class InternalMethods
     public IFunc_1Param<List<IReactiveCallback>, ReactiveObject> ReactiveObject$passiveCallbacks$getter;
     public IFunc_1Param<Map<String, IgiGuiContainer>, GuiLifecycleProvider> GuiLifecycleProvider$openedGuiMap$getter;
     public IFunc_1Param<List<SlotAccessor>, ViewModel> ViewModel$slotAccessors$getter;
+    public IFunc_1Param<SharedContext, ViewModel> ViewModel$sharedContext$getter;
 
     public IAction_2Param<IgiGuiContainer, ViewModel> IgiGuiContainer$viewModel$setter;
     public IAction_2Param<View, MainGroup> View$mainGroup$setter;
@@ -230,6 +232,27 @@ public class InternalMethods
         {
             ViewModel$slotAccessors$getter = null;
             InGameInfoReborn.LOGGER.error("Reflection setup failed for ViewModel$slotAccessors$getter: " + exception.getMessage());
+            crash(exception);
+        }
+
+        try
+        {
+            Field field = ViewModel.class.getDeclaredField("sharedContext");
+            field.setAccessible(true);
+            MethodHandle handle = lookup.unreflectGetter(field);
+            ViewModel$sharedContext$getter = (arg0) ->
+            {
+                try
+                {
+                    return (SharedContext)handle.invoke(arg0);
+                }
+                catch (Throwable ignored) { return null; }
+            };
+        }
+        catch (Exception exception)
+        {
+            ViewModel$sharedContext$getter = null;
+            InGameInfoReborn.LOGGER.error("Reflection setup failed for ViewModel$sharedContext$getter: " + exception.getMessage());
             crash(exception);
         }
         //</editor-fold>

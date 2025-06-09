@@ -17,6 +17,11 @@ public abstract class ElementGroup extends Element
         InternalMethods.instance.Element$parent$setter.invoke(element, this);
         elements.add(element);
     }
+    public void add(int index, Element element)
+    {
+        InternalMethods.instance.Element$parent$setter.invoke(element, this);
+        elements.add(index, element);
+    }
 
     @Override
     public void applyLogicTheme(ThemeConfig themeConfig)
