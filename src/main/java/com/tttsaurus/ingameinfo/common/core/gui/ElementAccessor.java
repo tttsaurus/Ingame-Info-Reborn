@@ -1,6 +1,5 @@
 package com.tttsaurus.ingameinfo.common.core.gui;
 
-import com.tttsaurus.ingameinfo.common.core.function.IAction_1Param;
 import com.tttsaurus.ingameinfo.common.core.gui.layout.ElementGroup;
 import com.tttsaurus.ingameinfo.common.core.gui.property.style.IStylePropertyGetter;
 import com.tttsaurus.ingameinfo.common.core.gui.property.style.IStylePropertySetter;
@@ -47,8 +46,7 @@ public final class ElementAccessor
 
     public void set(String propertyName, Object value)
     {
-        IAction_1Param<Object> action = ElementRegistry.getStylePropertySetterFullCallback(element, propertyName);
-        if (action != null) action.invoke(value);
+        element.setStyleProperty(propertyName, value);
     }
     public void set(String uid, String propertyName, Object value)
     {
@@ -63,8 +61,7 @@ public final class ElementAccessor
         {
             if (ordinal != -1 && ordinal != index++) continue;
 
-            IAction_1Param<Object> action = ElementRegistry.getStylePropertySetterFullCallback(item, propertyName);
-            if (action != null) action.invoke(value);
+            item.setStyleProperty(propertyName, value);
         }
     }
 
