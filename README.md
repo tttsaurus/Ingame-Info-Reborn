@@ -7,7 +7,7 @@
 [![Downloads](https://img.shields.io/curseforge/dt/1171541?logo=curseforge&label=Downloads)](https://www.curseforge.com/minecraft/mc-mods/ingame-info-reborn)
 [![Downloads](https://img.shields.io/modrinth/dt/ingame-info-reborn?logo=modrinth&label=Downloads)](https://modrinth.com/mod/ingame-info-reborn)
 
-This is a spiritual successor of [InGame-Info-XML](https://github.com/Lunatrius/InGame-Info-XML), **not a fork**. Moreover, this is evolving into a general-purpose declarative MVVM architecture HUD/GUI library for both Java and ZenScript users.
+This is a spiritual successor of [InGame-Info-XML](https://github.com/Lunatrius/InGame-Info-XML), **not a fork**. Moreover, this is evolving into a general-purpose HUD/GUI library for both Java and ZenScript users.
 
 If you like this project, don't forget to give it a star⭐!
 
@@ -18,6 +18,25 @@ This is a library mod that helps you to create in-game overlaid (or focused) GUI
 
 ![Snipaste_2025-01-12_12-53-07](https://github.com/user-attachments/assets/581f0727-bba8-4ff5-9780-8fdbfaf587fd)
 (Nothing will pop up with the default configuration!)
+
+### Architectural Modules Chart
+
+| Module                             | Role                                                             | Status        |
+|------------------------------------|------------------------------------------------------------------|---------------|
+| **MVVM Base**                      | Separates logic (ViewModel) from rendering (View)                | ✅ Done        |
+| **XML-Style DSL For View**         | Declarative XML-style layout to build static UI trees            | ✅ Done        |
+| **Reactive Binding**               | View reacts to changes in ViewModel automatically                | ✅ Done        |
+| **Compose (Powered by Slot)**      | Immediate-mode UI embedded in ViewModel                          | ⚠️ Partially  |
+| **Snapshot Diffing**               | Virtual tree diffing for Compose-based UI                        | ✅ Done        |
+| **Shared Context**                 | Shared runtime context between ViewModel and Compose blocks      | ✅ Done        |
+| **DOM-Like Event System**          | Input propagation and event bubbling/capturing                   | 🚧 Planned    |
+| **Interactable Control**           | Captures input, intercepts propagation (works with Event System) | 🚧 Planned    |
+| **Fixed / Render Update**          | Dual update loop for logic vs animation                          | ✅ Done        |
+| **Annotation Driven Lerp Utility** | Utility for smooth interpolation during render updates           | ✅ Done        |
+| **Transition API**                 | Externally trigger view transitions                              | 🚧 Planned    |
+| **Theme Manager**                  | Global theme system (colors, font scale, etc)                    | ✅ Mostly Done |
+| **Render Op Queue**                | Abstract draw commands for controls                              | ✅ Done        |
+| **Modal Layer**                    | Stack-based modal / dialog system                                | 🚧 Planned    |
 
 ### Declarative GUI Example:
 ```xml
@@ -50,7 +69,7 @@ EventCenter.gameFpsEvent.addListener((fps) ->
 ## Wiki
 - [Wiki Link](https://tttsaurus.github.io/Ingame-Info-Reborn-Wiki/)
 
-## Todo List / Features
+## Implementation Todo List / Overview
 <details>
 <summary>Click to Expand</summary>
 
@@ -60,10 +79,8 @@ _**Not adding controls or QoL updates.**_
 My Detailed Todo List:
 - https://trello.com/b/MTLHeyGn/ingameinfo
 
-Feature Overview:
-- Approximate Model-View-ViewModel pattern (✔)
+Implementation Overview:
 - Add framebuffer to the GUI rendering life cycle (✔)
-- GUI theme manager (✔)
 - Introduce a custom GUI container (✔)
 - Maintain a list of GUI containers so that GUIs can stack together (✔)
 - A GUI container can be ingame-overlaid/focused (runtime switchable) (✔)
@@ -91,7 +108,6 @@ Feature Overview:
   - Slide Bar
   - Progress Bar (✔)
   - Item (✔)
-- Introduce modular animation options for controls
 - Add CrT/Zenscript support (✔)
 - Ingame spotify support (go to wiki for details) (✔)
 
