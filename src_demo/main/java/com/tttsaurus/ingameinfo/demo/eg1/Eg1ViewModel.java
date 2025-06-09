@@ -5,6 +5,7 @@ import com.tttsaurus.ingameinfo.common.core.mvvm.binding.Reactive;
 import com.tttsaurus.ingameinfo.common.core.mvvm.binding.ReactiveCollection;
 import com.tttsaurus.ingameinfo.common.core.mvvm.binding.ReactiveObject;
 import com.tttsaurus.ingameinfo.common.core.mvvm.binding.SlotAccessor;
+import com.tttsaurus.ingameinfo.common.core.mvvm.context.ContextKey;
 import com.tttsaurus.ingameinfo.common.core.mvvm.viewmodel.ViewModel;
 import com.tttsaurus.ingameinfo.common.impl.igievent.EventCenter;
 
@@ -29,9 +30,10 @@ public class Eg1ViewModel extends ViewModel<Eg1View>
     public SlotAccessor slot = new SlotAccessor();
 
     private boolean flag = false;
+    private int counter = 0;
 
     @Override
-    public void start()
+    public void onStart()
     {
         EventCenter.gameTpsMsptEvent.addListener((tps, mspt) ->
         {
@@ -50,6 +52,7 @@ public class Eg1ViewModel extends ViewModel<Eg1View>
             @Override
             public void click()
             {
+                sharedContext.put(ContextKey.gen("num", int.class), ++counter);
                 if (flag)
                 {
                     list.get(0).set("enabled", false);

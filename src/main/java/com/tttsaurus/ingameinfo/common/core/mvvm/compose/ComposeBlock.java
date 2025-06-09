@@ -62,6 +62,15 @@ public abstract class ComposeBlock
             else
                 updatePlans = prevSnapshot.diff(currSnapshot);
 
+//            InGameInfoReborn.LOGGER.info("finished compose");
+//            if (prevSnapshot == null)
+//                InGameInfoReborn.LOGGER.info("prevSnapshot is null");
+//            else
+//                InGameInfoReborn.LOGGER.info("prevSnapshot: " + prevSnapshot);
+//            InGameInfoReborn.LOGGER.info("ccurrSnapshot: " + currSnapshot);
+//            for (UpdatePlan plan: updatePlans)
+//                InGameInfoReborn.LOGGER.info(plan);
+
             prevSnapshot = currSnapshot;
             currSnapshot = new SnapshotTree();
 

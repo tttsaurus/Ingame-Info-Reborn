@@ -1,11 +1,20 @@
 package com.tttsaurus.ingameinfo.common.core.mvvm.context;
 
+import com.tttsaurus.ingameinfo.common.core.reflection.TypeUtils;
+
 public class ContextKey<T>
 {
     public final String key;
     public Class<T> clazz;
 
-    public ContextKey(String key, Class<T> clazz)
+    public static ContextKey<?> gen(String key, Class<?> clazz)
+    {
+        if (clazz.isPrimitive())
+            return new ContextKey<>(key, TypeUtils.toWrappedPrimitive(clazz));
+        return new ContextKey<>(key, clazz);
+    }
+
+    private ContextKey(String key, Class<T> clazz)
     {
         this.key = key;
         this.clazz = clazz;

@@ -29,7 +29,7 @@ public class TemplateViewModel extends ViewModel<TemplateView>
     public ReactiveObject<String> igiFboText = new ReactiveObject<>(){};
 
     @Override
-    public void start()
+    public void onStart()
     {
         EventCenter.enterBiomeEvent.addListener((biomeName, registryName) ->
         {

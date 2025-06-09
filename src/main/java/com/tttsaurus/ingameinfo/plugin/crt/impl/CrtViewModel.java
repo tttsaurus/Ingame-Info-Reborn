@@ -84,7 +84,7 @@ public final class CrtViewModel extends ViewModel<CrtView>
     public boolean getFocused() { return super.getFocused(); }
 
     @Override
-    public void start()
+    public void onStart()
     {
         IViewModelStart action = startActions.get(runtimeMvvm);
         if (action != null) action.start(this);

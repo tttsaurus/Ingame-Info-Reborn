@@ -120,6 +120,6 @@ public abstract class ViewModel<T extends View>
         }
     }
 
-    public abstract void start();
+    public abstract void onStart();
     public abstract void onFixedUpdate(double deltaTime);
 }

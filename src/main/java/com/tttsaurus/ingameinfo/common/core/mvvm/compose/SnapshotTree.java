@@ -199,8 +199,12 @@ public class SnapshotTree
 
                 // root node
                 if (!node.children.isEmpty())
+                {
+                    updatePlans.add(new UpdatePlan(i, UpdatePlan.ActionType.GOTO_NEXT_LAYER));
                     // no need to sync oldRoot here
                     recursiveAddAll(updatePlans, node);
+                    updatePlans.add(new UpdatePlan(-1, UpdatePlan.ActionType.GOTO_PREV_LAYER));
+                }
             }
         }
 

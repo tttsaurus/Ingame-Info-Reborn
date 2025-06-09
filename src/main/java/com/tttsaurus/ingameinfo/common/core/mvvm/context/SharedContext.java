@@ -8,7 +8,7 @@ public class SharedContext
 {
     private final Map<ContextKey<?>, Object> data = new HashMap<>();
 
-    public <T> void put(ContextKey<T> key, T value)
+    public void put(ContextKey<?> key, Object value)
     {
         if (!key.clazz.isInstance(value)) return;
         data.put(key, value);

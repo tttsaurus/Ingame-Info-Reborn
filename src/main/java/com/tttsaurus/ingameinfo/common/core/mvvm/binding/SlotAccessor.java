@@ -24,6 +24,7 @@ public class SlotAccessor
         }
         catch (Throwable throwable)
         {
+            composeBlock = null;
             throw new RuntimeException("Failed to initialize the compose block.", throwable);
         }
     }

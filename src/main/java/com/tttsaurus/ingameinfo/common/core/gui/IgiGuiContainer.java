@@ -63,6 +63,13 @@ public class IgiGuiContainer
         themeConfig = ThemeRegistry.getTheme(themeName);
         mainGroup.applyLogicTheme(themeConfig);
 
+        InternalMethods.instance.ViewModel$isActiveGetter$setter.invoke(viewModel, () -> isActive);
+        InternalMethods.instance.ViewModel$isActiveSetter$setter.invoke(viewModel, (flag) -> isActive = flag);
+        InternalMethods.instance.ViewModel$exitCallbackSetter$setter.invoke(viewModel, (callback) -> exitCallback = callback);
+        InternalMethods.instance.ViewModel$isFocusedGetter$setter.invoke(viewModel, () -> isFocused);
+        InternalMethods.instance.ViewModel$isFocusedSetter$setter.invoke(viewModel, (focused) -> isFocused = focused);
+        viewModel.onStart();
+
         List<SlotAccessor> slotAccessors = InternalMethods.instance.ViewModel$slotAccessors$getter.invoke(viewModel);
         for (SlotAccessor slotAccessor: slotAccessors)
         {
@@ -80,13 +87,6 @@ public class IgiGuiContainer
         mainGroup.finishReCalc();
 
         mainGroup.onCollectLerpInfo();
-
-        InternalMethods.instance.ViewModel$isActiveGetter$setter.invoke(viewModel, () -> isActive);
-        InternalMethods.instance.ViewModel$isActiveSetter$setter.invoke(viewModel, (flag) -> isActive = flag);
-        InternalMethods.instance.ViewModel$exitCallbackSetter$setter.invoke(viewModel, (callback) -> exitCallback = callback);
-        InternalMethods.instance.ViewModel$isFocusedGetter$setter.invoke(viewModel, () -> isFocused);
-        InternalMethods.instance.ViewModel$isFocusedSetter$setter.invoke(viewModel, (focused) -> isFocused = focused);
-        viewModel.start();
     }
     public void onScaledResolutionResize()
     {
@@ -144,6 +144,8 @@ public class IgiGuiContainer
         themeConfig = ThemeRegistry.getTheme(themeName);
         mainGroup.applyLogicTheme(themeConfig);
 
+        viewModel.onStart();
+
         List<SlotAccessor> slotAccessors = InternalMethods.instance.ViewModel$slotAccessors$getter.invoke(viewModel);
         for (SlotAccessor slotAccessor: slotAccessors)
         {
@@ -162,7 +164,5 @@ public class IgiGuiContainer
         mainGroup.finishReCalc();
 
         mainGroup.onCollectLerpInfo();
-
-        viewModel.start();
     }
 }

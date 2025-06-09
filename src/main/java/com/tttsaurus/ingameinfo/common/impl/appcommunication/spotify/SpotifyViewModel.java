@@ -214,7 +214,7 @@ public class SpotifyViewModel extends ViewModel<SpotifyView>
     }
 
     @Override
-    public void start()
+    public void onStart()
     {
         setActive(false);
         setExitCallback(() ->

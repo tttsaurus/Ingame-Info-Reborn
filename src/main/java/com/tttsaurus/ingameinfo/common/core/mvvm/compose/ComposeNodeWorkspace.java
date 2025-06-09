@@ -29,6 +29,10 @@ public class ComposeNodeWorkspace
         return this;
     }
 
+    public ComposeNodeWorkspace key(int key)
+    {
+        return key(String.valueOf(key));
+    }
     public ComposeNodeWorkspace key(String key)
     {
         if (!enableUserKey)
@@ -36,7 +40,7 @@ public class ComposeNodeWorkspace
             enableUserKey = true;
             sysKeyCounter.decrementAndGet();
         }
-        node.userKey = key;
+        node.userKey = "!" + key;
         return this;
     }
 
