@@ -1,11 +1,10 @@
 package com.tttsaurus.ingameinfo.common.impl.mvvm.registry;
 
-import com.tttsaurus.ingameinfo.common.core.event.MvvmRegisterEvent;
+import com.tttsaurus.ingameinfo.common.core.forgeevent.MvvmRegisterEvent;
 import com.tttsaurus.ingameinfo.common.core.gui.IgiGuiManager;
 import com.tttsaurus.ingameinfo.common.core.mvvm.registry.MvvmRegistry;
 import com.tttsaurus.ingameinfo.common.impl.appcommunication.spotify.SpotifyViewModel;
 import com.tttsaurus.ingameinfo.common.impl.mvvm.TemplateViewModel;
-import com.tttsaurus.ingameinfo.config.IgiCommonConfig;
 import com.tttsaurus.ingameinfo.config.IgiSpotifyIntegrationConfig;
 import com.tttsaurus.ingameinfo.plugin.crt.impl.CrtMvvm;
 import com.tttsaurus.ingameinfo.plugin.crt.impl.CrtViewModel;

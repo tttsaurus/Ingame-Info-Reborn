@@ -1,6 +1,5 @@
 package com.tttsaurus.ingameinfo.common.core.render;
 
-import com.tttsaurus.ingameinfo.common.core.item.GhostableItem;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.Gui;

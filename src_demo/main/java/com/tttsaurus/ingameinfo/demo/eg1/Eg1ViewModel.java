@@ -60,8 +60,8 @@ public class Eg1ViewModel extends ViewModel<Eg1View>
                 }
                 else
                 {
-                    list.get(0).set("enabled", true);
                     list.get(1).set("enabled", false);
+                    list.get(0).set("enabled", true);
                 }
                 flag = !flag;
             }

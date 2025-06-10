@@ -1,6 +1,6 @@
 package com.tttsaurus.ingameinfo.common.core.render.shader;
 
-import com.tttsaurus.ingameinfo.common.core.reader.RlReaderUtils;
+import com.tttsaurus.ingameinfo.common.core.commonutils.RlReaderUtils;
 
 public final class ShaderLoadingUtils
 {

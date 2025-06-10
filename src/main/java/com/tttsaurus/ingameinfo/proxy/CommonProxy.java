@@ -1,7 +1,7 @@
 package com.tttsaurus.ingameinfo.proxy;
 
 import com.tttsaurus.ingameinfo.InGameInfoReborn;
-import com.tttsaurus.ingameinfo.common.core.file.FileUtils;
+import com.tttsaurus.ingameinfo.common.core.commonutils.FileUtils;
 import com.tttsaurus.ingameinfo.common.impl.network.IgiNetwork;
 import com.tttsaurus.ingameinfo.config.ForgeConfigWriter;
 import com.tttsaurus.ingameinfo.config.IgiCommonConfig;

@@ -1,7 +1,6 @@
 package com.tttsaurus.ingameinfo.common.impl.appcommunication.spotify;
 
-import com.tttsaurus.ingameinfo.common.core.file.FileUtils;
-import com.tttsaurus.ingameinfo.config.IgiCommonConfig;
+import com.tttsaurus.ingameinfo.common.core.commonutils.FileUtils;
 import com.tttsaurus.ingameinfo.common.core.appcommunication.spotify.SpotifyAccessUtils;
 import com.tttsaurus.ingameinfo.common.core.appcommunication.spotify.SpotifyOAuthUtils;
 import com.tttsaurus.ingameinfo.common.core.appcommunication.spotify.SpotifyUserInfo;

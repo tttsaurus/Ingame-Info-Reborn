@@ -3,7 +3,7 @@ package com.tttsaurus.ingameinfo.proxy;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import com.tttsaurus.ingameinfo.common.core.appcommunication.spotify.SpotifyOAuthUtils;
-import com.tttsaurus.ingameinfo.common.core.event.MvvmRegisterEvent;
+import com.tttsaurus.ingameinfo.common.core.forgeevent.MvvmRegisterEvent;
 import com.tttsaurus.ingameinfo.common.core.gui.Element;
 import com.tttsaurus.ingameinfo.common.core.gui.IgiGuiManager;
 import com.tttsaurus.ingameinfo.common.core.gui.property.lerp.ILerpablePropertyGetter;

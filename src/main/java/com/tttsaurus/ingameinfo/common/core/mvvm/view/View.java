@@ -1,6 +1,6 @@
 package com.tttsaurus.ingameinfo.common.core.mvvm.view;
 
-import com.tttsaurus.ingameinfo.common.core.file.FileUtils;
+import com.tttsaurus.ingameinfo.common.core.commonutils.FileUtils;
 import com.tttsaurus.ingameinfo.common.core.gui.Element;
 import com.tttsaurus.ingameinfo.common.core.gui.GuiLayout;
 import com.tttsaurus.ingameinfo.common.core.gui.IgiGuiContainer;

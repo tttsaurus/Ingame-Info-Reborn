@@ -6,7 +6,7 @@ import com.tttsaurus.ingameinfo.common.core.gui.property.style.CallbackInfo;
 import com.tttsaurus.ingameinfo.common.core.gui.property.style.StyleProperty;
 import com.tttsaurus.ingameinfo.common.core.gui.property.style.StylePropertyCallback;
 import com.tttsaurus.ingameinfo.common.core.gui.render.RenderOpQueue;
-import com.tttsaurus.ingameinfo.common.core.input.MouseUtils;
+import com.tttsaurus.ingameinfo.common.core.commonutils.MouseUtils;
 import java.util.ArrayList;
 import java.util.List;
 

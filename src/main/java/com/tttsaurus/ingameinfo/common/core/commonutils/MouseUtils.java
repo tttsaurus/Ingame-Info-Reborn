@@ -1,4 +1,4 @@
-package com.tttsaurus.ingameinfo.common.core.input;
+package com.tttsaurus.ingameinfo.common.core.commonutils;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.ScaledResolution;

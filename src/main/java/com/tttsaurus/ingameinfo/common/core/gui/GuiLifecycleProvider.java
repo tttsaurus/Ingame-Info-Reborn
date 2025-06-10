@@ -1,7 +1,7 @@
 package com.tttsaurus.ingameinfo.common.core.gui;
 
-import com.tttsaurus.ingameinfo.common.core.event.IgiGuiInitEvent;
-import com.tttsaurus.ingameinfo.common.core.event.IgiGuiRegainScreenFocusEvent;
+import com.tttsaurus.ingameinfo.common.core.forgeevent.IgiGuiInitEvent;
+import com.tttsaurus.ingameinfo.common.core.forgeevent.IgiGuiRegainScreenFocusEvent;
 import com.tttsaurus.ingameinfo.common.core.function.IFunc;
 import com.tttsaurus.ingameinfo.common.core.gui.delegate.dummy.IDummyDrawScreen;
 import com.tttsaurus.ingameinfo.common.core.gui.delegate.dummy.IDummyKeyTyped;

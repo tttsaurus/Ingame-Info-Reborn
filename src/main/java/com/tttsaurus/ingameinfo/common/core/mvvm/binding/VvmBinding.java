@@ -4,6 +4,7 @@ import com.tttsaurus.ingameinfo.common.core.gui.Element;
 import com.tttsaurus.ingameinfo.common.core.gui.GuiLayout;
 import com.tttsaurus.ingameinfo.common.core.gui.layout.ElementGroup;
 import com.tttsaurus.ingameinfo.common.core.function.IAction_1Param;
+import com.tttsaurus.ingameinfo.common.core.gui.layout.Slot;
 import com.tttsaurus.ingameinfo.common.core.gui.property.style.IStylePropertyGetter;
 import com.tttsaurus.ingameinfo.common.core.gui.property.style.IStylePropertySetter;
 import com.tttsaurus.ingameinfo.common.core.gui.property.style.IStylePropertySyncTo;
@@ -127,7 +128,7 @@ public class VvmBinding<TView extends View>
         {
             if (reactive.ordinal() != -1 && reactive.ordinal() != index++) continue;
 
-            if (ElementGroup.class.isAssignableFrom(element.getClass()))
+            if (Slot.class.isAssignableFrom(element.getClass()))
             {
                 slotAccessor.group = (ElementGroup)element;
             }

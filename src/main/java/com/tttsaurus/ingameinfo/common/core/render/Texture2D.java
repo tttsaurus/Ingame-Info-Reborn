@@ -3,6 +3,7 @@ package com.tttsaurus.ingameinfo.common.core.render;
 import net.minecraft.client.renderer.GlStateManager;
 import org.lwjgl.opengl.*;
 import java.nio.ByteBuffer;
+
 import static com.tttsaurus.ingameinfo.common.core.render.CommonBuffers.INT_BUFFER_16;
 
 public final class Texture2D implements IGlDisposable

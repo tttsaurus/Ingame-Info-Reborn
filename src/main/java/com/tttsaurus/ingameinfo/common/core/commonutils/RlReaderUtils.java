@@ -1,4 +1,4 @@
-package com.tttsaurus.ingameinfo.common.core.reader;
+package com.tttsaurus.ingameinfo.common.core.commonutils;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.IResource;

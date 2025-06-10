@@ -7,7 +7,7 @@ import com.tttsaurus.ingameinfo.common.core.gui.layout.Rect;
 import com.tttsaurus.ingameinfo.common.core.gui.registry.RegisterElement;
 import com.tttsaurus.ingameinfo.common.core.gui.property.style.StyleProperty;
 import com.tttsaurus.ingameinfo.common.core.gui.render.RenderOpQueue;
-import com.tttsaurus.ingameinfo.common.core.input.MouseUtils;
+import com.tttsaurus.ingameinfo.common.core.commonutils.MouseUtils;
 
 @RegisterElement
 public class DraggableGroup extends DraggableContainerGroup

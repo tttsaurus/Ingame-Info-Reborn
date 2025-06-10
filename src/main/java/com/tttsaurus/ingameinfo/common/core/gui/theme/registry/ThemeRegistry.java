@@ -1,8 +1,8 @@
 package com.tttsaurus.ingameinfo.common.core.gui.theme.registry;
 
 import com.tttsaurus.ingameinfo.InGameInfoReborn;
-import com.tttsaurus.ingameinfo.common.core.event.IgiGuiRegainScreenFocusEvent;
-import com.tttsaurus.ingameinfo.common.core.file.FileUtils;
+import com.tttsaurus.ingameinfo.common.core.forgeevent.IgiGuiRegainScreenFocusEvent;
+import com.tttsaurus.ingameinfo.common.core.commonutils.FileUtils;
 import com.tttsaurus.ingameinfo.common.core.gui.theme.ThemeConfig;
 import com.tttsaurus.ingameinfo.common.core.gui.theme.ThemeConfigSerDesUtils;
 import com.tttsaurus.ingameinfo.common.core.gui.theme.ThemeConfigUpdater;

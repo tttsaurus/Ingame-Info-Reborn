@@ -1,4 +1,4 @@
-package com.tttsaurus.ingameinfo.common.core.file;
+package com.tttsaurus.ingameinfo.common.core.commonutils;
 
 import java.io.File;
 import java.io.RandomAccessFile;
