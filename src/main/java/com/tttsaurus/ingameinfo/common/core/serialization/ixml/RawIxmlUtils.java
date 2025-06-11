@@ -118,12 +118,20 @@ public final class RawIxmlUtils
             }
             else
             {
-                while (endIndex2 + 1 < param.length() && (c != ' '))
+                boolean func = c == '(';
+                while (endIndex2 + 1 < param.length() && (c != ' ') && !func)
+                {
                     c = param.charAt(++endIndex2);
-                if (endIndex2 == param.length() - 1)
+                    if (c == '(') func = true;
+                }
+                while (endIndex2 + 1 < param.length() && (c != ')') && func)
+                    c = param.charAt(++endIndex2);
+
+                if (endIndex2 == param.length() - 1 || func)
                     value = param.substring(endIndex, endIndex2 + 1);
                 else
                     value = param.substring(endIndex, endIndex2);
+
                 value = value.trim();
             }
 

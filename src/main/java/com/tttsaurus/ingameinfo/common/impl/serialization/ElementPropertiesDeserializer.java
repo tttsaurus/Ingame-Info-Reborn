@@ -5,11 +5,11 @@ import com.tttsaurus.ingameinfo.common.core.gui.ElementProperty;
 import com.tttsaurus.ingameinfo.common.core.gui.property.style.IStylePropertySetter;
 import com.tttsaurus.ingameinfo.common.core.serialization.IDeserializer;
 import com.tttsaurus.ingameinfo.common.core.gui.registry.ElementRegistry;
+import com.tttsaurus.ingameinfo.common.core.serialization.ixml.RawIxmlUtils;
 import net.minecraft.util.Tuple;
 import java.util.ArrayList;
 import java.util.List;
 
-@SuppressWarnings("all")
 public class ElementPropertiesDeserializer implements IDeserializer<List<ElementProperty>>
 {
     private final Class<? extends Element> clazz;
@@ -20,8 +20,7 @@ public class ElementPropertiesDeserializer implements IDeserializer<List<Element
     {
         List<ElementProperty> properties = new ArrayList<>();
 
-        RawElementStylesDeserializer deserializer = new RawElementStylesDeserializer();
-        List<Tuple<String, String>> list = deserializer.deserialize(raw);
+        List<Tuple<String, String>> list = RawIxmlUtils.splitParams(raw);
         for (Tuple<String, String> pair: list)
         {
             IStylePropertySetter setter = ElementRegistry.getStylePropertySetter(clazz, pair.getFirst());

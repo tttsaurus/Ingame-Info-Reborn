@@ -6,9 +6,40 @@ import stanhebben.zenscript.annotations.ZenMethod;
 
 @SuppressWarnings("all")
 @ZenRegister
-@ZenClass("mods.ingameinfo.Utils")
-public final class Utils
+@ZenClass("mods.ingameinfo.utils.CommonUtils")
+public final class CommonUtils
 {
+    @ZenRegister
+    @ZenClass("mods.ingameinfo.utils.AtomicBoolean")
+    public static class AtomicBoolean
+    {
+        private final java.util.concurrent.atomic.AtomicBoolean atomicBoolean;
+
+        public AtomicBoolean()
+        {
+            atomicBoolean = new java.util.concurrent.atomic.AtomicBoolean();
+        }
+
+        @ZenMethod
+        public void set(boolean value)
+        {
+            atomicBoolean.set(value);
+        }
+        @ZenMethod
+        public boolean get()
+        {
+            return atomicBoolean.get();
+        }
+
+        @ZenMethod("new")
+        public static AtomicBoolean newAtomicBoolean(boolean value)
+        {
+            AtomicBoolean instance = new AtomicBoolean();
+            instance.set(value);
+            return instance;
+        }
+    }
+
     @ZenMethod
     public static String alignStringToRight(String value, int expectLength)
     {
@@ -232,5 +263,51 @@ public final class Utils
     public static String toString(boolean value)
     {
         return value ? "true" : "false";
+    }
+
+    @ZenMethod
+    public static Object toObject(Object value)
+    {
+        return value;
+    }
+    @ZenMethod
+    public static Object toObject(String value)
+    {
+        return value;
+    }
+    @ZenMethod
+    public static Object toObject(int value)
+    {
+        return (Integer)value;
+    }
+    @ZenMethod
+    public static Object toObject(long value)
+    {
+        return (Long)value;
+    }
+    @ZenMethod
+    public static Object toObject(short value)
+    {
+        return (Short)value;
+    }
+    @ZenMethod
+    public static Object toObject(double value)
+    {
+        return (Double)value;
+    }
+    @ZenMethod
+    public static Object toObject(float value)
+    {
+        return (Float)value;
+    }
+    @ZenMethod
+    public static Object toObject(char value)
+    {
+        return (Character)value;
+    }
+    @ZenMethod
+    public static Object toObject(boolean value)
+    {
+        return (Boolean)value;
     }
 }

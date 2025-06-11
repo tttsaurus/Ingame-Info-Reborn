@@ -9,8 +9,8 @@ public class ItemDeserializer implements IDeserializer<GhostableItem>
     public GhostableItem deserialize(String raw)
     {
         raw = raw.trim();
-        if (raw.startsWith("(") && raw.endsWith(")"))
-            return new GhostableItem(raw.substring(1, raw.length() - 1));
+        if (raw.startsWith("item(") && raw.endsWith(")"))
+            return new GhostableItem(raw.substring(5, raw.length() - 1).trim());
         return null;
     }
 }

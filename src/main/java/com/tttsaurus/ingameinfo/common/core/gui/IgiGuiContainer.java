@@ -40,6 +40,20 @@ public class IgiGuiContainer
     private boolean isActive = true;
     private IFunc<Boolean> exitCallback = () -> true;
 
+    private void resetDef()
+    {
+        useHeldItemWhitelist = false;
+        heldItemWhitelist.clear();
+        useHeldItemBlacklist = false;
+        heldItemBlacklist.clear();
+        debug = false;
+        exitKeyForFocusedGui = Keyboard.KEY_ESCAPE;
+        isFocused = false;
+        hasFocusBackground = true;
+        backgroundColor = -1072689136;
+        themeName = "default";
+    }
+
     //<editor-fold desc="getters">
     public boolean getActive() { return isActive; }
     public IFunc<Boolean> getExitCallback() { return exitCallback; }
@@ -139,6 +153,7 @@ public class IgiGuiContainer
     // todo: state preserving hotswap
     public void refreshVvm()
     {
+        resetDef();
         viewModel.refresh(this);
 
         themeConfig = ThemeRegistry.getTheme(themeName);

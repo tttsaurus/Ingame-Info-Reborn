@@ -49,9 +49,6 @@ public abstract class View
     {
         if (mainGroup == null) return;
 
-        container.getHeldItemWhitelist().clear();
-        container.getHeldItemBlacklist().clear();
-
         GuiLayout guiLayout = init(container);
         MainGroup mainGroup = InternalMethods.instance.GuiLayout$mainGroup$getter.invoke(guiLayout);
 

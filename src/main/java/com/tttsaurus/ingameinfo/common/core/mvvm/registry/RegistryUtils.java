@@ -61,6 +61,16 @@ public final class RegistryUtils
     {
         Map<Reactive, IReactiveCollectionGetter> reactiveCollections = new HashMap<>();
 
+        // crt support
+        if (CrtViewModel.class.isAssignableFrom(clazz))
+        {
+            Map<String, Tuple<Reactive, ReactiveCollection>> def = CrtViewModel.reactiveCollectionDefs.get(mvvmRegistryName);
+            if (def != null)
+                for (Tuple<Reactive, ReactiveCollection> tuple: def.values())
+                    reactiveCollections.put(tuple.getFirst(), (target) -> tuple.getSecond());
+            return reactiveCollections;
+        }
+
         for (Field field: clazz.getDeclaredFields())
             if (field.isAnnotationPresent(annotation))
             {

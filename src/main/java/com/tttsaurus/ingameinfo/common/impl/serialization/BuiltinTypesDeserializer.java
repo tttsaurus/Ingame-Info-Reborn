@@ -2,12 +2,57 @@ package com.tttsaurus.ingameinfo.common.impl.serialization;
 
 import com.tttsaurus.ingameinfo.common.core.reflection.TypeUtils;
 import com.tttsaurus.ingameinfo.common.core.serialization.IDeserializer;
+import java.awt.*;
 
 @SuppressWarnings("all")
 public class BuiltinTypesDeserializer<T> implements IDeserializer<T>
 {
     private final Class<T> clazz;
     public BuiltinTypesDeserializer(Class<T> clazz) { this.clazz = clazz; }
+
+    private static int parseColor0(String hex)
+    {
+        if (hex.length() == 6)
+            return 0xff000000 | Integer.parseInt(hex, 16);
+        if (hex.length() == 8)
+            return (int)Long.parseLong(hex, 16);
+        return 0;
+    }
+    private static int parseColor1(String rgb)
+    {
+        String[] items = rgb.split(",");
+        if (items.length != 3) return 0;
+
+        int r = Integer.parseInt(items[0].trim());
+        int g = Integer.parseInt(items[1].trim());
+        int b = Integer.parseInt(items[2].trim());
+
+        return (new Color(r, g, b, 255)).getRGB();
+    }
+    private static int parseColor2(String argb)
+    {
+        String[] items = argb.split(",");
+        if (items.length != 4) return 0;
+
+        float a = Float.parseFloat(items[0].trim());
+        int r = Integer.parseInt(items[1].trim());
+        int g = Integer.parseInt(items[2].trim());
+        int b = Integer.parseInt(items[3].trim());
+
+        return (new Color(r, g, b, (int)(a * 255f))).getRGB();
+    }
+    private static int parseColor3(String rgba)
+    {
+        String[] items = rgba.split(",");
+        if (items.length != 4) return 0;
+
+        int r = Integer.parseInt(items[0].trim());
+        int g = Integer.parseInt(items[1].trim());
+        int b = Integer.parseInt(items[2].trim());
+        float a = Float.parseFloat(items[3].trim());
+
+        return (new Color(r, g, b, (int)(a * 255f))).getRGB();
+    }
 
     @Override
     public T deserialize(String raw)
@@ -17,7 +62,15 @@ public class BuiltinTypesDeserializer<T> implements IDeserializer<T>
             if (TypeUtils.isIntOrWrappedInt(clazz))
                 try
                 {
-                    if (raw.startsWith("0x"))
+                    if (raw.startsWith("#"))
+                        return (T)(Object)parseColor0(raw.substring(1));
+                    else if (raw.startsWith("rgb("))
+                        return (T)(Object)parseColor1(raw.substring(4, raw.length() - 1));
+                    else if (raw.startsWith("argb("))
+                        return (T)(Object)parseColor2(raw.substring(5, raw.length() - 1));
+                    else if (raw.startsWith("rgba("))
+                        return (T)(Object)parseColor3(raw.substring(5, raw.length() - 1));
+                    else if (raw.startsWith("0x"))
                         return (T)(Object)Integer.parseInt(raw.substring(2), 16);
                     else
                         return (T)(Object)Integer.parseInt(raw);

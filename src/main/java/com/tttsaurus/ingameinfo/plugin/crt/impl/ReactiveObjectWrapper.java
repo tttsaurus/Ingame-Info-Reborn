@@ -54,41 +54,11 @@ public final class ReactiveObjectWrapper
     @ZenMethod
     public Object get()
     {
-        Object obj = reactiveObject.get();
-
-        if (obj instanceof Alignment alignment)
-            return new AlignmentWrapper(alignment);
-        if (obj instanceof Padding padding)
-            return new PaddingWrapper(padding);
-        if (obj instanceof Pivot pivot)
-            return new PivotWrapper(pivot);
-        if (obj instanceof Skewness skewness)
-            return new SkewnessWrapper(skewness);
-        if (obj instanceof GhostableItem ghostableItem)
-            return new GhostableItemWrapper(ghostableItem);
-        if (obj instanceof ITextAnimDef iTextAnimDef)
-            return new TextAnimDefWrapper(iTextAnimDef);
-
-        return obj;
+        return WrapUnwrapUtils.safeWrap(reactiveObject.get());
     }
     @ZenMethod
     public void set(Object value)
     {
-        Object input = value;
-
-        if (value instanceof AlignmentWrapper alignmentWrapper)
-            input = alignmentWrapper.alignment;
-        if (value instanceof PaddingWrapper paddingWrapper)
-            input = paddingWrapper.padding;
-        if (value instanceof PivotWrapper pivotWrapper)
-            input = pivotWrapper.pivot;
-        if (value instanceof SkewnessWrapper skewnessWrapper)
-            input = skewnessWrapper.skewness;
-        if (value instanceof GhostableItemWrapper ghostableItemWrapper)
-            input = ghostableItemWrapper.ghostableItem;
-        if (value instanceof TextAnimDefWrapper textAnimDefWrapper)
-            input = textAnimDefWrapper.iTextAnimDef;
-
-        reactiveObject.set(input);
+        reactiveObject.set(WrapUnwrapUtils.safeUnwrap(value));
     }
 }

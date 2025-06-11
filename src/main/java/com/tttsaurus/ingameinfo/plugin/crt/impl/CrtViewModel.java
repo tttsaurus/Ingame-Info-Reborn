@@ -1,6 +1,7 @@
 package com.tttsaurus.ingameinfo.plugin.crt.impl;
 
 import com.tttsaurus.ingameinfo.common.core.mvvm.binding.Reactive;
+import com.tttsaurus.ingameinfo.common.core.mvvm.binding.ReactiveCollection;
 import com.tttsaurus.ingameinfo.common.core.mvvm.binding.ReactiveObject;
 import com.tttsaurus.ingameinfo.common.core.mvvm.viewmodel.ViewModel;
 import com.tttsaurus.ingameinfo.common.core.reflection.AnnotationUtils;
@@ -38,6 +39,7 @@ public final class CrtViewModel extends ViewModel<CrtView>
 
     // key: mvvm registry name
     public static final Map<String, Map<String, Tuple<Reactive, ReactiveObject<?>>>> reactiveObjectDefs = new HashMap<>();
+    public static final Map<String, Map<String, Tuple<Reactive, ReactiveCollection>>> reactiveCollectionDefs = new HashMap<>();
 
     @ZenMethod
     public static ReactiveObjectWrapper registerReactiveObject(String fieldName, TypesWrapper typesWrapper, String targetUid, String property, @Optional boolean initiativeSync, @Optional boolean passiveSync, @Optional(valueLong = -1) int ordinal)
@@ -69,6 +71,38 @@ public final class CrtViewModel extends ViewModel<CrtView>
         Tuple<Reactive, ReactiveObject<?>> tuple = def.get(fieldName);
         if (tuple == null) return null;
         return new ReactiveObjectWrapper(tuple.getSecond());
+    }
+
+    @ZenMethod
+    public static ReactiveCollectionWrapper registerReactiveCollection(String fieldName, String targetUid, @Optional(valueLong = -1) int ordinal)
+    {
+        Map<String, Tuple<Reactive, ReactiveCollection>> def = reactiveCollectionDefs.computeIfAbsent(CrtMvvm.currentMvvm, k -> new HashMap<>());
+
+        if (def.containsKey(fieldName)) return null;
+
+        Map<String, Object> values = new HashMap<>();
+        values.put("targetUid", targetUid);
+        values.put("property", "");
+        values.put("initiativeSync", false);
+        values.put("passiveSync", false);
+        values.put("ordinal", ordinal);
+        Reactive reactive = AnnotationUtils.createAnnotation(Reactive.class, values);
+
+        ReactiveCollectionWrapper wrapper = new ReactiveCollectionWrapper(new ReactiveCollection());
+
+        def.put(fieldName, new Tuple<Reactive, ReactiveCollection>(reactive, wrapper.reactiveCollection));
+
+        return wrapper;
+    }
+
+    @ZenMethod
+    public static ReactiveCollectionWrapper getReactiveCollection(String fieldName)
+    {
+        Map<String, Tuple<Reactive, ReactiveCollection>> def = reactiveCollectionDefs.get(CrtMvvm.currentMvvm);
+        if (def == null) return null;
+        Tuple<Reactive, ReactiveCollection> tuple = def.get(fieldName);
+        if (tuple == null) return null;
+        return new ReactiveCollectionWrapper(tuple.getSecond());
     }
     //</editor-fold>
 
