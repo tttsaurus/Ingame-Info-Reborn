@@ -10,6 +10,36 @@ import stanhebben.zenscript.annotations.ZenMethod;
 public final class Utils
 {
     @ZenMethod
+    public static String alignStringToRight(String value, int expectLength)
+    {
+        if (value.length() < expectLength)
+        {
+            StringBuilder builder = new StringBuilder();
+            int compensate = expectLength - value.length();
+            for (int i = 0; i < compensate; i++) builder.append(" ");
+            builder.append(value);
+            return builder.toString();
+        }
+        else
+            return value;
+    }
+
+    @ZenMethod
+    public static String alignStringToLeft(String value, int expectLength)
+    {
+        if (value.length() < expectLength)
+        {
+            StringBuilder builder = new StringBuilder();
+            builder.append(value);
+            int compensate = expectLength - value.length();
+            for (int i = 0; i < compensate; i++) builder.append(" ");
+            return builder.toString();
+        }
+        else
+            return value;
+    }
+
+    @ZenMethod
     public static float truncateFloat(float value, int decimalPlaces)
     {
         float multiplier = (float)Math.pow(10, decimalPlaces);
