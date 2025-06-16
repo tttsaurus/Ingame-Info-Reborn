@@ -146,10 +146,12 @@ public abstract class GuiLifecycleProvider
         }
         //</editor-fold>
 
+        // todo: input lifecycle - onPropagateInput
+
         updateInternal();
     }
 
-    //<editor-fold desc="fixed update variables">
+    //<editor-fold desc="fixed update">
     // units are all in second
     protected int maxFps_FixedUpdate = 125;
     protected double timePerFrame_FixedUpdate = 1d / maxFps_FixedUpdate;
@@ -158,15 +160,15 @@ public abstract class GuiLifecycleProvider
         maxFps_FixedUpdate = fps;
         timePerFrame_FixedUpdate = 1d / maxFps_FixedUpdate;
     }
-    //</editor-fold>
 
     protected final void definedFixedUpdate(double deltaTime)
     {
         for (IgiGuiContainer container: openedGuiMap.values())
             container.onFixedUpdate(deltaTime);
     }
+    //</editor-fold>
 
-    //<editor-fold desc="render update variables">
+    //<editor-fold desc="render update">
     // units are all in second
     protected int maxFps_RenderUpdate = 240;
     protected double timePerFrame_RenderUpdate = 1d / maxFps_RenderUpdate;
@@ -175,7 +177,6 @@ public abstract class GuiLifecycleProvider
         maxFps_RenderUpdate = fps;
         timePerFrame_RenderUpdate = 1d / maxFps_RenderUpdate;
     }
-    //</editor-fold>
 
     protected final void definedRenderUpdate()
     {
@@ -237,6 +238,7 @@ public abstract class GuiLifecycleProvider
             }
         }
     }
+    //</editor-fold>
 
     protected abstract boolean isUsingFramebuffer();
     protected abstract boolean isUsingMultisampleFramebuffer();

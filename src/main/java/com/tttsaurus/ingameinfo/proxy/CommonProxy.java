@@ -5,7 +5,7 @@ import com.tttsaurus.ingameinfo.common.core.commonutils.FileUtils;
 import com.tttsaurus.ingameinfo.common.impl.network.IgiNetwork;
 import com.tttsaurus.ingameinfo.config.ForgeConfigWriter;
 import com.tttsaurus.ingameinfo.config.IgiCommonConfig;
-import com.tttsaurus.ingameinfo.common.core.internal.InternalMethods;
+import com.tttsaurus.ingameinfo.common.core.InternalMethods;
 import com.tttsaurus.ingameinfo.config.IgiDefaultLifecycleProviderConfig;
 import com.tttsaurus.ingameinfo.config.IgiSpotifyIntegrationConfig;
 import com.tttsaurus.ingameinfo.plugin.crt.impl.CrtEventManager;

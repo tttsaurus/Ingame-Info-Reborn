@@ -2,7 +2,7 @@ package com.tttsaurus.ingameinfo.common.impl.mvvm.command;
 
 import com.tttsaurus.ingameinfo.common.core.gui.IgiGuiContainer;
 import com.tttsaurus.ingameinfo.common.core.gui.IgiGuiManager;
-import com.tttsaurus.ingameinfo.common.core.internal.InternalMethods;
+import com.tttsaurus.ingameinfo.common.core.InternalMethods;
 import net.minecraft.client.Minecraft;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.CommandException;

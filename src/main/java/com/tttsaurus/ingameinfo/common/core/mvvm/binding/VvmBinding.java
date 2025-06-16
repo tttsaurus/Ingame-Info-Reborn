@@ -8,7 +8,7 @@ import com.tttsaurus.ingameinfo.common.core.gui.layout.Slot;
 import com.tttsaurus.ingameinfo.common.core.gui.property.style.IStylePropertyGetter;
 import com.tttsaurus.ingameinfo.common.core.gui.property.style.IStylePropertySetter;
 import com.tttsaurus.ingameinfo.common.core.gui.property.style.IStylePropertySyncTo;
-import com.tttsaurus.ingameinfo.common.core.internal.InternalMethods;
+import com.tttsaurus.ingameinfo.common.core.InternalMethods;
 import com.tttsaurus.ingameinfo.common.core.mvvm.view.View;
 import com.tttsaurus.ingameinfo.common.core.mvvm.viewmodel.ViewModel;
 import com.tttsaurus.ingameinfo.common.core.reflection.TypeUtils;

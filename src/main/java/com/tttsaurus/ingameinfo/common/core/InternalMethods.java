@@ -1,4 +1,4 @@
-package com.tttsaurus.ingameinfo.common.core.internal;
+package com.tttsaurus.ingameinfo.common.core;
 
 import com.tttsaurus.ingameinfo.InGameInfoReborn;
 import com.tttsaurus.ingameinfo.common.core.function.*;

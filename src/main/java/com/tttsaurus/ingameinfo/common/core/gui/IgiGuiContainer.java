@@ -1,9 +1,10 @@
 package com.tttsaurus.ingameinfo.common.core.gui;
 
 import com.tttsaurus.ingameinfo.common.core.function.IFunc;
+import com.tttsaurus.ingameinfo.common.core.input.InputState;
 import com.tttsaurus.ingameinfo.common.core.gui.render.RenderOpQueue;
 import com.tttsaurus.ingameinfo.common.core.gui.theme.ThemeConfig;
-import com.tttsaurus.ingameinfo.common.core.internal.InternalMethods;
+import com.tttsaurus.ingameinfo.common.core.InternalMethods;
 import com.tttsaurus.ingameinfo.common.core.item.GhostableItem;
 import com.tttsaurus.ingameinfo.common.core.mvvm.binding.SlotAccessor;
 import com.tttsaurus.ingameinfo.common.core.mvvm.compose.ComposeBlock;
@@ -102,6 +103,7 @@ public class IgiGuiContainer
 
         mainGroup.onCollectLerpInfo();
     }
+
     public void onScaledResolutionResize()
     {
         mainGroup.resetRenderInfo();
@@ -109,6 +111,7 @@ public class IgiGuiContainer
         mainGroup.calcRenderPos(mainGroup.rect);
         mainGroup.finishReCalc();
     }
+
     public void onFixedUpdate(double deltaTime)
     {
         if (!isActive) return;
@@ -131,6 +134,7 @@ public class IgiGuiContainer
 
         mainGroup.onCollectLerpInfo();
     }
+
     public RenderOpQueue onRenderUpdate(boolean focused)
     {
         if (!isActive) return new RenderOpQueue();
@@ -147,6 +151,13 @@ public class IgiGuiContainer
         if (debug) mainGroup.renderDebugRect(queue);
 
         return queue;
+    }
+
+    public void onPropagateInput(InputState inputState)
+    {
+        if (!isActive) return;
+
+        mainGroup.onPropagateInput(inputState);
     }
 
     // viewModel.start() may not work properly due to the lack of `undo` function

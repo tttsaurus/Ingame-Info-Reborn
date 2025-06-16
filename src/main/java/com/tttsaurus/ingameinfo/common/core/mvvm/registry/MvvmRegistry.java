@@ -3,7 +3,7 @@ package com.tttsaurus.ingameinfo.common.core.mvvm.registry;
 import com.tttsaurus.ingameinfo.InGameInfoReborn;
 import com.tttsaurus.ingameinfo.common.core.gui.GuiLayout;
 import com.tttsaurus.ingameinfo.common.core.gui.IgiGuiContainer;
-import com.tttsaurus.ingameinfo.common.core.internal.InternalMethods;
+import com.tttsaurus.ingameinfo.common.core.InternalMethods;
 import com.tttsaurus.ingameinfo.common.core.mvvm.binding.IReactiveCollectionGetter;
 import com.tttsaurus.ingameinfo.common.core.mvvm.binding.IReactiveObjectGetter;
 import com.tttsaurus.ingameinfo.common.core.mvvm.binding.ISlotAccessorGetter;

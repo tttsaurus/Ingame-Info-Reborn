@@ -5,7 +5,7 @@ import com.tttsaurus.ingameinfo.common.core.gui.Element;
 import com.tttsaurus.ingameinfo.common.core.gui.GuiLayout;
 import com.tttsaurus.ingameinfo.common.core.gui.IgiGuiContainer;
 import com.tttsaurus.ingameinfo.common.core.gui.layout.ElementGroup;
-import com.tttsaurus.ingameinfo.common.core.internal.InternalMethods;
+import com.tttsaurus.ingameinfo.common.core.InternalMethods;
 import com.tttsaurus.ingameinfo.common.core.serialization.ixml.RawIxmlUtils;
 import com.tttsaurus.ingameinfo.common.core.gui.layout.MainGroup;
 import com.tttsaurus.ingameinfo.common.impl.serialization.GuiLayoutDeserializer;

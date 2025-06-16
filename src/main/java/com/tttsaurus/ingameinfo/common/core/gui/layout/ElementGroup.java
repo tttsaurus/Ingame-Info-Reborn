@@ -1,10 +1,11 @@
 package com.tttsaurus.ingameinfo.common.core.gui.layout;
 
 import com.tttsaurus.ingameinfo.common.core.gui.Element;
+import com.tttsaurus.ingameinfo.common.core.input.InputState;
 import com.tttsaurus.ingameinfo.common.core.gui.render.DebugRectOp;
 import com.tttsaurus.ingameinfo.common.core.gui.render.RenderOpQueue;
 import com.tttsaurus.ingameinfo.common.core.gui.theme.ThemeConfig;
-import com.tttsaurus.ingameinfo.common.core.internal.InternalMethods;
+import com.tttsaurus.ingameinfo.common.core.InternalMethods;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -83,6 +84,16 @@ public abstract class ElementGroup extends Element
         for (Element element: elements)
             if (element.enabled)
                 element.onRenderUpdate(queue, focused);
+    }
+
+    @Override
+    public void onPropagateInput(InputState inputState)
+    {
+        if (!enabled) return;
+        super.onPropagateInput(inputState);
+        for (Element element: elements)
+            if (element.enabled) // todo: only propagate to interactable element
+                element.onPropagateInput(inputState);
     }
 
     @Override

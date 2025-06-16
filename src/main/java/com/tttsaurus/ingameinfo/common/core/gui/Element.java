@@ -1,6 +1,7 @@
 package com.tttsaurus.ingameinfo.common.core.gui;
 
 import com.tttsaurus.ingameinfo.common.core.function.IAction_1Param;
+import com.tttsaurus.ingameinfo.common.core.input.InputState;
 import com.tttsaurus.ingameinfo.common.core.gui.layout.*;
 import com.tttsaurus.ingameinfo.common.core.gui.property.lerp.*;
 import com.tttsaurus.ingameinfo.common.core.gui.registry.RegisterElement;
@@ -372,6 +373,16 @@ public abstract class Element
     {
         if (drawBackground)
             queue.enqueue(new BackgroundOp(backgroundStyle, rect));
+    }
+
+    /**
+     * Propagate input states to child elements.
+     *
+     * @param inputState The current input state.
+     */
+    public void onPropagateInput(InputState inputState)
+    {
+
     }
 
     /**

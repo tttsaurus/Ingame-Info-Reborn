@@ -4,7 +4,7 @@ import com.tttsaurus.ingameinfo.common.core.gui.GuiLayout;
 import com.tttsaurus.ingameinfo.common.core.function.IAction_1Param;
 import com.tttsaurus.ingameinfo.common.core.function.IFunc;
 import com.tttsaurus.ingameinfo.common.core.gui.IgiGuiContainer;
-import com.tttsaurus.ingameinfo.common.core.internal.InternalMethods;
+import com.tttsaurus.ingameinfo.common.core.InternalMethods;
 import com.tttsaurus.ingameinfo.common.core.mvvm.binding.*;
 import com.tttsaurus.ingameinfo.common.core.mvvm.context.SharedContext;
 import com.tttsaurus.ingameinfo.common.core.mvvm.view.View;
