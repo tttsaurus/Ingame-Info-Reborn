@@ -3,6 +3,7 @@ package com.tttsaurus.ingameinfo.proxy;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import com.tttsaurus.ingameinfo.common.core.appcommunication.spotify.SpotifyOAuthUtils;
+import com.tttsaurus.ingameinfo.common.core.commonutils.FileUtils;
 import com.tttsaurus.ingameinfo.common.core.forgeevent.MvvmRegisterEvent;
 import com.tttsaurus.ingameinfo.common.core.gui.Element;
 import com.tttsaurus.ingameinfo.common.core.gui.IgiGuiManager;
@@ -32,6 +33,8 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import org.apache.logging.log4j.Logger;
+import java.io.IOException;
+import java.io.RandomAccessFile;
 import java.util.List;
 import java.util.Map;
 
@@ -216,6 +219,16 @@ public class ClientProxy extends CommonProxy
         }
 
         logger.info(builder.toString());
+
+        try
+        {
+            RandomAccessFile raf = new RandomAccessFile(FileUtils.makeFile("ui_element_dump.txt"), "rw");
+            raf.setLength(0);
+            raf.seek(0);
+            raf.writeBytes(builder.toString());
+            raf.close();
+        }
+        catch (IOException ignored) { }
         //</editor-fold>
 
         //<editor-fold desc="mvvm">
