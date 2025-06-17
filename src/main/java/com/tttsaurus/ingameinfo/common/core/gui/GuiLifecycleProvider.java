@@ -8,6 +8,7 @@ import com.tttsaurus.ingameinfo.common.core.gui.delegate.dummy.IDummyKeyTyped;
 import com.tttsaurus.ingameinfo.common.core.gui.render.IRenderOp;
 import com.tttsaurus.ingameinfo.common.core.gui.render.RenderContext;
 import com.tttsaurus.ingameinfo.common.core.gui.render.RenderOpQueue;
+import com.tttsaurus.ingameinfo.common.core.input.InputState;
 import com.tttsaurus.ingameinfo.common.core.item.GhostableItem;
 import com.tttsaurus.ingameinfo.common.core.render.RenderMask;
 import net.minecraft.client.Minecraft;
@@ -74,7 +75,7 @@ public abstract class GuiLifecycleProvider
     private boolean isDummyGuiOn = false;
     protected boolean isDummyGuiOn() { return isDummyGuiOn; }
 
-    public final void update()
+    public final void update(InputState inputState)
     {
         if (initFlag)
         {
@@ -146,7 +147,10 @@ public abstract class GuiLifecycleProvider
         }
         //</editor-fold>
 
-        // todo: input lifecycle - onPropagateInput
+        //<editor-fold desc="propagate input">
+        for (IgiGuiContainer container: openedGuiMap.values())
+            container.onPropagateInput(inputState);
+        //</editor-fold>
 
         updateInternal();
     }

@@ -232,7 +232,7 @@ public class ClientProxy extends CommonProxy
         //</editor-fold>
 
         //<editor-fold desc="mvvm">
-        logger.info("Start registering mvvm.");
+        logger.info("Start registering MVVM.");
         MinecraftForge.EVENT_BUS.post(new MvvmRegisterEvent());
         //</editor-fold>
     }

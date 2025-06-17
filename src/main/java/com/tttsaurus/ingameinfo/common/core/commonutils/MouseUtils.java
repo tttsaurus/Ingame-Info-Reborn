@@ -8,18 +8,18 @@ public final class MouseUtils
 {
     // under Minecraft's scaled resolution coordinate system
 
-    private static final Minecraft minecraft = Minecraft.getMinecraft();
+    private static final Minecraft MINECRAFT = Minecraft.getMinecraft();
 
     public static int getMouseX()
     {
-        ScaledResolution resolution = new ScaledResolution(minecraft);
+        ScaledResolution resolution = new ScaledResolution(MINECRAFT);
         int mouseX = Mouse.getX();
         return mouseX / resolution.getScaleFactor();
     }
     public static int getMouseY()
     {
-        ScaledResolution resolution = new ScaledResolution(minecraft);
-        int mouseY = minecraft.displayHeight - Mouse.getY() - 1;
+        ScaledResolution resolution = new ScaledResolution(MINECRAFT);
+        int mouseY = MINECRAFT.displayHeight - Mouse.getY() - 1;
         return mouseY / resolution.getScaleFactor();
     }
     public static boolean isMouseDownLeft()

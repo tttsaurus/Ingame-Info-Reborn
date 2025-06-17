@@ -31,9 +31,9 @@ public final class InGameInfoReborn
     public static boolean toughasnailsLoaded;
     public static boolean simpledifficultyLoaded;
 
-    public static Logger LOGGER = LogManager.getLogger(Tags.MODNAME);
-    public static ASMDataTable asmDataTable;
+    public static final Logger LOGGER = LogManager.getLogger(Tags.MODNAME);
 
+    public static ASMDataTable asmDataTable;
     private static Boolean isCleanroom = null;
 
     public static boolean isCleanroom()
