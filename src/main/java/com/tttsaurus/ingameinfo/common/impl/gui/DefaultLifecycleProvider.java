@@ -2,7 +2,7 @@ package com.tttsaurus.ingameinfo.common.impl.gui;
 
 import com.tttsaurus.ingameinfo.InGameInfoReborn;
 import com.tttsaurus.ingameinfo.common.core.gui.GuiLifecycleProvider;
-import com.tttsaurus.ingameinfo.common.core.gui.delegate.dummy.IDummyDrawScreen;
+import com.tttsaurus.ingameinfo.common.core.gui.dummygui.IDummyDrawScreen;
 import com.tttsaurus.ingameinfo.common.core.commonutils.RlReaderUtils;
 import com.tttsaurus.ingameinfo.common.core.render.GlResourceManager;
 import com.tttsaurus.ingameinfo.common.core.render.IGlDisposable;

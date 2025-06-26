@@ -1,7 +1,6 @@
 package com.tttsaurus.ingameinfo.common.core.gui.layout;
 
 import com.tttsaurus.ingameinfo.common.core.gui.Element;
-import com.tttsaurus.ingameinfo.common.core.gui.control.Interactable;
 import com.tttsaurus.ingameinfo.common.core.input.InputState;
 import com.tttsaurus.ingameinfo.common.core.gui.render.DebugRectOp;
 import com.tttsaurus.ingameinfo.common.core.gui.render.RenderOpQueue;
@@ -94,8 +93,11 @@ public abstract class ElementGroup extends Element
         if (inputState.isConsumed()) return;
         super.onPropagateInput(inputState);
         for (Element element: elements)
+        {
             if (element.enabled)
                 element.onPropagateInput(inputState);
+            if (inputState.isConsumed()) return;
+        }
     }
 
     @Override

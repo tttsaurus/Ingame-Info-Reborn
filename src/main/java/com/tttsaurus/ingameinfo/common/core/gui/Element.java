@@ -3,6 +3,7 @@ package com.tttsaurus.ingameinfo.common.core.gui;
 import com.tttsaurus.ingameinfo.common.core.function.IAction_1Param;
 import com.tttsaurus.ingameinfo.common.core.gui.event.IUIEventListener;
 import com.tttsaurus.ingameinfo.common.core.gui.event.UIEvent;
+import com.tttsaurus.ingameinfo.common.core.gui.event.UIEventListenerType;
 import com.tttsaurus.ingameinfo.common.core.input.InputState;
 import com.tttsaurus.ingameinfo.common.core.gui.layout.*;
 import com.tttsaurus.ingameinfo.common.core.gui.property.lerp.*;
@@ -24,10 +25,7 @@ import com.tttsaurus.ingameinfo.common.core.reflection.FieldUtils;
 import java.lang.invoke.MethodHandle;
 import java.lang.invoke.MethodHandles;
 import java.lang.reflect.Field;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @RegisterElement(constructable = false)
 public abstract class Element
@@ -99,7 +97,6 @@ public abstract class Element
 
     /**
      * <code>uiEventListeners</code> stores event listeners.
-     * They will be selectively fired after event capturing process when input hits.
      * They will be fired by {@link Element#fireEvent(UIEvent)}.
      * They will be added by {@link Element#addEventListener(Class, IUIEventListener)}.
      *
@@ -109,20 +106,10 @@ public abstract class Element
     private final Map<Class<? extends UIEvent>, List<IUIEventListener<?>>> uiEventListeners = new HashMap<>();
 
     /**
-     * <code>uiLocalEventListeners</code> stores local event listeners.
-     * They will be fired immediately when input hits.
-     * They will be fired by {@link Element#fireEventLocally(UIEvent)}.
-     * They will be added by {@link Element#addLocalEventListener(Class, IUIEventListener)}.
-     *
-     * @see Element#fireEventLocally(UIEvent)
-     * @see Element#addLocalEventListener(Class, IUIEventListener)
-     */
-    private final Map<Class<? extends UIEvent>, List<IUIEventListener<?>>> uiLocalEventListeners = new HashMap<>();
-
-    /**
      * The parent node. Will be injected by {@link ElementGroup#add(Element)}.
      */
-    private ElementGroup parent;
+    @SuppressWarnings("all")
+    private ElementGroup parent = null;
     //</editor-fold>
 
     //<editor-fold desc="style properties">
@@ -214,7 +201,13 @@ public abstract class Element
 
     //<editor-fold desc="final method: ui event listener">
     /**
-     * Execute all {@link IUIEventListener} of the corresponding event.
+     * Execute {@link IUIEventListener} of the corresponding event.
+     * <ul>
+     *     <li>Local listeners will be executed immediately first</li>
+     *     <li>Then capturing process happens</li>
+     *     <li>Then target listeners will be executed</li>
+     *     <li>Then bubbling process happens</li>
+     * </ul>
      * This method should be called during {@link Element#onPropagateInput(InputState)}.
      *
      * @param event The {@link UIEvent}.
@@ -227,28 +220,56 @@ public abstract class Element
     protected final <T extends UIEvent> void fireEvent(T event)
     {
         List<IUIEventListener<?>> list = uiEventListeners.get(event.getClass());
-        if (list != null)
-            for (IUIEventListener<?> listener: list)
-                ((IUIEventListener<T>)listener).handle(event);
-    }
 
-    /**
-     * Execute all {@link IUIEventListener} of the corresponding event.
-     * This method should be called during {@link Element#onPropagateInput(InputState)}.
-     *
-     * @param event The {@link UIEvent}.
-     * @param <T> Generic parameter of the type of the {@link UIEvent}.
-     *
-     * @see Element#uiLocalEventListeners
-     * @see Element#onPropagateInput(InputState)
-     */
-    @SuppressWarnings("unchecked")
-    protected final <T extends UIEvent> void fireEventLocally(T event)
-    {
-        List<IUIEventListener<?>> list = uiLocalEventListeners.get(event.getClass());
+        // local
         if (list != null)
             for (IUIEventListener<?> listener: list)
-                ((IUIEventListener<T>)listener).handle(event);
+                if (listener.type() == UIEventListenerType.LOCAL)
+                    ((IUIEventListener<T>)listener).handle(event);
+
+        if (event.isConsumed()) return;
+
+        Deque<Element> stack = new ArrayDeque<>();
+        Element parent = this;
+        stack.push(parent);
+        while (parent.parent != null)
+        {
+            parent = parent.parent;
+            stack.push(parent);
+        }
+
+        // capture
+        while (!stack.isEmpty())
+        {
+            Element element = stack.pop();
+            List<IUIEventListener<?>> list2 = element.uiEventListeners.get(event.getClass());
+            if (list2 != null)
+                for (IUIEventListener<?> listener: list2)
+                    if (listener.type() == UIEventListenerType.CAPTURE)
+                        ((IUIEventListener<T>)listener).handle(event);
+        }
+
+        if (event.isConsumed()) return;
+
+        // target
+        if (list != null)
+            for (IUIEventListener<?> listener: list)
+                if (listener.type() == UIEventListenerType.TARGET)
+                    ((IUIEventListener<T>)listener).handle(event);
+
+        if (event.isConsumed()) return;
+
+        // bubble
+        parent = this;
+        while (parent.parent != null)
+        {
+            List<IUIEventListener<?>> list2 = parent.uiEventListeners.get(event.getClass());
+            if (list2 != null)
+                for (IUIEventListener<?> listener: list2)
+                    if (listener.type() == UIEventListenerType.BUBBLE)
+                        ((IUIEventListener<T>)listener).handle(event);
+            parent = parent.parent;
+        }
     }
 
     /**
@@ -263,20 +284,6 @@ public abstract class Element
     public final <T extends UIEvent> void addEventListener(Class<T> type, IUIEventListener<T> listener)
     {
         uiEventListeners.computeIfAbsent(type, k -> new ArrayList<>()).add(listener);
-    }
-
-    /**
-     * Add event listener for the corresponding type of {@link UIEvent} to {@link Element#uiLocalEventListeners}.
-     *
-     * @param type Type of the {@link UIEvent}.
-     * @param listener UI event listener.
-     * @param <T> Generic parameter of the type of the {@link UIEvent}.
-     *
-     * @see Element#uiLocalEventListeners
-     */
-    public final <T extends UIEvent> void addLocalEventListener(Class<T> type, IUIEventListener<T> listener)
-    {
-        uiLocalEventListeners.computeIfAbsent(type, k -> new ArrayList<>()).add(listener);
     }
     //</editor-fold>
 

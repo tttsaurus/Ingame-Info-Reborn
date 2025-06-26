@@ -1,7 +1,5 @@
-package com.tttsaurus.ingameinfo.common.core.gui;
+package com.tttsaurus.ingameinfo.common.core.gui.dummygui;
 
-import com.tttsaurus.ingameinfo.common.core.gui.delegate.dummy.IDummyDrawScreen;
-import com.tttsaurus.ingameinfo.common.core.gui.delegate.dummy.IDummyKeyTyped;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiScreen;
 import java.io.IOException;

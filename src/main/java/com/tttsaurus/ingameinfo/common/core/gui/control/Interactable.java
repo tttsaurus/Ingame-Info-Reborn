@@ -21,29 +21,29 @@ public abstract class Interactable extends Sized
             if (!hover)
             {
                 hover = true;
-                fireEventLocally(new UIEvent.MouseEnter(inputState));
+                fireEvent(new UIEvent.MouseEnter(inputState));
             }
             if (inputState.leftDown)
             {
                 if (!hold)
                 {
                     hold = true;
-                    fireEventLocally(new UIEvent.MousePress(inputState));
+                    fireEvent(new UIEvent.MousePress(inputState));
                 }
             }
             else if (hold)
             {
                 hover = false;
                 hold = false;
-                fireEventLocally(new UIEvent.MouseRelease(inputState));
-                fireEventLocally(new UIEvent.MouseClick(inputState));
+                fireEvent(new UIEvent.MouseRelease(inputState));
+                fireEvent(new UIEvent.MouseClick(inputState));
             }
         }
         else if (hover)
         {
             hover = false;
             hold = false;
-            fireEventLocally(new UIEvent.MouseLeave(inputState));
+            fireEvent(new UIEvent.MouseLeave(inputState));
         }
     }
 }

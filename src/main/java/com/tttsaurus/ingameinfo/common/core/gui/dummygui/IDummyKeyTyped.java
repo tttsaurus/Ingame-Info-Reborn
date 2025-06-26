@@ -1,4 +1,4 @@
-package com.tttsaurus.ingameinfo.common.core.gui.delegate.dummy;
+package com.tttsaurus.ingameinfo.common.core.gui.dummygui;
 
 public interface IDummyKeyTyped
 {

@@ -6,6 +6,10 @@ public class UIEvent
 {
     public final InputState input;
 
+    private boolean consumed = false;
+    public boolean isConsumed() { return consumed; }
+    public void consume() { consumed = true; }
+
     public UIEvent(InputState input)
     {
         this.input = input;
