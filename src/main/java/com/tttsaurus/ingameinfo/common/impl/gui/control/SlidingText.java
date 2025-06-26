@@ -1,5 +1,6 @@
 package com.tttsaurus.ingameinfo.common.impl.gui.control;
 
+import com.tttsaurus.ingameinfo.common.core.gui.control.Sized;
 import com.tttsaurus.ingameinfo.common.core.gui.property.lerp.LerpCenter;
 import com.tttsaurus.ingameinfo.common.core.gui.property.lerp.LerpTarget;
 import com.tttsaurus.ingameinfo.common.core.gui.property.lerp.LerpableProperty;

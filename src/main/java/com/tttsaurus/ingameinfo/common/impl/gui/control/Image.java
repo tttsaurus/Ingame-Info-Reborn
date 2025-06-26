@@ -1,5 +1,6 @@
 package com.tttsaurus.ingameinfo.common.impl.gui.control;
 
+import com.tttsaurus.ingameinfo.common.core.gui.control.Sized;
 import com.tttsaurus.ingameinfo.common.core.gui.registry.RegisterElement;
 import com.tttsaurus.ingameinfo.common.core.gui.property.style.CallbackInfo;
 import com.tttsaurus.ingameinfo.common.core.gui.property.style.StyleProperty;

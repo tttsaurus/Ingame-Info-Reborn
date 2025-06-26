@@ -71,6 +71,7 @@ public abstract class GuiLifecycleProvider
 
     private boolean listenRegainScreenFocus = false;
     private boolean initFlag = true;
+    private boolean finishFirstUpdate = false;
 
     private boolean isDummyGuiOn = false;
     protected boolean isDummyGuiOn() { return isDummyGuiOn; }
@@ -93,8 +94,7 @@ public abstract class GuiLifecycleProvider
 
         //<editor-fold desc="gui container init">
         for (IgiGuiContainer container : openedGuiMap.values())
-            if (!container.getInitFlag())
-                container.onInit();
+            container.onInit();
         //</editor-fold>
 
         //<editor-fold desc="gui container resize">
@@ -148,11 +148,14 @@ public abstract class GuiLifecycleProvider
         //</editor-fold>
 
         //<editor-fold desc="propagate input">
-        for (IgiGuiContainer container: openedGuiMap.values())
-            container.onPropagateInput(inputState);
+        if (finishFirstUpdate)
+            for (IgiGuiContainer container: openedGuiMap.values())
+                container.onPropagateInput(inputState);
         //</editor-fold>
 
         updateInternal();
+
+        if (!finishFirstUpdate) finishFirstUpdate = true;
     }
 
     //<editor-fold desc="fixed update">

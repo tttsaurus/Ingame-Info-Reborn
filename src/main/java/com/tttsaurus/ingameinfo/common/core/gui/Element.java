@@ -1,6 +1,8 @@
 package com.tttsaurus.ingameinfo.common.core.gui;
 
 import com.tttsaurus.ingameinfo.common.core.function.IAction_1Param;
+import com.tttsaurus.ingameinfo.common.core.gui.event.IUIEventListener;
+import com.tttsaurus.ingameinfo.common.core.gui.event.UIEvent;
 import com.tttsaurus.ingameinfo.common.core.input.InputState;
 import com.tttsaurus.ingameinfo.common.core.gui.layout.*;
 import com.tttsaurus.ingameinfo.common.core.gui.property.lerp.*;
@@ -22,6 +24,7 @@ import com.tttsaurus.ingameinfo.common.core.reflection.FieldUtils;
 import java.lang.invoke.MethodHandle;
 import java.lang.invoke.MethodHandles;
 import java.lang.reflect.Field;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -83,6 +86,7 @@ public abstract class Element
      *
      * @see Element#setStyleProperty(String, Object)
      */
+    @SuppressWarnings("all")
     private final Map<String, IStylePropertySyncTo> syncToMap = new HashMap<>();
 
     /**
@@ -92,6 +96,28 @@ public abstract class Element
      * @see Element#onCollectLerpInfo()
      */
     private Map<LerpableProperty<?>, ITargetingLerpTarget> lerpTargetGetters = null;
+
+    /**
+     * <code>uiEventListeners</code> stores event listeners.
+     * They will be selectively fired after event capturing process when input hits.
+     * They will be fired by {@link Element#fireEvent(UIEvent)}.
+     * They will be added by {@link Element#addEventListener(Class, IUIEventListener)}.
+     *
+     * @see Element#fireEvent(UIEvent)
+     * @see Element#addEventListener(Class, IUIEventListener)
+     */
+    private final Map<Class<? extends UIEvent>, List<IUIEventListener<?>>> uiEventListeners = new HashMap<>();
+
+    /**
+     * <code>uiLocalEventListeners</code> stores local event listeners.
+     * They will be fired immediately when input hits.
+     * They will be fired by {@link Element#fireEventLocally(UIEvent)}.
+     * They will be added by {@link Element#addLocalEventListener(Class, IUIEventListener)}.
+     *
+     * @see Element#fireEventLocally(UIEvent)
+     * @see Element#addLocalEventListener(Class, IUIEventListener)
+     */
+    private final Map<Class<? extends UIEvent>, List<IUIEventListener<?>>> uiLocalEventListeners = new HashMap<>();
 
     /**
      * The parent node. Will be injected by {@link ElementGroup#add(Element)}.
@@ -186,6 +212,75 @@ public abstract class Element
     public boolean drawBackground = false;
     //</editor-fold>
 
+    //<editor-fold desc="final method: ui event listener">
+    /**
+     * Execute all {@link IUIEventListener} of the corresponding event.
+     * This method should be called during {@link Element#onPropagateInput(InputState)}.
+     *
+     * @param event The {@link UIEvent}.
+     * @param <T> Generic parameter of the type of the {@link UIEvent}.
+     *
+     * @see Element#uiEventListeners
+     * @see Element#onPropagateInput(InputState)
+     */
+    @SuppressWarnings("unchecked")
+    protected final <T extends UIEvent> void fireEvent(T event)
+    {
+        List<IUIEventListener<?>> list = uiEventListeners.get(event.getClass());
+        if (list != null)
+            for (IUIEventListener<?> listener: list)
+                ((IUIEventListener<T>)listener).handle(event);
+    }
+
+    /**
+     * Execute all {@link IUIEventListener} of the corresponding event.
+     * This method should be called during {@link Element#onPropagateInput(InputState)}.
+     *
+     * @param event The {@link UIEvent}.
+     * @param <T> Generic parameter of the type of the {@link UIEvent}.
+     *
+     * @see Element#uiLocalEventListeners
+     * @see Element#onPropagateInput(InputState)
+     */
+    @SuppressWarnings("unchecked")
+    protected final <T extends UIEvent> void fireEventLocally(T event)
+    {
+        List<IUIEventListener<?>> list = uiLocalEventListeners.get(event.getClass());
+        if (list != null)
+            for (IUIEventListener<?> listener: list)
+                ((IUIEventListener<T>)listener).handle(event);
+    }
+
+    /**
+     * Add event listener for the corresponding type of {@link UIEvent} to {@link Element#uiEventListeners}.
+     *
+     * @param type Type of the {@link UIEvent}.
+     * @param listener UI event listener.
+     * @param <T> Generic parameter of the type of the {@link UIEvent}.
+     *
+     * @see Element#uiEventListeners
+     */
+    public final <T extends UIEvent> void addEventListener(Class<T> type, IUIEventListener<T> listener)
+    {
+        uiEventListeners.computeIfAbsent(type, k -> new ArrayList<>()).add(listener);
+    }
+
+    /**
+     * Add event listener for the corresponding type of {@link UIEvent} to {@link Element#uiLocalEventListeners}.
+     *
+     * @param type Type of the {@link UIEvent}.
+     * @param listener UI event listener.
+     * @param <T> Generic parameter of the type of the {@link UIEvent}.
+     *
+     * @see Element#uiLocalEventListeners
+     */
+    public final <T extends UIEvent> void addLocalEventListener(Class<T> type, IUIEventListener<T> listener)
+    {
+        uiLocalEventListeners.computeIfAbsent(type, k -> new ArrayList<>()).add(listener);
+    }
+    //</editor-fold>
+
+    //<editor-fold desc="final method: style property">
     /**
      * The most safe way to set style properties since this method guarantees the
      * callbacks and syncing between <code>View</code> and <code>ViewModel</code> to be handled correctly.
@@ -203,57 +298,7 @@ public abstract class Element
             if (sync != null) sync.sync();
         }
     }
-
-    /**
-     * Reset {@link Element#rect}, {@link Element#contextRect}, {@link Element#pivotPosX} and {@link Element#pivotPosY}.
-     * This method will be called before re-calculate the layout.
-     */
-    public void resetRenderInfo()
-    {
-        rect.set(0, 0, 0, 0);
-        contextRect.set(0, 0, 0, 0);
-        pivotPosX = 0;
-        pivotPosY = 0;
-    }
-
-    /**
-     * {@link Element#calcWidthHeight()} will be called before calling this method, so
-     * <code>width</code> and <code>height</code> from {@link Element#rect} will be ready during this method.
-     * This method by itself uses pivot position to calculate the actual render position, which are <code>x</code> and <code>y</code> from {@link Element#rect}.
-     * You should override this method if you want to further manipulate the render position.
-     *
-     * @see Element#calcWidthHeight()
-     * @param contextRect The position and size of its parent.
-     */
-    public void calcRenderPos(Rect contextRect)
-    {
-        this.contextRect.set(contextRect.x, contextRect.y, contextRect.width, contextRect.height);
-
-        pivotPosX = rect.x;
-        rect.x -= rect.width * pivot.vertical;
-
-        pivotPosY = rect.y;
-        rect.y -= rect.height * pivot.horizontal;
-    }
-
-    /**
-     * You should set <code>width</code> and <code>height</code> from {@link Element#rect} in this method.
-     * Must not touch <code>x</code> and <code>y</code> from {@link Element#rect} during this method.
-     * 
-     * @see Element#calcRenderPos(Rect)
-     */
-    public abstract void calcWidthHeight();
-
-    /**
-     * Override to handle animation calculation and stuff here.
-     *
-     * @see IgiGuiContainer#onFixedUpdate(double)
-     * @param deltaTime The time between the last fixed update and this one.
-     */
-    public void onFixedUpdate(double deltaTime)
-    {
-
-    }
+    //</editor-fold>
 
     /**
      * This method will be executed right after {@link Element#onFixedUpdate(double)}
@@ -357,6 +402,57 @@ public abstract class Element
                 property.setPrevValue(property.getCurrValue());
             property.setCurrValue(target);
         }
+    }
+
+    /**
+     * Reset {@link Element#rect}, {@link Element#contextRect}, {@link Element#pivotPosX} and {@link Element#pivotPosY}.
+     * This method will be called before re-calculate the layout.
+     */
+    public void resetRenderInfo()
+    {
+        rect.set(0, 0, 0, 0);
+        contextRect.set(0, 0, 0, 0);
+        pivotPosX = 0;
+        pivotPosY = 0;
+    }
+
+    /**
+     * {@link Element#calcWidthHeight()} will be called before calling this method, so
+     * <code>width</code> and <code>height</code> from {@link Element#rect} will be ready during this method.
+     * This method by itself uses pivot position to calculate the actual render position, which are <code>x</code> and <code>y</code> from {@link Element#rect}.
+     * You should override this method if you want to further manipulate the render position.
+     *
+     * @see Element#calcWidthHeight()
+     * @param contextRect The position and size of its parent.
+     */
+    public void calcRenderPos(Rect contextRect)
+    {
+        this.contextRect.set(contextRect.x, contextRect.y, contextRect.width, contextRect.height);
+
+        pivotPosX = rect.x;
+        rect.x -= rect.width * pivot.vertical;
+
+        pivotPosY = rect.y;
+        rect.y -= rect.height * pivot.horizontal;
+    }
+
+    /**
+     * You should set <code>width</code> and <code>height</code> from {@link Element#rect} in this method.
+     * Must not touch <code>x</code> and <code>y</code> from {@link Element#rect} during this method.
+     * 
+     * @see Element#calcRenderPos(Rect)
+     */
+    public abstract void calcWidthHeight();
+
+    /**
+     * Override to handle animation calculation and stuff here.
+     *
+     * @see IgiGuiContainer#onFixedUpdate(double)
+     * @param deltaTime The time between the last fixed update and this one.
+     */
+    public void onFixedUpdate(double deltaTime)
+    {
+
     }
 
     /**

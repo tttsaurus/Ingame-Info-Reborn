@@ -19,6 +19,10 @@ public class InputState
     public final float deltaPosX;
     public final float deltaPosY;
 
+    private boolean consumed = false;
+    public boolean isConsumed() { return consumed; }
+    public void consume() { consumed = true; }
+
     public InputState(
             Set<Integer> heldKeys,
             Set<Integer> pressedKeys,

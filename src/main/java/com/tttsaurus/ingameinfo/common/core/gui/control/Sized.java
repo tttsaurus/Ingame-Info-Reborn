@@ -1,4 +1,4 @@
-package com.tttsaurus.ingameinfo.common.impl.gui.control;
+package com.tttsaurus.ingameinfo.common.core.gui.control;
 
 import com.tttsaurus.ingameinfo.common.core.gui.Element;
 import com.tttsaurus.ingameinfo.common.core.gui.registry.RegisterElement;
