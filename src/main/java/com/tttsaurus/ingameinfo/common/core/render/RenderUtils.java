@@ -92,9 +92,25 @@ public final class RenderUtils
     public static void renderRectBrightnessOverlay(float x, float y, float width, float height, float brightness)
     {
         GlStateManager.enableBlend();
-        GlStateManager.blendFunc(GL11.GL_ONE, GL11.GL_ONE);
+        GlStateManager.tryBlendFuncSeparate(GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ONE, GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO);
         GlStateManager.disableTexture2D();
         GlStateManager.color(brightness, brightness, brightness);
+
+        Tessellator tessellator = Tessellator.getInstance();
+        BufferBuilder bufferbuilder = tessellator.getBuffer();
+        bufferbuilder.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION);
+        bufferbuilder.pos(x, y + height, zLevel).endVertex();
+        bufferbuilder.pos(x + width, y + height, zLevel).endVertex();
+        bufferbuilder.pos(x + width, y, zLevel).endVertex();
+        bufferbuilder.pos(x, y, zLevel).endVertex();
+        tessellator.draw();
+    }
+    public static void renderRectBrightnessOverlay(float x, float y, float width, float height, float r, float g, float b)
+    {
+        GlStateManager.enableBlend();
+        GlStateManager.tryBlendFuncSeparate(GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ONE, GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO);
+        GlStateManager.disableTexture2D();
+        GlStateManager.color(r, g, b);
 
         Tessellator tessellator = Tessellator.getInstance();
         BufferBuilder bufferbuilder = tessellator.getBuffer();
