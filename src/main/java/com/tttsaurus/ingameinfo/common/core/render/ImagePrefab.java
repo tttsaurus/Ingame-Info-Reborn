@@ -21,7 +21,7 @@ public class ImagePrefab
 
     public ImagePrefab(NinePatchBorder ninePatchBorder)
     {
-        type = InternalType.TEXTURE_2D;
+        type = InternalType.NINE_PATCH_BORDER;
         texture2D = null;
         this.ninePatchBorder = ninePatchBorder;
     }

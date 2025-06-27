@@ -1,9 +1,6 @@
 package com.tttsaurus.ingameinfo.common.core.gui;
 
-import com.tttsaurus.ingameinfo.common.core.render.RenderHints;
-import com.tttsaurus.ingameinfo.common.core.render.RenderUtils;
-import com.tttsaurus.ingameinfo.common.core.render.NinePatchBorder;
-import com.tttsaurus.ingameinfo.common.core.render.Texture2D;
+import com.tttsaurus.ingameinfo.common.core.render.*;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.IResource;
 import net.minecraft.util.ResourceLocation;
@@ -14,8 +11,8 @@ import java.io.InputStream;
 
 public final class GuiResources
 {
-    public static NinePatchBorder mcVanillaBg;
-    public static NinePatchBorder mcVanillaButton;
+    public static ImagePrefab mcVanillaBg;
+    public static ImagePrefab mcVanillaButton;
 
     @Nullable
     private static BufferedImage getBufferedImageFromRl(ResourceLocation rl)
@@ -84,7 +81,7 @@ public final class GuiResources
         if (image != null)
             mcVanillaBgBottomRight = RenderUtils.createTexture2D(image);
 
-        mcVanillaBg = new NinePatchBorder(
+        mcVanillaBg = new ImagePrefab(new NinePatchBorder(
                 mcVanillaBgTopLeft,
                 mcVanillaBgTopCenter,
                 mcVanillaBgTopRight,
@@ -93,7 +90,7 @@ public final class GuiResources
                 mcVanillaBgCenterRight,
                 mcVanillaBgBottomLeft,
                 mcVanillaBgBottomCenter,
-                mcVanillaBgBottomRight);
+                mcVanillaBgBottomRight));
 
         Texture2D mcVanillaButtonTopLeft = null;
         Texture2D mcVanillaButtonTopCenter = null;
@@ -141,7 +138,7 @@ public final class GuiResources
         if (image != null)
             mcVanillaButtonBottomRight = RenderUtils.createTexture2D(image);
 
-        mcVanillaButton = new NinePatchBorder(
+        mcVanillaButton = new ImagePrefab(new NinePatchBorder(
                 mcVanillaButtonTopLeft,
                 mcVanillaButtonTopCenter,
                 mcVanillaButtonTopRight,
@@ -150,8 +147,8 @@ public final class GuiResources
                 mcVanillaButtonCenterRight,
                 mcVanillaButtonBottomLeft,
                 mcVanillaButtonBottomCenter,
-                mcVanillaButtonBottomRight);
-        mcVanillaButton.center.tiling = true;
+                mcVanillaButtonBottomRight));
+        mcVanillaButton.ninePatchBorder.center.tiling = true;
 
         RenderHints.setHint_Texture2D$FilterMode(filterMode);
         RenderHints.setHint_Texture2D$WrapMode(wrapMode);
