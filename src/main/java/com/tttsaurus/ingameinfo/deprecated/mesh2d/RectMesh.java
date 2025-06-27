@@ -1,7 +1,7 @@
-package com.tttsaurus.ingameinfo.common.impl.render.mesh2d;
+package com.tttsaurus.ingameinfo.deprecated.mesh2d;
 
-import com.tttsaurus.ingameinfo.common.core.render.ScaledRes2NdcUtils;
-import com.tttsaurus.ingameinfo.common.core.render.Mesh;
+import com.tttsaurus.ingameinfo.deprecated.ScaledRes2NdcUtils;
+import com.tttsaurus.ingameinfo.deprecated.Mesh;
 
 public class RectMesh extends Mesh
 {

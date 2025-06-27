@@ -1,4 +1,4 @@
-package com.tttsaurus.ingameinfo.common.core.render;
+package com.tttsaurus.ingameinfo.deprecated;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.ScaledResolution;

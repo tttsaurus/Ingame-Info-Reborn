@@ -1,5 +1,7 @@
-package com.tttsaurus.ingameinfo.common.core.render;
+package com.tttsaurus.ingameinfo.deprecated;
 
+import com.tttsaurus.ingameinfo.common.core.render.GlResourceManager;
+import com.tttsaurus.ingameinfo.common.core.render.IGlDisposable;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL15;
 import org.lwjgl.opengl.GL20;

@@ -42,7 +42,7 @@ public class BackgroundOp implements IRenderOp
             }
             case "mc-vanilla" ->
             {
-                RenderUtils.renderNinePatchBorderByPixel(rect.x, rect.y, rect.width, rect.height, GuiResources.mcVanillaBg, context.theme.backgroundStyles.mcVanilla.parsedColor);
+                RenderUtils.renderNinePatchBorder(rect.x, rect.y, rect.width, rect.height, GuiResources.mcVanillaBg, context.theme.backgroundStyles.mcVanilla.parsedColor);
             }
         }
     }

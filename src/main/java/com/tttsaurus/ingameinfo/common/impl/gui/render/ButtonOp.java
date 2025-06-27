@@ -35,7 +35,7 @@ public class ButtonOp implements IRenderOp
     @Override
     public void execute(RenderContext context)
     {
-        RenderUtils.renderNinePatchBorderByPixel(rect.x, rect.y, rect.width, rect.height, GuiResources.mcVanillaButton, buttonColor);
+        RenderUtils.renderNinePatchBorder(rect.x, rect.y, rect.width, rect.height, GuiResources.mcVanillaButton, buttonColor);
         if (hover && !hold)
             RenderUtils.renderRectBrightnessOverlay(rect.x, rect.y, rect.width, rect.height, 0.1f);
         RenderUtils.renderText(text, x, y, scale, textColor, shadow);

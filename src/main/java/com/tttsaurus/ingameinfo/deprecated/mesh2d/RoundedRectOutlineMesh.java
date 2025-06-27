@@ -1,4 +1,4 @@
-package com.tttsaurus.ingameinfo.common.impl.render.mesh2d;
+package com.tttsaurus.ingameinfo.deprecated.mesh2d;
 
 public class RoundedRectOutlineMesh extends LineMesh
 {
