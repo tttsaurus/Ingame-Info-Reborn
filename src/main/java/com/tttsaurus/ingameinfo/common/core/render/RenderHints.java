@@ -89,8 +89,10 @@ public final class RenderHints
     private static Framebuffer.CreateFramebufferHint hint_Framebuffer$CreateFramebufferHint = Framebuffer.CreateFramebufferHint.TEXTURE_2D;
     private static Framebuffer.FramebufferClearHint hint_Framebuffer$FramebufferClearHint = Framebuffer.FramebufferClearHint.UNBIND_FBO;
     private static int hint_Framebuffer$FramebufferSampleNum = 2;
-    private static Texture2D.FilterMode hint_Texture2D$FilterMode = Texture2D.FilterMode.LINEAR;
-    private static Texture2D.WrapMode hint_Texture2D$WrapMode = Texture2D.WrapMode.CLAMP;
+    private static Texture2D.FilterMode hint_Texture2D$FilterModeMin = Texture2D.FilterMode.LINEAR;
+    private static Texture2D.FilterMode hint_Texture2D$FilterModeMag = Texture2D.FilterMode.LINEAR;
+    private static Texture2D.WrapMode hint_Texture2D$WrapModeS = Texture2D.WrapMode.CLAMP;
+    private static Texture2D.WrapMode hint_Texture2D$WrapModeT = Texture2D.WrapMode.CLAMP;
     // per unit scaled resolution
     private static float hint_pixelPerUnit = 1f;
     //</editor-fold>
@@ -126,34 +128,67 @@ public final class RenderHints
         if (num > 4) num = 4;
         hint_Framebuffer$FramebufferSampleNum = num;
     }
-    public static void texture2dLinearFilter()
+
+    public static void texture2dLinearFilterMin()
     {
-        hint_Texture2D$FilterMode = Texture2D.FilterMode.LINEAR;
+        hint_Texture2D$FilterModeMin = Texture2D.FilterMode.LINEAR;
     }
-    public static void texture2dNearestFilter()
+    public static void texture2dNearestFilterMin()
     {
-        hint_Texture2D$FilterMode = Texture2D.FilterMode.NEAREST;
+        hint_Texture2D$FilterModeMin = Texture2D.FilterMode.NEAREST;
     }
-    public static void texture2dRepeatWrap()
+
+    public static void texture2dLinearFilterMag()
     {
-        hint_Texture2D$WrapMode = Texture2D.WrapMode.REPEAT;
+        hint_Texture2D$FilterModeMag = Texture2D.FilterMode.LINEAR;
     }
-    public static void texture2dClampWrap()
+    public static void texture2dNearestFilterMag()
     {
-        hint_Texture2D$WrapMode = Texture2D.WrapMode.CLAMP;
+        hint_Texture2D$FilterModeMag = Texture2D.FilterMode.NEAREST;
     }
-    public static void texture2dClampToEdgeWrap()
+
+    public static void texture2dRepeatWrapS()
     {
-        hint_Texture2D$WrapMode = Texture2D.WrapMode.CLAMP_TO_EDGE;
+        hint_Texture2D$WrapModeS = Texture2D.WrapMode.REPEAT;
     }
-    public static void texture2dClampToBorderWrap()
+    public static void texture2dClampWrapS()
     {
-        hint_Texture2D$WrapMode = Texture2D.WrapMode.CLAMP_TO_BORDER;
+        hint_Texture2D$WrapModeS = Texture2D.WrapMode.CLAMP;
     }
-    public static void texture2dMirroredRepeatWrap()
+    public static void texture2dClampToEdgeWrapS()
     {
-        hint_Texture2D$WrapMode = Texture2D.WrapMode.MIRRORED_REPEAT;
+        hint_Texture2D$WrapModeS = Texture2D.WrapMode.CLAMP_TO_EDGE;
     }
+    public static void texture2dClampToBorderWrapS()
+    {
+        hint_Texture2D$WrapModeS = Texture2D.WrapMode.CLAMP_TO_BORDER;
+    }
+    public static void texture2dMirroredRepeatWrapS()
+    {
+        hint_Texture2D$WrapModeS = Texture2D.WrapMode.MIRRORED_REPEAT;
+    }
+
+    public static void texture2dRepeatWrapT()
+    {
+        hint_Texture2D$WrapModeT = Texture2D.WrapMode.REPEAT;
+    }
+    public static void texture2dClampWrapT()
+    {
+        hint_Texture2D$WrapModeT = Texture2D.WrapMode.CLAMP;
+    }
+    public static void texture2dClampToEdgeWrapT()
+    {
+        hint_Texture2D$WrapModeT = Texture2D.WrapMode.CLAMP_TO_EDGE;
+    }
+    public static void texture2dClampToBorderWrapT()
+    {
+        hint_Texture2D$WrapModeT = Texture2D.WrapMode.CLAMP_TO_BORDER;
+    }
+    public static void texture2dMirroredRepeatWrapT()
+    {
+        hint_Texture2D$WrapModeT = Texture2D.WrapMode.MIRRORED_REPEAT;
+    }
+
     public static void pixelPerUnit(float pixel)
     {
         hint_pixelPerUnit = pixel;
@@ -177,13 +212,21 @@ public final class RenderHints
     {
         hint_Framebuffer$FramebufferSampleNum = hint;
     }
-    public static void setHint_Texture2D$FilterMode(Texture2D.FilterMode hint)
+    public static void setHint_Texture2D$FilterModeMin(Texture2D.FilterMode hint)
     {
-        hint_Texture2D$FilterMode = hint;
+        hint_Texture2D$FilterModeMin = hint;
     }
-    public static void setHint_Texture2D$WrapMode(Texture2D.WrapMode hint)
+    public static void setHint_Texture2D$FilterModeMag(Texture2D.FilterMode hint)
     {
-        hint_Texture2D$WrapMode = hint;
+        hint_Texture2D$FilterModeMag = hint;
+    }
+    public static void setHint_Texture2D$WrapModeS(Texture2D.WrapMode hint)
+    {
+        hint_Texture2D$WrapModeS = hint;
+    }
+    public static void setHint_Texture2D$WrapModeT(Texture2D.WrapMode hint)
+    {
+        hint_Texture2D$WrapModeT = hint;
     }
     public static void setHint_pixelPerUnit(float pixel)
     {
@@ -196,8 +239,10 @@ public final class RenderHints
     public static Framebuffer.CreateFramebufferHint getHint_Framebuffer$CreateFramebufferHint() { return hint_Framebuffer$CreateFramebufferHint; }
     public static Framebuffer.FramebufferClearHint getHint_Framebuffer$FramebufferClearHint() { return hint_Framebuffer$FramebufferClearHint; }
     public static int getHint_Framebuffer$FramebufferSampleNum() { return hint_Framebuffer$FramebufferSampleNum; }
-    public static Texture2D.FilterMode getHint_Texture2D$FilterMode() { return hint_Texture2D$FilterMode; }
-    public static Texture2D.WrapMode getHint_Texture2D$WrapMode() { return hint_Texture2D$WrapMode; }
+    public static Texture2D.FilterMode getHint_Texture2D$FilterModeMin() { return hint_Texture2D$FilterModeMin; }
+    public static Texture2D.FilterMode getHint_Texture2D$FilterModeMag() { return hint_Texture2D$FilterModeMag; }
+    public static Texture2D.WrapMode getHint_Texture2D$WrapModeS() { return hint_Texture2D$WrapModeS; }
+    public static Texture2D.WrapMode getHint_Texture2D$WrapModeT() { return hint_Texture2D$WrapModeT; }
     public static float getHint_pixelPerUnit() { return hint_pixelPerUnit; }
     //</editor-fold>
 

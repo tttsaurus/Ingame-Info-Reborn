@@ -29,11 +29,15 @@ public final class GuiResources
 
     public static void init()
     {
-        Texture2D.FilterMode filterMode = RenderHints.getHint_Texture2D$FilterMode();
-        Texture2D.WrapMode wrapMode = RenderHints.getHint_Texture2D$WrapMode();
+        Texture2D.FilterMode filterModeMin = RenderHints.getHint_Texture2D$FilterModeMin();
+        Texture2D.FilterMode filterModeMag = RenderHints.getHint_Texture2D$FilterModeMag();
+        Texture2D.WrapMode wrapModeS = RenderHints.getHint_Texture2D$WrapModeS();
+        Texture2D.WrapMode wrapModeT = RenderHints.getHint_Texture2D$WrapModeT();
 
-        RenderHints.texture2dNearestFilter();
-        RenderHints.texture2dRepeatWrap();
+        RenderHints.texture2dNearestFilterMin();
+        RenderHints.texture2dNearestFilterMag();
+        RenderHints.texture2dRepeatWrapS();
+        RenderHints.texture2dRepeatWrapT();
 
         Texture2D mcVanillaBgTopLeft = null;
         Texture2D mcVanillaBgTopCenter = null;
@@ -150,7 +154,9 @@ public final class GuiResources
                 mcVanillaButtonBottomRight));
         mcVanillaButton.ninePatchBorder.center.tiling = true;
 
-        RenderHints.setHint_Texture2D$FilterMode(filterMode);
-        RenderHints.setHint_Texture2D$WrapMode(wrapMode);
+        RenderHints.setHint_Texture2D$FilterModeMin(filterModeMin);
+        RenderHints.setHint_Texture2D$FilterModeMag(filterModeMag);
+        RenderHints.setHint_Texture2D$WrapModeS(wrapModeS);
+        RenderHints.setHint_Texture2D$WrapModeT(wrapModeT);
     }
 }

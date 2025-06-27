@@ -37,12 +37,12 @@ public final class Texture2D implements IGlDisposable
     private int glTextureID = 0;
     private final int width;
     private final int height;
-    private boolean isGlBounded;
+    private boolean isGlRegistered;
 
     public int getGlTextureID() { return glTextureID; }
     public int getWidth() { return width; }
     public int getHeight() { return height; }
-    public boolean getIsGlBounded() { return isGlBounded; }
+    public boolean isGlRegistered() { return isGlRegistered; }
 
     public Texture2D(int width, int height, ByteBuffer byteBuffer)
     {
@@ -55,14 +55,14 @@ public final class Texture2D implements IGlDisposable
 
         GL11.glBindTexture(GL11.GL_TEXTURE_2D, glTextureID);
 
-        GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MIN_FILTER, RenderHints.getHint_Texture2D$FilterMode().glValue);
-        GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MAG_FILTER, RenderHints.getHint_Texture2D$FilterMode().glValue);
-        GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_WRAP_S, RenderHints.getHint_Texture2D$WrapMode().glValue);
-        GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_WRAP_T, RenderHints.getHint_Texture2D$WrapMode().glValue);
+        GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MIN_FILTER, RenderHints.getHint_Texture2D$FilterModeMin().glValue);
+        GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MAG_FILTER, RenderHints.getHint_Texture2D$FilterModeMag().glValue);
+        GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_WRAP_S, RenderHints.getHint_Texture2D$WrapModeS().glValue);
+        GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_WRAP_T, RenderHints.getHint_Texture2D$WrapModeT().glValue);
 
         GL11.glTexImage2D(GL11.GL_TEXTURE_2D, 0, GL11.GL_RGBA8, width, height, 0, GL11.GL_RGBA, GL11.GL_UNSIGNED_BYTE, byteBuffer);
 
-        isGlBounded = true;
+        isGlRegistered = true;
 
         GlStateManager.bindTexture(textureID);
 
@@ -73,7 +73,7 @@ public final class Texture2D implements IGlDisposable
     {
         if (glTextureID != 0) GL11.glDeleteTextures(glTextureID);
         glTextureID = 0;
-        isGlBounded = false;
+        isGlRegistered = false;
         GlResourceManager.removeDisposable(this);
     }
 }

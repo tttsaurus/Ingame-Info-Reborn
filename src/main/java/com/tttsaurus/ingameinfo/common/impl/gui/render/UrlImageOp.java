@@ -24,7 +24,7 @@ public class UrlImageOp implements IRenderOp
     public void execute(RenderContext context)
     {
         if (texture == null) return;
-        if (!texture.getIsGlBounded()) return;
+        if (!texture.isGlRegistered()) return;
 
         if (rounded)
         {
