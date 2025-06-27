@@ -15,7 +15,10 @@ public class ButtonOp implements IRenderOp
     public int textColor;
     public boolean shadow;
 
-    public ButtonOp(Rect rect, int buttonColor, String text, float x, float y, float scale, int textColor, boolean shadow)
+    public boolean hover;
+    public boolean hold;
+
+    public ButtonOp(Rect rect, int buttonColor, String text, float x, float y, float scale, int textColor, boolean shadow, boolean hover, boolean hold)
     {
         this.rect = rect;
         this.buttonColor = buttonColor;
@@ -25,12 +28,16 @@ public class ButtonOp implements IRenderOp
         this.scale = scale;
         this.textColor = textColor;
         this.shadow = shadow;
+        this.hover = hover;
+        this.hold = hold;
     }
 
     @Override
     public void execute(RenderContext context)
     {
         RenderUtils.renderNinePatchBorderByPixel(rect.x, rect.y, rect.width, rect.height, GuiResources.mcVanillaButton, buttonColor);
+        if (hover && !hold)
+            RenderUtils.renderRectBrightnessOverlay(rect.x, rect.y, rect.width, rect.height, 0.1f);
         RenderUtils.renderText(text, x, y, scale, textColor, shadow);
     }
 }

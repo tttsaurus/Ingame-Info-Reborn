@@ -88,6 +88,25 @@ public final class RenderUtils
     }
     //</editor-fold>
 
+    //<editor-fold desc="rect overlay">
+    public static void renderRectBrightnessOverlay(float x, float y, float width, float height, float brightness)
+    {
+        GlStateManager.enableBlend();
+        GlStateManager.blendFunc(GL11.GL_ONE, GL11.GL_ONE);
+        GlStateManager.disableTexture2D();
+        GlStateManager.color(brightness, brightness, brightness);
+
+        Tessellator tessellator = Tessellator.getInstance();
+        BufferBuilder bufferbuilder = tessellator.getBuffer();
+        bufferbuilder.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION);
+        bufferbuilder.pos(x, y + height, zLevel).endVertex();
+        bufferbuilder.pos(x + width, y + height, zLevel).endVertex();
+        bufferbuilder.pos(x + width, y, zLevel).endVertex();
+        bufferbuilder.pos(x, y, zLevel).endVertex();
+        tessellator.draw();
+    }
+    //</editor-fold>
+
     //<editor-fold desc="rect">
     public static void renderRect(float x, float y, float width, float height, int color)
     {

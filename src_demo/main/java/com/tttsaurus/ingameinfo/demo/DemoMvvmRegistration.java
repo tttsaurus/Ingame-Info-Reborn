@@ -23,6 +23,6 @@ public final class DemoMvvmRegistration
     @SubscribeEvent
     public static void onIgiGuiInit(IgiGuiInitEvent event)
     {
-        IgiGuiManager.openGui("eg1");
+        //IgiGuiManager.openGui("eg1");
     }
 }

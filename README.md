@@ -1,5 +1,5 @@
 <div align="center">
-  <img src="logo.png" alt="Your Image" width="300"/>
+  <img src="logo.png" alt="InGame Info Reborn" width="300"/>
   <h1>InGame Info Reborn</h1>
 </div>
 
@@ -43,9 +43,10 @@ This is a library mod that helps you to create in-game overlaid (or focused) GUI
 
 </details>
 
-### Declarative GUI Example:
+### Declarative GUI Example
 ```xml
 <VerticalGroup>
+    <Text uid = "fps">
     <HorizontalGroup>
         <Text text = "Memory: ">
         <ProgressBar uid = "memoryBar" 
@@ -56,7 +57,6 @@ This is a library mod that helps you to create in-game overlaid (or focused) GUI
                      padding = {"right": 5}>
         <Text uid = "memory">
     </Group>
-    <Text uid = "fps">
 </Group>
 ```
 ```java

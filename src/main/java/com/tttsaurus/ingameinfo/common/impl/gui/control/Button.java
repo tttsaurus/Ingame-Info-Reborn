@@ -133,7 +133,9 @@ public class Button extends Interactable
                 rect.y + (rect.height - RenderUtils.simulateTextHeight(1f)) / 2f,
                 1f,
                 currentTextColor,
-                shadow));
+                shadow,
+                hover,
+                hold));
     }
 
     @Override
