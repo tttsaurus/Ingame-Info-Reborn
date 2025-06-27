@@ -19,5 +19,4 @@ public class UIEvent
     public static class MouseLeave extends UIEvent { public MouseLeave(InputState input) { super(input); } }
     public static class MousePress extends UIEvent { public MousePress(InputState input) { super(input); } }
     public static class MouseRelease extends UIEvent { public MouseRelease(InputState input) { super(input); } }
-    public static class MouseClick extends UIEvent { public MouseClick(InputState input) { super(input); } }
 }

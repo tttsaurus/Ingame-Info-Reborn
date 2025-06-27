@@ -5,7 +5,9 @@ import com.tttsaurus.ingameinfo.common.core.appcommunication.spotify.SpotifyAcce
 import com.tttsaurus.ingameinfo.common.core.appcommunication.spotify.SpotifyOAuthUtils;
 import com.tttsaurus.ingameinfo.common.core.appcommunication.spotify.SpotifyUserInfo;
 import com.tttsaurus.ingameinfo.common.core.appcommunication.spotify.TrackPlaying;
-import com.tttsaurus.ingameinfo.common.core.gui.delegate.button.IMouseClickButton;
+import com.tttsaurus.ingameinfo.common.core.gui.event.IUIEventListener;
+import com.tttsaurus.ingameinfo.common.core.gui.event.UIEvent;
+import com.tttsaurus.ingameinfo.common.core.gui.event.UIEventListenerType;
 import com.tttsaurus.ingameinfo.common.core.gui.layout.Padding;
 import com.tttsaurus.ingameinfo.common.core.mvvm.binding.Reactive;
 import com.tttsaurus.ingameinfo.common.core.mvvm.binding.ReactiveObject;
@@ -81,9 +83,6 @@ public class SpotifyViewModel extends ViewModel<SpotifyView>
     // editButton
     @Reactive(targetUid = "editButton", property = "enabled", initiativeSync = true)
     public ReactiveObject<Boolean> editButtonEnabled = new ReactiveObject<>(){};
-
-    @Reactive(targetUid = "editButton", property = "addClickListener", initiativeSync = true)
-    public ReactiveObject<IMouseClickButton> editButtonAddClickListener = new ReactiveObject<>(){};
 
     private float durationMs = 0;
     private float estimatedProgressMs;
@@ -228,19 +227,29 @@ public class SpotifyViewModel extends ViewModel<SpotifyView>
 
         switchLayout();
 
-        editButtonAddClickListener.set((IMouseClickButton)(() ->
+        bindEventListener("editButton", UIEvent.MouseRelease.class, new IUIEventListener<>()
         {
-            if (IgiSpotifyIntegrationConfig.SPOTIFY_EXTENDED_LAYOUT)
+            @Override
+            public void handle(UIEvent.MouseRelease event)
             {
-                IgiSpotifyIntegrationConfig.useSpotifyExtendedLayout(false);
-                switchLayout();
+                if (IgiSpotifyIntegrationConfig.SPOTIFY_EXTENDED_LAYOUT)
+                {
+                    IgiSpotifyIntegrationConfig.useSpotifyExtendedLayout(false);
+                    switchLayout();
+                }
+                else
+                {
+                    IgiSpotifyIntegrationConfig.useSpotifyExtendedLayout(true);
+                    switchLayout();
+                }
             }
-            else
+
+            @Override
+            public UIEventListenerType type()
             {
-                IgiSpotifyIntegrationConfig.useSpotifyExtendedLayout(true);
-                switchLayout();
+                return UIEventListenerType.TARGET;
             }
-        }));
+        });
 
         EventCenter.spotifyOverlayEvent.addListener((flag) ->
         {

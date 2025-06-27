@@ -1,9 +1,9 @@
 package com.tttsaurus.ingameinfo.common.impl.gui.control;
 
-import com.tttsaurus.ingameinfo.common.core.gui.delegate.button.IMouseEnterButton;
-import com.tttsaurus.ingameinfo.common.core.gui.delegate.button.IMouseLeaveButton;
-import com.tttsaurus.ingameinfo.common.core.gui.delegate.button.IMousePressButton;
-import com.tttsaurus.ingameinfo.common.core.gui.delegate.button.IMouseReleaseButton;
+import com.tttsaurus.ingameinfo.common.core.gui.control.Interactable;
+import com.tttsaurus.ingameinfo.common.core.gui.event.IUIEventListener;
+import com.tttsaurus.ingameinfo.common.core.gui.event.UIEvent;
+import com.tttsaurus.ingameinfo.common.core.gui.event.UIEventListenerType;
 import com.tttsaurus.ingameinfo.common.core.gui.registry.RegisterElement;
 import com.tttsaurus.ingameinfo.common.core.gui.property.style.CallbackInfo;
 import com.tttsaurus.ingameinfo.common.core.gui.property.style.StyleProperty;
@@ -15,7 +15,7 @@ import com.tttsaurus.ingameinfo.common.impl.gui.render.ButtonOp;
 
 // todo: another ButtonPro to handle complicated logic
 @RegisterElement
-public class Button extends AbstractButton
+public class Button extends Interactable
 {
     private int currentColor;
 
@@ -59,37 +59,64 @@ public class Button extends AbstractButton
 
     public Button()
     {
-        addListener(new IMouseEnterButton()
+        addEventListener(UIEvent.MouseEnter.class, new IUIEventListener<>()
         {
             @Override
-            public void enter()
+            public void handle(UIEvent.MouseEnter event)
             {
                 currentColor = hoverColor;
                 currentTextColor = hoverTextColor;
             }
-        }).addListener(new IMousePressButton()
+
+            @Override
+            public UIEventListenerType type()
+            {
+                return UIEventListenerType.LOCAL;
+            }
+        });
+        addEventListener(UIEvent.MousePress.class, new IUIEventListener<>()
         {
             @Override
-            public void press()
+            public void handle(UIEvent.MousePress event)
             {
                 currentColor = holdColor;
                 currentTextColor = holdTextColor;
             }
-        }).addListener(new IMouseLeaveButton()
+
+            @Override
+            public UIEventListenerType type()
+            {
+                return UIEventListenerType.LOCAL;
+            }
+        });
+        addEventListener(UIEvent.MouseLeave.class, new IUIEventListener<>()
         {
             @Override
-            public void leave()
+            public void handle(UIEvent.MouseLeave event)
             {
                 currentColor = defaultColor;
                 currentTextColor = defaultTextColor;
             }
-        }).addListener(new IMouseReleaseButton()
+
+            @Override
+            public UIEventListenerType type()
+            {
+                return UIEventListenerType.LOCAL;
+            }
+        });
+        addEventListener(UIEvent.MouseRelease.class, new IUIEventListener<>()
         {
             @Override
-            public void release()
+            public void handle(UIEvent.MouseRelease event)
             {
                 currentColor = defaultColor;
                 currentTextColor = defaultTextColor;
+            }
+
+            @Override
+            public UIEventListenerType type()
+            {
+                return UIEventListenerType.LOCAL;
             }
         });
     }

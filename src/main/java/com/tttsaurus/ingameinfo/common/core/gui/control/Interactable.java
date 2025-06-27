@@ -36,7 +36,6 @@ public abstract class Interactable extends Sized
                 hover = false;
                 hold = false;
                 fireEvent(new UIEvent.MouseRelease(inputState));
-                fireEvent(new UIEvent.MouseClick(inputState));
             }
         }
         else if (hover)

@@ -1,6 +1,8 @@
 package com.tttsaurus.ingameinfo.demo.eg1;
 
-import com.tttsaurus.ingameinfo.common.core.gui.delegate.button.IMouseClickButton;
+import com.tttsaurus.ingameinfo.common.core.gui.event.IUIEventListener;
+import com.tttsaurus.ingameinfo.common.core.gui.event.UIEvent;
+import com.tttsaurus.ingameinfo.common.core.gui.event.UIEventListenerType;
 import com.tttsaurus.ingameinfo.common.core.mvvm.binding.Reactive;
 import com.tttsaurus.ingameinfo.common.core.mvvm.binding.ReactiveCollection;
 import com.tttsaurus.ingameinfo.common.core.mvvm.binding.ReactiveObject;
@@ -19,9 +21,6 @@ public class Eg1ViewModel extends ViewModel<Eg1View>
 
     @Reactive(targetUid = "memory", property = "text", initiativeSync = true)
     public ReactiveObject<String> memoryText = new ReactiveObject<>(){};
-
-    @Reactive(targetUid = "switch", property = "addClickListener", initiativeSync = true)
-    public ReactiveObject<IMouseClickButton> switchClick = new ReactiveObject<>(){};
 
     @Reactive(targetUid = "list")
     public ReactiveCollection list = new ReactiveCollection();
@@ -47,10 +46,10 @@ public class Eg1ViewModel extends ViewModel<Eg1View>
             memoryText.set(usedMb + " MB / " + totalMb + " MB");
         });
 
-        switchClick.set(new IMouseClickButton()
+        bindEventListener("switch", UIEvent.MouseRelease.class, new IUIEventListener<>()
         {
             @Override
-            public void click()
+            public void handle(UIEvent.MouseRelease event)
             {
                 sharedContext.put(ContextKey.gen("num", int.class), ++counter);
                 if (flag)
@@ -64,6 +63,12 @@ public class Eg1ViewModel extends ViewModel<Eg1View>
                     list.get(0).set("enabled", true);
                 }
                 flag = !flag;
+            }
+
+            @Override
+            public UIEventListenerType type()
+            {
+                return UIEventListenerType.TARGET;
             }
         });
 

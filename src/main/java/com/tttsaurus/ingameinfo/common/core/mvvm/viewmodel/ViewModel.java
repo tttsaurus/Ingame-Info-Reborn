@@ -5,6 +5,8 @@ import com.tttsaurus.ingameinfo.common.core.function.IAction_1Param;
 import com.tttsaurus.ingameinfo.common.core.function.IFunc;
 import com.tttsaurus.ingameinfo.common.core.gui.IgiGuiContainer;
 import com.tttsaurus.ingameinfo.common.core.InternalMethods;
+import com.tttsaurus.ingameinfo.common.core.gui.event.IUIEventListener;
+import com.tttsaurus.ingameinfo.common.core.gui.event.UIEvent;
 import com.tttsaurus.ingameinfo.common.core.mvvm.binding.*;
 import com.tttsaurus.ingameinfo.common.core.mvvm.context.SharedContext;
 import com.tttsaurus.ingameinfo.common.core.mvvm.view.View;
@@ -18,10 +20,22 @@ import java.util.Map;
 @SuppressWarnings("all")
 public abstract class ViewModel<T extends View>
 {
+    private VvmBinding<T> binding = new VvmBinding<>();
+
     private String mvvmRegistryName;
     public String getMvvmRegistryName() { return mvvmRegistryName; }
 
     private final List<SlotAccessor> slotAccessors = new ArrayList<>();
+    private final EventListenerBinder eventListenerBinder = new EventListenerBinder();
+
+    public <T extends UIEvent> void bindEventListener(String uid, Class<T> type, IUIEventListener<T> listener)
+    {
+        eventListenerBinder.bind(binding, uid, type, listener, -1);
+    }
+    public <T extends UIEvent> void bindEventListener(String uid, Class<T> type, IUIEventListener<T> listener, int ordinal)
+    {
+        eventListenerBinder.bind(binding, uid, type, listener, ordinal);
+    }
 
     protected final SharedContext sharedContext = new SharedContext();
 
@@ -58,8 +72,6 @@ public abstract class ViewModel<T extends View>
         if (isFocusedGetter == null) return false;
         return isFocusedGetter.invoke();
     }
-
-    private VvmBinding<T> binding = new VvmBinding<>();
 
     // MvvmRegistry.cacheIgiGuiContainer() calls init
     private GuiLayout init(String mvvmRegistryName)
