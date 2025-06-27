@@ -12,7 +12,6 @@ import com.tttsaurus.ingameinfo.common.core.gui.render.RenderOpQueue;
 import com.tttsaurus.ingameinfo.common.core.input.InputState;
 import com.tttsaurus.ingameinfo.common.core.item.GhostableItem;
 import com.tttsaurus.ingameinfo.common.core.render.RenderMask;
-import com.tttsaurus.ingameinfo.common.core.render.RenderUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.client.gui.ScaledResolution;
@@ -24,7 +23,6 @@ import java.util.*;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import com.tttsaurus.ingameinfo.common.impl.gui.DefaultLifecycleProvider;
-import org.lwjgl.opengl.GL11;
 
 /**
  * Provides the lifecycle foundation for an IGI GUI system.

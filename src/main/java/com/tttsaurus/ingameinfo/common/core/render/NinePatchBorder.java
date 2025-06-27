@@ -8,13 +8,15 @@ public class NinePatchBorder
         public float width;
         public float height;
         public boolean tiling;
+        public boolean sizeDeductionByPixels;
 
-        public Patch(Texture2D tex, float width, float height, boolean tiling)
+        public Patch(Texture2D tex, float width, float height, boolean tiling, boolean sizeDeductionByPixels)
         {
             this.tex = tex;
             this.width = width;
             this.height = height;
             this.tiling = tiling;
+            this.sizeDeductionByPixels = sizeDeductionByPixels;
         }
         public Patch(Texture2D tex)
         {
@@ -22,6 +24,7 @@ public class NinePatchBorder
             width = 0f;
             height = 0f;
             tiling = false;
+            sizeDeductionByPixels = true;
         }
     }
 
