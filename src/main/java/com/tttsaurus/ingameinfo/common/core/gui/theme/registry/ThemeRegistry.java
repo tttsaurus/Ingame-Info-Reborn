@@ -105,6 +105,9 @@ public final class ThemeRegistry
                     spotifyTheme.text.color = "#232323";
                     spotifyTheme.slidingText.color = "#232323";
                     spotifyTheme.animText.color = "#232323";
+                    spotifyTheme.text.shadow = false;
+                    spotifyTheme.slidingText.shadow = false;
+                    spotifyTheme.animText.shadow = false;
 
                     String config = ThemeConfigSerDesUtils.serialize(spotifyTheme);
                     file.write(config.getBytes(StandardCharsets.UTF_8));

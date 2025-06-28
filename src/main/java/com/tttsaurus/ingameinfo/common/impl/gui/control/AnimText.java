@@ -120,9 +120,12 @@ public class AnimText extends Element
     {
         for (CharInfo info : charInfos)
             info.shadow = shadow;
+
+        if (!isShadowInit) isShadowInit = true;
     }
     @StyleProperty(setterCallbackPost = "setShadowCallback")
     public boolean shadow;
+    private boolean isShadowInit = false;
 
     @Override
     public void calcWidthHeight()
@@ -147,6 +150,11 @@ public class AnimText extends Element
 
         if (scale == 0)
             setStyleProperty("scale", themeConfig.animText.scale);
+        if (!isShadowInit)
+        {
+            isShadowInit = true;
+            setStyleProperty("shadow", themeConfig.animText.shadow);
+        }
     }
 
     @Override

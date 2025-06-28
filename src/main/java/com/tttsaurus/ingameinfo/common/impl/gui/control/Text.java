@@ -32,8 +32,14 @@ public class Text extends Element
     @StyleProperty
     public int color;
 
-    @StyleProperty
+    @StylePropertyCallback
+    public void setShadowCallback()
+    {
+        if (!isShadowInit) isShadowInit = true;
+    }
+    @StyleProperty(setterCallbackPost = "setShadowCallback")
     public boolean shadow;
+    private boolean isShadowInit = false;
 
     @Override
     public void calcWidthHeight()
@@ -49,6 +55,11 @@ public class Text extends Element
 
         if (scale == 0)
             setStyleProperty("scale", themeConfig.text.scale);
+        if (!isShadowInit)
+        {
+            isShadowInit = true;
+            setStyleProperty("shadow", themeConfig.text.shadow);
+        }
     }
 
     @Override

@@ -130,10 +130,6 @@ public final class GuiLayout
     private void injectStyleProperties(Element element, List<ElementProperty> properties)
     {
         for (ElementProperty style: properties)
-        {
-            IAction_1Param<Object> action = ElementRegistry.getStylePropertySetterFullCallback(element, style.name);
-            if (action != null)
-                action.invoke(style.value);
-        }
+            element.setStyleProperty(style.name, style.value);
     }
 }

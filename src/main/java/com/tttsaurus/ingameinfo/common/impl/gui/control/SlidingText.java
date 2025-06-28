@@ -90,8 +90,14 @@ public class SlidingText extends Sized
     @StyleProperty
     public int color;
 
-    @StyleProperty
+    @StylePropertyCallback
+    public void setShadowCallback()
+    {
+        if (!isShadowInit) isShadowInit = true;
+    }
+    @StyleProperty(setterCallbackPost = "setShadowCallback")
     public boolean shadow;
+    private boolean isShadowInit = false;
 
     @Override
     public void applyLogicTheme(ThemeConfig themeConfig)
@@ -100,6 +106,11 @@ public class SlidingText extends Sized
 
         if (scale == 0)
             setStyleProperty("scale", themeConfig.slidingText.scale);
+        if (!isShadowInit)
+        {
+            isShadowInit = true;
+            setStyleProperty("shadow", themeConfig.slidingText.shadow);
+        }
     }
 
     @Override

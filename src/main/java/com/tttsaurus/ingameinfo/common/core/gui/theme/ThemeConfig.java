@@ -98,6 +98,8 @@ public final class ThemeConfig
         public String color = "#d2d2d2";
         @Comment("This will only be applied to Text with style property 'scale' left empty.")
         public float scale = 1f;
+        @Comment("This will only be applied to Text with style property 'shadow' left empty.")
+        public boolean shadow = true;
 
         public transient int parsedColor;
     }
@@ -110,6 +112,8 @@ public final class ThemeConfig
         public String color = "#d2d2d2";
         @Comment("This will only be applied to SlidingText with style property 'scale' left empty.")
         public float scale = 1f;
+        @Comment("This will only be applied to SlidingText with style property 'shadow' left empty.")
+        public boolean shadow = true;
 
         public transient int parsedColor;
     }
@@ -122,6 +126,8 @@ public final class ThemeConfig
         public String color = "#d2d2d2";
         @Comment("This will only be applied to AnimText with style property 'scale' left empty.")
         public float scale = 1f;
+        @Comment("This will only be applied to AnimText with style property 'shadow' left empty.")
+        public boolean shadow = true;
 
         public transient int parsedColor;
     }
