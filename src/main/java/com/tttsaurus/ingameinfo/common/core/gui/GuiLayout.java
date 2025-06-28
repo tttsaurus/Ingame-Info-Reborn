@@ -1,10 +1,8 @@
 package com.tttsaurus.ingameinfo.common.core.gui;
 
-import com.tttsaurus.ingameinfo.common.core.function.IAction_1Param;
 import com.tttsaurus.ingameinfo.common.core.gui.layout.ElementGroup;
 import com.tttsaurus.ingameinfo.common.core.item.GhostableItem;
 import com.tttsaurus.ingameinfo.common.core.gui.layout.MainGroup;
-import com.tttsaurus.ingameinfo.common.core.gui.registry.ElementRegistry;
 import java.util.ArrayList;
 import java.util.List;
 

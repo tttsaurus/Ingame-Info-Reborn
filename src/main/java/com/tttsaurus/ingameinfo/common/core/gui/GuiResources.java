@@ -8,11 +8,28 @@ import javax.annotation.Nullable;
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.InputStream;
+import java.util.HashMap;
+import java.util.Map;
 
 public final class GuiResources
 {
-    public static ImagePrefab mcVanillaBg;
-    public static ImagePrefab mcVanillaButton;
+    private static final Map<String, ImagePrefab> imagePrefabs = new HashMap<>();
+
+    public static void register(String name, ImagePrefab imagePrefab)
+    {
+        imagePrefabs.put(name, imagePrefab);
+    }
+
+    public static ImagePrefab get(String name)
+    {
+        ImagePrefab imagePrefab = imagePrefabs.get(name);
+        if (imagePrefab == null)
+            return missingTexture;
+        else
+            return imagePrefab;
+    }
+
+    private static ImagePrefab missingTexture;
 
     @Nullable
     private static BufferedImage getBufferedImageFromRl(ResourceLocation rl)
@@ -85,7 +102,7 @@ public final class GuiResources
         if (image != null)
             mcVanillaBgBottomRight = RenderUtils.createTexture2D(image);
 
-        mcVanillaBg = new ImagePrefab(new NinePatchBorder(
+        ImagePrefab mcVanillaBg = new ImagePrefab(new NinePatchBorder(
                 mcVanillaBgTopLeft,
                 mcVanillaBgTopCenter,
                 mcVanillaBgTopRight,
@@ -142,7 +159,7 @@ public final class GuiResources
         if (image != null)
             mcVanillaButtonBottomRight = RenderUtils.createTexture2D(image);
 
-        mcVanillaButton = new ImagePrefab(new NinePatchBorder(
+        ImagePrefab mcVanillaButton = new ImagePrefab(new NinePatchBorder(
                 mcVanillaButtonTopLeft,
                 mcVanillaButtonTopCenter,
                 mcVanillaButtonTopRight,
@@ -154,9 +171,32 @@ public final class GuiResources
                 mcVanillaButtonBottomRight));
         mcVanillaButton.ninePatchBorder.center.tiling = true;
 
+        Texture2D missingTexture = null;
+        image = getBufferedImageFromRl(new ResourceLocation("ingameinfo:gui/missing_texture.png"));
+        if (image != null)
+            missingTexture = RenderUtils.createTexture2D(image);
+        GuiResources.missingTexture = new ImagePrefab(new NinePatchBorder(
+                missingTexture,
+                missingTexture,
+                missingTexture,
+                missingTexture,
+                missingTexture,
+                missingTexture,
+                missingTexture,
+                missingTexture,
+                missingTexture));
+        GuiResources.missingTexture.ninePatchBorder.center.tiling = true;
+        GuiResources.missingTexture.ninePatchBorder.topLeft.sizeDeductionByPixels = false;
+        GuiResources.missingTexture.ninePatchBorder.topRight.sizeDeductionByPixels = false;
+        GuiResources.missingTexture.ninePatchBorder.bottomLeft.sizeDeductionByPixels = false;
+        GuiResources.missingTexture.ninePatchBorder.bottomRight.sizeDeductionByPixels = false;
+
         RenderHints.setHint_Texture2D$FilterModeMin(filterModeMin);
         RenderHints.setHint_Texture2D$FilterModeMag(filterModeMag);
         RenderHints.setHint_Texture2D$WrapModeS(wrapModeS);
         RenderHints.setHint_Texture2D$WrapModeT(wrapModeT);
+
+        register("vanilla_background", mcVanillaBg);
+        register("vanilla_button", mcVanillaButton);
     }
 }

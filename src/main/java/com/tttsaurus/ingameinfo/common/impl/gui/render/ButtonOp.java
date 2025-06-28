@@ -60,12 +60,15 @@ public class ButtonOp implements IRenderOp
 
         int tempColor = (new Color(Math.min(_r, 1f), Math.min(_g, 1f), Math.min(_b, 1f), a)).getRGB();
 
-        RenderUtils.renderImagePrefab(rect.x, rect.y, rect.width, rect.height, GuiResources.mcVanillaButton, tempColor);
+        RenderUtils.renderImagePrefab(rect.x, rect.y, rect.width, rect.height, GuiResources.get("vanilla_button"), tempColor);
 
         RenderUtils.renderRectBrightnessOverlay(rect.x, rect.y, rect.width, rect.height,
                 _r > 1f ? r - ORIGINAL_R : 0f,
                 _g > 1f ? g - ORIGINAL_G : 0f,
                 _b > 1f ? b - ORIGINAL_B : 0f);
+
+        if (hover && !hold)
+            RenderUtils.renderRectOutline(rect.x, rect.y, rect.width - 1, rect.height - 1, 1f, Color.BLACK.getRGB());
 
         RenderUtils.renderText(text, x, y, scale, textColor, shadow);
     }

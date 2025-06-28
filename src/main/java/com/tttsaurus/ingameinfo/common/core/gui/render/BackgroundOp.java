@@ -42,7 +42,7 @@ public class BackgroundOp implements IRenderOp
             }
             case "mc-vanilla" ->
             {
-                RenderUtils.renderImagePrefab(rect.x, rect.y, rect.width, rect.height, GuiResources.mcVanillaBg, context.theme.backgroundStyles.mcVanilla.parsedColor);
+                RenderUtils.renderImagePrefab(rect.x, rect.y, rect.width, rect.height, GuiResources.get("vanilla_background"), context.theme.backgroundStyles.mcVanilla.parsedColor);
             }
         }
     }
