@@ -49,29 +49,23 @@ public class ButtonOp implements IRenderOp
     @Override
     public void execute(RenderContext context)
     {
+        float a = (float)(buttonColor >> 24 & 255) / 255f;
         float r = (float)(buttonColor >> 16 & 255) / 255f;
         float g = (float)(buttonColor >> 8 & 255) / 255f;
         float b = (float)(buttonColor & 255) / 255f;
 
-        if (r == 1f && g == 1f && b == 1f)
-            RenderUtils.renderImagePrefab(rect.x, rect.y, rect.width, rect.height, GuiResources.mcVanillaButton, buttonColor);
-        else
-        {
-            float a = (float)(buttonColor >> 24 & 255) / 255f;
+        float _r = r / ORIGINAL_R;
+        float _g = g / ORIGINAL_G;
+        float _b = b / ORIGINAL_B;
 
-            float _r = r / ORIGINAL_R;
-            float _g = g / ORIGINAL_G;
-            float _b = b / ORIGINAL_B;
+        int tempColor = (new Color(Math.min(_r, 1f), Math.min(_g, 1f), Math.min(_b, 1f), a)).getRGB();
 
-            int tempColor = (new Color(Math.min(_r, 1f), Math.min(_g, 1f), Math.min(_b, 1f), a)).getRGB();
+        RenderUtils.renderImagePrefab(rect.x, rect.y, rect.width, rect.height, GuiResources.mcVanillaButton, tempColor);
 
-            RenderUtils.renderImagePrefab(rect.x, rect.y, rect.width, rect.height, GuiResources.mcVanillaButton, tempColor);
-
-            RenderUtils.renderRectBrightnessOverlay(rect.x, rect.y, rect.width, rect.height,
-                    _r > 1f ? r - ORIGINAL_R : 0f,
-                    _g > 1f ? g - ORIGINAL_G : 0f,
-                    _b > 1f ? b - ORIGINAL_B : 0f);
-        }
+        RenderUtils.renderRectBrightnessOverlay(rect.x, rect.y, rect.width, rect.height,
+                _r > 1f ? r - ORIGINAL_R : 0f,
+                _g > 1f ? g - ORIGINAL_G : 0f,
+                _b > 1f ? b - ORIGINAL_B : 0f);
 
         RenderUtils.renderText(text, x, y, scale, textColor, shadow);
     }

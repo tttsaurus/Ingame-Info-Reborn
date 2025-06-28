@@ -161,7 +161,7 @@ public final class ThemeConfig
     {
         @Comment("This will only be applied to Button with style property 'defaultColor' left empty when using this style.\n" +
                 "In the form of hex #rrggbb or #aarrggbb.")
-        public String defaultColor = "#ffffff";
+        public String defaultColor = "#aaaaaa";
         @Comment("This will only be applied to Button with style property 'hoverColor' left empty when using this style.\n" +
                 "In the form of hex #rrggbb or #aarrggbb.")
         public String hoverColor = "#bec7ff";
