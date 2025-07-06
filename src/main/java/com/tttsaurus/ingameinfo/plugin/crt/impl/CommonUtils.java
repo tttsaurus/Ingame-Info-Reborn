@@ -9,6 +9,7 @@ import stanhebben.zenscript.annotations.ZenMethod;
 @ZenClass("mods.ingameinfo.utils.CommonUtils")
 public final class CommonUtils
 {
+    //<editor-fold desc="atomic utils">
     @ZenRegister
     @ZenClass("mods.ingameinfo.utils.AtomicBoolean")
     public static class AtomicBoolean
@@ -70,7 +71,9 @@ public final class CommonUtils
             return instance;
         }
     }
+    //</editor-fold>
 
+    //<editor-fold desc="align string">
     @ZenMethod
     public static String alignStringToRight(String value, int expectLength)
     {
@@ -100,7 +103,9 @@ public final class CommonUtils
         else
             return value;
     }
+    //</editor-fold>
 
+    //<editor-fold desc="truncate">
     @ZenMethod
     public static float truncateFloat(float value, int decimalPlaces)
     {
@@ -114,7 +119,9 @@ public final class CommonUtils
         double multiplier = Math.pow(10, decimalPlaces);
         return (long)(value * multiplier) / multiplier;
     }
+    //</editor-fold>
 
+    //<editor-fold desc="to int">
     @ZenMethod
     public static int toInt(Object value)
     {
@@ -184,7 +191,9 @@ public final class CommonUtils
         }
         catch (NumberFormatException ignored) { return 0; }
     }
+    //</editor-fold>
 
+    //<editor-fold desc="to float">
     @ZenMethod
     public static float toFloat(Object value)
     {
@@ -254,7 +263,9 @@ public final class CommonUtils
         }
         catch (NumberFormatException ignored) { return 0f; }
     }
+    //</editor-fold>
 
+    //<editor-fold desc="to string">
     @ZenMethod
     public static String toString(Object value)
     {
@@ -295,7 +306,9 @@ public final class CommonUtils
     {
         return value ? "true" : "false";
     }
+    //</editor-fold>
 
+    //<editor-fold desc="to object">
     @ZenMethod
     public static Object toObject(Object value)
     {
@@ -341,4 +354,5 @@ public final class CommonUtils
     {
         return (Boolean)value;
     }
+    //</editor-fold>
 }
