@@ -40,6 +40,37 @@ public final class CommonUtils
         }
     }
 
+    @ZenRegister
+    @ZenClass("mods.ingameinfo.utils.AtomicInteger")
+    public static class AtomicInteger
+    {
+        private final java.util.concurrent.atomic.AtomicInteger atomicInteger;
+
+        public AtomicInteger()
+        {
+            atomicInteger = new java.util.concurrent.atomic.AtomicInteger();
+        }
+
+        @ZenMethod
+        public void set(int value)
+        {
+            atomicInteger.set(value);
+        }
+        @ZenMethod
+        public int get()
+        {
+            return atomicInteger.get();
+        }
+
+        @ZenMethod("new")
+        public static AtomicInteger newAtomicInteger(int value)
+        {
+            AtomicInteger instance = new AtomicInteger();
+            instance.set(value);
+            return instance;
+        }
+    }
+
     @ZenMethod
     public static String alignStringToRight(String value, int expectLength)
     {
