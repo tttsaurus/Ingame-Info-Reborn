@@ -2,7 +2,7 @@ package com.tttsaurus.ingameinfo.common.core.gui.layout;
 
 import com.tttsaurus.ingameinfo.common.core.gui.Element;
 import com.tttsaurus.ingameinfo.common.core.input.InputState;
-import com.tttsaurus.ingameinfo.common.core.gui.render.DebugRectOp;
+import com.tttsaurus.ingameinfo.common.core.gui.render.op.DebugRectOp;
 import com.tttsaurus.ingameinfo.common.core.gui.render.RenderOpQueue;
 import com.tttsaurus.ingameinfo.common.core.gui.theme.ThemeConfig;
 import com.tttsaurus.ingameinfo.common.core.InternalMethods;

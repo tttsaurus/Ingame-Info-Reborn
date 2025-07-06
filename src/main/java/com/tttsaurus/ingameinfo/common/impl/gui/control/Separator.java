@@ -4,7 +4,7 @@ import com.tttsaurus.ingameinfo.common.core.gui.Element;
 import com.tttsaurus.ingameinfo.common.core.gui.property.style.StyleProperty;
 import com.tttsaurus.ingameinfo.common.core.gui.registry.RegisterElement;
 import com.tttsaurus.ingameinfo.common.core.gui.render.RenderOpQueue;
-import com.tttsaurus.ingameinfo.common.impl.gui.render.SeparatorOp;
+import com.tttsaurus.ingameinfo.common.impl.gui.render.op.SeparatorOp;
 
 @RegisterElement
 public class Separator extends Element

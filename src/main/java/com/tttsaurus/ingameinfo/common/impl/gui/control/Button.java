@@ -11,7 +11,7 @@ import com.tttsaurus.ingameinfo.common.core.gui.property.style.StylePropertyCall
 import com.tttsaurus.ingameinfo.common.core.gui.render.RenderOpQueue;
 import com.tttsaurus.ingameinfo.common.core.gui.theme.ThemeConfig;
 import com.tttsaurus.ingameinfo.common.core.render.RenderUtils;
-import com.tttsaurus.ingameinfo.common.impl.gui.render.ButtonOp;
+import com.tttsaurus.ingameinfo.common.impl.gui.render.op.ButtonOp;
 
 // todo: another ButtonPro to handle complicated logic
 @RegisterElement

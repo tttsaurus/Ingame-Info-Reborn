@@ -1,8 +1,8 @@
-package com.tttsaurus.ingameinfo.common.impl.gui.render;
+package com.tttsaurus.ingameinfo.common.impl.gui.render.op;
 
 import com.tttsaurus.ingameinfo.common.core.gui.GuiResources;
 import com.tttsaurus.ingameinfo.common.core.gui.layout.Rect;
-import com.tttsaurus.ingameinfo.common.core.gui.render.IRenderOp;
+import com.tttsaurus.ingameinfo.common.core.gui.render.op.IRenderOp;
 import com.tttsaurus.ingameinfo.common.core.gui.render.RenderContext;
 import com.tttsaurus.ingameinfo.common.core.render.RenderUtils;
 import java.awt.*;

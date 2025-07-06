@@ -11,9 +11,9 @@ import com.tttsaurus.ingameinfo.common.core.gui.property.style.StylePropertyCall
 import com.tttsaurus.ingameinfo.common.core.gui.render.RenderOpQueue;
 import com.tttsaurus.ingameinfo.common.core.gui.theme.ThemeConfig;
 import com.tttsaurus.ingameinfo.common.core.render.RenderUtils;
-import com.tttsaurus.ingameinfo.common.core.gui.render.MaskEndOp;
-import com.tttsaurus.ingameinfo.common.core.gui.render.MaskStartOp;
-import com.tttsaurus.ingameinfo.common.impl.gui.render.SlidingTextOp;
+import com.tttsaurus.ingameinfo.common.core.gui.render.op.MaskEndOp;
+import com.tttsaurus.ingameinfo.common.core.gui.render.op.MaskStartOp;
+import com.tttsaurus.ingameinfo.common.impl.gui.render.op.SlidingTextOp;
 
 @RegisterElement
 public class SlidingText extends Sized

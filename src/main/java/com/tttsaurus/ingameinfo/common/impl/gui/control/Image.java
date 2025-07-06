@@ -8,7 +8,7 @@ import com.tttsaurus.ingameinfo.common.core.gui.property.style.StylePropertyCall
 import com.tttsaurus.ingameinfo.common.core.gui.render.RenderOpQueue;
 import com.tttsaurus.ingameinfo.common.core.render.RenderUtils;
 import com.tttsaurus.ingameinfo.common.core.render.Texture2D;
-import com.tttsaurus.ingameinfo.common.impl.gui.render.ImageOp;
+import com.tttsaurus.ingameinfo.common.impl.gui.render.op.ImageOp;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.IResource;
 import net.minecraft.util.ResourceLocation;

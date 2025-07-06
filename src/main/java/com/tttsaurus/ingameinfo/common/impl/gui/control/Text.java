@@ -8,7 +8,7 @@ import com.tttsaurus.ingameinfo.common.core.gui.property.style.StylePropertyCall
 import com.tttsaurus.ingameinfo.common.core.gui.render.RenderOpQueue;
 import com.tttsaurus.ingameinfo.common.core.gui.theme.ThemeConfig;
 import com.tttsaurus.ingameinfo.common.core.render.RenderUtils;
-import com.tttsaurus.ingameinfo.common.impl.gui.render.TextOp;
+import com.tttsaurus.ingameinfo.common.impl.gui.render.op.TextOp;
 
 @RegisterElement
 public class Text extends Element

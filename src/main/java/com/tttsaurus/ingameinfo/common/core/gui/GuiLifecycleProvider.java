@@ -6,7 +6,7 @@ import com.tttsaurus.ingameinfo.common.core.function.IFunc;
 import com.tttsaurus.ingameinfo.common.core.gui.dummygui.IDummyDrawScreen;
 import com.tttsaurus.ingameinfo.common.core.gui.dummygui.IDummyKeyTyped;
 import com.tttsaurus.ingameinfo.common.core.gui.dummygui.DummyMcGui;
-import com.tttsaurus.ingameinfo.common.core.gui.render.IRenderOp;
+import com.tttsaurus.ingameinfo.common.core.gui.render.op.IRenderOp;
 import com.tttsaurus.ingameinfo.common.core.gui.render.RenderContext;
 import com.tttsaurus.ingameinfo.common.core.gui.render.RenderOpQueue;
 import com.tttsaurus.ingameinfo.common.core.input.InputState;

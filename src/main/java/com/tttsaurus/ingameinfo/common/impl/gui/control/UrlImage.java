@@ -8,7 +8,7 @@ import com.tttsaurus.ingameinfo.common.core.gui.property.style.StylePropertyCall
 import com.tttsaurus.ingameinfo.common.core.gui.render.RenderOpQueue;
 import com.tttsaurus.ingameinfo.common.core.render.RenderUtils;
 import com.tttsaurus.ingameinfo.common.core.render.Texture2D;
-import com.tttsaurus.ingameinfo.common.impl.gui.render.UrlImageOp;
+import com.tttsaurus.ingameinfo.common.impl.gui.render.op.UrlImageOp;
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.InputStream;

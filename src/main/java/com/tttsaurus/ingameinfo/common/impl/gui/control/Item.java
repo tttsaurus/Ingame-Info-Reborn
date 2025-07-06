@@ -7,7 +7,7 @@ import com.tttsaurus.ingameinfo.common.core.gui.property.style.StyleProperty;
 import com.tttsaurus.ingameinfo.common.core.gui.property.style.StylePropertyCallback;
 import com.tttsaurus.ingameinfo.common.core.gui.render.RenderOpQueue;
 import com.tttsaurus.ingameinfo.common.core.item.GhostableItem;
-import com.tttsaurus.ingameinfo.common.impl.gui.render.ItemOp;
+import com.tttsaurus.ingameinfo.common.impl.gui.render.op.ItemOp;
 
 @RegisterElement
 public class Item extends Sized
