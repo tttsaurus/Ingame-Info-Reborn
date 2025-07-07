@@ -3,6 +3,7 @@ package com.tttsaurus.ingameinfo.common.impl.gui.render.op;
 import com.tttsaurus.ingameinfo.common.core.gui.layout.Rect;
 import com.tttsaurus.ingameinfo.common.core.gui.render.op.IRenderOp;
 import com.tttsaurus.ingameinfo.common.core.gui.render.RenderContext;
+import com.tttsaurus.ingameinfo.common.core.gui.theme.ThemeConfig;
 import com.tttsaurus.ingameinfo.common.core.render.RenderMask;
 import com.tttsaurus.ingameinfo.common.core.render.RenderUtils;
 
@@ -22,14 +23,14 @@ public class ProgressBarOp implements IRenderOp
     }
 
     @Override
-    public void readRenderContext(RenderContext context)
+    public void readTheme(ThemeConfig theme)
     {
         if (fillerColor == 0)
-            fillerColor =  context.theme.progressBar.parsedFillerColor;
+            fillerColor =  theme.progressBar.parsedFillerColor;
         if (backgroundColor == 0)
-            backgroundColor = context.theme.progressBar.parsedBackgroundColor;
+            backgroundColor = theme.progressBar.parsedBackgroundColor;
         if (outlineColor == 0)
-            outlineColor = context.theme.progressBar.parsedOutlineColor;
+            outlineColor = theme.progressBar.parsedOutlineColor;
     }
 
     @Override

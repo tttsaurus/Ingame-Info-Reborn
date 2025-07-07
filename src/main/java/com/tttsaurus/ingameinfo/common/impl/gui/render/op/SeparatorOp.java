@@ -2,6 +2,7 @@ package com.tttsaurus.ingameinfo.common.impl.gui.render.op;
 
 import com.tttsaurus.ingameinfo.common.core.gui.render.op.IRenderOp;
 import com.tttsaurus.ingameinfo.common.core.gui.render.RenderContext;
+import com.tttsaurus.ingameinfo.common.core.gui.theme.ThemeConfig;
 import com.tttsaurus.ingameinfo.common.core.render.RenderUtils;
 
 public class SeparatorOp implements IRenderOp
@@ -17,7 +18,7 @@ public class SeparatorOp implements IRenderOp
     }
 
     @Override
-    public void readRenderContext(RenderContext context)
+    public void readTheme(ThemeConfig theme)
     {
         if (color == 0)
             color = 0; // todo: theme to be impl

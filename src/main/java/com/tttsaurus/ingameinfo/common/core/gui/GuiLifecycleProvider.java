@@ -256,7 +256,7 @@ public abstract class GuiLifecycleProvider
                 IRenderOp op;
                 while ((op = queue.dequeue()) != null)
                 {
-                    op.readRenderContext(context);
+                    op.readTheme(context.theme);
                     if (!decorator.isEmpty() && decorator.isModifying(op.getClass()))
                     {
                         boolean abort = false;

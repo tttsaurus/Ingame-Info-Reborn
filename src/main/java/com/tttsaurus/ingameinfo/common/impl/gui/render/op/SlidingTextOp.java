@@ -3,6 +3,7 @@ package com.tttsaurus.ingameinfo.common.impl.gui.render.op;
 import com.tttsaurus.ingameinfo.common.core.gui.property.lerp.LerpableProperty;
 import com.tttsaurus.ingameinfo.common.core.gui.render.op.IRenderOp;
 import com.tttsaurus.ingameinfo.common.core.gui.render.RenderContext;
+import com.tttsaurus.ingameinfo.common.core.gui.theme.ThemeConfig;
 import com.tttsaurus.ingameinfo.common.core.render.RenderUtils;
 
 public class SlidingTextOp implements IRenderOp
@@ -36,10 +37,10 @@ public class SlidingTextOp implements IRenderOp
     }
 
     @Override
-    public void readRenderContext(RenderContext context)
+    public void readTheme(ThemeConfig theme)
     {
         if (color == 0)
-            color = context.theme.slidingText.parsedColor;
+            color = theme.slidingText.parsedColor;
     }
 
     @Override

@@ -4,6 +4,7 @@ import com.tttsaurus.ingameinfo.common.core.animation.text.CharInfo;
 import com.tttsaurus.ingameinfo.common.core.gui.property.lerp.LerpableProperty;
 import com.tttsaurus.ingameinfo.common.core.gui.render.op.IRenderOp;
 import com.tttsaurus.ingameinfo.common.core.gui.render.RenderContext;
+import com.tttsaurus.ingameinfo.common.core.gui.theme.ThemeConfig;
 import com.tttsaurus.ingameinfo.common.core.render.RenderUtils;
 
 public class AnimTextOp implements IRenderOp
@@ -25,11 +26,11 @@ public class AnimTextOp implements IRenderOp
     public boolean overrideColor;
 
     @Override
-    public void readRenderContext(RenderContext context)
+    public void readTheme(ThemeConfig theme)
     {
         if (color == 0)
         {
-            color = context.theme.animText.parsedColor;
+            color = theme.animText.parsedColor;
             overrideColor = true;
         }
     }
