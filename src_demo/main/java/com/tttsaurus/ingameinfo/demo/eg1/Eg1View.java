@@ -1,5 +1,6 @@
 package com.tttsaurus.ingameinfo.demo.eg1;
 
+import com.tttsaurus.ingameinfo.common.core.gui.render.RenderDecorator;
 import com.tttsaurus.ingameinfo.common.core.mvvm.view.View;
 
 public class Eg1View extends View
@@ -26,5 +27,11 @@ public class Eg1View extends View
                     <Slot uid = "mySlot">
                 </Group>
                 """;
+    }
+
+    @Override
+    public void initRenderDecorator(RenderDecorator renderDecorator)
+    {
+
     }
 }

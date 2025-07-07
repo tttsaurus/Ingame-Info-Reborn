@@ -28,11 +28,11 @@ public abstract class ViewModel<T extends View>
     private final List<SlotAccessor> slotAccessors = new ArrayList<>();
     private final EventListenerBinder eventListenerBinder = new EventListenerBinder();
 
-    public <T extends UIEvent> void bindEventListener(String uid, Class<T> type, IUIEventListener<T> listener)
+    public final <T extends UIEvent> void bindEventListener(String uid, Class<T> type, IUIEventListener<T> listener)
     {
         eventListenerBinder.bind(binding, uid, type, listener, -1);
     }
-    public <T extends UIEvent> void bindEventListener(String uid, Class<T> type, IUIEventListener<T> listener, int ordinal)
+    public final <T extends UIEvent> void bindEventListener(String uid, Class<T> type, IUIEventListener<T> listener, int ordinal)
     {
         eventListenerBinder.bind(binding, uid, type, listener, ordinal);
     }

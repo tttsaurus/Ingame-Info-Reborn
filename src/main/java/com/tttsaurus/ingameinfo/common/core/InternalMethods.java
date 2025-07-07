@@ -8,6 +8,7 @@ import com.tttsaurus.ingameinfo.common.core.gui.GuiLifecycleProvider;
 import com.tttsaurus.ingameinfo.common.core.gui.IgiGuiContainer;
 import com.tttsaurus.ingameinfo.common.core.gui.layout.ElementGroup;
 import com.tttsaurus.ingameinfo.common.core.gui.property.style.IStylePropertySyncTo;
+import com.tttsaurus.ingameinfo.common.core.gui.render.RenderDecorator;
 import com.tttsaurus.ingameinfo.common.core.mvvm.binding.IReactiveCallback;
 import com.tttsaurus.ingameinfo.common.core.mvvm.binding.ReactiveCollection;
 import com.tttsaurus.ingameinfo.common.core.mvvm.binding.ReactiveObject;
@@ -51,6 +52,7 @@ public class InternalMethods
     public IAction_2Param<SlotAccessor, ElementGroup> SlotAccessor$group$setter;
     public IAction_2Param<GuiLayout, IgiGuiContainer> GuiLayout$igiGuiContainer$setter;
     public IAction_2Param<Element, ElementGroup> Element$parent$setter;
+    public IAction_2Param<View, RenderDecorator> View$renderDecorator$setter;
 
     public IFunc_2Param<GuiLayout, ViewModel, String> ViewModel$init;
     public IFunc_2Param<GuiLayout, View, IgiGuiContainer> View$init;
@@ -486,6 +488,27 @@ public class InternalMethods
         {
             Element$parent$setter = null;
             InGameInfoReborn.LOGGER.error("Reflection setup failed for Element$parent$setter: " + exception.getMessage());
+            crash(exception);
+        }
+
+        try
+        {
+            Field field = View.class.getDeclaredField("renderDecorator");
+            field.setAccessible(true);
+            MethodHandle handle = lookup.unreflectSetter(field);
+            View$renderDecorator$setter = (arg0, arg1) ->
+            {
+                try
+                {
+                    handle.invoke(arg0, arg1);
+                }
+                catch (Throwable ignored) { }
+            };
+        }
+        catch (Exception exception)
+        {
+            View$renderDecorator$setter = null;
+            InGameInfoReborn.LOGGER.error("Reflection setup failed for View$renderDecorator$setter: " + exception.getMessage());
             crash(exception);
         }
         //</editor-fold>
