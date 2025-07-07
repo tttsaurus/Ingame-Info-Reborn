@@ -24,22 +24,23 @@ This is a library mod that helps you to create in-game overlaid (or focused) GUI
 <details>
 <summary>Click to Expand</summary>
 
-| Module                             | Role                                                             | Status        |
-|------------------------------------|------------------------------------------------------------------|---------------|
-| **MVVM Base**                      | Separates logic (ViewModel) from rendering (View)                | ✅ Done        |
-| **XML-Style DSL For View**         | Declarative XML-style layout to build static UI trees            | ✅ Done        |
-| **Reactive Binding**               | View reacts to changes in ViewModel automatically                | ✅ Done        |
-| **Compose (Powered by Slot)**      | Immediate-mode UI embedded in ViewModel                          | ⚠️ Partially  |
-| **Snapshot Diffing**               | Virtual tree diffing for Compose-based UI                        | ✅ Done        |
-| **Shared Context**                 | Shared runtime context between ViewModel and Compose blocks      | ✅ Done        |
-| **DOM-Like Event System**          | Input propagation and event capturing/bubbling                   | ✅ Done        |
-| **Interactable Control**           | Captures input, intercepts propagation (works with Event System) | ✅ Done        |
-| **Fixed / Render Update**          | Dual update loop for logic vs animation                          | ✅ Done        |
-| **Annotation Driven Lerp Utility** | Utility for smooth interpolation during render updates           | ✅ Done        |
-| **Transition API**                 | Externally trigger view transitions                              | 🚧 Planned    |
-| **Theme Manager**                  | Global theme system (colors, font scale, etc)                    | ✅ Mostly Done |
-| **Render Op Queue**                | Abstract draw commands for controls                              | ✅ Done        |
-| **Modal Layer**                    | Stack-based modal / dialog system                                | 🚧 Planned    |
+| Module                                   | Role                                                             | Status         |
+|------------------------------------------|------------------------------------------------------------------|----------------|
+| **MVVM Base**                            | Separates logic (ViewModel) from rendering (View)                | ✅ Done         |
+| **XAML-Style DSL For View**              | Declarative XAML-style layout to build static UI trees           | ✅ Done         |
+| **Reactive Binding**                     | View reacts to changes in ViewModel automatically                | ✅ Done         |
+| **Compose (Injected via Slot)**          | Immediate-mode UI embedded in ViewModel                          | ⚠️ Partially   |
+| **Snapshot Diffing**                     | Virtual tree diffing for Compose-based UI                        | ✅ Done         |
+| **Shared Context**                       | Shared runtime context between ViewModel and Compose blocks      | ✅ Done         |
+| **DOM-Like Event System**                | Input propagation and event capturing/bubbling                   | ✅ Done         |
+| **Interactable Control**                 | Captures input, intercepts propagation (works with Event System) | ✅ Done         |
+| **Fixed / Render Update**                | Dual update loop for logic vs render                             | ✅ Done         |
+| **Annotation Driven Auto-Interpolation** | Utility for smooth interpolation during render updates           | ✅ Done         |
+| **Render Op Queue**                      | Abstract draw commands for controls                              | ✅ Done         |
+| **UI Decoration**                        | Draw custom visuals on existing controls                         | ✅ Mostly Done  |
+| **Transition API**                       | Externally trigger view transitions                              | 🚧 Planned     |
+| **Theme Manager**                        | Global theme system (colors, font scale, etc)                    | ✅ Mostly Done  |
+| **Modal Layer**                          | Stack-based modal / dialog system                                | 🚧 Planned     |
 
 </details>
 
