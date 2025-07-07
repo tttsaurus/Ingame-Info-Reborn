@@ -256,11 +256,12 @@ public abstract class GuiLifecycleProvider
                 IRenderOp op;
                 while ((op = queue.dequeue()) != null)
                 {
+                    op.readRenderContext(context);
                     if (!decorator.isEmpty() && decorator.isModifying(op.getClass()))
                     {
                         boolean abort = false;
-                        List<IVisualModifier> modBefore = decorator.getModifiers(op.getClass(), RenderOpPhase.BEFORE_SELF);
-                        List<IVisualModifier> modAfter = decorator.getModifiers(op.getClass(), RenderOpPhase.AFTER_SELF);
+                        List<IVisualModifier> modBefore = decorator.getModifiers(op.getClass(), RenderOpPhase.BEFORE_EXE);
+                        List<IVisualModifier> modAfter = decorator.getModifiers(op.getClass(), RenderOpPhase.AFTER_EXE);
 
                         if (!modBefore.isEmpty())
                         {

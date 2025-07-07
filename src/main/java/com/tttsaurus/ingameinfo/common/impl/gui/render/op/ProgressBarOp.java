@@ -22,7 +22,7 @@ public class ProgressBarOp implements IRenderOp
     }
 
     @Override
-    public void execute(RenderContext context)
+    public void readRenderContext(RenderContext context)
     {
         if (fillerColor == 0)
             fillerColor =  context.theme.progressBar.parsedFillerColor;
@@ -30,7 +30,11 @@ public class ProgressBarOp implements IRenderOp
             backgroundColor = context.theme.progressBar.parsedBackgroundColor;
         if (outlineColor == 0)
             outlineColor = context.theme.progressBar.parsedOutlineColor;
+    }
 
+    @Override
+    public void execute(RenderContext context)
+    {
         RenderUtils.renderRoundedRect(rect.x, rect.y, rect.width, rect.height, rect.height / 2f, backgroundColor, context.polygonSmoothHint);
         if (percentage != 0)
         {

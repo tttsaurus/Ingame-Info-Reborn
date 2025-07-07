@@ -22,11 +22,15 @@ public class TextOp implements IRenderOp
     }
 
     @Override
-    public void execute(RenderContext context)
+    public void readRenderContext(RenderContext context)
     {
         if (color == 0)
             color = context.theme.text.parsedColor;
+    }
 
+    @Override
+    public void execute(RenderContext context)
+    {
         RenderUtils.renderText(text, x, y, scale, color, shadow);
     }
 }

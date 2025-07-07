@@ -22,17 +22,21 @@ public class AnimTextOp implements IRenderOp
         this.charInfos = charInfos;
     }
 
-    @Override
-    public void execute(RenderContext context)
-    {
-        boolean overrideColor = false;
+    public boolean overrideColor;
 
+    @Override
+    public void readRenderContext(RenderContext context)
+    {
         if (color == 0)
         {
             color = context.theme.animText.parsedColor;
             overrideColor = true;
         }
+    }
 
+    @Override
+    public void execute(RenderContext context)
+    {
         CharInfo[] charInfos1 = charInfos.lerp(context.lerpAlpha);
         for (int i = 0; i < Math.min(charInfos1.length, text.length()); i++)
         {

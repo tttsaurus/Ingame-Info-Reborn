@@ -35,12 +35,13 @@ public class Eg1View extends View
     @Override
     public void initRenderDecorator(RenderDecorator renderDecorator)
     {
-//        renderDecorator.register(ButtonOp.class, RenderOpPhase.AFTER_SELF, builder ->
-//        {
-//            builder.command(VisualCommandSet.DRAW_RECT, (renderContext, renderOp) ->
-//            {
-//                return new Object[]{0f, 0f, 30f, 30f, -1};
-//            });
-//        });
+        renderDecorator.register(ButtonOp.class, RenderOpPhase.AFTER_EXE, builder ->
+        {
+            builder.command(VisualCommandSet.DRAW_RECT, (renderContext, renderOp) ->
+            {
+                ButtonOp op = (ButtonOp)renderOp;
+                return new Object[]{op.rect.x, op.rect.y, op.rect.width, op.rect.height, -1};
+            });
+        });
     }
 }

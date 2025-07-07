@@ -36,11 +36,15 @@ public class SlidingTextOp implements IRenderOp
     }
 
     @Override
-    public void execute(RenderContext context)
+    public void readRenderContext(RenderContext context)
     {
         if (color == 0)
             color = context.theme.slidingText.parsedColor;
+    }
 
+    @Override
+    public void execute(RenderContext context)
+    {
         float finalX = x;
         if (xShift != null)
         {
