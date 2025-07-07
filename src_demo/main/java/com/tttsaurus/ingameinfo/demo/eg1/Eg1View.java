@@ -1,7 +1,10 @@
 package com.tttsaurus.ingameinfo.demo.eg1;
 
 import com.tttsaurus.ingameinfo.common.core.gui.render.decorator.RenderDecorator;
+import com.tttsaurus.ingameinfo.common.core.gui.render.decorator.RenderOpPhase;
+import com.tttsaurus.ingameinfo.common.core.gui.render.decorator.visual.command.VisualCommandSet;
 import com.tttsaurus.ingameinfo.common.core.mvvm.view.View;
+import com.tttsaurus.ingameinfo.common.impl.gui.render.op.ButtonOp;
 
 public class Eg1View extends View
 {
@@ -32,6 +35,12 @@ public class Eg1View extends View
     @Override
     public void initRenderDecorator(RenderDecorator renderDecorator)
     {
-
+//        renderDecorator.register(ButtonOp.class, RenderOpPhase.AFTER_SELF, builder ->
+//        {
+//            builder.command(VisualCommandSet.DRAW_RECT, (renderContext, renderOp) ->
+//            {
+//                return new Object[]{0f, 0f, 30f, 30f, -1};
+//            });
+//        });
     }
 }

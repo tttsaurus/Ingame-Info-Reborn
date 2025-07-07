@@ -6,6 +6,9 @@ import java.util.*;
 
 public class RenderDecorator
 {
+    private boolean empty = true;
+    public boolean isEmpty() { return empty; }
+
     private final Map<Class<? extends IRenderOp>, Map<RenderOpPhase, List<IVisualModifier>>> visualModifiers = new HashMap<>();
 
     private Class<? extends IRenderOp> currKey = null;
@@ -56,5 +59,7 @@ public class RenderDecorator
         List<IVisualModifier> list = map.computeIfAbsent(phase, k -> new ArrayList<>());
 
         list.add(visualModifier);
+
+        empty = false;
     }
 }

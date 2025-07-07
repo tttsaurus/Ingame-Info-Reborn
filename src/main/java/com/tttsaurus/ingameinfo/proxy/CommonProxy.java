@@ -21,11 +21,23 @@ public class CommonProxy
 {
     public void preInit(FMLPreInitializationEvent event, Logger logger)
     {
+        //<editor-fold desc="reflection">
+        InternalMethods.instance = new InternalMethods();
+        logger.info("Reflection setup of IGI framework finished.");
+        //</editor-fold>
+
         //<editor-fold desc="config setup">
         IgiCommonConfig.CONFIG = new Configuration(FileUtils.makeFile("common.cfg"));
         IgiCommonConfig.loadConfig();
         // crash game immediately if the lifecycle provider was null
-        IgiCommonConfig.GUI_LIFECYCLE_PROVIDER.getClass();
+        try
+        {
+            IgiCommonConfig.GUI_LIFECYCLE_PROVIDER.getClass();
+        }
+        catch (Exception e)
+        {
+            throw new RuntimeException("GUI Lifecycle Provider is invalid. See config/ingameinfo/common.cfg");
+        }
 
         IgiDefaultLifecycleProviderConfig.CONFIG = new Configuration(FileUtils.makeFile("default_lifecycle_provider.cfg"));
         IgiDefaultLifecycleProviderConfig.loadConfig();
@@ -42,11 +54,6 @@ public class CommonProxy
     public void init(FMLInitializationEvent event, Logger logger)
     {
         logger.info("In-Game Info Reborn starts initializing.");
-
-        //<editor-fold desc="reflection">
-        InternalMethods.instance = new InternalMethods();
-        logger.info("Reflection setup of IGI framework finished.");
-        //</editor-fold>
 
         //<editor-fold desc="network">
         IgiNetwork.init();

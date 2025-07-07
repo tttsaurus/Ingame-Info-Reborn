@@ -12,6 +12,8 @@ import com.tttsaurus.ingameinfo.common.core.gui.render.decorator.RenderOpPhase;
 import com.tttsaurus.ingameinfo.common.core.gui.render.decorator.visual.IVisualModifier;
 import com.tttsaurus.ingameinfo.common.core.gui.render.decorator.visual.VisualBuilder;
 import com.tttsaurus.ingameinfo.common.core.gui.render.decorator.visual.VisualBuilderAccessor;
+import com.tttsaurus.ingameinfo.common.core.gui.render.decorator.visual.command.IArgsMapping;
+import com.tttsaurus.ingameinfo.common.core.gui.render.decorator.visual.command.VisualCommand;
 import com.tttsaurus.ingameinfo.common.core.gui.render.op.IRenderOp;
 import com.tttsaurus.ingameinfo.common.core.gui.render.RenderContext;
 import com.tttsaurus.ingameinfo.common.core.gui.render.RenderOpQueue;
@@ -22,6 +24,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.Tuple;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import org.lwjgl.opengl.Display;
@@ -253,7 +256,7 @@ public abstract class GuiLifecycleProvider
                 IRenderOp op;
                 while ((op = queue.dequeue()) != null)
                 {
-                    if (decorator.isModifying(op.getClass()))
+                    if (!decorator.isEmpty() && decorator.isModifying(op.getClass()))
                     {
                         boolean abort = false;
                         List<IVisualModifier> modBefore = decorator.getModifiers(op.getClass(), RenderOpPhase.BEFORE_SELF);
@@ -264,8 +267,11 @@ public abstract class GuiLifecycleProvider
                             VisualBuilder builder = new VisualBuilder();
                             for (IVisualModifier mod: modBefore)
                                 mod.apply(builder);
+
                             visualBuilderAccessor.setVisualBuilder(builder);
                             abort = visualBuilderAccessor.getAbortRenderOp();
+                            for (Tuple<VisualCommand, IArgsMapping> command: visualBuilderAccessor.getCommands())
+                                command.getFirst().execute(command.getSecond().genCommandArgs(context, op));
                         }
 
                         if (!abort) op.execute(context);
@@ -275,6 +281,10 @@ public abstract class GuiLifecycleProvider
                             VisualBuilder builder = new VisualBuilder();
                             for (IVisualModifier mod: modAfter)
                                 mod.apply(builder);
+
+                            visualBuilderAccessor.setVisualBuilder(builder);
+                            for (Tuple<VisualCommand, IArgsMapping> command: visualBuilderAccessor.getCommands())
+                                command.getFirst().execute(command.getSecond().genCommandArgs(context, op));
                         }
                     }
                     else
