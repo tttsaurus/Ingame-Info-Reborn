@@ -9,7 +9,7 @@ import com.tttsaurus.ingameinfo.common.core.gui.property.style.IStylePropertyGet
 import com.tttsaurus.ingameinfo.common.core.gui.property.style.IStylePropertySetter;
 import com.tttsaurus.ingameinfo.common.core.gui.property.style.IStylePropertySyncTo;
 import com.tttsaurus.ingameinfo.common.core.InternalMethods;
-import com.tttsaurus.ingameinfo.common.core.gui.render.RenderDecorator;
+import com.tttsaurus.ingameinfo.common.core.gui.render.decorator.RenderDecorator;
 import com.tttsaurus.ingameinfo.common.core.mvvm.view.View;
 import com.tttsaurus.ingameinfo.common.core.mvvm.viewmodel.ViewModel;
 import com.tttsaurus.ingameinfo.common.core.reflection.TypeUtils;
@@ -43,8 +43,8 @@ public class VvmBinding<TView extends View>
         InternalMethods.instance.View$mainGroup$setter.invoke(view, mainGroup);
 
         RenderDecorator renderDecorator = new RenderDecorator();
-        InternalMethods.instance.View$renderDecorator$setter.invoke(view, renderDecorator);
         view.initRenderDecorator(renderDecorator);
+        InternalMethods.instance.View$renderDecorator$setter.invoke(view, renderDecorator);
 
         return guiLayout;
     }

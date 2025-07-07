@@ -1,7 +1,7 @@
 package com.tttsaurus.ingameinfo.common.core.gui;
 
 import com.tttsaurus.ingameinfo.common.core.function.IFunc;
-import com.tttsaurus.ingameinfo.common.core.gui.render.RenderDecorator;
+import com.tttsaurus.ingameinfo.common.core.gui.render.decorator.RenderDecorator;
 import com.tttsaurus.ingameinfo.common.core.input.InputState;
 import com.tttsaurus.ingameinfo.common.core.gui.render.RenderOpQueue;
 import com.tttsaurus.ingameinfo.common.core.gui.theme.ThemeConfig;
@@ -61,12 +61,12 @@ public class IgiGuiContainer
     public IFunc<Boolean> getExitCallback() { return exitCallback; }
     public int getExitKeyForFocusedGui() { return exitKeyForFocusedGui; }
     public boolean getFocused() { return isFocused; }
-    public boolean getInitFlag() { return initFlag; }
     public boolean getUseHeldItemWhitelist() { return useHeldItemWhitelist; }
     public boolean getUseHeldItemBlacklist() { return useHeldItemBlacklist; }
     public List<GhostableItem> getHeldItemWhitelist() { return heldItemWhitelist; }
     public List<GhostableItem> getHeldItemBlacklist() { return heldItemBlacklist; }
     public ThemeConfig getThemeConfig() { return themeConfig; }
+    public RenderDecorator getRenderDecorator() { return InternalMethods.instance.ViewModel$getRenderDecorator.invoke(viewModel); }
     //</editor-fold>
 
     protected IgiGuiContainer() { }

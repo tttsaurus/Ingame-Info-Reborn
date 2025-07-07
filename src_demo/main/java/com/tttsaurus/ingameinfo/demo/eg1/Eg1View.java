@@ -1,6 +1,6 @@
 package com.tttsaurus.ingameinfo.demo.eg1;
 
-import com.tttsaurus.ingameinfo.common.core.gui.render.RenderDecorator;
+import com.tttsaurus.ingameinfo.common.core.gui.render.decorator.RenderDecorator;
 import com.tttsaurus.ingameinfo.common.core.mvvm.view.View;
 
 public class Eg1View extends View

@@ -7,6 +7,7 @@ import com.tttsaurus.ingameinfo.common.core.gui.IgiGuiContainer;
 import com.tttsaurus.ingameinfo.common.core.InternalMethods;
 import com.tttsaurus.ingameinfo.common.core.gui.event.IUIEventListener;
 import com.tttsaurus.ingameinfo.common.core.gui.event.UIEvent;
+import com.tttsaurus.ingameinfo.common.core.gui.render.decorator.RenderDecorator;
 import com.tttsaurus.ingameinfo.common.core.mvvm.binding.*;
 import com.tttsaurus.ingameinfo.common.core.mvvm.context.SharedContext;
 import com.tttsaurus.ingameinfo.common.core.mvvm.view.View;
@@ -22,19 +23,24 @@ public abstract class ViewModel<T extends View>
 {
     private VvmBinding<T> binding = new VvmBinding<>();
 
+    private RenderDecorator getRenderDecorator()
+    {
+        return binding.view.getRenderDecorator();
+    }
+
     private String mvvmRegistryName;
-    public String getMvvmRegistryName() { return mvvmRegistryName; }
+    public final String getMvvmRegistryName() { return mvvmRegistryName; }
 
     private final List<SlotAccessor> slotAccessors = new ArrayList<>();
     private final EventListenerBinder eventListenerBinder = new EventListenerBinder();
 
     public final <T extends UIEvent> void bindEventListener(String uid, Class<T> type, IUIEventListener<T> listener)
     {
-        eventListenerBinder.bind(binding, uid, type, listener, -1);
+        eventListenerBinder.bind(binding.view, uid, type, listener, -1);
     }
     public final <T extends UIEvent> void bindEventListener(String uid, Class<T> type, IUIEventListener<T> listener, int ordinal)
     {
-        eventListenerBinder.bind(binding, uid, type, listener, ordinal);
+        eventListenerBinder.bind(binding.view, uid, type, listener, ordinal);
     }
 
     protected final SharedContext sharedContext = new SharedContext();

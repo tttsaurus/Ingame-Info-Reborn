@@ -6,7 +6,7 @@ import com.tttsaurus.ingameinfo.common.core.gui.GuiLayout;
 import com.tttsaurus.ingameinfo.common.core.gui.IgiGuiContainer;
 import com.tttsaurus.ingameinfo.common.core.gui.layout.ElementGroup;
 import com.tttsaurus.ingameinfo.common.core.InternalMethods;
-import com.tttsaurus.ingameinfo.common.core.gui.render.RenderDecorator;
+import com.tttsaurus.ingameinfo.common.core.gui.render.decorator.RenderDecorator;
 import com.tttsaurus.ingameinfo.common.core.serialization.ixml.RawIxmlUtils;
 import com.tttsaurus.ingameinfo.common.core.gui.layout.MainGroup;
 import com.tttsaurus.ingameinfo.common.impl.serialization.GuiLayoutDeserializer;
@@ -25,6 +25,11 @@ public abstract class View
     private RenderDecorator renderDecorator;
 
     public void initRenderDecorator(RenderDecorator renderDecorator) { }
+
+    public RenderDecorator getRenderDecorator()
+    {
+        return renderDecorator;
+    }
 
     // injected by VvmBinding.init()
     // alias of IgiGuiContainer.mainGroup

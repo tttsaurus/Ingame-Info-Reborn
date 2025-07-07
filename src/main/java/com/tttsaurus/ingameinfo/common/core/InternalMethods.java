@@ -8,7 +8,8 @@ import com.tttsaurus.ingameinfo.common.core.gui.GuiLifecycleProvider;
 import com.tttsaurus.ingameinfo.common.core.gui.IgiGuiContainer;
 import com.tttsaurus.ingameinfo.common.core.gui.layout.ElementGroup;
 import com.tttsaurus.ingameinfo.common.core.gui.property.style.IStylePropertySyncTo;
-import com.tttsaurus.ingameinfo.common.core.gui.render.RenderDecorator;
+import com.tttsaurus.ingameinfo.common.core.gui.render.decorator.RenderDecorator;
+import com.tttsaurus.ingameinfo.common.core.gui.render.decorator.visual.VisualBuilderAccessor;
 import com.tttsaurus.ingameinfo.common.core.mvvm.binding.IReactiveCallback;
 import com.tttsaurus.ingameinfo.common.core.mvvm.binding.ReactiveCollection;
 import com.tttsaurus.ingameinfo.common.core.mvvm.binding.ReactiveObject;
@@ -31,6 +32,7 @@ public class InternalMethods
     public static InternalMethods instance;
 
     public IFunc<GuiLayout> GuiLayout$constructor;
+    public IFunc<VisualBuilderAccessor> VisualBuilderAccessor$constructor;
 
     public IFunc_1Param<MainGroup, GuiLayout> GuiLayout$mainGroup$getter;
     public IFunc_1Param<IgiGuiContainer, GuiLayout> GuiLayout$igiGuiContainer$getter;
@@ -56,6 +58,7 @@ public class InternalMethods
 
     public IFunc_2Param<GuiLayout, ViewModel, String> ViewModel$init;
     public IFunc_2Param<GuiLayout, View, IgiGuiContainer> View$init;
+    public IFunc_1Param<RenderDecorator, ViewModel> ViewModel$getRenderDecorator;
 
     private static void crash(Exception e)
     {
@@ -85,6 +88,27 @@ public class InternalMethods
         {
             GuiLayout$constructor = null;
             InGameInfoReborn.LOGGER.error("Reflection setup failed for GuiLayout$constructor: " + exception.getMessage());
+            crash(exception);
+        }
+
+        try
+        {
+            Constructor<VisualBuilderAccessor> constructor = VisualBuilderAccessor.class.getDeclaredConstructor(new Class[0]);
+            constructor.setAccessible(true);
+            MethodHandle handle = lookup.unreflectConstructor(constructor);
+            VisualBuilderAccessor$constructor = () ->
+            {
+                try
+                {
+                    return (VisualBuilderAccessor)handle.invoke();
+                }
+                catch (Throwable ignored) { return null; }
+            };
+        }
+        catch (Exception exception)
+        {
+            VisualBuilderAccessor$constructor = null;
+            InGameInfoReborn.LOGGER.error("Reflection setup failed for VisualBuilderAccessor$constructor: " + exception.getMessage());
             crash(exception);
         }
         //</editor-fold>
@@ -553,6 +577,27 @@ public class InternalMethods
         {
             View$init = null;
             InGameInfoReborn.LOGGER.error("Reflection setup failed for View$init: " + exception.getMessage());
+            crash(exception);
+        }
+
+        try
+        {
+            Method method = ViewModel.class.getDeclaredMethod("getRenderDecorator");
+            method.setAccessible(true);
+            MethodHandle handle = lookup.unreflect(method);
+            ViewModel$getRenderDecorator = (arg0) ->
+            {
+                try
+                {
+                    return (RenderDecorator)handle.invoke(arg0);
+                }
+                catch (Throwable ignored) { return null; }
+            };
+        }
+        catch (Exception exception)
+        {
+            ViewModel$getRenderDecorator = null;
+            InGameInfoReborn.LOGGER.error("Reflection setup failed for ViewModel$getRenderDecorator: " + exception.getMessage());
             crash(exception);
         }
         //</editor-fold>

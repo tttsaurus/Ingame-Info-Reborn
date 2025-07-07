@@ -1,11 +1,17 @@
 package com.tttsaurus.ingameinfo.common.core.gui;
 
+import com.tttsaurus.ingameinfo.common.core.InternalMethods;
 import com.tttsaurus.ingameinfo.common.core.forgeevent.IgiGuiInitEvent;
 import com.tttsaurus.ingameinfo.common.core.forgeevent.IgiGuiRegainScreenFocusEvent;
 import com.tttsaurus.ingameinfo.common.core.function.IFunc;
 import com.tttsaurus.ingameinfo.common.core.gui.dummygui.IDummyDrawScreen;
 import com.tttsaurus.ingameinfo.common.core.gui.dummygui.IDummyKeyTyped;
 import com.tttsaurus.ingameinfo.common.core.gui.dummygui.DummyMcGui;
+import com.tttsaurus.ingameinfo.common.core.gui.render.decorator.RenderDecorator;
+import com.tttsaurus.ingameinfo.common.core.gui.render.decorator.RenderOpPhase;
+import com.tttsaurus.ingameinfo.common.core.gui.render.decorator.visual.IVisualModifier;
+import com.tttsaurus.ingameinfo.common.core.gui.render.decorator.visual.VisualBuilder;
+import com.tttsaurus.ingameinfo.common.core.gui.render.decorator.visual.VisualBuilderAccessor;
 import com.tttsaurus.ingameinfo.common.core.gui.render.op.IRenderOp;
 import com.tttsaurus.ingameinfo.common.core.gui.render.RenderContext;
 import com.tttsaurus.ingameinfo.common.core.gui.render.RenderOpQueue;
@@ -186,6 +192,8 @@ public abstract class GuiLifecycleProvider
         timePerFrame_RenderUpdate = 1d / maxFps_RenderUpdate;
     }
 
+    private final VisualBuilderAccessor visualBuilderAccessor = InternalMethods.instance.VisualBuilderAccessor$constructor.invoke();
+
     protected final void definedRenderUpdate()
     {
         ItemStack heldItemMainhand = null;
@@ -239,10 +247,39 @@ public abstract class GuiLifecycleProvider
                         !isUsingFramebuffer() || isUsingMultisampleFramebuffer(),
                         !isUsingFramebuffer() || isUsingMultisampleFramebuffer());
 
+                RenderDecorator decorator = container.getRenderDecorator();
+
                 RenderOpQueue queue = container.onRenderUpdate(entry.getKey().equals(firstFocused));
                 IRenderOp op;
                 while ((op = queue.dequeue()) != null)
-                    op.execute(context);
+                {
+                    if (decorator.isModifying(op.getClass()))
+                    {
+                        boolean abort = false;
+                        List<IVisualModifier> modBefore = decorator.getModifiers(op.getClass(), RenderOpPhase.BEFORE_SELF);
+                        List<IVisualModifier> modAfter = decorator.getModifiers(op.getClass(), RenderOpPhase.AFTER_SELF);
+
+                        if (!modBefore.isEmpty())
+                        {
+                            VisualBuilder builder = new VisualBuilder();
+                            for (IVisualModifier mod: modBefore)
+                                mod.apply(builder);
+                            visualBuilderAccessor.setVisualBuilder(builder);
+                            abort = visualBuilderAccessor.getAbortRenderOp();
+                        }
+
+                        if (!abort) op.execute(context);
+
+                        if (!modAfter.isEmpty())
+                        {
+                            VisualBuilder builder = new VisualBuilder();
+                            for (IVisualModifier mod: modAfter)
+                                mod.apply(builder);
+                        }
+                    }
+                    else
+                        op.execute(context);
+                }
             }
         }
     }
