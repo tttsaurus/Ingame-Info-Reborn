@@ -40,7 +40,7 @@ public class Eg1View extends View
             builder.command(VisualCommandSet.RENDER_RECT, (renderContext, renderOp) ->
             {
                 ButtonOp op = (ButtonOp)renderOp;
-                return new Object[]{op.rect.x, op.rect.y, op.rect.width, op.rect.height, -1};
+                return new Object[]{op.rect.x, op.rect.y, 10, 10, -1};
             });
         });
     }

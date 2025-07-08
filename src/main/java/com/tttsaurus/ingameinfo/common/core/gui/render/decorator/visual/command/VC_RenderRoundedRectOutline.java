@@ -12,7 +12,9 @@ public class VC_RenderRoundedRectOutline extends VisualCommand
     @Override
     public void execute(Object... args)
     {
-        switch (matchParam(args))
+        int index = matchParams(args);
+        if (index != -1) castArgs(index, args);
+        switch (index)
         {
             case 0 ->
             {
