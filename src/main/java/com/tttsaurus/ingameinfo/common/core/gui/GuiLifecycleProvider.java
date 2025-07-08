@@ -247,8 +247,8 @@ public abstract class GuiLifecycleProvider
                 RenderContext context = new RenderContext(
                         container.getThemeConfig(),
                         getRenderLerpAlpha(),
-                        !isUsingFramebuffer() || isUsingMultisampleFramebuffer(),
-                        !isUsingFramebuffer() || isUsingMultisampleFramebuffer());
+                        !isUsingFramebuffer() && !isUsingMultisampleFramebuffer(),
+                        !isUsingFramebuffer() && !isUsingMultisampleFramebuffer());
 
                 RenderDecorator decorator = container.getRenderDecorator();
 
