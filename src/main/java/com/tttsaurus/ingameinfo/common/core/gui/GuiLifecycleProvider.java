@@ -12,7 +12,7 @@ import com.tttsaurus.ingameinfo.common.core.gui.render.decorator.RenderOpPhase;
 import com.tttsaurus.ingameinfo.common.core.gui.render.decorator.visual.IVisualModifier;
 import com.tttsaurus.ingameinfo.common.core.gui.render.decorator.visual.VisualBuilder;
 import com.tttsaurus.ingameinfo.common.core.gui.render.decorator.visual.VisualBuilderAccessor;
-import com.tttsaurus.ingameinfo.common.core.gui.render.decorator.visual.command.IArgsMapping;
+import com.tttsaurus.ingameinfo.common.core.gui.render.decorator.visual.command.IArgsGenerator;
 import com.tttsaurus.ingameinfo.common.core.gui.render.decorator.visual.command.VisualCommand;
 import com.tttsaurus.ingameinfo.common.core.gui.render.op.IRenderOp;
 import com.tttsaurus.ingameinfo.common.core.gui.render.RenderContext;
@@ -271,7 +271,7 @@ public abstract class GuiLifecycleProvider
 
                             visualBuilderAccessor.setVisualBuilder(builder);
                             abort = visualBuilderAccessor.getAbortRenderOp();
-                            for (Tuple<VisualCommand, IArgsMapping> command: visualBuilderAccessor.getCommands())
+                            for (Tuple<VisualCommand, IArgsGenerator> command: visualBuilderAccessor.getCommands())
                                 command.getFirst().execute(command.getSecond().genCommandArgs(context, op));
                         }
 
@@ -284,7 +284,7 @@ public abstract class GuiLifecycleProvider
                                 mod.apply(builder);
 
                             visualBuilderAccessor.setVisualBuilder(builder);
-                            for (Tuple<VisualCommand, IArgsMapping> command: visualBuilderAccessor.getCommands())
+                            for (Tuple<VisualCommand, IArgsGenerator> command: visualBuilderAccessor.getCommands())
                                 command.getFirst().execute(command.getSecond().genCommandArgs(context, op));
                         }
                     }

@@ -37,7 +37,7 @@ public class Eg1View extends View
     {
         renderDecorator.register(ButtonOp.class, RenderOpPhase.AFTER_EXE, builder ->
         {
-            builder.command(VisualCommandSet.DRAW_RECT, (renderContext, renderOp) ->
+            builder.command(VisualCommandSet.RENDER_RECT, (renderContext, renderOp) ->
             {
                 ButtonOp op = (ButtonOp)renderOp;
                 return new Object[]{op.rect.x, op.rect.y, op.rect.width, op.rect.height, -1};

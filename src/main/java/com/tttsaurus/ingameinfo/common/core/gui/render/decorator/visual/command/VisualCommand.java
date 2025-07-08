@@ -42,6 +42,9 @@ public abstract class VisualCommand
 
     protected static List<Class<?>> params(Class<?>... classes)
     {
+        for (int i = 0; i < classes.length; i++)
+            if (TypeUtils.isWrappedPrimitive(classes[i])) classes[i] = TypeUtils.toPrimitive(classes[i]);
+
         return Arrays.asList(classes);
     }
 

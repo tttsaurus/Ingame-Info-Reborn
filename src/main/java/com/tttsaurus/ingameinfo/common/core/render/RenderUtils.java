@@ -20,8 +20,6 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.ByteBuffer;
 
-import static com.tttsaurus.ingameinfo.common.core.render.CommonBuffers.INT_BUFFER_16;
-
 public final class RenderUtils
 {
     public static FontRenderer fontRenderer = Minecraft.getMinecraft().fontRenderer;
