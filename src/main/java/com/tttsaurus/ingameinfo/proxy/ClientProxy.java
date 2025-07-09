@@ -147,28 +147,28 @@ public class ClientProxy extends CommonProxy
         //<editor-fold desc="ui elements">
         String myPackage = "com.tttsaurus.ingameinfo";
         ElementRegistry.register();
-        logger.info("UI elements registered. See config/ingameinfo/ui_element_dump.txt");
+        logger.info("UI elements registered. See config/ingameinfo/ui_element_dump.md");
 
         StringBuilder builder = new StringBuilder();
 
         builder.append("\n");
-        builder.append("Notice:\n");
-        builder.append("1. Elements marked with * below are abstract (unserviceable) in ixml.\n");
+        builder.append("## Notice:\n");
+        builder.append("1. Elements marked with `*` below are abstract (unserviceable in ixml).\n");
         builder.append("2. You can access style properties from parent elements.\n");
         builder.append("\n");
 
         ImmutableList<Class<? extends Element>> elementClasses = ElementRegistry.getRegisteredElements();
         List<Class<? extends Element>> constructableElements = ElementRegistry.getConstructableElements();
 
-        builder.append("Registered elements:\n");
+        builder.append("## Registered Elements:\n");
         for (Class<? extends Element> clazz: elementClasses)
         {
-            builder.append("- ")
+            builder.append("- `")
                     .append(TypeUtils.isFromParentPackage(clazz, myPackage) ? clazz.getSimpleName() : clazz.getName())
                     .append(constructableElements.contains(clazz) ? "" : "*")
-                    .append("\n");
+                    .append("`\n");
         }
-        builder.append("\n");
+        builder.append("\n").append("## Details:\n\n");
 
         ImmutableMap<String, Map<String, IStylePropertySetter>> setters = ElementRegistry.getStylePropertySetters();
         ImmutableMap<IStylePropertySetter, IDeserializer<?>> deserializers = ElementRegistry.getStylePropertyDeserializers();
@@ -177,58 +177,70 @@ public class ClientProxy extends CommonProxy
         ImmutableMap<IStylePropertySetter, Class<?>> classes = ElementRegistry.getStylePropertyClasses();
         ImmutableMap<String, Map<ILerpablePropertyGetter, LerpTarget>> getters = ElementRegistry.getLerpablePropertyGetters();
 
+        int count = elementClasses.size();
+        int index = 0;
         for (Class<? extends Element> clazz: elementClasses)
         {
             String parentMsg = "";
             if (!clazz.equals(Element.class))
                 parentMsg =
-                    " extends " +
+                    " extends `" +
                     (TypeUtils.isFromParentPackage(clazz.getSuperclass(), myPackage) ? clazz.getSuperclass().getSimpleName() : clazz.getSuperclass().getName()) +
-                    (constructableElements.contains(clazz.getSuperclass()) ? "" : "*");
-            builder.append("Element type: ").append(TypeUtils.isFromParentPackage(clazz, myPackage) ? clazz.getSimpleName() : clazz.getName()).append(constructableElements.contains(clazz) ? "" : "*").append(parentMsg).append("\n");
+                    (constructableElements.contains(clazz.getSuperclass()) ? "" : "*") + "`";
+
+            builder.append("**Element Type**: `")
+                    .append(TypeUtils.isFromParentPackage(clazz, myPackage) ? clazz.getSimpleName() : clazz.getName())
+                    .append(constructableElements.contains(clazz) ? "" : "*")
+                    .append("`")
+                    .append(parentMsg).append("\n");
 
             Map<String, IStylePropertySetter> map1 = setters.get(clazz.getName());
             if (!map1.isEmpty())
             {
-                builder.append("- With style properties:\n");
+                builder.append("- With Style Properties:\n");
                 for (Map.Entry<String, IStylePropertySetter> entry: map1.entrySet())
                 {
                     IStylePropertySetter primaryKey = entry.getValue();
 
                     String suffix = "";
                     if (deserializers.containsKey(primaryKey))
-                        suffix = " (with deserializer: " + (TypeUtils.isFromParentPackage(deserializers.get(primaryKey).getClass(), myPackage) ? deserializers.get(primaryKey).getClass().getSimpleName() : deserializers.get(primaryKey).getClass().getName()) + ")";
-                    builder.append("  - [").append(classes.get(primaryKey).getSimpleName()).append("] ").append(entry.getKey()).append(suffix).append("\n");
+                        suffix = " (with deserializer: `" + (TypeUtils.isFromParentPackage(deserializers.get(primaryKey).getClass(), myPackage) ? deserializers.get(primaryKey).getClass().getSimpleName() : deserializers.get(primaryKey).getClass().getName()) + "`)";
+
+                    builder.append("  - **[_").append(classes.get(primaryKey).getSimpleName()).append("_]** ")
+                            .append("`").append(entry.getKey()).append("`")
+                            .append(suffix).append("\n");
+
                     if (setterCallbacksPre.containsKey(primaryKey))
-                        builder.append("    - Setter callback pre: ").append(setterCallbacksPre.get(primaryKey).name()).append("\n");
+                        builder.append("    - Setter callback pre: `").append(setterCallbacksPre.get(primaryKey).name()).append("`\n");
                     if (setterCallbacksPost.containsKey(primaryKey))
-                        builder.append("    - Setter callback post: ").append(setterCallbacksPost.get(primaryKey).name()).append("\n");
+                        builder.append("    - Setter callback post: `").append(setterCallbacksPost.get(primaryKey).name()).append("`\n");
                 }
             }
 
             Map<ILerpablePropertyGetter, LerpTarget> map2 = getters.get(clazz.getName());
             if (!map2.isEmpty())
             {
-                builder.append("- With lerpable properties:\n");
+                builder.append("- With Lerpable Properties:\n");
                 for (LerpTarget lerpTarget: map2.values())
                 {
-                    builder.append("  - ").append(lerpTarget.value());
+                    builder.append("  - ").append("`").append(lerpTarget.value());
                     if (!lerpTarget.inner0().isEmpty())
                         builder.append(".").append(lerpTarget.inner0());
                     if (!lerpTarget.inner1().isEmpty())
                         builder.append(".").append(lerpTarget.inner1());
-                    builder.append("\n");
+                    builder.append("`").append("\n");
                 }
             }
 
             builder.append("\n");
-        }
 
-        logger.info(builder.toString());
+            if (index != count - 1) builder.append("***\n\n");
+            index++;
+        }
 
         try
         {
-            RandomAccessFile raf = new RandomAccessFile(FileUtils.makeFile("ui_element_dump.txt"), "rw");
+            RandomAccessFile raf = new RandomAccessFile(FileUtils.makeFile("ui_element_dump.md"), "rw");
             raf.setLength(0);
             raf.seek(0);
             raf.writeBytes(builder.toString());

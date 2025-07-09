@@ -17,7 +17,7 @@ public final class DemoMvvmRegistration
     {
         MvvmRegistry.autoRegister("eg1", Eg1ViewModel.class);
 
-        InGameInfoReborn.LOGGER.info("In-Game Info Reborn mvvm demos registered.");
+        InGameInfoReborn.LOGGER.info("In-Game Info Reborn MVVM demos registered.");
     }
 
     @SubscribeEvent
