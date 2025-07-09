@@ -138,32 +138,38 @@ public class ClientProxy extends CommonProxy
         GuiResources.init();
         logger.info("GUI resources loaded.");
         //</editor-fold>
-
+ 
         //<editor-fold desc="themes">
         ThemeRegistry.init();
         logger.info("Theme configs loaded. They are: " + String.join(", ", ThemeRegistry.getThemeNames()));
         //</editor-fold>
 
-        //<editor-fold desc="gui elements">
+        //<editor-fold desc="ui elements">
         String myPackage = "com.tttsaurus.ingameinfo";
         ElementRegistry.register();
-        logger.info("GUI elements registered.");
+        logger.info("UI elements registered. See config/ingameinfo/ui_element_dump.txt");
 
         StringBuilder builder = new StringBuilder();
 
         builder.append("\n");
-        builder.append("Registered serviceable elements:\n");
-        List<Class<? extends Element>> constructableElements = ElementRegistry.getConstructableElements();
-        for (Class<? extends Element> clazz: constructableElements)
-            builder.append("- ").append(TypeUtils.isFromParentPackage(clazz, myPackage) ? clazz.getSimpleName() : clazz.getName()).append("\n");
-
-        builder.append("\n");
         builder.append("Notice:\n");
-        builder.append("1. Elements marked with * below are unserviceable in ixml.\n");
+        builder.append("1. Elements marked with * below are abstract (unserviceable) in ixml.\n");
         builder.append("2. You can access style properties from parent elements.\n");
         builder.append("\n");
 
         ImmutableList<Class<? extends Element>> elementClasses = ElementRegistry.getRegisteredElements();
+        List<Class<? extends Element>> constructableElements = ElementRegistry.getConstructableElements();
+
+        builder.append("Registered elements:\n");
+        for (Class<? extends Element> clazz: elementClasses)
+        {
+            builder.append("- ")
+                    .append(TypeUtils.isFromParentPackage(clazz, myPackage) ? clazz.getSimpleName() : clazz.getName())
+                    .append(constructableElements.contains(clazz) ? "" : "*")
+                    .append("\n");
+        }
+        builder.append("\n");
+
         ImmutableMap<String, Map<String, IStylePropertySetter>> setters = ElementRegistry.getStylePropertySetters();
         ImmutableMap<IStylePropertySetter, IDeserializer<?>> deserializers = ElementRegistry.getStylePropertyDeserializers();
         ImmutableMap<IStylePropertySetter, IStylePropertyCallbackPre> setterCallbacksPre = ElementRegistry.getStylePropertySetterCallbacksPre();
