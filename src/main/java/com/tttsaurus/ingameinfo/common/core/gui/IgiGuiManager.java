@@ -1,5 +1,7 @@
 package com.tttsaurus.ingameinfo.common.core.gui;
 
+import com.tttsaurus.fluxloading.core.FluxLoadingAPI;
+import com.tttsaurus.ingameinfo.InGameInfoReborn;
 import com.tttsaurus.ingameinfo.common.core.input.IgiKeyboard;
 import com.tttsaurus.ingameinfo.common.core.input.IgiMouse;
 import com.tttsaurus.ingameinfo.common.core.input.InputFrameGenerator;
@@ -31,11 +33,24 @@ public final class IgiGuiManager
         lifecycleProvider.closeIgiGui(mvvmRegistryName);
     }
 
+    private static boolean init = false;
+
     @SubscribeEvent
     public static void onRenderGameOverlay(RenderGameOverlayEvent.Post event)
     {
         if (event.getType() != RenderGameOverlayEvent.ElementType.ALL) return;
         if (lifecycleProvider == null) return;
+
+        // fluxloading compat
+        if (InGameInfoReborn.fluxloadingLoaded)
+        {
+            if (!init)
+            {
+                init = true;
+                lifecycleProvider.update(INPUT_GEN.generate());
+            }
+            if (!FluxLoadingAPI.isDuringFadingOutPhase() && !FluxLoadingAPI.isFinishLoading()) return;
+        }
 
         lifecycleProvider.update(INPUT_GEN.generate());
     }

@@ -69,6 +69,7 @@ public class CommonProxy
         InGameInfoReborn.deepresonanceLoaded = Loader.isModLoaded("deepresonance");
         InGameInfoReborn.toughasnailsLoaded = Loader.isModLoaded("toughasnails");
         InGameInfoReborn.simpledifficultyLoaded = Loader.isModLoaded("simpledifficulty");
+        InGameInfoReborn.fluxloadingLoaded = Loader.isModLoaded("fluxloading");
         //</editor-fold>
 
         //<editor-fold desc="crafttweaker support">

@@ -30,6 +30,7 @@ public final class InGameInfoReborn
     public static boolean deepresonanceLoaded;
     public static boolean toughasnailsLoaded;
     public static boolean simpledifficultyLoaded;
+    public static boolean fluxloadingLoaded;
 
     public static final Logger LOGGER = LogManager.getLogger(Tags.MODNAME);
 

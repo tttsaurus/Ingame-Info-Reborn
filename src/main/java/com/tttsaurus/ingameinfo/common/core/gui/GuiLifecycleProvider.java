@@ -119,8 +119,9 @@ public abstract class GuiLifecycleProvider
         }
         //</editor-fold>
 
+        // skip first update
         //<editor-fold desc="dummy gui">
-        if (FMLCommonHandler.instance().getSide().isClient())
+        if (finishFirstUpdate && FMLCommonHandler.instance().getSide().isClient())
         {
             // close dummy
             if (isDummyGuiOn)
@@ -157,6 +158,7 @@ public abstract class GuiLifecycleProvider
         }
         //</editor-fold>
 
+        // skip first update
         //<editor-fold desc="propagate input">
         if (finishFirstUpdate)
             for (IgiGuiContainer container: openedGuiMap.values())
