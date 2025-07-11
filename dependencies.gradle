@@ -83,6 +83,6 @@ dependencies {
     runtimeOnly "curse.maven:simpledifficulty-360779:3613814"
 
     // fluxloading
-    compileOnly "curse.maven:fluxloading-1207328:6751532"
-    runtimeOnly "curse.maven:fluxloading-1207328:6751532"
+    compileOnly "curse.maven:fluxloading-1207328:6755760"
+    runtimeOnly "curse.maven:fluxloading-1207328:6755760"
 }

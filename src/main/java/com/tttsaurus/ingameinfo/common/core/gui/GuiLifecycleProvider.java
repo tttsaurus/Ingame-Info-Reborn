@@ -88,6 +88,8 @@ public abstract class GuiLifecycleProvider
 
     public final void update(InputState inputState)
     {
+        if (!FMLCommonHandler.instance().getSide().isClient()) return;
+
         if (initFlag)
         {
             initFlag = false;
@@ -119,10 +121,12 @@ public abstract class GuiLifecycleProvider
         }
         //</editor-fold>
 
-        // skip first update
         //<editor-fold desc="dummy gui">
-        if (finishFirstUpdate && FMLCommonHandler.instance().getSide().isClient())
+        // skip first update
+        if (finishFirstUpdate)
         {
+            isDummyGuiOn = MC.currentScreen instanceof DummyMcGui;
+
             // close dummy
             if (isDummyGuiOn)
             {
@@ -143,23 +147,24 @@ public abstract class GuiLifecycleProvider
                     }
                 }
             }
+
             // open dummy
-            else if (!openedGuiMap.isEmpty() && MC.currentScreen == null)
+            if (!openedGuiMap.isEmpty() && MC.currentScreen == null)
             {
                 AtomicBoolean focus = new AtomicBoolean(false);
                 openedGuiMap.forEach((uuid, guiContainer) -> focus.set(focus.get() || (guiContainer.getFocused() && guiContainer.getActive())));
 
                 if (focus.get())
                 {
-                    MC.displayGuiScreen(getDummyGui());
+                    MC.displayGuiScreen(newDummyGui());
                     isDummyGuiOn = true;
                 }
             }
         }
         //</editor-fold>
 
-        // skip first update
         //<editor-fold desc="propagate input">
+        // skip first update
         if (finishFirstUpdate)
             for (IgiGuiContainer container: openedGuiMap.values())
                 container.onPropagateInput(inputState);
@@ -303,7 +308,7 @@ public abstract class GuiLifecycleProvider
 
     protected abstract IDummyDrawScreen getDummyGuiDrawScreen();
 
-    private DummyMcGui getDummyGui()
+    private DummyMcGui newDummyGui()
     {
         DummyMcGui dummyGui = new DummyMcGui();
         dummyGui.setDrawAction(getDummyGuiDrawScreen());
