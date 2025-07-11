@@ -368,13 +368,29 @@ public final class RenderHints
     //</editor-fold>
 
     //<editor-fold desc="camera">
-    public static Vector3f getCameraPos()
+    public static Vec3d getWorldOffset()
     {
         Entity camera = Minecraft.getMinecraft().getRenderViewEntity();
-        if (camera == null)
-            camera = Minecraft.getMinecraft().player;
-        Vec3d vec3d = camera.getPositionVector().add(ActiveRenderInfo.getCameraPosition());
-        return new Vector3f((float)vec3d.x, (float)vec3d.y, (float)vec3d.z);
+        if (camera == null) camera = Minecraft.getMinecraft().player;
+        double partialTicks = getPartialTick();
+
+        double camX = camera.lastTickPosX + (camera.posX - camera.lastTickPosX) * partialTicks;
+        double camY = camera.lastTickPosY + (camera.posY - camera.lastTickPosY) * partialTicks;
+        double camZ = camera.lastTickPosZ + (camera.posZ - camera.lastTickPosZ) * partialTicks;
+
+        return new Vec3d(camX, camY, camZ);
+    }
+    public static Vec3d getCameraPos()
+    {
+        Entity camera = Minecraft.getMinecraft().getRenderViewEntity();
+        if (camera == null) camera = Minecraft.getMinecraft().player;
+        double partialTicks = getPartialTick();
+
+        double camX = camera.lastTickPosX + (camera.posX - camera.lastTickPosX) * partialTicks;
+        double camY = camera.lastTickPosY + (camera.posY - camera.lastTickPosY) * partialTicks + camera.getEyeHeight();
+        double camZ = camera.lastTickPosZ + (camera.posZ - camera.lastTickPosZ) * partialTicks;
+
+        return new Vec3d(camX, camY, camZ);
     }
     public static Vector2f getCameraRotationInDegree()
     {
