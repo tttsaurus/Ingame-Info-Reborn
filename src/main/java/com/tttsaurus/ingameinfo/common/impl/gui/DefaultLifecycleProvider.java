@@ -645,4 +645,9 @@ public final class DefaultLifecycleProvider extends GuiLifecycleProvider
         if (!isDummyGuiOn())
             renderUpdateWrapped();
     }
+
+    public DefaultLifecycleProvider(String lifecycleOwner)
+    {
+        super(lifecycleOwner);
+    }
 }

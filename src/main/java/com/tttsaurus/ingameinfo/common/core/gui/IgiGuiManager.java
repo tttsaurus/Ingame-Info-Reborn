@@ -11,6 +11,8 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 public final class IgiGuiManager
 {
+    public static final String OWNER_NAME = "official_igi";
+
     private static final InputFrameGenerator INPUT_GEN = new InputFrameGenerator(IgiKeyboard.INSTANCE, IgiMouse.INSTANCE);
 
     private static GuiLifecycleProvider lifecycleProvider;

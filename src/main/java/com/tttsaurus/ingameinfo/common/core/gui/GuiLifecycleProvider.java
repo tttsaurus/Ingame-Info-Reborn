@@ -1,8 +1,8 @@
 package com.tttsaurus.ingameinfo.common.core.gui;
 
 import com.tttsaurus.ingameinfo.common.core.InternalMethods;
-import com.tttsaurus.ingameinfo.common.core.forgeevent.IgiGuiInitEvent;
-import com.tttsaurus.ingameinfo.common.core.forgeevent.IgiGuiRegainScreenFocusEvent;
+import com.tttsaurus.ingameinfo.common.core.forgeevent.IgiGuiLifecycleInitEvent;
+import com.tttsaurus.ingameinfo.common.core.forgeevent.IgiGuiLifecycleRegainScreenFocusEvent;
 import com.tttsaurus.ingameinfo.common.core.function.IFunc;
 import com.tttsaurus.ingameinfo.common.core.gui.dummygui.IDummyDrawScreen;
 import com.tttsaurus.ingameinfo.common.core.gui.dummygui.IDummyKeyTyped;
@@ -62,6 +62,18 @@ import com.tttsaurus.ingameinfo.common.impl.gui.DefaultLifecycleProvider;
  */
 public abstract class GuiLifecycleProvider
 {
+    private final String lifecycleOwner;
+
+    public String getLifecycleOwner()
+    {
+        return lifecycleOwner;
+    }
+
+    public GuiLifecycleProvider(String lifecycleOwner)
+    {
+        this.lifecycleOwner = lifecycleOwner;
+    }
+
     protected static final Minecraft MC = Minecraft.getMinecraft();
 
     protected ScaledResolution resolution = new ScaledResolution(MC);
@@ -93,7 +105,7 @@ public abstract class GuiLifecycleProvider
         if (initFlag)
         {
             initFlag = false;
-            MinecraftForge.EVENT_BUS.post(new IgiGuiInitEvent());
+            MinecraftForge.EVENT_BUS.post(new IgiGuiLifecycleInitEvent(lifecycleOwner));
         }
 
         if (!Display.isActive() && !listenRegainScreenFocus)
@@ -101,7 +113,7 @@ public abstract class GuiLifecycleProvider
         if (Display.isActive() && listenRegainScreenFocus)
         {
             listenRegainScreenFocus = false;
-            MinecraftForge.EVENT_BUS.post(new IgiGuiRegainScreenFocusEvent());
+            MinecraftForge.EVENT_BUS.post(new IgiGuiLifecycleRegainScreenFocusEvent(lifecycleOwner));
         }
 
         //<editor-fold desc="gui container init">

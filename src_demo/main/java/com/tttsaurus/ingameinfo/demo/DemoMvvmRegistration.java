@@ -1,7 +1,7 @@
 package com.tttsaurus.ingameinfo.demo;
 
 import com.tttsaurus.ingameinfo.InGameInfoReborn;
-import com.tttsaurus.ingameinfo.common.core.forgeevent.IgiGuiInitEvent;
+import com.tttsaurus.ingameinfo.common.core.forgeevent.IgiGuiLifecycleInitEvent;
 import com.tttsaurus.ingameinfo.common.core.forgeevent.MvvmRegisterEvent;
 import com.tttsaurus.ingameinfo.common.core.gui.IgiGuiManager;
 import com.tttsaurus.ingameinfo.common.core.mvvm.registry.MvvmRegistry;
@@ -21,8 +21,11 @@ public final class DemoMvvmRegistration
     }
 
     @SubscribeEvent
-    public static void onIgiGuiInit(IgiGuiInitEvent event)
+    public static void onIgiGuiLifecycleInit(IgiGuiLifecycleInitEvent event)
     {
-        IgiGuiManager.openGui("eg1");
+        if (event.lifecycleOwner.equals(IgiGuiManager.OWNER_NAME))
+        {
+            IgiGuiManager.openGui("eg1");
+        }
     }
 }
