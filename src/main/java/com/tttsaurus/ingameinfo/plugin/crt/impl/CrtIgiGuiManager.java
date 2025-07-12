@@ -12,12 +12,12 @@ public final class CrtIgiGuiManager
     @ZenMethod
     public static void openGui(String mvvmRegistryName)
     {
-        IgiRuntimeLocator.get().lifecycleHolder.openGui(mvvmRegistryName, IgiRuntimeLocator.get().mvvmRegistry);
+        IgiRuntimeLocator.get().unifiedEntry.openGui(mvvmRegistryName);
     }
 
     @ZenMethod
     public static void closeGui(String mvvmRegistryName)
     {
-        IgiRuntimeLocator.get().lifecycleHolder.closeGui(mvvmRegistryName);
+        IgiRuntimeLocator.get().unifiedEntry.closeGui(mvvmRegistryName);
     }
 }

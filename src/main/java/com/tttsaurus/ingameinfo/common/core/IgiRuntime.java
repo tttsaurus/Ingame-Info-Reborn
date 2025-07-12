@@ -6,10 +6,13 @@ import com.tttsaurus.ingameinfo.common.core.mvvm.registry.MvvmRegistry;
 import com.tttsaurus.ingameinfo.common.core.mvvm.viewmodel.ViewModel;
 import com.tttsaurus.ingameinfo.common.impl.gui.DefaultLifecycleHolder;
 import com.tttsaurus.ingameinfo.config.IgiCommonConfig;
+import crafttweaker.annotations.ZenRegister;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import stanhebben.zenscript.annotations.ZenClass;
+import stanhebben.zenscript.annotations.ZenMethod;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -21,6 +24,8 @@ public final class IgiRuntime
         instance = new IgiRuntime();
     }
 
+    @ZenRegister
+    @ZenClass("mods.ingameinfo.UnifiedEntry")
     public static class UnifiedEntry
     {
         private final MvvmRegistry mvvmRegistry;
@@ -39,6 +44,7 @@ public final class IgiRuntime
             return this;
         }
 
+        @ZenMethod
         public UnifiedEntry openGuiOnStartup(String mvvmRegistryName)
         {
             if (!guisToOpenWhenLifecycleInit.contains(mvvmRegistryName))
@@ -49,6 +55,12 @@ public final class IgiRuntime
         public UnifiedEntry openGui(String mvvmRegistryName)
         {
             lifecycleHolder.openGui(mvvmRegistryName, mvvmRegistry);
+            return this;
+        }
+
+        public UnifiedEntry closeGui(String mvvmRegistryName)
+        {
+            lifecycleHolder.closeGui(mvvmRegistryName);
             return this;
         }
     }

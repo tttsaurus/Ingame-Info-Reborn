@@ -1,8 +1,8 @@
 package com.tttsaurus.ingameinfo.plugin.crt.impl;
 
-import com.tttsaurus.ingameinfo.common.core.forgeevent.IgiGuiLifecycleInitEvent;
-import com.tttsaurus.ingameinfo.plugin.crt.api.event.IIgiGuiLifecycleInitEvent;
-import com.tttsaurus.ingameinfo.plugin.crt.impl.event.McIgiGuiLifecycleInitEvent;
+import com.tttsaurus.ingameinfo.common.core.forgeevent.IgiRuntimeEntryPointEvent;
+import com.tttsaurus.ingameinfo.plugin.crt.api.event.IIgiRuntimeEntryPointEvent;
+import com.tttsaurus.ingameinfo.plugin.crt.impl.event.McIgiRuntimeEntryPointEvent;
 import crafttweaker.annotations.ZenRegister;
 import crafttweaker.api.event.IEventHandle;
 import crafttweaker.api.event.IEventManager;
@@ -22,22 +22,22 @@ public final class CrtEventManager
     private static Object igiGuiInitEventList = null;
 
     @ZenMethod
-    public static IEventHandle onIgiGuiLifecycleInit(IEventManager manager, IEventHandler<IIgiGuiLifecycleInitEvent> event)
+    public static IEventHandle onIgiRuntimeEntryPoint(IEventManager manager, IEventHandler<IIgiRuntimeEntryPointEvent> event)
     {
         if (igiGuiInitEventList == null)
-            igiGuiInitEventList = new EventList<IIgiGuiLifecycleInitEvent>();
-        return ((EventList<IIgiGuiLifecycleInitEvent>)igiGuiInitEventList).add(event);
+            igiGuiInitEventList = new EventList<IIgiRuntimeEntryPointEvent>();
+        return ((EventList<IIgiRuntimeEntryPointEvent>)igiGuiInitEventList).add(event);
     }
 
     public static final class Handler
     {
         @SubscribeEvent
-        public static void onIgiGuiLifecycleInit(IgiGuiLifecycleInitEvent event)
+        public static void onIgiRuntimeEntryPoint(IgiRuntimeEntryPointEvent event)
         {
             if (igiGuiInitEventList == null)
-                igiGuiInitEventList = new EventList<IIgiGuiLifecycleInitEvent>();
-            if (((EventList<IIgiGuiLifecycleInitEvent>)igiGuiInitEventList).hasHandlers())
-                ((EventList<IIgiGuiLifecycleInitEvent>)igiGuiInitEventList).publish(new McIgiGuiLifecycleInitEvent(event));
+                igiGuiInitEventList = new EventList<IIgiRuntimeEntryPointEvent>();
+            if (((EventList<IIgiRuntimeEntryPointEvent>)igiGuiInitEventList).hasHandlers())
+                ((EventList<IIgiRuntimeEntryPointEvent>)igiGuiInitEventList).publish(new McIgiRuntimeEntryPointEvent(event));
         }
     }
 }
