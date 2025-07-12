@@ -13,7 +13,7 @@ public final class DemoMvvmRegistration
     @SubscribeEvent(priority = EventPriority.HIGHEST)
     public static void onIgiRuntimeEntryPoint(IgiRuntimeEntryPointEvent event)
     {
-        event.runtime.unifiedEntry
+        event.runtime.initPhase
                 .registerMvvm("eg1", Eg1ViewModel.class)
                 .openGuiOnStartup("eg1");
 

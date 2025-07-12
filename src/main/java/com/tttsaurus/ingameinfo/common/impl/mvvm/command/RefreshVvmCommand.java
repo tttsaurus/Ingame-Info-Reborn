@@ -1,5 +1,6 @@
 package com.tttsaurus.ingameinfo.common.impl.mvvm.command;
 
+import com.tttsaurus.ingameinfo.common.core.IgiRuntime;
 import com.tttsaurus.ingameinfo.common.core.IgiRuntimeLocator;
 import com.tttsaurus.ingameinfo.common.core.gui.IgiGuiContainer;
 import com.tttsaurus.ingameinfo.common.impl.gui.DefaultLifecycleHolder;
@@ -33,10 +34,11 @@ public class RefreshVvmCommand extends CommandBase
     {
         if (args.length == 1)
         {
-            Map<String, IgiGuiContainer> map = InternalMethods.instance.GuiLifecycleProvider$openedGuiMap$getter.invoke(IgiRuntimeLocator.get().lifecycleHolder.getLifecycleProvider());
+            IgiRuntime.GlobalEntry global = IgiRuntimeLocator.get().global;
+            Map<String, IgiGuiContainer> map = InternalMethods.instance.GuiLifecycleProvider$openedGuiMap$getter.invoke(global.lifecycleHolder.getLifecycleProvider());
             if (map.containsKey(args[0]))
             {
-                map.get(args[0]).refreshVvm(IgiRuntimeLocator.get().mvvmRegistry);
+                map.get(args[0]).refreshVvm(global.mvvmRegistry);
                 Minecraft.getMinecraft().player.sendMessage(new TextComponentString("Refreshed In-Game Info GUI " + TextFormatting.AQUA + args[0] + TextFormatting.RESET));
             }
             else

@@ -1,7 +1,6 @@
 package com.tttsaurus.ingameinfo.common.impl;
 
 import com.tttsaurus.ingameinfo.common.core.forgeevent.IgiRuntimeEntryPointEvent;
-import com.tttsaurus.ingameinfo.common.core.gui.GuiLifecycleHolder;
 import com.tttsaurus.ingameinfo.common.core.mvvm.registry.MvvmRegistry;
 import com.tttsaurus.ingameinfo.common.impl.appcommunication.spotify.SpotifyViewModel;
 import com.tttsaurus.ingameinfo.common.impl.mvvm.TemplateViewModel;
@@ -16,9 +15,7 @@ public final class IgiRuntimeEntryPoint
     @SubscribeEvent(priority = EventPriority.HIGHEST)
     public static void onIgiRuntimeEntryPoint(IgiRuntimeEntryPointEvent event)
     {
-        MvvmRegistry mvvmRegistry = event.runtime.mvvmRegistry;
-        GuiLifecycleHolder lifecycleHolder = event.runtime.lifecycleHolder;
-
+        MvvmRegistry mvvmRegistry = event.runtime.global.mvvmRegistry;
         for (String mvvm: CrtMvvm.mvvms)
         {
             mvvmRegistry.manualRegister(mvvm, CrtViewModel.class);
@@ -28,11 +25,10 @@ public final class IgiRuntimeEntryPoint
         }
 
         if (IgiSpotifyIntegrationConfig.ENABLE_SPOTIFY_INTEGRATION)
-        {
-            mvvmRegistry.autoRegister("spotify", SpotifyViewModel.class);
-            lifecycleHolder.openGui("spotify", mvvmRegistry);
-        }
+            event.runtime.initPhase
+                    .registerMvvm("spotify", SpotifyViewModel.class)
+                    .openGuiOnStartup("spotify");
 
-        mvvmRegistry.autoRegister("template", TemplateViewModel.class);
+        event.runtime.initPhase.registerMvvm("template", TemplateViewModel.class);
     }
 }

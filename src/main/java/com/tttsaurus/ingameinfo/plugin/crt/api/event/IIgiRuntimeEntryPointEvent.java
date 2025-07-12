@@ -10,6 +10,9 @@ import stanhebben.zenscript.annotations.ZenGetter;
 @ZenClass("mods.ingameinfo.event.IgiRuntimeEntryPointEvent")
 public interface IIgiRuntimeEntryPointEvent extends IEventCancelable
 {
-    @ZenGetter("unifiedEntry")
-    IgiRuntime.UnifiedEntry getUnifiedEntry();
+    @ZenGetter("initPhase")
+    IgiRuntime.InitPhaseEntry getInitPhase();
+
+    @ZenGetter("livePhase")
+    IgiRuntime.LivePhaseEntry getLivePhase();
 }

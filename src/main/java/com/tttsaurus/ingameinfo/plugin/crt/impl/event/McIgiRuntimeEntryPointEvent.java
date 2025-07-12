@@ -23,8 +23,14 @@ public class McIgiRuntimeEntryPointEvent implements IIgiRuntimeEntryPointEvent
     public void setCanceled(boolean canceled) { }
 
     @Override
-    public IgiRuntime.UnifiedEntry getUnifiedEntry()
+    public IgiRuntime.InitPhaseEntry getInitPhase()
     {
-        return event.runtime.unifiedEntry;
+        return event.runtime.initPhase;
+    }
+
+    @Override
+    public IgiRuntime.LivePhaseEntry getLivePhase()
+    {
+        return event.runtime.livePhase;
     }
 }
