@@ -21,7 +21,7 @@ public final class DefaultLifecycleHolder extends GuiLifecycleHolder
     @Override
     public void update()
     {
-        if (lifecycleProvider == null) return;
+        if (getLifecycleProvider() == null) return;
 
         // fluxloading compat
         if (InGameInfoReborn.fluxloadingLoaded)
@@ -29,11 +29,11 @@ public final class DefaultLifecycleHolder extends GuiLifecycleHolder
             if (!init)
             {
                 init = true;
-                lifecycleProvider.update(inputGen.generate());
+                getLifecycleProvider().update(inputGen.generate());
             }
             if (!FluxLoadingAPI.isDuringFadingOutPhase() && !FluxLoadingAPI.isFinishLoading()) return;
         }
 
-        lifecycleProvider.update(inputGen.generate());
+        getLifecycleProvider().update(inputGen.generate());
     }
 }

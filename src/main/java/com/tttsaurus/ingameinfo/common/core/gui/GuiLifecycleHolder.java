@@ -7,16 +7,16 @@ import com.tttsaurus.ingameinfo.common.core.mvvm.registry.MvvmRegistry;
 public abstract class GuiLifecycleHolder
 {
     private final String holderName;
-    protected GuiLifecycleProvider lifecycleProvider;
+    private GuiLifecycleProvider lifecycleProvider;
 
-    public String getHolderName() { return holderName; }
+    public final String getHolderName() { return holderName; }
 
-    public void setLifecycleProvider(GuiLifecycleProvider provider)
+    public final void setLifecycleProvider(GuiLifecycleProvider provider)
     {
         lifecycleProvider = provider;
         InternalMethods.instance.GuiLifecycleProvider$lifecycleHolderName$setter.invoke(provider, holderName);
     }
-    public GuiLifecycleProvider getLifecycleProvider() { return lifecycleProvider; }
+    public final GuiLifecycleProvider getLifecycleProvider() { return lifecycleProvider; }
 
     protected final InputFrameGenerator inputGen;
 

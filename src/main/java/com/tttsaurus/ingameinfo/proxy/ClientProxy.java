@@ -8,7 +8,6 @@ import com.tttsaurus.ingameinfo.common.core.appcommunication.spotify.SpotifyOAut
 import com.tttsaurus.ingameinfo.common.core.commonutils.FileUtils;
 import com.tttsaurus.ingameinfo.common.core.forgeevent.IgiRuntimeEntryPointEvent;
 import com.tttsaurus.ingameinfo.common.core.gui.Element;
-import com.tttsaurus.ingameinfo.common.impl.gui.DefaultLifecycleHolder;
 import com.tttsaurus.ingameinfo.common.core.gui.property.lerp.ILerpablePropertyGetter;
 import com.tttsaurus.ingameinfo.common.core.gui.property.lerp.LerpTarget;
 import com.tttsaurus.ingameinfo.common.core.gui.property.style.IStylePropertyCallbackPost;
@@ -120,7 +119,6 @@ public class ClientProxy extends CommonProxy
 
         //<editor-fold desc="core events">
         MinecraftForge.EVENT_BUS.register(IgiRuntimeEntryPoint.class);
-        MinecraftForge.EVENT_BUS.register(DefaultLifecycleHolder.class);
         MinecraftForge.EVENT_BUS.register(ThemeRegistry.class);
         logger.info("Core event listeners registered.");
         //</editor-fold>

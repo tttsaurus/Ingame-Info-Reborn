@@ -15,7 +15,9 @@ import stanhebben.zenscript.annotations.ZenClass;
 import stanhebben.zenscript.annotations.ZenMethod;
 import java.lang.reflect.Constructor;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public final class IgiRuntime
 {
@@ -85,6 +87,7 @@ public final class IgiRuntime
         public final MvvmRegistry mvvmRegistry;
         public final DefaultLifecycleHolder lifecycleHolder;
         private final List<GuiLifecycleHolder> externaLifecycleHolders;
+        private final Map<GuiLifecycleHolder, List<String>> guisToOpenWhenLifecycleInit = new HashMap<>();
 
         private GlobalEntry(MvvmRegistry mvvmRegistry, DefaultLifecycleHolder lifecycleHolder, List<GuiLifecycleHolder> externaLifecycleHolders)
         {
@@ -114,6 +117,14 @@ public final class IgiRuntime
             }
             catch (Throwable ignored) { }
             return null;
+        }
+
+        public GlobalEntry openGuiOnStartup(GuiLifecycleHolder holder, String mvvmRegistryName)
+        {
+            List<String> list = guisToOpenWhenLifecycleInit.computeIfAbsent(holder, k -> new ArrayList<>());
+            if (!list.contains(mvvmRegistryName))
+                list.add(mvvmRegistryName);
+            return this;
         }
     }
 
@@ -152,10 +163,18 @@ public final class IgiRuntime
         if (event.lifecycleOwner.equals(DefaultLifecycleHolder.HOLDER_NAME))
         {
             for (String mvvmRegistryName: initPhase.guisToOpenWhenLifecycleInit)
-            {
                 lifecycleHolder.openGui(mvvmRegistryName, mvvmRegistry);
-            }
             initPhase.guisToOpenWhenLifecycleInit.clear();
+        }
+
+        for (Map.Entry<GuiLifecycleHolder, List<String>> entry: new ArrayList<>(global.guisToOpenWhenLifecycleInit.entrySet()))
+        {
+            if (event.lifecycleOwner.equals(entry.getKey().getHolderName()))
+            {
+                for (String mvvmRegistryName: entry.getValue())
+                    entry.getKey().openGui(mvvmRegistryName, mvvmRegistry);
+                global.guisToOpenWhenLifecycleInit.remove(entry.getKey());
+            }
         }
     }
 }
