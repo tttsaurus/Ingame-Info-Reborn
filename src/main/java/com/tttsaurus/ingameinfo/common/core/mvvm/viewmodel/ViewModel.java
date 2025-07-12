@@ -80,21 +80,21 @@ public abstract class ViewModel<T extends View>
     }
 
     // MvvmRegistry.cacheIgiGuiContainer() calls init
-    private GuiLayout init(String mvvmRegistryName)
+    private GuiLayout init(String mvvmRegistryName, MvvmRegistry mvvmRegistry)
     {
         this.mvvmRegistryName = mvvmRegistryName;
         GuiLayout guiLayout = binding.init(this, mvvmRegistryName);
 
-        Map<Reactive, IReactiveObjectGetter> reactiveObjects = MvvmRegistry.getRegisteredReactiveObjects(mvvmRegistryName);
+        Map<Reactive, IReactiveObjectGetter> reactiveObjects = mvvmRegistry.getRegisteredReactiveObjects(mvvmRegistryName);
         for (Map.Entry<Reactive, IReactiveObjectGetter> entry: reactiveObjects.entrySet())
             binding.bindReactiveObject(entry.getKey(), entry.getValue().get(this));
 
-        Map<Reactive, IReactiveCollectionGetter> reactiveCollections = MvvmRegistry.getRegisteredReactiveCollections(mvvmRegistryName);
+        Map<Reactive, IReactiveCollectionGetter> reactiveCollections = mvvmRegistry.getRegisteredReactiveCollections(mvvmRegistryName);
         for (Map.Entry<Reactive, IReactiveCollectionGetter> entry: reactiveCollections.entrySet())
             binding.bindReactiveCollection(entry.getKey(), entry.getValue().get(this));
 
         this.slotAccessors.clear();
-        Map<Reactive, ISlotAccessorGetter> slotAccessors = MvvmRegistry.getRegisteredSlotAccessors(mvvmRegistryName);
+        Map<Reactive, ISlotAccessorGetter> slotAccessors = mvvmRegistry.getRegisteredSlotAccessors(mvvmRegistryName);
         for (Map.Entry<Reactive, ISlotAccessorGetter> entry: slotAccessors.entrySet())
         {
             SlotAccessor slotAccessor = entry.getValue().get(this);
@@ -105,12 +105,12 @@ public abstract class ViewModel<T extends View>
         return guiLayout;
     }
 
-    public final void refresh(IgiGuiContainer container)
+    public final void refresh(IgiGuiContainer container, MvvmRegistry mvvmRegistry)
     {
         if (binding.view == null) return;
         binding.view.refresh(container);
 
-        Map<Reactive, IReactiveObjectGetter> reactiveObjects = MvvmRegistry.getRegisteredReactiveObjects(mvvmRegistryName);
+        Map<Reactive, IReactiveObjectGetter> reactiveObjects = mvvmRegistry.getRegisteredReactiveObjects(mvvmRegistryName);
         for (Map.Entry<Reactive, IReactiveObjectGetter> entry: reactiveObjects.entrySet())
         {
             ReactiveObject<?> reactiveObject = entry.getValue().get(this);
@@ -119,7 +119,7 @@ public abstract class ViewModel<T extends View>
             binding.bindReactiveObject(entry.getKey(), reactiveObject);
         }
 
-        Map<Reactive, IReactiveCollectionGetter> reactiveCollections = MvvmRegistry.getRegisteredReactiveCollections(mvvmRegistryName);
+        Map<Reactive, IReactiveCollectionGetter> reactiveCollections = mvvmRegistry.getRegisteredReactiveCollections(mvvmRegistryName);
         for (Map.Entry<Reactive, IReactiveCollectionGetter> entry: reactiveCollections.entrySet())
         {
             ReactiveCollection reactiveCollection = entry.getValue().get(this);
@@ -128,7 +128,7 @@ public abstract class ViewModel<T extends View>
         }
 
         this.slotAccessors.clear();
-        Map<Reactive, ISlotAccessorGetter> slotAccessors = MvvmRegistry.getRegisteredSlotAccessors(mvvmRegistryName);
+        Map<Reactive, ISlotAccessorGetter> slotAccessors = mvvmRegistry.getRegisteredSlotAccessors(mvvmRegistryName);
         for (Map.Entry<Reactive, ISlotAccessorGetter> entry: slotAccessors.entrySet())
         {
             SlotAccessor slotAccessor = entry.getValue().get(this);

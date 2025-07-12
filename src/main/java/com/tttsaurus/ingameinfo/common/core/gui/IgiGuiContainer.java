@@ -9,6 +9,7 @@ import com.tttsaurus.ingameinfo.common.core.InternalMethods;
 import com.tttsaurus.ingameinfo.common.core.item.GhostableItem;
 import com.tttsaurus.ingameinfo.common.core.mvvm.binding.SlotAccessor;
 import com.tttsaurus.ingameinfo.common.core.mvvm.compose.ComposeBlock;
+import com.tttsaurus.ingameinfo.common.core.mvvm.registry.MvvmRegistry;
 import com.tttsaurus.ingameinfo.common.core.mvvm.viewmodel.ViewModel;
 import com.tttsaurus.ingameinfo.common.core.gui.layout.MainGroup;
 import com.tttsaurus.ingameinfo.common.core.render.RenderUtils;
@@ -163,10 +164,10 @@ public class IgiGuiContainer
 
     // viewModel.start() may not work properly due to the lack of `undo` function
     // todo: state preserving hotswap
-    public void refreshVvm()
+    public void refreshVvm(MvvmRegistry mvvmRegistry)
     {
         resetDef();
-        viewModel.refresh(this);
+        viewModel.refresh(this, mvvmRegistry);
 
         themeConfig = ThemeRegistry.getTheme(themeName);
         mainGroup.applyLogicTheme(themeConfig);

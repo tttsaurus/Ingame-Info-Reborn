@@ -2,7 +2,7 @@ package com.tttsaurus.ingameinfo.config;
 
 import com.tttsaurus.ingameinfo.InGameInfoReborn;
 import com.tttsaurus.ingameinfo.common.core.gui.GuiLifecycleProvider;
-import com.tttsaurus.ingameinfo.common.core.gui.IgiGuiManager;
+import com.tttsaurus.ingameinfo.common.impl.gui.DefaultLifecycleHolder;
 import net.minecraftforge.common.config.Configuration;
 
 public final class IgiCommonConfig
@@ -25,7 +25,7 @@ public final class IgiCommonConfig
             {
                 Class<?> clazz = Class.forName(className);
                 Class<? extends GuiLifecycleProvider> providerClass = clazz.asSubclass(GuiLifecycleProvider.class);
-                IgiCommonConfig.GUI_LIFECYCLE_PROVIDER = providerClass.getConstructor(String.class).newInstance(IgiGuiManager.OWNER_NAME);
+                IgiCommonConfig.GUI_LIFECYCLE_PROVIDER = providerClass.getConstructor(String.class).newInstance(DefaultLifecycleHolder.HOLDER_NAME);
             }
             catch (Throwable throwable)
             {

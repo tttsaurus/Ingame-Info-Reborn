@@ -2,11 +2,13 @@ package com.tttsaurus.ingameinfo.proxy;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
+import com.tttsaurus.ingameinfo.common.core.IgiRuntime;
+import com.tttsaurus.ingameinfo.common.core.InternalMethods;
 import com.tttsaurus.ingameinfo.common.core.appcommunication.spotify.SpotifyOAuthUtils;
 import com.tttsaurus.ingameinfo.common.core.commonutils.FileUtils;
-import com.tttsaurus.ingameinfo.common.core.forgeevent.MvvmRegisterEvent;
+import com.tttsaurus.ingameinfo.common.core.forgeevent.IgiRuntimeEntryPointEvent;
 import com.tttsaurus.ingameinfo.common.core.gui.Element;
-import com.tttsaurus.ingameinfo.common.core.gui.IgiGuiManager;
+import com.tttsaurus.ingameinfo.common.impl.gui.DefaultLifecycleHolder;
 import com.tttsaurus.ingameinfo.common.core.gui.property.lerp.ILerpablePropertyGetter;
 import com.tttsaurus.ingameinfo.common.core.gui.property.lerp.LerpTarget;
 import com.tttsaurus.ingameinfo.common.core.gui.property.style.IStylePropertyCallbackPost;
@@ -17,13 +19,13 @@ import com.tttsaurus.ingameinfo.common.core.render.GlResourceManager;
 import com.tttsaurus.ingameinfo.common.core.render.RenderHints;
 import com.tttsaurus.ingameinfo.common.core.serialization.IDeserializer;
 import com.tttsaurus.ingameinfo.common.core.shutdown.ShutdownHooks;
+import com.tttsaurus.ingameinfo.common.impl.IgiRuntimeEntryPoint;
 import com.tttsaurus.ingameinfo.common.impl.appcommunication.spotify.SpotifyCommandHandler;
 import com.tttsaurus.ingameinfo.common.core.gui.GuiResources;
 import com.tttsaurus.ingameinfo.common.core.gui.registry.ElementRegistry;
 import com.tttsaurus.ingameinfo.common.core.gui.theme.registry.ThemeRegistry;
 import com.tttsaurus.ingameinfo.common.impl.gui.DefaultLifecycleProvider;
 import com.tttsaurus.ingameinfo.common.impl.mvvm.command.RefreshVvmCommand;
-import com.tttsaurus.ingameinfo.common.impl.mvvm.registry.MvvmRegisterEventHandler;
 import com.tttsaurus.ingameinfo.config.IgiCommonConfig;
 import com.tttsaurus.ingameinfo.config.IgiDefaultLifecycleProviderConfig;
 import com.tttsaurus.ingameinfo.config.IgiSpotifyIntegrationConfig;
@@ -88,7 +90,6 @@ public class ClientProxy extends CommonProxy
 
         IgiCommonConfig.GUI_LIFECYCLE_PROVIDER.setMaxFps_FixedUpdate(IgiCommonConfig.FIXED_UPDATE_LIMIT);
         IgiCommonConfig.GUI_LIFECYCLE_PROVIDER.setMaxFps_RenderUpdate(IgiCommonConfig.RENDER_UPDATE_LIMIT);
-        IgiGuiManager.setLifecycleProvider(IgiCommonConfig.GUI_LIFECYCLE_PROVIDER);
 
         logger.info("GUI Lifecycle Provider is ready.");
         //</editor-fold>
@@ -118,8 +119,8 @@ public class ClientProxy extends CommonProxy
         //</editor-fold>
 
         //<editor-fold desc="core events">
-        MinecraftForge.EVENT_BUS.register(IgiGuiManager.class);
-        MinecraftForge.EVENT_BUS.register(MvvmRegisterEventHandler.class);
+        MinecraftForge.EVENT_BUS.register(IgiRuntimeEntryPoint.class);
+        MinecraftForge.EVENT_BUS.register(DefaultLifecycleHolder.class);
         MinecraftForge.EVENT_BUS.register(ThemeRegistry.class);
         logger.info("Core event listeners registered.");
         //</editor-fold>
@@ -249,9 +250,10 @@ public class ClientProxy extends CommonProxy
         catch (IOException ignored) { }
         //</editor-fold>
 
-        //<editor-fold desc="mvvm">
-        logger.info("Start registering MVVM.");
-        MinecraftForge.EVENT_BUS.post(new MvvmRegisterEvent());
+        //<editor-fold desc="igi runtime">
+        InternalMethods.instance.IgiRuntime$init.invoke();
+        IgiRuntime runtime = InternalMethods.instance.IgiRuntime$instance$getter.invoke();
+        MinecraftForge.EVENT_BUS.post(new IgiRuntimeEntryPointEvent(runtime));
         //</editor-fold>
     }
 }

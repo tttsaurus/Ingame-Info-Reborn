@@ -1,27 +1,23 @@
 package com.tttsaurus.ingameinfo.plugin.crt.impl;
 
-import com.tttsaurus.ingameinfo.common.core.gui.IgiGuiManager;
+import com.tttsaurus.ingameinfo.common.core.IgiRuntimeLocator;;
 import crafttweaker.annotations.ZenRegister;
 import stanhebben.zenscript.annotations.ZenClass;
 import stanhebben.zenscript.annotations.ZenMethod;
-import stanhebben.zenscript.annotations.ZenProperty;
 
 @ZenRegister
 @ZenClass("mods.ingameinfo.gui.IgiGuiManager")
-public final class IgiGuiManagerWrapper
+public final class CrtIgiGuiManager
 {
-    @ZenProperty
-    public static String OWNER_NAME = IgiGuiManager.OWNER_NAME;
-
     @ZenMethod
     public static void openGui(String mvvmRegistryName)
     {
-        IgiGuiManager.openGui(mvvmRegistryName);
+        IgiRuntimeLocator.get().lifecycleHolder.openGui(mvvmRegistryName, IgiRuntimeLocator.get().mvvmRegistry);
     }
 
     @ZenMethod
     public static void closeGui(String mvvmRegistryName)
     {
-        IgiGuiManager.closeGui(mvvmRegistryName);
+        IgiRuntimeLocator.get().lifecycleHolder.closeGui(mvvmRegistryName);
     }
 }

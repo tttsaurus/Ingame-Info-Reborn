@@ -18,41 +18,43 @@ import java.util.Map;
 public final class MvvmRegistry
 {
     // key: mvvm registry name
-    private static final Map<String, IgiGuiContainer> igiGuiContainerCache = new HashMap<>();
+    private final Map<String, IgiGuiContainer> igiGuiContainerCache = new HashMap<>();
 
     @Nullable
-    public static IgiGuiContainer getIgiGuiContainer(String mvvmRegistryName)
+    public IgiGuiContainer getIgiGuiContainer(String mvvmRegistryName)
     {
         if (!isMvvmRegistered(mvvmRegistryName)) return null;
         return igiGuiContainerCache.get(mvvmRegistryName);
     }
-    public static void cacheIgiGuiContainer(String mvvmRegistryName, @Nonnull ViewModel<?> viewModel)
+    public void cacheIgiGuiContainer(String mvvmRegistryName, @Nonnull ViewModel<?> viewModel)
     {
-        GuiLayout guiLayout = InternalMethods.instance.ViewModel$init.invoke(viewModel, mvvmRegistryName);
+        GuiLayout guiLayout = InternalMethods.instance.ViewModel$init.invoke(viewModel, mvvmRegistryName, this);
         IgiGuiContainer igiGuiContainer = InternalMethods.instance.GuiLayout$igiGuiContainer$getter.invoke(guiLayout);
         InternalMethods.instance.IgiGuiContainer$viewModel$setter.invoke(igiGuiContainer, viewModel);
         igiGuiContainerCache.put(mvvmRegistryName, igiGuiContainer);
+
+        InGameInfoReborn.LOGGER.info("Generated and cached IgiGuiContainer for '" + mvvmRegistryName + "'.");
     }
 
     // key: mvvm registry name
-    private static final Map<String, Map<Reactive, IReactiveObjectGetter>> registeredReactiveObjects = new HashMap<>();
-    private static final Map<String, Map<Reactive, IReactiveCollectionGetter>> registeredReactiveCollections = new HashMap<>();
-    private static final Map<String, Map<Reactive, ISlotAccessorGetter>> registeredSlotAccessors = new HashMap<>();
+    private final Map<String, Map<Reactive, IReactiveObjectGetter>> registeredReactiveObjects = new HashMap<>();
+    private final Map<String, Map<Reactive, IReactiveCollectionGetter>> registeredReactiveCollections = new HashMap<>();
+    private final Map<String, Map<Reactive, ISlotAccessorGetter>> registeredSlotAccessors = new HashMap<>();
 
     //<editor-fold desc="getters">
-    public static Map<Reactive, IReactiveObjectGetter> getRegisteredReactiveObjects(String mvvmRegistryName)
+    public Map<Reactive, IReactiveObjectGetter> getRegisteredReactiveObjects(String mvvmRegistryName)
     {
         Map<Reactive, IReactiveObjectGetter> map = registeredReactiveObjects.get(mvvmRegistryName);
         if (map == null) return new HashMap<>();
         return map;
     }
-    public static Map<Reactive, IReactiveCollectionGetter> getRegisteredReactiveCollections(String mvvmRegistryName)
+    public Map<Reactive, IReactiveCollectionGetter> getRegisteredReactiveCollections(String mvvmRegistryName)
     {
         Map<Reactive, IReactiveCollectionGetter> map = registeredReactiveCollections.get(mvvmRegistryName);
         if (map == null) return new HashMap<>();
         return map;
     }
-    public static Map<Reactive, ISlotAccessorGetter> getRegisteredSlotAccessors(String mvvmRegistryName)
+    public Map<Reactive, ISlotAccessorGetter> getRegisteredSlotAccessors(String mvvmRegistryName)
     {
         Map<Reactive, ISlotAccessorGetter> map = registeredSlotAccessors.get(mvvmRegistryName);
         if (map == null) return new HashMap<>();
@@ -60,23 +62,22 @@ public final class MvvmRegistry
     }
     //</editor-fold>
 
-    private static final Map<String, Class<? extends ViewModel<?>>> viewModelClasses = new HashMap<>();
+    private final Map<String, Class<? extends ViewModel<?>>> viewModelClasses = new HashMap<>();
 
-    public static boolean isMvvmRegistered(String mvvmRegistryName) { return viewModelClasses.containsKey(mvvmRegistryName); }
+    public boolean isMvvmRegistered(String mvvmRegistryName) { return viewModelClasses.containsKey(mvvmRegistryName); }
 
     @Nullable
-    public static ViewModel<?> newViewModel(String mvvmRegistryName)
+    public ViewModel<?> newViewModel(String mvvmRegistryName)
     {
         try { return viewModelClasses.get(mvvmRegistryName).newInstance(); }
         catch (Exception e) { return null; }
     }
 
-    // only to be called under MvvmRegisterEvent
-    public static boolean manualRegister(String mvvmRegistryName, Class<? extends ViewModel<?>> viewModelClass)
+    public boolean manualRegister(String mvvmRegistryName, Class<? extends ViewModel<?>> viewModelClass)
     {
         if (viewModelClasses.containsKey(mvvmRegistryName)) return false;
 
-        InGameInfoReborn.LOGGER.info("Currently registering '" + mvvmRegistryName + "'.");
+        InGameInfoReborn.LOGGER.info("Currently registering MVVM '" + mvvmRegistryName + "'.");
 
         viewModelClasses.put(mvvmRegistryName, viewModelClass);
         registeredReactiveObjects.put(mvvmRegistryName, RegistryUtils.findReactiveObjects(mvvmRegistryName, viewModelClass));
@@ -86,8 +87,7 @@ public final class MvvmRegistry
         return true;
     }
 
-    // only to be called under MvvmRegisterEvent
-    public static boolean autoRegister(String mvvmRegistryName, Class<? extends ViewModel<?>> viewModelClass)
+    public boolean autoRegister(String mvvmRegistryName, Class<? extends ViewModel<?>> viewModelClass)
     {
         if (!manualRegister(mvvmRegistryName, viewModelClass)) return false;
         cacheIgiGuiContainer(mvvmRegistryName, newViewModel(mvvmRegistryName));

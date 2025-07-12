@@ -63,13 +63,9 @@ import com.tttsaurus.ingameinfo.common.impl.gui.DefaultLifecycleProvider;
 public abstract class GuiLifecycleProvider
 {
     private final String lifecycleOwner;
+    public String getLifecycleOwner() { return lifecycleOwner; }
 
-    public String getLifecycleOwner()
-    {
-        return lifecycleOwner;
-    }
-
-    public GuiLifecycleProvider(String lifecycleOwner)
+    protected GuiLifecycleProvider(String lifecycleOwner)
     {
         this.lifecycleOwner = lifecycleOwner;
     }

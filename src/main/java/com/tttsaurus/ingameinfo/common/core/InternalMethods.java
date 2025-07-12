@@ -15,6 +15,7 @@ import com.tttsaurus.ingameinfo.common.core.mvvm.binding.ReactiveCollection;
 import com.tttsaurus.ingameinfo.common.core.mvvm.binding.ReactiveObject;
 import com.tttsaurus.ingameinfo.common.core.mvvm.binding.SlotAccessor;
 import com.tttsaurus.ingameinfo.common.core.mvvm.context.SharedContext;
+import com.tttsaurus.ingameinfo.common.core.mvvm.registry.MvvmRegistry;
 import com.tttsaurus.ingameinfo.common.core.mvvm.view.View;
 import com.tttsaurus.ingameinfo.common.core.mvvm.viewmodel.ViewModel;
 import com.tttsaurus.ingameinfo.common.core.gui.layout.MainGroup;
@@ -27,7 +28,7 @@ import java.util.List;
 import java.util.Map;
 
 @SuppressWarnings("all")
-public class InternalMethods
+public final class InternalMethods
 {
     public static InternalMethods instance;
 
@@ -42,6 +43,7 @@ public class InternalMethods
     public IFunc_1Param<Map<String, IgiGuiContainer>, GuiLifecycleProvider> GuiLifecycleProvider$openedGuiMap$getter;
     public IFunc_1Param<List<SlotAccessor>, ViewModel> ViewModel$slotAccessors$getter;
     public IFunc_1Param<SharedContext, ViewModel> ViewModel$sharedContext$getter;
+    public IFunc<IgiRuntime> IgiRuntime$instance$getter;
 
     public IAction_2Param<IgiGuiContainer, ViewModel> IgiGuiContainer$viewModel$setter;
     public IAction_2Param<View, MainGroup> View$mainGroup$setter;
@@ -56,9 +58,10 @@ public class InternalMethods
     public IAction_2Param<Element, ElementGroup> Element$parent$setter;
     public IAction_2Param<View, RenderDecorator> View$renderDecorator$setter;
 
-    public IFunc_2Param<GuiLayout, ViewModel, String> ViewModel$init;
+    public IFunc_3Param<GuiLayout, ViewModel, String, MvvmRegistry> ViewModel$init;
     public IFunc_2Param<GuiLayout, View, IgiGuiContainer> View$init;
     public IFunc_1Param<RenderDecorator, ViewModel> ViewModel$getRenderDecorator;
+    public IAction IgiRuntime$init;
 
     private static void crash(Exception e)
     {
@@ -279,6 +282,27 @@ public class InternalMethods
         {
             ViewModel$sharedContext$getter = null;
             InGameInfoReborn.LOGGER.error("Reflection setup failed for ViewModel$sharedContext$getter: " + exception.getMessage());
+            crash(exception);
+        }
+
+        try
+        {
+            Field field = IgiRuntime.class.getDeclaredField("instance");
+            field.setAccessible(true);
+            MethodHandle handle = lookup.unreflectGetter(field);
+            IgiRuntime$instance$getter = () ->
+            {
+                try
+                {
+                    return (IgiRuntime)handle.invoke();
+                }
+                catch (Throwable ignored) { return null; }
+            };
+        }
+        catch (Exception exception)
+        {
+            IgiRuntime$instance$getter = null;
+            InGameInfoReborn.LOGGER.error("Reflection setup failed for IgiRuntime$instance$getter: " + exception.getMessage());
             crash(exception);
         }
         //</editor-fold>
@@ -540,14 +564,14 @@ public class InternalMethods
         //<editor-fold desc="methods">
         try
         {
-            Method method = ViewModel.class.getDeclaredMethod("init", String.class);
+            Method method = ViewModel.class.getDeclaredMethod("init", String.class, MvvmRegistry.class);
             method.setAccessible(true);
             MethodHandle handle = lookup.unreflect(method);
-            ViewModel$init = (arg0, arg1) ->
+            ViewModel$init = (arg0, arg1, arg2) ->
             {
                 try
                 {
-                    return (GuiLayout)handle.invoke(arg0, arg1);
+                    return (GuiLayout)handle.invoke(arg0, arg1, arg2);
                 }
                 catch (Throwable ignored) { return null; }
             };
@@ -598,6 +622,27 @@ public class InternalMethods
         {
             ViewModel$getRenderDecorator = null;
             InGameInfoReborn.LOGGER.error("Reflection setup failed for ViewModel$getRenderDecorator: " + exception.getMessage());
+            crash(exception);
+        }
+
+        try
+        {
+            Method method = IgiRuntime.class.getDeclaredMethod("init");
+            method.setAccessible(true);
+            MethodHandle handle = lookup.unreflect(method);
+            IgiRuntime$init = () ->
+            {
+                try
+                {
+                    handle.invoke();
+                }
+                catch (Throwable ignored) { }
+            };
+        }
+        catch (Exception exception)
+        {
+            IgiRuntime$init = null;
+            InGameInfoReborn.LOGGER.error("Reflection setup failed for IgiRuntime$init: " + exception.getMessage());
             crash(exception);
         }
         //</editor-fold>
