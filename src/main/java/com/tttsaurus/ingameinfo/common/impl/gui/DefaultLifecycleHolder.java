@@ -13,7 +13,7 @@ public final class DefaultLifecycleHolder extends GuiLifecycleHolder
 
     public DefaultLifecycleHolder()
     {
-        super(HOLDER_NAME, new InputFrameGenerator(IgiKeyboard.INSTANCE, IgiMouse.INSTANCE));
+        super(HOLDER_NAME, new InputFrameGenerator(new IgiKeyboard(), new IgiMouse()));
     }
 
     private boolean init = false;

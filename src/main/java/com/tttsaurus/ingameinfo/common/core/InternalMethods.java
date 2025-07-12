@@ -57,6 +57,7 @@ public final class InternalMethods
     public IAction_2Param<GuiLayout, IgiGuiContainer> GuiLayout$igiGuiContainer$setter;
     public IAction_2Param<Element, ElementGroup> Element$parent$setter;
     public IAction_2Param<View, RenderDecorator> View$renderDecorator$setter;
+    public IAction_2Param<GuiLifecycleProvider, String> GuiLifecycleProvider$lifecycleHolderName$setter;
 
     public IFunc_3Param<GuiLayout, ViewModel, String, MvvmRegistry> ViewModel$init;
     public IFunc_2Param<GuiLayout, View, IgiGuiContainer> View$init;
@@ -557,6 +558,27 @@ public final class InternalMethods
         {
             View$renderDecorator$setter = null;
             InGameInfoReborn.LOGGER.error("Reflection setup failed for View$renderDecorator$setter: " + exception.getMessage());
+            crash(exception);
+        }
+
+        try
+        {
+            Field field = GuiLifecycleProvider.class.getDeclaredField("lifecycleHolderName");
+            field.setAccessible(true);
+            MethodHandle handle = lookup.unreflectSetter(field);
+            GuiLifecycleProvider$lifecycleHolderName$setter = (arg0, arg1) ->
+            {
+                try
+                {
+                    handle.invoke(arg0, arg1);
+                }
+                catch (Throwable ignored) { }
+            };
+        }
+        catch (Exception exception)
+        {
+            GuiLifecycleProvider$lifecycleHolderName$setter = null;
+            InGameInfoReborn.LOGGER.error("Reflection setup failed for GuiLifecycleProvider$lifecycleHolderName$setter: " + exception.getMessage());
             crash(exception);
         }
         //</editor-fold>

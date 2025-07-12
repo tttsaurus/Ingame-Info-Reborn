@@ -6,8 +6,6 @@ import java.util.Set;
 
 public class IgiKeyboard implements IKeyboard
 {
-    public static final IgiKeyboard INSTANCE = new IgiKeyboard();
-
     private final Set<Integer> heldKeys = new HashSet<>();
     private final Set<Integer> pressedKeys = new HashSet<>();
     private final Set<Integer> leftKeys = new HashSet<>();

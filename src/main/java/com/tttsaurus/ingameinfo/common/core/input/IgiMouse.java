@@ -4,8 +4,6 @@ import com.tttsaurus.ingameinfo.common.core.commonutils.MouseUtils;
 
 public class IgiMouse implements IMouse
 {
-    public static final IgiMouse INSTANCE = new IgiMouse();
-
     private boolean leftDown;
     private boolean leftPress;
     private boolean leftLeave;

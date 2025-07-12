@@ -1,5 +1,6 @@
 package com.tttsaurus.ingameinfo.common.core.gui;
 
+import com.tttsaurus.ingameinfo.common.core.InternalMethods;
 import com.tttsaurus.ingameinfo.common.core.input.InputFrameGenerator;
 import com.tttsaurus.ingameinfo.common.core.mvvm.registry.MvvmRegistry;
 
@@ -9,7 +10,12 @@ public abstract class GuiLifecycleHolder
     protected GuiLifecycleProvider lifecycleProvider;
 
     public String getHolderName() { return holderName; }
-    public void setLifecycleProvider(GuiLifecycleProvider provider) { lifecycleProvider = provider; }
+
+    public void setLifecycleProvider(GuiLifecycleProvider provider)
+    {
+        lifecycleProvider = provider;
+        InternalMethods.instance.GuiLifecycleProvider$lifecycleHolderName$setter.invoke(provider, holderName);
+    }
     public GuiLifecycleProvider getLifecycleProvider() { return lifecycleProvider; }
 
     protected final InputFrameGenerator inputGen;
@@ -20,7 +26,7 @@ public abstract class GuiLifecycleHolder
         this.inputGen = inputGen;
     }
 
-    public void openGui(String mvvmRegistryName, MvvmRegistry mvvmRegistry)
+    public final void openGui(String mvvmRegistryName, MvvmRegistry mvvmRegistry)
     {
         if (lifecycleProvider == null) return;
         IgiGuiContainer igiGuiContainer = mvvmRegistry.getIgiGuiContainer(mvvmRegistryName);
@@ -29,7 +35,7 @@ public abstract class GuiLifecycleHolder
         lifecycleProvider.openIgiGui(mvvmRegistryName, igiGuiContainer);
     }
 
-    public void closeGui(String mvvmRegistryName)
+    public final void closeGui(String mvvmRegistryName)
     {
         if (lifecycleProvider == null) return;
 

@@ -62,13 +62,8 @@ import com.tttsaurus.ingameinfo.common.impl.gui.DefaultLifecycleProvider;
  */
 public abstract class GuiLifecycleProvider
 {
-    private final String lifecycleOwner;
-    public String getLifecycleOwner() { return lifecycleOwner; }
-
-    protected GuiLifecycleProvider(String lifecycleOwner)
-    {
-        this.lifecycleOwner = lifecycleOwner;
-    }
+    private String lifecycleHolderName;
+    public String getLifecycleHolderName() { return lifecycleHolderName; }
 
     protected static final Minecraft MC = Minecraft.getMinecraft();
 
@@ -101,7 +96,7 @@ public abstract class GuiLifecycleProvider
         if (initFlag)
         {
             initFlag = false;
-            MinecraftForge.EVENT_BUS.post(new IgiGuiLifecycleInitEvent(lifecycleOwner));
+            MinecraftForge.EVENT_BUS.post(new IgiGuiLifecycleInitEvent(lifecycleHolderName));
         }
 
         if (!Display.isActive() && !listenRegainScreenFocus)
@@ -109,7 +104,7 @@ public abstract class GuiLifecycleProvider
         if (Display.isActive() && listenRegainScreenFocus)
         {
             listenRegainScreenFocus = false;
-            MinecraftForge.EVENT_BUS.post(new IgiGuiLifecycleRegainScreenFocusEvent(lifecycleOwner));
+            MinecraftForge.EVENT_BUS.post(new IgiGuiLifecycleRegainScreenFocusEvent(lifecycleHolderName));
         }
 
         //<editor-fold desc="gui container init">
