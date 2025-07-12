@@ -105,6 +105,7 @@ public final class IgiRuntime
                 constructor.setAccessible(true);
                 GuiLifecycleHolder holder = constructor.newInstance();
 
+                if (DefaultLifecycleHolder.HOLDER_NAME.equals(holder.getHolderName())) return null;
                 for (GuiLifecycleHolder otherHolder: externaLifecycleHolders)
                     if (otherHolder.getHolderName().equals(holder.getHolderName())) return null;
 

@@ -44,23 +44,15 @@ This is a library mod that helps you to create in-game overlaid (or focused) GUI
 
 </details>
 
-### Declarative GUI Example
+### Example
 ```xml
 <VerticalGroup>
     <Text uid = "fps">
-    <HorizontalGroup>
-        <Text text = "Memory: ">
-        <ProgressBar uid = "memoryBar" 
-                     width = 40 
-                     height = 3 
-                     alignment = CENTER 
-                     pivot = CENTER 
-                     padding = {"right": 5}>
-        <Text uid = "memory">
-    </Group>
+    ...
 </Group>
 ```
 ```java
+// snippet from View and ViewModel classes
 @Reactive(targetUid = "fps", property = "text", initiativeSync = true)
 public ReactiveObject<String> fpsText = new ReactiveObject<>(){};
 
@@ -68,8 +60,16 @@ EventCenter.gameFpsEvent.addListener((fps) ->
 {
     fpsText.set("FPS: " + fps);
 });
-
-... more bindings
+```
+```java
+// registration entry point
+@SubscribeEvent
+public static void onIgiRuntimeEntryPoint(IgiRuntimeEntryPointEvent event)
+{
+    event.runtime.initPhase
+            .registerMvvm("example", ExampleViewModel.class)
+            .openGuiOnStartup("example");
+}
 ```
 
 ## Wiki
