@@ -122,10 +122,14 @@ public final class IgiRuntime
         public GlobalEntry openGuiOnStartup(String holderName, String mvvmRegistryName)
         {
             GuiLifecycleHolder holder = null;
-            if (holderName.equals(DefaultLifecycleHolder.HOLDER_NAME)) holder = lifecycleHolder;
-            for (GuiLifecycleHolder otherHolder: externaLifecycleHolders)
+            if (holderName.equals(DefaultLifecycleHolder.HOLDER_NAME))
+                holder = lifecycleHolder;
+            else for (GuiLifecycleHolder otherHolder: externaLifecycleHolders)
                 if (holderName.equals(otherHolder.getHolderName()))
+                {
                     holder = otherHolder;
+                    break;
+                }
 
             if (holder == null) return this;
 
