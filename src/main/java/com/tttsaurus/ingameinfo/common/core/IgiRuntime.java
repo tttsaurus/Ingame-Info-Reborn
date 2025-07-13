@@ -119,8 +119,16 @@ public final class IgiRuntime
             return null;
         }
 
-        public GlobalEntry openGuiOnStartup(GuiLifecycleHolder holder, String mvvmRegistryName)
+        public GlobalEntry openGuiOnStartup(String holderName, String mvvmRegistryName)
         {
+            GuiLifecycleHolder holder = null;
+            if (holderName.equals(DefaultLifecycleHolder.HOLDER_NAME)) holder = lifecycleHolder;
+            for (GuiLifecycleHolder otherHolder: externaLifecycleHolders)
+                if (holderName.equals(otherHolder.getHolderName()))
+                    holder = otherHolder;
+
+            if (holder == null) return this;
+
             List<String> list = guisToOpenWhenLifecycleInit.computeIfAbsent(holder, k -> new ArrayList<>());
             if (!list.contains(mvvmRegistryName))
                 list.add(mvvmRegistryName);
