@@ -1,14 +1,14 @@
 <div align="center">
   <img src="logo.png" alt="InGame Info Reborn" width="300"/>
   <h1>InGame Info Reborn</h1>
+  <p>"In-game HUDs and GUIs done with structure — reactive, declarative, composable, and built to handle the rest."</p>
 </div>
 
 [![Versions](https://img.shields.io/curseforge/game-versions/1171541?logo=curseforge&label=Game%20Version)](https://www.curseforge.com/minecraft/mc-mods/ingame-info-reborn)
 [![Downloads](https://img.shields.io/curseforge/dt/1171541?logo=curseforge&label=Downloads)](https://www.curseforge.com/minecraft/mc-mods/ingame-info-reborn)
 [![Downloads](https://img.shields.io/modrinth/dt/ingame-info-reborn?logo=modrinth&label=Downloads)](https://modrinth.com/mod/ingame-info-reborn)
 
-This is a spiritual successor of [InGame-Info-XML](https://github.com/Lunatrius/InGame-Info-XML), **not a fork**. Moreover, this is evolving into a general-purpose HUD/GUI library for both Java and ZenScript users.
-
+This is a _Work-In-Progress_ spiritual successor of [InGame-Info-XML](https://github.com/Lunatrius/InGame-Info-XML), **not a fork**.
 If you like this project, don't forget to give it a star⭐!
 
 Suggestions/PRs are welcome
@@ -73,7 +73,7 @@ public static void onIgiRuntimeEntryPoint(IgiRuntimeEntryPointEvent event)
 ```
 
 ## Wiki
-- [Wiki Link](https://tttsaurus.github.io/Ingame-Info-Reborn-Wiki/)
+- [WIP Wiki](https://tttsaurus.github.io/Ingame-Info-Reborn-Wiki/)
 
 ## Implementation Todo List / Overview
 <details>
