@@ -3,6 +3,7 @@
   <h1>InGame Info Reborn</h1>
   <p>"In-game HUDs and GUIs done with structure — reactive, declarative, composable, and built to handle the rest."</p>
 </div>
+<br>
 
 [![Versions](https://img.shields.io/curseforge/game-versions/1171541?logo=curseforge&label=Game%20Version)](https://www.curseforge.com/minecraft/mc-mods/ingame-info-reborn)
 [![Downloads](https://img.shields.io/curseforge/dt/1171541?logo=curseforge&label=Downloads)](https://www.curseforge.com/minecraft/mc-mods/ingame-info-reborn)
