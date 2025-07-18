@@ -1,6 +1,5 @@
 package com.tttsaurus.ingameinfo.common.core.gui.registry;
 
-import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import com.tttsaurus.ingameinfo.common.core.gui.Element;
 import com.tttsaurus.ingameinfo.common.core.function.IAction_1Param;
@@ -126,11 +125,18 @@ public final class ElementRegistry
     public static ImmutableMap<IStylePropertySetter, Class<?>> getStylePropertyClasses() { return ImmutableMap.copyOf(stylePropertyClasses); }
     //</editor-fold>
 
-    public static ImmutableList<Class<? extends Element>> getRegisteredElements() { return ImmutableList.copyOf(registeredElements.values()); }
+    public static List<Class<? extends Element>> getRegisteredElements()
+    {
+        List<Class<? extends Element>> list = new ArrayList<>(registeredElements.values());
+        String myPackage = "com.tttsaurus.ingameinfo";
+        list.sort(Comparator.comparing((Class<? extends Element> c) -> !c.getName().startsWith(myPackage)).thenComparing(Class::getName));
+        return list;
+    }
+
     public static List<Class<? extends Element>> getConstructableElements()
     {
         List<Class<? extends Element>> list = new ArrayList<>();
-        for (Class<? extends Element> clazz: registeredElements.values())
+        for (Class<? extends Element> clazz: getRegisteredElements())
         {
             RegisterElement annotation = elementAnnotations.get(clazz);
             if (annotation != null)

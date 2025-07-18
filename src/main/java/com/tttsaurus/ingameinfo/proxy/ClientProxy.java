@@ -1,6 +1,5 @@
 package com.tttsaurus.ingameinfo.proxy;
 
-import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import com.tttsaurus.ingameinfo.common.core.IgiRuntime;
 import com.tttsaurus.ingameinfo.common.core.InternalMethods;
@@ -156,7 +155,7 @@ public class ClientProxy extends CommonProxy
         builder.append("2. You can access style properties from parent elements.\n");
         builder.append("\n");
 
-        ImmutableList<Class<? extends Element>> elementClasses = ElementRegistry.getRegisteredElements();
+        List<Class<? extends Element>> elementClasses = ElementRegistry.getRegisteredElements();
         List<Class<? extends Element>> constructableElements = ElementRegistry.getConstructableElements();
 
         builder.append("## Registered Elements:\n");
