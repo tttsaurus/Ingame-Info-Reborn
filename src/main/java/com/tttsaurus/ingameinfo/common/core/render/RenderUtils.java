@@ -2,7 +2,6 @@ package com.tttsaurus.ingameinfo.common.core.render;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
-import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.GlStateManager;
@@ -124,13 +123,9 @@ public final class RenderUtils
     //<editor-fold desc="rect">
     public static void renderRect(float x, float y, float width, float height, int color)
     {
-        GlStateManager.pushMatrix();
-        GlStateManager.translate(x, y, zLevel);
-        GlStateManager.scale(width, height, 0);
-        Gui.drawRect(0, 0, 1, 1, color);
-        GlStateManager.popMatrix();
+        renderRect(x, y, width, height, color, true);
     }
-    public static void renderRectFullScreen(int color)
+    public static void renderRect(float x, float y, float width, float height, int color, boolean srcAlphaOrDestAlpha)
     {
         float a = (float)(color >> 24 & 255) / 255.0F;
         float r = (float)(color >> 16 & 255) / 255.0F;
@@ -140,7 +135,40 @@ public final class RenderUtils
         GlStateManager.disableTexture2D();
         GlStateManager.enableBlend();
         GlStateManager.disableAlpha();
-        GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
+        if (srcAlphaOrDestAlpha)
+            GlStateManager.tryBlendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO);
+        else
+            GlStateManager.tryBlendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SourceFactor.ZERO, GlStateManager.DestFactor.ONE);
+        GlStateManager.shadeModel(GL11.GL_SMOOTH);
+
+        Tessellator tessellator = Tessellator.getInstance();
+        BufferBuilder buffer = tessellator.getBuffer();
+        buffer.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_COLOR);
+        buffer.pos(x, y + height, zLevel).color(r, g, b, a).endVertex();
+        buffer.pos(x + width, y + height, zLevel).color(r, g, b, a).endVertex();
+        buffer.pos(x + width, y, zLevel).color(r, g, b, a).endVertex();
+        buffer.pos(x, y, zLevel).color(r, g, b, a).endVertex();
+        tessellator.draw();
+    }
+
+    public static void renderRectFullScreen(int color)
+    {
+        renderRectFullScreen(color, true);
+    }
+    public static void renderRectFullScreen(int color, boolean srcAlphaOrDestAlpha)
+    {
+        float a = (float)(color >> 24 & 255) / 255.0F;
+        float r = (float)(color >> 16 & 255) / 255.0F;
+        float g = (float)(color >> 8 & 255) / 255.0F;
+        float b = (float)(color & 255) / 255.0F;
+
+        GlStateManager.disableTexture2D();
+        GlStateManager.enableBlend();
+        GlStateManager.disableAlpha();
+        if (srcAlphaOrDestAlpha)
+            GlStateManager.tryBlendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO);
+        else
+            GlStateManager.tryBlendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SourceFactor.ZERO, GlStateManager.DestFactor.ONE);
         GlStateManager.shadeModel(GL11.GL_SMOOTH);
 
         ScaledResolution resolution = new ScaledResolution(Minecraft.getMinecraft());
@@ -156,8 +184,13 @@ public final class RenderUtils
         buffer.pos(0, 0, zLevel).color(r, g, b, a).endVertex();
         tessellator.draw();
     }
-    // this method is modified from Minecraft's Gui.drawGradientRect
+
     public static void renderGradientRect(float x, float y, float width, float height, int startColor, int endColor)
+    {
+        renderGradientRect(x, y, width, height, startColor, endColor, true);
+    }
+    // this method is modified from Minecraft's Gui.drawGradientRect
+    public static void renderGradientRect(float x, float y, float width, float height, int startColor, int endColor, boolean srcAlphaOrDestAlpha)
     {
         float f = (float)(startColor >> 24 & 255) / 255.0F;
         float f1 = (float)(startColor >> 16 & 255) / 255.0F;
@@ -171,55 +204,41 @@ public final class RenderUtils
         GlStateManager.disableTexture2D();
         GlStateManager.enableBlend();
         GlStateManager.disableAlpha();
-        GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
+        if (srcAlphaOrDestAlpha)
+            GlStateManager.tryBlendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO);
+        else
+            GlStateManager.tryBlendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SourceFactor.ZERO, GlStateManager.DestFactor.ONE);
         GlStateManager.shadeModel(GL11.GL_SMOOTH);
 
         Tessellator tessellator = Tessellator.getInstance();
         BufferBuilder bufferbuilder = tessellator.getBuffer();
         bufferbuilder.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_COLOR);
-        bufferbuilder.pos(1, 0, 0).color(f1, f2, f3, f).endVertex();
-        bufferbuilder.pos(0, 0, 0).color(f1, f2, f3, f).endVertex();
-        bufferbuilder.pos(0, 1, 0).color(f5, f6, f7, f4).endVertex();
-        bufferbuilder.pos(1, 1, 0).color(f5, f6, f7, f4).endVertex();
-        GlStateManager.pushMatrix();
-        GlStateManager.translate(x, y, zLevel);
-        GlStateManager.scale(width, height, 0);
+        bufferbuilder.pos(x + width, y, zLevel).color(f1, f2, f3, f).endVertex();
+        bufferbuilder.pos(x, y, zLevel).color(f1, f2, f3, f).endVertex();
+        bufferbuilder.pos(x, y + height, zLevel).color(f5, f6, f7, f4).endVertex();
+        bufferbuilder.pos(x + width, y + height, zLevel).color(f5, f6, f7, f4).endVertex();
         tessellator.draw();
-        GlStateManager.popMatrix();
     }
+
     public static void renderRectOutline(float x, float y, float width, float height, float thickness, int color)
     {
-        GlStateManager.pushMatrix();
-        GlStateManager.translate(x, y, zLevel);
-
-        GlStateManager.pushMatrix();
-        GlStateManager.scale(width, thickness, 0);
-        Gui.drawRect(0, 0, 1, 1, color);
-        GlStateManager.popMatrix();
-
-        GlStateManager.pushMatrix();
-        GlStateManager.translate(0, height, 0);
-        GlStateManager.scale(width, thickness, 0);
-        Gui.drawRect(0, 0, 1, 1, color);
-        GlStateManager.popMatrix();
-
-        GlStateManager.pushMatrix();
-        GlStateManager.scale(thickness, height, 0);
-        Gui.drawRect(0, 0, 1, 1, color);
-        GlStateManager.popMatrix();
-
-        GlStateManager.pushMatrix();
-        GlStateManager.translate(width, 0, 0);
-        GlStateManager.scale(thickness, height + thickness, 0);
-        Gui.drawRect(0, 0, 1, 1, color);
-        GlStateManager.popMatrix();
-
-        GlStateManager.popMatrix();
+        renderRectOutline(x, y, width, height, thickness, color, true);
+    }
+    public static void renderRectOutline(float x, float y, float width, float height, float thickness, int color, boolean srcAlphaOrDestAlpha)
+    {
+        renderRect(x, y, width, thickness, color, srcAlphaOrDestAlpha);
+        renderRect(x, y + height, width, thickness, color, srcAlphaOrDestAlpha);
+        renderRect(x, y, thickness, height, color, srcAlphaOrDestAlpha);
+        renderRect(x + width, y, thickness, height + thickness, color, srcAlphaOrDestAlpha);
     }
     //</editor-fold>
 
     //<editor-fold desc="rounded rect">
     public static void renderRoundedRect(float x, float y, float width, float height, float radius, int color, boolean smoothHint)
+    {
+        renderRoundedRect(x, y, width, height, radius, color, smoothHint, true);
+    }
+    public static void renderRoundedRect(float x, float y, float width, float height, float radius, int color, boolean smoothHint, boolean srcAlphaOrDestAlpha)
     {
         int segments = Math.max(3, (int)(radius / 2f));
         float a = (float)(color >> 24 & 255) / 255.0F;
@@ -231,7 +250,10 @@ public final class RenderUtils
         GlStateManager.disableTexture2D();
         GlStateManager.enableBlend();
         GlStateManager.disableAlpha();
-        GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
+        if (srcAlphaOrDestAlpha)
+            GlStateManager.tryBlendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO);
+        else
+            GlStateManager.tryBlendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SourceFactor.ZERO, GlStateManager.DestFactor.ONE);
         GlStateManager.color(r, g, b, a);
 
         if (smoothHint)
@@ -266,7 +288,12 @@ public final class RenderUtils
 
         if (smoothHint) GL11.glDisable(GL11.GL_POLYGON_SMOOTH);
     }
+
     public static void renderRoundedRectOutline(float x, float y, float width, float height, float radius, float thickness, int color, boolean smoothHint)
+    {
+        renderRoundedRectOutline(x, y, width, height, radius, thickness, color, smoothHint, true);
+    }
+    public static void renderRoundedRectOutline(float x, float y, float width, float height, float radius, float thickness, int color, boolean smoothHint, boolean srcAlphaOrDestAlpha)
     {
         int segments = Math.max(3, (int)(radius / 2f));
         float a = (float)(color >> 24 & 255) / 255.0F;
@@ -278,7 +305,10 @@ public final class RenderUtils
         GlStateManager.disableTexture2D();
         GlStateManager.enableBlend();
         GlStateManager.disableAlpha();
-        GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
+        if (srcAlphaOrDestAlpha)
+            GlStateManager.tryBlendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO);
+        else
+            GlStateManager.tryBlendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SourceFactor.ZERO, GlStateManager.DestFactor.ONE);
         GlStateManager.glLineWidth(thickness * (float)(new ScaledResolution(Minecraft.getMinecraft())).getScaleFactor());
         GlStateManager.color(r, g, b, a);
 
