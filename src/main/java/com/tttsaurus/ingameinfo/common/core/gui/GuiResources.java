@@ -20,6 +20,11 @@ public final class GuiResources
         imagePrefabs.put(name, imagePrefab);
     }
 
+    public static boolean exists(String name)
+    {
+        return imagePrefabs.containsKey(name);
+    }
+
     public static ImagePrefab get(String name)
     {
         ImagePrefab imagePrefab = imagePrefabs.get(name);
