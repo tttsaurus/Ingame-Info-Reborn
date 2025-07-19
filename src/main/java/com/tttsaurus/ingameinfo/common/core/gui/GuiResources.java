@@ -49,8 +49,12 @@ public final class GuiResources
         return null;
     }
 
+    private static boolean init = false;
     public static void init()
     {
+        if (init) return;
+        init = true;
+
         Texture2D.FilterMode filterModeMin = RenderHints.getHint_Texture2D$FilterModeMin();
         Texture2D.FilterMode filterModeMag = RenderHints.getHint_Texture2D$FilterModeMag();
         Texture2D.WrapMode wrapModeS = RenderHints.getHint_Texture2D$WrapModeS();
