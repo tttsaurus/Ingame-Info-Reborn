@@ -1,5 +1,6 @@
 package com.tttsaurus.ingameinfo;
 
+import com.tttsaurus.ingameinfo.common.core.commonutils.TextFormattingUtils;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventHandler;
 import net.minecraftforge.fml.common.SidedProxy;
@@ -9,6 +10,8 @@ import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import com.tttsaurus.ingameinfo.proxy.CommonProxy;
+
+import java.util.List;
 
 @Mod(modid = Tags.MODID,
      name = Tags.MODNAME,
@@ -62,6 +65,11 @@ public final class InGameInfoReborn
     {
         asmDataTable = event.getAsmData();
         proxy.preInit(event, LOGGER);
+
+        LOGGER.info("debug text formatting");
+        List<TextFormattingUtils.Token> tokens = TextFormattingUtils.tokenize("lol@red[red and @green[green and @obf[more]]]");
+        for (TextFormattingUtils.Token token: tokens)
+            LOGGER.info("\n" + token);
     }
 
     @EventHandler

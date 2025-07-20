@@ -59,7 +59,16 @@ public final class RenderUtils
     //</editor-fold>
 
     //<editor-fold desc="text">
+    public static void renderTextFormatted(String text, float x, float y, float alpha, boolean srcAlphaOrDestAlpha)
+    {
+
+    }
+
     public static void renderText(String text, float x, float y, float scale, int color, boolean shadow)
+    {
+        renderText(text, x, y, scale, color, shadow, true);
+    }
+    public static void renderText(String text, float x, float y, float scale, int color, boolean shadow, boolean srcAlphaOrDestAlpha)
     {
         GlStateManager.disableCull();
         GlStateManager.enableTexture2D();
@@ -67,7 +76,10 @@ public final class RenderUtils
         GlStateManager.enableBlend();
         GlStateManager.disableAlpha();
         GlStateManager.disableDepth();
-        GlStateManager.tryBlendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO);
+        if (srcAlphaOrDestAlpha)
+            GlStateManager.tryBlendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO);
+        else
+            GlStateManager.tryBlendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SourceFactor.ZERO, GlStateManager.DestFactor.ONE);
 
         GlStateManager.pushMatrix();
         GlStateManager.translate(x, y, zLevel);
@@ -75,6 +87,7 @@ public final class RenderUtils
         fontRenderer.drawString(text, 0, 0, color, shadow);
         GlStateManager.popMatrix();
     }
+
     public static float simulateTextHeight(float scale)
     {
         return fontRenderer.FONT_HEIGHT * scale;
