@@ -1,4 +1,4 @@
-package com.tttsaurus.ingameinfo.common.core.item;
+package com.tttsaurus.ingameinfo.common.core.commonutils;
 
 import com.tttsaurus.ingameinfo.common.core.serialization.Deserializer;
 import com.tttsaurus.ingameinfo.common.impl.serialization.ItemDeserializer;

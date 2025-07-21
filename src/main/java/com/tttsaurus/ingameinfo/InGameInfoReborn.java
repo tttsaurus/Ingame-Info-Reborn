@@ -1,6 +1,6 @@
 package com.tttsaurus.ingameinfo;
 
-import com.tttsaurus.ingameinfo.common.core.commonutils.TextFormattingUtils;
+import com.tttsaurus.ingameinfo.common.core.commonutils.TextFormattingV2;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventHandler;
 import net.minecraftforge.fml.common.SidedProxy;
@@ -67,8 +67,8 @@ public final class InGameInfoReborn
         proxy.preInit(event, LOGGER);
 
         LOGGER.info("debug text formatting");
-        List<TextFormattingUtils.Token> tokens = TextFormattingUtils.tokenize("lol@red[red and @green[green and @obf[more]]]");
-        for (TextFormattingUtils.Token token: tokens)
+        List<TextFormattingV2.NestedToken> tokens = TextFormattingV2.tokenize("@green[green and @obf[more]]");
+        for (TextFormattingV2.NestedToken token: tokens)
             LOGGER.info("\n" + token);
     }
 

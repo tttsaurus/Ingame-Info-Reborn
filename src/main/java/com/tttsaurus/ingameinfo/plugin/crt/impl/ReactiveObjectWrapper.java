@@ -5,7 +5,7 @@ import com.tttsaurus.ingameinfo.common.core.gui.layout.Alignment;
 import com.tttsaurus.ingameinfo.common.core.gui.layout.Padding;
 import com.tttsaurus.ingameinfo.common.core.gui.layout.Pivot;
 import com.tttsaurus.ingameinfo.common.core.gui.layout.Skewness;
-import com.tttsaurus.ingameinfo.common.core.item.GhostableItem;
+import com.tttsaurus.ingameinfo.common.core.commonutils.GhostableItem;
 import com.tttsaurus.ingameinfo.common.core.mvvm.binding.ReactiveObject;
 import com.tttsaurus.ingameinfo.plugin.crt.api.Types;
 import com.tttsaurus.ingameinfo.plugin.crt.impl.types.*;

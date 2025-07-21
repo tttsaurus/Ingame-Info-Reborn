@@ -1,10 +1,13 @@
 package com.tttsaurus.ingameinfo.common.core.commonutils;
 
+import com.tttsaurus.ingameinfo.InGameInfoReborn;
+
 import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicBoolean;
 
-public final class TextFormattingUtils
+public final class TextFormattingV2
 {
     // treat as one-to-one func
     public enum TokenType
@@ -32,7 +35,8 @@ public final class TextFormattingUtils
         UNDERLINE("underline"),
         ITALIC("italic"),
         I18N("i18n"),
-        ITEM("item");
+        ITEM("item"),
+        LINE_BREAK("br");
 
         public final String indicator;
         TokenType(String indicator)
@@ -50,19 +54,19 @@ public final class TextFormattingUtils
         return null;
     }
 
-    public static class Token
+    public static class NestedToken
     {
         public final TokenType type;
         public final String argString;
-        public final List<Token> argTokens;
+        public final List<NestedToken> argTokens;
 
-        public Token(String argString)
+        public NestedToken(String argString)
         {
             this.type = TokenType.RAW;
             this.argString = argString;
             argTokens = null;
         }
-        public Token(TokenType type, List<Token> argTokens)
+        public NestedToken(TokenType type, List<NestedToken> argTokens)
         {
             this.type = type;
             this.argTokens = argTokens;
@@ -90,7 +94,7 @@ public final class TextFormattingUtils
             else if (argTokens != null && !argTokens.isEmpty())
             {
                 builder.append(", children=[\n");
-                for (Token child : argTokens)
+                for (NestedToken child : argTokens)
                     builder.append(child.recursiveToString(indent + 1)).append("\n");
                 builder.append(pad).append("]");
             }
@@ -100,7 +104,7 @@ public final class TextFormattingUtils
         }
     }
 
-    private static int tokenizeNested(String text, int startIndex, List<Token> tokens)
+    private static int tokenizeNested(String text, int startIndex, List<NestedToken> tokens, AtomicBoolean abortFlag)
     {
         if (startIndex + 1 >= text.length()) return startIndex;
 
@@ -111,19 +115,27 @@ public final class TextFormattingUtils
             c = text.charAt(++index1);
 
         // syntax error. early escape
-        if (index1 + 1 >= text.length()) return index1;
+        if (index1 + 1 >= text.length())
+        {
+            abortFlag.set(true);
+            return -1;
+        }
 
         String tokenIndicator = text.substring(index0, index1);
         TokenType tokenType = getTokenType(tokenIndicator);
 
         // syntax error. early escape
-        if (tokenType == null) return index1 + 1;
+        if (tokenType == null)
+        {
+            abortFlag.set(true);
+            return -1;
+        }
 
         int level = 1;
         index0 = index1 + 1;
         index1 = index0;
         c = text.charAt(index1);
-        while (index1 + 1 < text.length() && level != 0)
+        while (true)
         {
             boolean nextLevel = false;
             if (c == '@')
@@ -136,34 +148,47 @@ public final class TextFormattingUtils
                         cNow = text.charAt(++indexNow);
                     if (getTokenType(text.substring(index1 + 1, indexNow)) != null)
                         nextLevel = true;
+                    // syntax error. early escape
                     else
-                        // syntax error. early escape
-                        return indexNow + 1;
+                    {
+                        abortFlag.set(true);
+                        return -1;
+                    }
                 }
             }
 
             if (nextLevel) level++;
             if (c == ']') level--;
 
+            if (level == 0) break;
+            if (index1 + 1 >= text.length()) break;
+
             c = text.charAt(++index1);
+        }
+
+        // syntax error. early escape
+        if (level != 0)
+        {
+            abortFlag.set(true);
+            return -1;
         }
 
         String nestedContent = text.substring(index0, index1);
 
         if (nestedContent.isEmpty())
-            tokens.add(new Token(tokenType, new ArrayList<>()));
+            tokens.add(new NestedToken(tokenType, new ArrayList<>()));
         else
-            tokens.add(new Token(tokenType, tokenize(nestedContent)));
+            tokens.add(new NestedToken(tokenType, tokenize(nestedContent)));
 
-        return index1;
+        return index1 + 1;
     }
 
-    public static List<Token> tokenize(String text)
+    public static List<NestedToken> tokenize(String text)
     {
         text = text.trim();
         if (text.isEmpty()) return new ArrayList<>();
 
-        List<Token> tokens = new ArrayList<>();
+        List<NestedToken> tokens = new ArrayList<>();
 
         int index = 0;
         while (index + 1 < text.length())
@@ -177,15 +202,69 @@ public final class TextFormattingUtils
 
             if (index1 + 1 >= text.length())
             {
-                tokens.add(new Token(text.substring(index0)));
+                tokens.add(new NestedToken(text.substring(index0)));
                 break;
             }
             else
-                tokens.add(new Token(text.substring(index0, index1)));
+                tokens.add(new NestedToken(text.substring(index0, index1)));
 
-            index = tokenizeNested(text, index1, tokens);
+            AtomicBoolean abortFlag = new AtomicBoolean(false);
+            index = tokenizeNested(text, index1, tokens, abortFlag);
+            if (abortFlag.get())
+                break;
+
+            if (index + 1 == text.length())
+                tokens.add(new NestedToken(text.substring(index)));
         }
 
         return tokens;
+    }
+
+    public static class FlattenedToken
+    {
+        public enum OutputType
+        {
+            STRING,
+            ITEM,
+            LINE_BREAK
+        }
+
+        public final OutputType outputType;
+        public final String outputString;
+        public final GhostableItem outputItem;
+        public final List<TokenType> types;
+
+        private FlattenedToken(OutputType outputType, String outputString, GhostableItem outputItem)
+        {
+            this.outputType = outputType;
+            this.outputString = outputString;
+            this.outputItem = outputItem;
+            types = new ArrayList<>();
+        }
+
+        public static FlattenedToken stringOutput(String output)
+        {
+            return new FlattenedToken(OutputType.STRING, output, null);
+        }
+        public static FlattenedToken itemOutput(GhostableItem output)
+        {
+            return new FlattenedToken(OutputType.ITEM, null, output);
+        }
+        public static FlattenedToken lineBreakOutput(GhostableItem output)
+        {
+            return new FlattenedToken(OutputType.LINE_BREAK, null, null);
+        }
+    }
+
+    public static List<FlattenedToken> flattenize(List<NestedToken> tokens)
+    {
+        List<FlattenedToken> flattenedTokens = new ArrayList<>();
+
+        for (NestedToken token: tokens)
+        {
+
+        }
+
+        return flattenedTokens;
     }
 }

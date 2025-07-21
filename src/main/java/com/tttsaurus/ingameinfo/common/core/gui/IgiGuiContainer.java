@@ -6,7 +6,7 @@ import com.tttsaurus.ingameinfo.common.core.input.InputState;
 import com.tttsaurus.ingameinfo.common.core.gui.render.RenderOpQueue;
 import com.tttsaurus.ingameinfo.common.core.gui.theme.ThemeConfig;
 import com.tttsaurus.ingameinfo.common.core.InternalMethods;
-import com.tttsaurus.ingameinfo.common.core.item.GhostableItem;
+import com.tttsaurus.ingameinfo.common.core.commonutils.GhostableItem;
 import com.tttsaurus.ingameinfo.common.core.mvvm.binding.SlotAccessor;
 import com.tttsaurus.ingameinfo.common.core.mvvm.compose.ComposeBlock;
 import com.tttsaurus.ingameinfo.common.core.mvvm.registry.MvvmRegistry;

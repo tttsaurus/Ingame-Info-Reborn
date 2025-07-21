@@ -7,7 +7,7 @@ import com.tttsaurus.ingameinfo.common.core.gui.IgiGuiContainer;
 import com.tttsaurus.ingameinfo.common.core.gui.layout.ElementGroup;
 import com.tttsaurus.ingameinfo.common.core.gui.layout.Slot;
 import com.tttsaurus.ingameinfo.common.core.InternalMethods;
-import com.tttsaurus.ingameinfo.common.core.item.GhostableItem;
+import com.tttsaurus.ingameinfo.common.core.commonutils.GhostableItem;
 import com.tttsaurus.ingameinfo.common.core.serialization.IDeserializer;
 import com.tttsaurus.ingameinfo.common.core.serialization.ixml.RawIxmlUtils;
 import com.tttsaurus.ingameinfo.common.core.serialization.json.RawJsonUtils;
