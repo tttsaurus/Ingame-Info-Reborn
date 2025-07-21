@@ -1,6 +1,7 @@
 package com.tttsaurus.ingameinfo.proxy;
 
 import com.tttsaurus.ingameinfo.InGameInfoReborn;
+import com.tttsaurus.ingameinfo.common.core.InternalMethods;
 import com.tttsaurus.ingameinfo.common.core.commonutils.FileUtils;
 import com.tttsaurus.ingameinfo.common.impl.network.IgiNetwork;
 import com.tttsaurus.ingameinfo.config.ForgeConfigWriter;
@@ -20,6 +21,11 @@ public class CommonProxy
 {
     public void preInit(FMLPreInitializationEvent event, Logger logger)
     {
+        //<editor-fold desc="reflection">
+        InternalMethods.instance = new InternalMethods();
+        logger.info("Reflection setup of IGI framework finished.");
+        //</editor-fold>
+
         //<editor-fold desc="config setup">
         IgiCommonConfig.CONFIG = new Configuration(FileUtils.makeFile("common.cfg"));
         IgiCommonConfig.loadConfig();

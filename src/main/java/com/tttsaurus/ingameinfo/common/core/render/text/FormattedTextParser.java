@@ -202,7 +202,6 @@ public final class FormattedTextParser
 
     protected static List<NestedToken> tokenize(String text)
     {
-        text = text.trim();
         if (text.isEmpty()) return new ArrayList<>();
         if (text.length() == 1) return Collections.singletonList(new NestedToken(text));
 

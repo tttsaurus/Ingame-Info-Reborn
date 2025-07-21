@@ -4,15 +4,16 @@ import com.tttsaurus.ingameinfo.common.core.gui.render.op.IRenderOp;
 import com.tttsaurus.ingameinfo.common.core.gui.render.RenderContext;
 import com.tttsaurus.ingameinfo.common.core.gui.theme.ThemeConfig;
 import com.tttsaurus.ingameinfo.common.core.render.RenderUtils;
+import com.tttsaurus.ingameinfo.common.core.render.text.FormattedText;
 
 public class TextOp implements IRenderOp
 {
-    public String text;
+    public FormattedText text;
     public float x, y, scale;
     public int color;
     public boolean shadow;
 
-    public TextOp(String text, float x, float y, float scale, int color, boolean shadow)
+    public TextOp(FormattedText text, float x, float y, float scale, int color, boolean shadow)
     {
         this.text = text;
         this.x = x;
@@ -32,6 +33,6 @@ public class TextOp implements IRenderOp
     @Override
     public void execute(RenderContext context)
     {
-        RenderUtils.renderText(text, x, y, scale, color, shadow);
+        RenderUtils.renderFormattedText(text, x, y, scale, color, shadow);
     }
 }

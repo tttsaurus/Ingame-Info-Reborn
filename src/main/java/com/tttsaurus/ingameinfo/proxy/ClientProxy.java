@@ -45,24 +45,13 @@ public class ClientProxy extends CommonProxy
     {
         super.preInit(event, logger);
 
-        //<editor-fold desc="rendering setup">
-        int majorGlVersion = RenderHints.getMajorGlVersion();
-        int minorGlVersion = RenderHints.getMinorGlVersion();
-
-        logger.info("Raw OpenGL version: " + RenderHints.getRawGlVersion());
-        logger.info(String.format("OpenGL version: %d.%d", majorGlVersion, minorGlVersion));
-
-        // init getters
-        RenderHints.getModelViewMatrix();
-        logger.info("The getters of ActiveRenderInfo private fields are ready.");
-        RenderHints.getPartialTick();
-        logger.info("The getter of private partial tick field is ready.");
-        //</editor-fold>
-
         //<editor-fold desc="lifecycle provider setup">
         if (IgiCommonConfig.GUI_LIFECYCLE_PROVIDER instanceof DefaultLifecycleProvider provider)
         {
             logger.info("Default GUI Lifecycle Provider is in use.");
+
+            int majorGlVersion = RenderHints.getMajorGlVersion();
+            int minorGlVersion = RenderHints.getMinorGlVersion();
 
             boolean enableFbo = IgiDefaultLifecycleProviderConfig.ENABLE_FRAMEBUFFER && OpenGlHelper.framebufferSupported;
             // at least gl 33

@@ -13,6 +13,7 @@ import com.tttsaurus.ingameinfo.common.core.gui.theme.ThemeConfig;
 import com.tttsaurus.ingameinfo.common.core.render.RenderUtils;
 import com.tttsaurus.ingameinfo.common.core.gui.render.op.MaskEndOp;
 import com.tttsaurus.ingameinfo.common.core.gui.render.op.MaskStartOp;
+import com.tttsaurus.ingameinfo.common.core.render.text.FormattedText;
 import com.tttsaurus.ingameinfo.common.impl.gui.render.op.SlidingTextOp;
 
 @RegisterElement
@@ -28,6 +29,8 @@ public class SlidingText extends Sized
             return LerpCenter.lerp(prevValue, currValue, percentage);
         }
     };
+
+    private FormattedText formattedText = RenderUtils.bakeFormattedText("");
 
     private float xShift = 0;
     private boolean needSliding;
@@ -65,9 +68,10 @@ public class SlidingText extends Sized
     @StylePropertyCallback
     public void setTextCallback()
     {
-        simulatedWidth = RenderUtils.simulateTextWidth(text, scale);
+        formattedText = RenderUtils.bakeFormattedText(text);
+        simulatedWidth = formattedText.width * scale;
         needSliding = simulatedWidth > width;
-        height = RenderUtils.simulateTextHeight(scale);
+        height = formattedText.height * scale;
         xShift = 0;
         freezeTimer = 0;
         onFreezeTiming = true;
@@ -79,9 +83,9 @@ public class SlidingText extends Sized
     @StylePropertyCallback
     public void setScaleCallback()
     {
-        simulatedWidth = RenderUtils.simulateTextWidth(text, scale);
+        simulatedWidth = formattedText.width * scale;
         needSliding = simulatedWidth > width;
-        height = RenderUtils.simulateTextHeight(scale);
+        height = formattedText.height * scale;
         requestReCalc();
     }
     @StyleProperty(setterCallbackPost = "setScaleCallback", setterCallbackPre = "nonNegativeFloatValidation")
@@ -142,39 +146,39 @@ public class SlidingText extends Sized
             if (forwardSliding)
             {
                 if (rect.x + xShift < rect.x + rect.width)
-                    queue.enqueue(new SlidingTextOp(text, rect.x, rect.y, lerpableXShift, true, scale, color, shadow));
+                    queue.enqueue(new SlidingTextOp(formattedText, rect.x, rect.y, lerpableXShift, true, scale, color, shadow));
 
                 if (xShift > spareWidth)
                 {
                     if (rect.x - simulatedWidth - spareWidth + xShift >= rect.x)
                     {
                         onFreezeTiming = true;
-                        queue.enqueue(new SlidingTextOp(text, rect.x, rect.y, scale, color, shadow));
+                        queue.enqueue(new SlidingTextOp(formattedText, rect.x, rect.y, scale, color, shadow));
                     }
                     else
-                        queue.enqueue(new SlidingTextOp(text, rect.x - simulatedWidth - spareWidth, rect.y, lerpableXShift, true, scale, color, shadow));
+                        queue.enqueue(new SlidingTextOp(formattedText, rect.x - simulatedWidth - spareWidth, rect.y, lerpableXShift, true, scale, color, shadow));
                 }
             }
             else
             {
                 if (rect.x - xShift > rect.x - simulatedWidth)
-                    queue.enqueue(new SlidingTextOp(text, rect.x, rect.y, lerpableXShift, false, scale, color, shadow));
+                    queue.enqueue(new SlidingTextOp(formattedText, rect.x, rect.y, lerpableXShift, false, scale, color, shadow));
 
                 if (xShift > spareWidth + simulatedWidth - rect.width)
                 {
                     if (rect.x + spareWidth + simulatedWidth - xShift <= rect.x)
                     {
                         onFreezeTiming = true;
-                        queue.enqueue(new SlidingTextOp(text, rect.x, rect.y, scale, color, shadow));
+                        queue.enqueue(new SlidingTextOp(formattedText, rect.x, rect.y, scale, color, shadow));
                     }
                     else
-                        queue.enqueue(new SlidingTextOp(text, rect.x + spareWidth + simulatedWidth, rect.y, lerpableXShift, false, scale, color, shadow));
+                        queue.enqueue(new SlidingTextOp(formattedText, rect.x + spareWidth + simulatedWidth, rect.y, lerpableXShift, false, scale, color, shadow));
                 }
             }
 
             queue.enqueue(new MaskEndOp());
         }
         else
-            queue.enqueue(new SlidingTextOp(text, rect.x, rect.y, scale, color, shadow));
+            queue.enqueue(new SlidingTextOp(formattedText, rect.x, rect.y, scale, color, shadow));
     }
 }

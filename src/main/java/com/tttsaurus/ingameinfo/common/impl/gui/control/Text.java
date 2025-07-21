@@ -8,17 +8,26 @@ import com.tttsaurus.ingameinfo.common.core.gui.property.style.StylePropertyCall
 import com.tttsaurus.ingameinfo.common.core.gui.render.RenderOpQueue;
 import com.tttsaurus.ingameinfo.common.core.gui.theme.ThemeConfig;
 import com.tttsaurus.ingameinfo.common.core.render.RenderUtils;
+import com.tttsaurus.ingameinfo.common.core.render.text.FormattedText;
 import com.tttsaurus.ingameinfo.common.impl.gui.render.op.TextOp;
 
 @RegisterElement
 public class Text extends Element
 {
+    private FormattedText formattedText = RenderUtils.bakeFormattedText("");
+
+    @StylePropertyCallback
+    public void setTextCallback()
+    {
+        formattedText = RenderUtils.bakeFormattedText(text);
+        requestReCalc();
+    }
     @StylePropertyCallback
     public void textValidation(String value, CallbackInfo callbackInfo)
     {
         if (value == null) callbackInfo.cancel = true;
     }
-    @StyleProperty(setterCallbackPost = "requestReCalc", setterCallbackPre = "textValidation")
+    @StyleProperty(setterCallbackPost = "setTextCallback", setterCallbackPre = "textValidation")
     public String text = "";
 
     @StylePropertyCallback
@@ -44,8 +53,8 @@ public class Text extends Element
     @Override
     public void calcWidthHeight()
     {
-        rect.width = RenderUtils.simulateTextWidth(text, scale);
-        rect.height = RenderUtils.simulateTextHeight(scale);
+        rect.width = formattedText.width * scale;
+        rect.height = formattedText.height * scale;
     }
 
     @Override
@@ -66,6 +75,6 @@ public class Text extends Element
     public void onRenderUpdate(RenderOpQueue queue, boolean focused)
     {
         super.onRenderUpdate(queue, focused);
-        queue.enqueue(new TextOp(text, rect.x, rect.y, scale, color, shadow));
+        queue.enqueue(new TextOp(formattedText, rect.x, rect.y, scale, color, shadow));
     }
 }

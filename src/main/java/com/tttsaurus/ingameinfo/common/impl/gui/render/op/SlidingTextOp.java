@@ -5,17 +5,18 @@ import com.tttsaurus.ingameinfo.common.core.gui.render.op.IRenderOp;
 import com.tttsaurus.ingameinfo.common.core.gui.render.RenderContext;
 import com.tttsaurus.ingameinfo.common.core.gui.theme.ThemeConfig;
 import com.tttsaurus.ingameinfo.common.core.render.RenderUtils;
+import com.tttsaurus.ingameinfo.common.core.render.text.FormattedText;
 
 public class SlidingTextOp implements IRenderOp
 {
-    public String text;
+    public FormattedText text;
     public float x, y, scale;
     public LerpableProperty<Float> xShift = null;
     public boolean xShiftSign; // plus or minus
     public int color;
     public boolean shadow;
 
-    public SlidingTextOp(String text, float x, float y, LerpableProperty<Float> xShift, boolean xShiftSign, float scale, int color, boolean shadow)
+    public SlidingTextOp(FormattedText text, float x, float y, LerpableProperty<Float> xShift, boolean xShiftSign, float scale, int color, boolean shadow)
     {
         this.text = text;
         this.x = x;
@@ -26,7 +27,7 @@ public class SlidingTextOp implements IRenderOp
         this.color = color;
         this.shadow = shadow;
     }
-    public SlidingTextOp(String text, float x, float y, float scale, int color, boolean shadow)
+    public SlidingTextOp(FormattedText text, float x, float y, float scale, int color, boolean shadow)
     {
         this.text = text;
         this.x = x;
@@ -55,6 +56,6 @@ public class SlidingTextOp implements IRenderOp
                 finalX -= xShift.lerp(context.lerpAlpha);
         }
 
-        RenderUtils.renderText(text, finalX, y, scale, color, shadow);
+        RenderUtils.renderFormattedText(text, finalX, y, scale, color, shadow);
     }
 }

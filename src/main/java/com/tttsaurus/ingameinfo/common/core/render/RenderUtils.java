@@ -63,12 +63,12 @@ public final class RenderUtils
     //</editor-fold>
 
     //<editor-fold desc="text">
-    public static FormattedText formatText(String text)
+    public static FormattedText bakeFormattedText(String text)
     {
         return InternalMethods.instance.FormattedText$constructor.invoke(text);
     }
 
-    public static void renderFormattedText(FormattedText text, float x, float y, float scale, boolean shadow)
+    public static void renderFormattedText(FormattedText text, float x, float y, float scale, int color, boolean shadow)
     {
         for (FormattedText.BakedComponent component: text.bakedComponents)
         {
@@ -85,7 +85,7 @@ public final class RenderUtils
                 GlStateManager.pushMatrix();
                 GlStateManager.translate(x + component.x * scale, y + component.y * scale, zLevel);
                 GlStateManager.scale(scale, scale, 0);
-                fontRenderer.drawString(component.text, 0, 0, -1, shadow);
+                fontRenderer.drawString(component.text, 0, 0, color, shadow);
                 GlStateManager.popMatrix();
             }
             else if (component.type == FormattedText.BakedComponent.Type.ITEM)

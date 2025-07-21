@@ -7,13 +7,18 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * A temporary workaround to make text formatting easier to use in Minecraft.
- * It only works for {@link RenderUtils} and
- * relies on {@link RenderUtils#simulateTextWidth(String, float)} & {@link RenderUtils#simulateTextHeight(float)}
- * to function properly.
+ * <p>This is a temporary workaround to make text formatting easier to use in Minecraft.</p>
+ * <p>It only works for {@link RenderUtils} and has rendering and I18n stuff embedded for the baking purpose.</p>
+ * In order to function properly, it requires:
+ * <li>{@link RenderUtils#fontRenderer} to be ready</li>
+ * <li>{@link net.minecraft.client.resources.I18n} to be ready</li>
+ *
+ * @see RenderUtils#bakeFormattedText(String)
  */
 public final class FormattedText
 {
+    private static final float BAKING_TEXT_SIZE = 1f;
+
     public static class BakedComponent
     {
         public enum Type
@@ -48,13 +53,23 @@ public final class FormattedText
 
     public final List<BakedComponent> bakedComponents;
 
+    public final float width;
+    public final float height;
+
     private FormattedText(String text)
     {
         bakedComponents = new ArrayList<>();
 
+        if (text.isEmpty())
+        {
+            width = 0f;
+            height = RenderUtils.simulateTextHeight(BAKING_TEXT_SIZE);
+            return;
+        }
+
         List<FormattedTextParser.FlattenedToken> flattenedTokens = FormattedTextParser.flattenize(FormattedTextParser.tokenize(text));
 
-        float x = 0, y = 0;
+        float x = 0, y = 0, width = 0, height = RenderUtils.simulateTextHeight(BAKING_TEXT_SIZE);
 
         StringBuilder sectionBuilder = new StringBuilder();
         boolean addTextSection = false;
@@ -75,12 +90,13 @@ public final class FormattedText
                 {
                     String section = sectionBuilder.toString();
                     bakedComponents.add(new BakedComponent(x, y, section));
-                    x += RenderUtils.simulateTextWidth(section, 1f);
+                    x += RenderUtils.simulateTextWidth(section, BAKING_TEXT_SIZE);
                     sectionBuilder = new StringBuilder();
                     addTextSection = false;
                 }
                 bakedComponents.add(new BakedComponent(x, y, token.outputItem));
-                x += RenderUtils.simulateTextHeight(1f);
+                x += RenderUtils.simulateTextHeight(BAKING_TEXT_SIZE);
+                width = Math.max(width, x);
             }
             else if (token.outputType == FormattedTextParser.FlattenedToken.OutputType.LINE_BREAK)
             {
@@ -88,11 +104,14 @@ public final class FormattedText
                 {
                     String section = sectionBuilder.toString();
                     bakedComponents.add(new BakedComponent(x, y, section));
+                    x += RenderUtils.simulateTextWidth(section, BAKING_TEXT_SIZE);
                     sectionBuilder = new StringBuilder();
                     addTextSection = false;
+                    width = Math.max(width, x);
                 }
-                y += RenderUtils.simulateTextHeight(1f);
+                y += RenderUtils.simulateTextHeight(BAKING_TEXT_SIZE);
                 x = 0;
+                height = Math.max(height, y + RenderUtils.simulateTextHeight(BAKING_TEXT_SIZE));
             }
         }
 
@@ -100,6 +119,11 @@ public final class FormattedText
         {
             String section = sectionBuilder.toString();
             bakedComponents.add(new BakedComponent(x, y, section));
+            x += RenderUtils.simulateTextWidth(section, BAKING_TEXT_SIZE);
+            width = Math.max(width, x);
         }
+
+        this.width = width;
+        this.height = height;
     }
 }

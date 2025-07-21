@@ -48,8 +48,7 @@ public @interface StyleProperty
      * Fill the style property setter's post callback method name here.
      * The post callback method signature must be
      * <pre><code>
-     *     // where T is the type of that style property
-     *     public void funcName(T arg0) { }
+     *     public void funcName() { }
      * </code></pre>
      * Post callbacks happen when the value is already being set.
      *
