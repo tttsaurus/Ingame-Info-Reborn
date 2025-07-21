@@ -50,6 +50,8 @@ public final class RenderUtils
     //<editor-fold desc="item">
     public static void renderItem(ItemStack item, float x, float y, float scaleX, float scaleY)
     {
+        GlStateManager.enableTexture2D();
+        GlStateManager.enableCull();
         GlStateManager.pushMatrix();
         GlStateManager.translate(x, y, zLevel);
         GlStateManager.scale(scaleX, scaleY, 1f);
