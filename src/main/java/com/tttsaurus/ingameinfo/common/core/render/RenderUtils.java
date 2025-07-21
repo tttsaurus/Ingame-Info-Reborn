@@ -1,5 +1,7 @@
 package com.tttsaurus.ingameinfo.common.core.render;
 
+import com.tttsaurus.ingameinfo.common.core.InternalMethods;
+import com.tttsaurus.ingameinfo.common.core.render.text.FormattedText;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.ScaledResolution;
@@ -59,9 +61,41 @@ public final class RenderUtils
     //</editor-fold>
 
     //<editor-fold desc="text">
-    public static void renderTextFormatted(String text, float x, float y, float alpha, boolean srcAlphaOrDestAlpha)
+    public static FormattedText formatText(String text)
     {
+        return InternalMethods.instance.FormattedText$constructor.invoke(text);
+    }
 
+    public static void renderFormattedText(FormattedText text, float x, float y, float scale, boolean shadow)
+    {
+        for (FormattedText.BakedComponent component: text.bakedComponents)
+        {
+            if (component.type == FormattedText.BakedComponent.Type.STRING)
+            {
+                GlStateManager.disableCull();
+                GlStateManager.enableTexture2D();
+                GlStateManager.disableLighting();
+                GlStateManager.enableBlend();
+                GlStateManager.disableAlpha();
+                GlStateManager.disableDepth();
+                GlStateManager.tryBlendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO);
+
+                GlStateManager.pushMatrix();
+                GlStateManager.translate(x + component.x * scale, y + component.y * scale, zLevel);
+                GlStateManager.scale(scale, scale, 0);
+                fontRenderer.drawString(component.text, 0, 0, -1, shadow);
+                GlStateManager.popMatrix();
+            }
+            else if (component.type == FormattedText.BakedComponent.Type.ITEM)
+            {
+                ItemStack itemStack = component.item.getItemStack();
+                if (itemStack != null)
+                {
+                    float itemScale = simulateTextHeight(1f) / 16f;
+                    renderItem(itemStack, x + component.x * scale, y + component.y * scale, itemScale * scale, itemScale * scale);
+                }
+            }
+        }
     }
 
     public static void renderText(String text, float x, float y, float scale, int color, boolean shadow)

@@ -1,47 +1,64 @@
-package com.tttsaurus.ingameinfo.common.core.commonutils;
+package com.tttsaurus.ingameinfo.common.core.render.text;
 
-import com.tttsaurus.ingameinfo.InGameInfoReborn;
-
+import com.tttsaurus.ingameinfo.common.core.commonutils.GhostableItem;
+import net.minecraft.client.resources.I18n;
+import net.minecraft.util.text.TextFormatting;
 import javax.annotation.Nullable;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-public final class TextFormattingV2
+/**
+ * This is an internal static parser that only works for {@link FormattedText}.
+ */
+public final class FormattedTextParser
 {
     // treat as one-to-one func
     public enum TokenType
     {
         RAW(""),
-        BLACK("black"),
-        DARK_BLUE("dark_blue"),
-        DARK_GREEN("dark_green"),
-        DARK_AQUA("dark_aqua"),
-        DARK_RED("dark_red"),
-        DARK_PURPLE("dark_purple"),
-        GOLD("gold"),
-        GRAY("gray"),
-        DARK_GRAY("dark_gray"),
-        BLUE("blue"),
-        GREEN("green"),
-        AQUA("aqua"),
-        RED("red"),
-        LIGHT_PURPLE("light_purple"),
-        YELLOW("yellow"),
-        WHITE("white"),
-        OBFUSCATED("obf"),
-        BOLD("bold"),
-        STRIKETHROUGH("strike_through"),
-        UNDERLINE("underline"),
-        ITALIC("italic"),
+        BLACK("black", TextFormatting.BLACK.toString()),
+        DARK_BLUE("dark_blue", TextFormatting.DARK_BLUE.toString()),
+        DARK_GREEN("dark_green", TextFormatting.DARK_GREEN.toString()),
+        DARK_AQUA("dark_aqua", TextFormatting.DARK_AQUA.toString()),
+        DARK_RED("dark_red", TextFormatting.DARK_RED.toString()),
+        DARK_PURPLE("dark_purple", TextFormatting.DARK_PURPLE.toString()),
+        GOLD("gold", TextFormatting.GOLD.toString()),
+        GRAY("gray", TextFormatting.GRAY.toString()),
+        DARK_GRAY("dark_gray", TextFormatting.DARK_GRAY.toString()),
+        BLUE("blue", TextFormatting.BLUE.toString()),
+        GREEN("green", TextFormatting.GREEN.toString()),
+        AQUA("aqua", TextFormatting.AQUA.toString()),
+        RED("red", TextFormatting.RED.toString()),
+        LIGHT_PURPLE("light_purple", TextFormatting.LIGHT_PURPLE.toString()),
+        YELLOW("yellow", TextFormatting.YELLOW.toString()),
+        WHITE("white", TextFormatting.WHITE.toString()),
+        OBFUSCATED("obf", TextFormatting.OBFUSCATED.toString()),
+        BOLD("bold", TextFormatting.BOLD.toString()),
+        STRIKETHROUGH("strike_through", TextFormatting.STRIKETHROUGH.toString()),
+        UNDERLINE("underline", TextFormatting.UNDERLINE.toString()),
+        ITALIC("italic", TextFormatting.ITALIC.toString()),
         I18N("i18n"),
         ITEM("item"),
         LINE_BREAK("br");
 
+        public static final List<TokenType> priorityLowest = Arrays.asList(
+                OBFUSCATED,
+                BOLD,
+                STRIKETHROUGH,
+                UNDERLINE,
+                ITALIC);
+
         public final String indicator;
+        public final String controlArg;
+        TokenType(String indicator, String controlArg)
+        {
+            this.indicator = indicator;
+            this.controlArg = controlArg;
+        }
         TokenType(String indicator)
         {
             this.indicator = indicator;
+            this.controlArg = "";
         }
     }
 
@@ -183,10 +200,11 @@ public final class TextFormattingV2
         return index1 + 1;
     }
 
-    public static List<NestedToken> tokenize(String text)
+    protected static List<NestedToken> tokenize(String text)
     {
         text = text.trim();
         if (text.isEmpty()) return new ArrayList<>();
+        if (text.length() == 1) return Collections.singletonList(new NestedToken(text));
 
         List<NestedToken> tokens = new ArrayList<>();
 
@@ -234,6 +252,31 @@ public final class TextFormattingV2
         public final GhostableItem outputItem;
         public final List<TokenType> types;
 
+        @Override
+        public String toString()
+        {
+            StringBuilder builder = new StringBuilder();
+            for (int i = 0; i < types.size(); i++)
+            {
+                builder.append(types.get(i).toString());
+                if (i != types.size() - 1)
+                    builder.append(" -> ");
+            }
+
+            String output = "";
+            if (outputType == OutputType.STRING)
+                output = outputString;
+            else if (outputType == OutputType.ITEM)
+                output = outputItem.toString();
+            else if (outputType == OutputType.LINE_BREAK)
+                output = OutputType.LINE_BREAK.toString();
+
+            return "FlattenedToken(" +
+                    "types=" + builder.toString() +
+                    ", output=" + output +
+                    ')';
+        }
+
         private FlattenedToken(OutputType outputType, String outputString, GhostableItem outputItem)
         {
             this.outputType = outputType;
@@ -250,20 +293,73 @@ public final class TextFormattingV2
         {
             return new FlattenedToken(OutputType.ITEM, null, output);
         }
-        public static FlattenedToken lineBreakOutput(GhostableItem output)
+        public static FlattenedToken lineBreakOutput()
         {
             return new FlattenedToken(OutputType.LINE_BREAK, null, null);
         }
     }
 
-    public static List<FlattenedToken> flattenize(List<NestedToken> tokens)
+    private static List<FlattenedToken> flattenizeNested(NestedToken token)
+    {
+        if (token.type == TokenType.RAW)
+        {
+            if (token.argString.isEmpty())
+                return new ArrayList<>();
+            else
+                return Collections.singletonList(FlattenedToken.stringOutput(token.argString));
+        }
+        if (token.type == TokenType.I18N)
+        {
+            if (token.argTokens == null || token.argTokens.isEmpty())
+                return new ArrayList<>();
+            if (token.argTokens.get(0).type != TokenType.RAW)
+                return new ArrayList<>();
+
+            return Collections.singletonList(FlattenedToken.stringOutput(I18n.format(token.argTokens.get(0).argString)));
+        }
+        if (token.type == TokenType.ITEM)
+        {
+            if (token.argTokens == null || token.argTokens.isEmpty())
+                return Collections.singletonList(FlattenedToken.itemOutput(new GhostableItem("")));
+            if (token.argTokens.get(0).type != TokenType.RAW)
+                return Collections.singletonList(FlattenedToken.itemOutput(new GhostableItem("")));
+
+            GhostableItem item = new GhostableItem(token.argTokens.get(0).argString);
+            item.abortNextTime();
+            return Collections.singletonList(FlattenedToken.itemOutput(item));
+        }
+        if (token.type == TokenType.LINE_BREAK)
+            return Collections.singletonList(FlattenedToken.lineBreakOutput());
+
+        List<FlattenedToken> flattenedTokens = new ArrayList<>();
+
+        if (token.argTokens != null && !token.argTokens.isEmpty())
+        {
+            for (NestedToken child: token.argTokens)
+            {
+                List<FlattenedToken> flattenedChildren = flattenizeNested(child);
+                for (FlattenedToken flattenedChild: flattenedChildren)
+                    flattenedChild.types.add(0, token.type);
+                flattenedTokens.addAll(flattenedChildren);
+            }
+        }
+
+        return flattenedTokens;
+    }
+
+    protected static List<FlattenedToken> flattenize(List<NestedToken> tokens)
     {
         List<FlattenedToken> flattenedTokens = new ArrayList<>();
 
         for (NestedToken token: tokens)
-        {
+            flattenedTokens.addAll(flattenizeNested(token));
 
-        }
+        for (FlattenedToken token: flattenedTokens)
+            token.types.sort(Comparator.comparingInt(e ->
+            {
+                int index = TokenType.priorityLowest.indexOf(e);
+                return index == -1 ? Integer.MAX_VALUE : index;
+            }).reversed());
 
         return flattenedTokens;
     }

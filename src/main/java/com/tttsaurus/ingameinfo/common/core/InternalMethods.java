@@ -1,6 +1,7 @@
 package com.tttsaurus.ingameinfo.common.core;
 
 import com.tttsaurus.ingameinfo.InGameInfoReborn;
+import com.tttsaurus.ingameinfo.common.core.render.text.FormattedText;
 import com.tttsaurus.ingameinfo.common.core.function.*;
 import com.tttsaurus.ingameinfo.common.core.gui.Element;
 import com.tttsaurus.ingameinfo.common.core.gui.GuiLayout;
@@ -34,6 +35,7 @@ public final class InternalMethods
 
     public IFunc<GuiLayout> GuiLayout$constructor;
     public IFunc<VisualBuilderAccessor> VisualBuilderAccessor$constructor;
+    public IFunc_1Param<FormattedText, String> FormattedText$constructor;
 
     public IFunc_1Param<MainGroup, GuiLayout> GuiLayout$mainGroup$getter;
     public IFunc_1Param<IgiGuiContainer, GuiLayout> GuiLayout$igiGuiContainer$getter;
@@ -113,6 +115,27 @@ public final class InternalMethods
         {
             VisualBuilderAccessor$constructor = null;
             InGameInfoReborn.LOGGER.error("Reflection setup failed for VisualBuilderAccessor$constructor: " + exception.getMessage());
+            crash(exception);
+        }
+
+        try
+        {
+            Constructor<FormattedText> constructor = FormattedText.class.getDeclaredConstructor(String.class);
+            constructor.setAccessible(true);
+            MethodHandle handle = lookup.unreflectConstructor(constructor);
+            FormattedText$constructor = (arg0) ->
+            {
+                try
+                {
+                    return (FormattedText)handle.invoke(arg0);
+                }
+                catch (Throwable ignored) { return null; }
+            };
+        }
+        catch (Exception exception)
+        {
+            FormattedText$constructor = null;
+            InGameInfoReborn.LOGGER.error("Reflection setup failed for FormattedText$constructor: " + exception.getMessage());
             crash(exception);
         }
         //</editor-fold>

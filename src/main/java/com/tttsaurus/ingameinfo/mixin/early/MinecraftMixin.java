@@ -1,5 +1,7 @@
 package com.tttsaurus.ingameinfo.mixin.early;
 
+import com.tttsaurus.ingameinfo.InGameInfoReborn;
+import com.tttsaurus.ingameinfo.common.core.InternalMethods;
 import com.tttsaurus.ingameinfo.common.core.function.IAction;
 import com.tttsaurus.ingameinfo.common.core.shutdown.ShutdownHooks;
 import net.minecraft.client.Minecraft;
@@ -22,6 +24,9 @@ public class MinecraftMixin
     @Inject(method = "init", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/Minecraft;createDisplay()V", shift = At.Shift.AFTER))
     private void afterCreateDisplay(CallbackInfo info)
     {
-
+        //<editor-fold desc="reflection">
+        InternalMethods.instance = new InternalMethods();
+        InGameInfoReborn.LOGGER.info("Reflection setup of IGI framework finished.");
+        //</editor-fold>
     }
 }
