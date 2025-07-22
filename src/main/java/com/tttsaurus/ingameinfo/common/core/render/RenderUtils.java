@@ -99,7 +99,7 @@ public final class RenderUtils
                 }
 
                 GlStateManager.pushMatrix();
-                GlStateManager.translate(x + component.x * scale, y + component.y * scale, zLevel);
+                GlStateManager.translate(Math.round(x + component.x * scale), Math.round(y + component.y * scale), zLevel);
                 GlStateManager.scale(scale, scale, 0);
                 fontRenderer.drawString(component.text, 0, 0, color, shadow);
                 GlStateManager.popMatrix();
@@ -138,7 +138,7 @@ public final class RenderUtils
         }
 
         GlStateManager.pushMatrix();
-        GlStateManager.translate(x, y, zLevel);
+        GlStateManager.translate(Math.round(x), Math.round(y), zLevel);
         GlStateManager.scale(scale, scale, 0);
         fontRenderer.drawString(text, 0, 0, color, shadow);
         GlStateManager.popMatrix();
