@@ -18,22 +18,24 @@ public final class GuiResources
         imagePrefabs.put(name, imagePrefab);
     }
 
-    public static void tryRegisterTexture(ResourceLocation rl)
+    public static ImagePrefab tryRegisterTexture(ResourceLocation rl)
     {
         ITexture2D tex = TextureHelper.loadTextureFromRl(rl);
-        if (tex == null) return;
+        if (tex == null) return missingTexture;
         ImagePrefab imagePrefab = TextureHelper.tryWrapToImagePrefab(tex);
-        if (imagePrefab == null) return;
+        if (imagePrefab == null) return missingTexture;
         register(rl.toString(), imagePrefab);
+        return imagePrefab;
     }
-    public static void tryRegisterTexture(ResourceLocation rl, FilterMode filterModeMin, FilterMode filterModeMag, WrapMode wrapModeS, WrapMode wrapModeT)
+    public static ImagePrefab tryRegisterTexture(ResourceLocation rl, FilterMode filterModeMin, FilterMode filterModeMag, WrapMode wrapModeS, WrapMode wrapModeT)
     {
         ITexture2D tex = TextureHelper.loadTextureFromRl(rl);
-        if (tex == null) return;
+        if (tex == null) return missingTexture;
         ImagePrefab imagePrefab = TextureHelper.tryWrapToImagePrefab(tex);
-        if (imagePrefab == null) return;
+        if (imagePrefab == null) return missingTexture;
         TextureHelper.setTextureParams(tex, filterModeMin, filterModeMag, wrapModeS, wrapModeT);
         register(rl.toString(), imagePrefab);
+        return imagePrefab;
     }
 
     public static boolean exists(ResourceLocation rl)

@@ -5,26 +5,25 @@ import com.tttsaurus.ingameinfo.common.core.gui.render.op.IRenderOp;
 import com.tttsaurus.ingameinfo.common.core.gui.render.RenderContext;
 import com.tttsaurus.ingameinfo.common.core.render.RenderMask;
 import com.tttsaurus.ingameinfo.common.core.render.RenderUtils;
-import com.tttsaurus.ingameinfo.common.core.render.texture.Texture2D;
+import com.tttsaurus.ingameinfo.common.core.render.texture.ImagePrefab;
 
 public class ImageOp implements IRenderOp
 {
     public Rect rect;
-    public Texture2D texture;
+    public ImagePrefab image;
     public boolean rounded;
 
-    public ImageOp(Rect rect, Texture2D texture, boolean rounded)
+    public ImageOp(Rect rect, ImagePrefab image, boolean rounded)
     {
         this.rect = rect;
-        this.texture = texture;
+        this.image = image;
         this.rounded = rounded;
     }
 
     @Override
     public void execute(RenderContext context)
     {
-        if (texture == null) return;
-        if (!texture.isGlRegistered()) return;
+        if (image == null) return;
 
         if (rounded)
         {
@@ -33,7 +32,7 @@ public class ImageOp implements IRenderOp
             mask.startMasking();
         }
 
-        RenderUtils.renderTexture2D(rect.x, rect.y, rect.width, rect.height, texture.getGlTextureID());
+        RenderUtils.renderImagePrefab(rect.x, rect.y, rect.width, rect.height, image);
 
         if (rounded)
             RenderMask.endMasking();
