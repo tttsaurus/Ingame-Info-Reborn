@@ -61,16 +61,6 @@ public final class TextureHelper
     @Nullable
     public static ITexture2D loadTextureFromRl(ResourceLocation rl)
     {
-        BufferedImage image = getBufferedImageFromRl(rl);
-        if (image == null) return null;
-
-        ITextureObject mcTex = Minecraft.getMinecraft().getTextureManager().getTexture(rl);
-        if (mcTex != null)
-            return new Texture2D(
-                    image.getWidth(),
-                    image.getHeight(),
-                    mcTex.getGlTextureId());
-
         TextureAtlasSprite mcSprite = Minecraft.getMinecraft().getTextureMapBlocks().getTextureExtry(rl.toString());
         if (mcSprite != null)
             return new TextureSliced2D(
@@ -83,6 +73,16 @@ public final class TextureHelper
                     mcSprite.getMaxU(),
                     mcSprite.getMinV(),
                     mcSprite.getMaxV());
+
+        BufferedImage image = getBufferedImageFromRl(rl);
+        if (image == null) return null;
+
+        ITextureObject mcTex = Minecraft.getMinecraft().getTextureManager().getTexture(rl);
+        if (mcTex != null)
+            return new Texture2D(
+                    image.getWidth(),
+                    image.getHeight(),
+                    mcTex.getGlTextureId());
 
         Texture2D texture2D = RenderUtils.createTexture2D(image);
 
