@@ -252,7 +252,10 @@ public abstract class GuiLifecycleProvider
 
             if (display)
             {
-                RenderMask.resetStencilCounter();
+                RenderMask.resetStencil();
+                RenderMask baseMask = new RenderMask(RenderMask.MaskShape.RECT);
+                baseMask.setRectMask(0, 0, resolution.getScaledWidth(), resolution.getScaledHeight());
+                baseMask.startMasking();
 
                 RenderContext context = new RenderContext(
                         container.getThemeConfig(),
@@ -301,6 +304,8 @@ public abstract class GuiLifecycleProvider
                     else
                         op.execute(context);
                 }
+
+                RenderMask.endMasking();
             }
         }
     }

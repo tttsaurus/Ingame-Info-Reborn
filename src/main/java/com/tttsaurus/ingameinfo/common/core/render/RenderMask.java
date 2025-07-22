@@ -7,21 +7,23 @@ import java.util.*;
 public final class RenderMask
 {
     private static final Stack<RenderMask> maskStack = new Stack<>();
-    private static int stencilValueCounter = 0;
+    private static int stencilValueCounter = 1;
     private static int nextStencilValue()
     {
         stencilValueCounter++;
         if (stencilValueCounter > 254)
         {
-            stencilValueCounter = 1;
+            stencilValueCounter = 2;
             GL11.glClearStencil(0);
             GL11.glClear(GL11.GL_STENCIL_BUFFER_BIT);
         }
         return stencilValueCounter;
     }
-    public static void resetStencilCounter()
+    public static void resetStencil()
     {
-        stencilValueCounter = 0;
+        GL11.glClearStencil(0);
+        GL11.glClear(GL11.GL_STENCIL_BUFFER_BIT);
+        stencilValueCounter = 1;
     }
 
     public enum MaskShape
