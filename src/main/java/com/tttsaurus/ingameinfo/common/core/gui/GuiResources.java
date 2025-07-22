@@ -75,8 +75,8 @@ public final class GuiResources
 
         RenderHints.texture2dNearestFilterMin();
         RenderHints.texture2dNearestFilterMag();
-        RenderHints.texture2dRepeatWrapS();
-        RenderHints.texture2dRepeatWrapT();
+        RenderHints.texture2dClampToEdgeWrapS();
+        RenderHints.texture2dClampToEdgeWrapT();
 
         Texture2D mcVanillaBgTopLeft = null;
         Texture2D mcVanillaBgTopCenter = null;
@@ -104,9 +104,15 @@ public final class GuiResources
         if (image != null)
             mcVanillaBgCenterLeft = RenderUtils.createTexture2D(image);
 
+        RenderHints.texture2dRepeatWrapS();
+        RenderHints.texture2dRepeatWrapT();
+
         image = TextureHelper.getBufferedImageFromRl(new ResourceLocation("ingameinfo:gui/background/vanilla/center.png"));
         if (image != null)
             mcVanillaBgCenter = RenderUtils.createTexture2D(image);
+
+        RenderHints.texture2dClampToEdgeWrapS();
+        RenderHints.texture2dClampToEdgeWrapT();
 
         image = TextureHelper.getBufferedImageFromRl(new ResourceLocation("ingameinfo:gui/background/vanilla/center_right.png"));
         if (image != null)
@@ -161,9 +167,15 @@ public final class GuiResources
         if (image != null)
             mcVanillaButtonCenterLeft = RenderUtils.createTexture2D(image);
 
+        RenderHints.texture2dRepeatWrapS();
+        RenderHints.texture2dRepeatWrapT();
+
         image = TextureHelper.getBufferedImageFromRl(new ResourceLocation("ingameinfo:gui/button/vanilla/center.png"));
         if (image != null)
             mcVanillaButtonCenter = RenderUtils.createTexture2D(image);
+
+        RenderHints.texture2dClampToEdgeWrapS();
+        RenderHints.texture2dClampToEdgeWrapT();
 
         image = TextureHelper.getBufferedImageFromRl(new ResourceLocation("ingameinfo:gui/button/vanilla/center_right.png"));
         if (image != null)

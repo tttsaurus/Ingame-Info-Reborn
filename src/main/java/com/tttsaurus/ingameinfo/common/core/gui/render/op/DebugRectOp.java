@@ -24,12 +24,12 @@ public class DebugRectOp implements IRenderOp
     {
         if (isGroup)
         {
-            RenderUtils.renderRectOutline(rect.x, rect.y, rect.width, rect.height, 1.0f, (new Color(255, 194, 38, 77)).getRGB(), false);
+            RenderUtils.renderRectOutline(rect.x, rect.y, rect.width, rect.height, 1.0f, (new Color(255, 194, 38, 77)).getRGB());
             RenderUtils.renderRect(pivotX - 1, pivotY - 1, 3, 3, Color.GREEN.getRGB());
         }
         else
         {
-            RenderUtils.renderRectOutline(rect.x, rect.y, rect.width, rect.height, 1.0f, (new Color(241, 58, 30, 128)).getRGB(), false);
+            RenderUtils.renderRectOutline(rect.x, rect.y, rect.width, rect.height, 1.0f, (new Color(241, 58, 30, 128)).getRGB());
             RenderUtils.renderRect(pivotX - 1, pivotY - 1, 3, 3, Color.GREEN.getRGB());
         }
     }

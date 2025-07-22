@@ -75,6 +75,10 @@ public final class RenderUtils
 
     public static void renderFormattedText(FormattedText text, float x, float y, float scale, int color, boolean shadow)
     {
+        renderFormattedText(text, x, y, scale, color, shadow, AlphaBlendMode.ADDITIVE);
+    }
+    public static void renderFormattedText(FormattedText text, float x, float y, float scale, int color, boolean shadow, AlphaBlendMode mode)
+    {
         for (FormattedText.BakedComponent component: text.bakedComponents)
         {
             if (component.type == FormattedText.BakedComponent.Type.STRING)
@@ -85,7 +89,14 @@ public final class RenderUtils
                 GlStateManager.enableBlend();
                 GlStateManager.disableAlpha();
                 GlStateManager.disableDepth();
-                GlStateManager.tryBlendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO);
+
+                switch (mode)
+                {
+                    case ADDITIVE -> { GlStateManager.tryBlendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ONE); }
+                    case FORCE_SRC -> { GlStateManager.tryBlendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO); }
+                    case FORCE_DEST -> { GlStateManager.tryBlendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SourceFactor.ZERO, GlStateManager.DestFactor.ONE); }
+                    case ZERO -> { GlStateManager.tryBlendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SourceFactor.ZERO, GlStateManager.DestFactor.ZERO); }
+                }
 
                 GlStateManager.pushMatrix();
                 GlStateManager.translate(x + component.x * scale, y + component.y * scale, zLevel);
@@ -107,9 +118,9 @@ public final class RenderUtils
 
     public static void renderText(String text, float x, float y, float scale, int color, boolean shadow)
     {
-        renderText(text, x, y, scale, color, shadow, true);
+        renderText(text, x, y, scale, color, shadow, AlphaBlendMode.ADDITIVE);
     }
-    public static void renderText(String text, float x, float y, float scale, int color, boolean shadow, boolean srcAlphaOrDestAlpha)
+    public static void renderText(String text, float x, float y, float scale, int color, boolean shadow, AlphaBlendMode mode)
     {
         GlStateManager.disableCull();
         GlStateManager.enableTexture2D();
@@ -117,10 +128,14 @@ public final class RenderUtils
         GlStateManager.enableBlend();
         GlStateManager.disableAlpha();
         GlStateManager.disableDepth();
-        if (srcAlphaOrDestAlpha)
-            GlStateManager.tryBlendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO);
-        else
-            GlStateManager.tryBlendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SourceFactor.ZERO, GlStateManager.DestFactor.ONE);
+
+        switch (mode)
+        {
+            case ADDITIVE -> { GlStateManager.tryBlendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ONE); }
+            case FORCE_SRC -> { GlStateManager.tryBlendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO); }
+            case FORCE_DEST -> { GlStateManager.tryBlendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SourceFactor.ZERO, GlStateManager.DestFactor.ONE); }
+            case ZERO -> { GlStateManager.tryBlendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SourceFactor.ZERO, GlStateManager.DestFactor.ZERO); }
+        }
 
         GlStateManager.pushMatrix();
         GlStateManager.translate(x, y, zLevel);
@@ -177,9 +192,9 @@ public final class RenderUtils
     //<editor-fold desc="rect">
     public static void renderRect(float x, float y, float width, float height, int color)
     {
-        renderRect(x, y, width, height, color, true);
+        renderRect(x, y, width, height, color, AlphaBlendMode.ADDITIVE);
     }
-    public static void renderRect(float x, float y, float width, float height, int color, boolean srcAlphaOrDestAlpha)
+    public static void renderRect(float x, float y, float width, float height, int color, AlphaBlendMode mode)
     {
         float a = (float)(color >> 24 & 255) / 255.0F;
         float r = (float)(color >> 16 & 255) / 255.0F;
@@ -189,10 +204,15 @@ public final class RenderUtils
         GlStateManager.disableTexture2D();
         GlStateManager.enableBlend();
         GlStateManager.disableAlpha();
-        if (srcAlphaOrDestAlpha)
-            GlStateManager.tryBlendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO);
-        else
-            GlStateManager.tryBlendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SourceFactor.ZERO, GlStateManager.DestFactor.ONE);
+
+        switch (mode)
+        {
+            case ADDITIVE -> { GlStateManager.tryBlendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ONE); }
+            case FORCE_SRC -> { GlStateManager.tryBlendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO); }
+            case FORCE_DEST -> { GlStateManager.tryBlendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SourceFactor.ZERO, GlStateManager.DestFactor.ONE); }
+            case ZERO -> { GlStateManager.tryBlendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SourceFactor.ZERO, GlStateManager.DestFactor.ZERO); }
+        }
+
         GlStateManager.shadeModel(GL11.GL_SMOOTH);
 
         Tessellator tessellator = Tessellator.getInstance();
@@ -207,9 +227,9 @@ public final class RenderUtils
 
     public static void renderRectFullScreen(int color)
     {
-        renderRectFullScreen(color, true);
+        renderRectFullScreen(color, AlphaBlendMode.ADDITIVE);
     }
-    public static void renderRectFullScreen(int color, boolean srcAlphaOrDestAlpha)
+    public static void renderRectFullScreen(int color, AlphaBlendMode mode)
     {
         float a = (float)(color >> 24 & 255) / 255.0F;
         float r = (float)(color >> 16 & 255) / 255.0F;
@@ -219,10 +239,15 @@ public final class RenderUtils
         GlStateManager.disableTexture2D();
         GlStateManager.enableBlend();
         GlStateManager.disableAlpha();
-        if (srcAlphaOrDestAlpha)
-            GlStateManager.tryBlendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO);
-        else
-            GlStateManager.tryBlendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SourceFactor.ZERO, GlStateManager.DestFactor.ONE);
+
+        switch (mode)
+        {
+            case ADDITIVE -> { GlStateManager.tryBlendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ONE); }
+            case FORCE_SRC -> { GlStateManager.tryBlendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO); }
+            case FORCE_DEST -> { GlStateManager.tryBlendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SourceFactor.ZERO, GlStateManager.DestFactor.ONE); }
+            case ZERO -> { GlStateManager.tryBlendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SourceFactor.ZERO, GlStateManager.DestFactor.ZERO); }
+        }
+
         GlStateManager.shadeModel(GL11.GL_SMOOTH);
 
         ScaledResolution resolution = new ScaledResolution(Minecraft.getMinecraft());
@@ -241,10 +266,10 @@ public final class RenderUtils
 
     public static void renderGradientRect(float x, float y, float width, float height, int startColor, int endColor)
     {
-        renderGradientRect(x, y, width, height, startColor, endColor, true);
+        renderGradientRect(x, y, width, height, startColor, endColor, AlphaBlendMode.ADDITIVE);
     }
     // this method is modified from Minecraft's Gui.drawGradientRect
-    public static void renderGradientRect(float x, float y, float width, float height, int startColor, int endColor, boolean srcAlphaOrDestAlpha)
+    public static void renderGradientRect(float x, float y, float width, float height, int startColor, int endColor, AlphaBlendMode mode)
     {
         float f = (float)(startColor >> 24 & 255) / 255.0F;
         float f1 = (float)(startColor >> 16 & 255) / 255.0F;
@@ -258,10 +283,15 @@ public final class RenderUtils
         GlStateManager.disableTexture2D();
         GlStateManager.enableBlend();
         GlStateManager.disableAlpha();
-        if (srcAlphaOrDestAlpha)
-            GlStateManager.tryBlendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO);
-        else
-            GlStateManager.tryBlendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SourceFactor.ZERO, GlStateManager.DestFactor.ONE);
+
+        switch (mode)
+        {
+            case ADDITIVE -> { GlStateManager.tryBlendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ONE); }
+            case FORCE_SRC -> { GlStateManager.tryBlendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO); }
+            case FORCE_DEST -> { GlStateManager.tryBlendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SourceFactor.ZERO, GlStateManager.DestFactor.ONE); }
+            case ZERO -> { GlStateManager.tryBlendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SourceFactor.ZERO, GlStateManager.DestFactor.ZERO); }
+        }
+
         GlStateManager.shadeModel(GL11.GL_SMOOTH);
 
         Tessellator tessellator = Tessellator.getInstance();
@@ -276,23 +306,23 @@ public final class RenderUtils
 
     public static void renderRectOutline(float x, float y, float width, float height, float thickness, int color)
     {
-        renderRectOutline(x, y, width, height, thickness, color, true);
+        renderRectOutline(x, y, width, height, thickness, color, AlphaBlendMode.ADDITIVE);
     }
-    public static void renderRectOutline(float x, float y, float width, float height, float thickness, int color, boolean srcAlphaOrDestAlpha)
+    public static void renderRectOutline(float x, float y, float width, float height, float thickness, int color, AlphaBlendMode mode)
     {
-        renderRect(x, y, width, thickness, color, srcAlphaOrDestAlpha);
-        renderRect(x, y + height, width, thickness, color, srcAlphaOrDestAlpha);
-        renderRect(x, y, thickness, height, color, srcAlphaOrDestAlpha);
-        renderRect(x + width, y, thickness, height + thickness, color, srcAlphaOrDestAlpha);
+        renderRect(x, y, width, thickness, color, mode);
+        renderRect(x, y + height, width, thickness, color, mode);
+        renderRect(x, y, thickness, height, color, mode);
+        renderRect(x + width, y, thickness, height + thickness, color, mode);
     }
     //</editor-fold>
 
     //<editor-fold desc="rounded rect">
     public static void renderRoundedRect(float x, float y, float width, float height, float radius, int color, boolean smoothHint)
     {
-        renderRoundedRect(x, y, width, height, radius, color, smoothHint, true);
+        renderRoundedRect(x, y, width, height, radius, color, smoothHint, AlphaBlendMode.ADDITIVE);
     }
-    public static void renderRoundedRect(float x, float y, float width, float height, float radius, int color, boolean smoothHint, boolean srcAlphaOrDestAlpha)
+    public static void renderRoundedRect(float x, float y, float width, float height, float radius, int color, boolean smoothHint, AlphaBlendMode mode)
     {
         int segments = Math.max(3, (int)(radius / 2f));
         float a = (float)(color >> 24 & 255) / 255.0F;
@@ -304,10 +334,15 @@ public final class RenderUtils
         GlStateManager.disableTexture2D();
         GlStateManager.enableBlend();
         GlStateManager.disableAlpha();
-        if (srcAlphaOrDestAlpha)
-            GlStateManager.tryBlendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO);
-        else
-            GlStateManager.tryBlendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SourceFactor.ZERO, GlStateManager.DestFactor.ONE);
+
+        switch (mode)
+        {
+            case ADDITIVE -> { GlStateManager.tryBlendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ONE); }
+            case FORCE_SRC -> { GlStateManager.tryBlendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO); }
+            case FORCE_DEST -> { GlStateManager.tryBlendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SourceFactor.ZERO, GlStateManager.DestFactor.ONE); }
+            case ZERO -> { GlStateManager.tryBlendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SourceFactor.ZERO, GlStateManager.DestFactor.ZERO); }
+        }
+
         GlStateManager.color(r, g, b, a);
 
         if (smoothHint)
@@ -345,9 +380,9 @@ public final class RenderUtils
 
     public static void renderRoundedRectOutline(float x, float y, float width, float height, float radius, float thickness, int color, boolean smoothHint)
     {
-        renderRoundedRectOutline(x, y, width, height, radius, thickness, color, smoothHint, true);
+        renderRoundedRectOutline(x, y, width, height, radius, thickness, color, smoothHint, AlphaBlendMode.ADDITIVE);
     }
-    public static void renderRoundedRectOutline(float x, float y, float width, float height, float radius, float thickness, int color, boolean smoothHint, boolean srcAlphaOrDestAlpha)
+    public static void renderRoundedRectOutline(float x, float y, float width, float height, float radius, float thickness, int color, boolean smoothHint, AlphaBlendMode mode)
     {
         int segments = Math.max(3, (int)(radius / 2f));
         float a = (float)(color >> 24 & 255) / 255.0F;
@@ -359,10 +394,15 @@ public final class RenderUtils
         GlStateManager.disableTexture2D();
         GlStateManager.enableBlend();
         GlStateManager.disableAlpha();
-        if (srcAlphaOrDestAlpha)
-            GlStateManager.tryBlendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO);
-        else
-            GlStateManager.tryBlendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SourceFactor.ZERO, GlStateManager.DestFactor.ONE);
+
+        switch (mode)
+        {
+            case ADDITIVE -> { GlStateManager.tryBlendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ONE); }
+            case FORCE_SRC -> { GlStateManager.tryBlendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO); }
+            case FORCE_DEST -> { GlStateManager.tryBlendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SourceFactor.ZERO, GlStateManager.DestFactor.ONE); }
+            case ZERO -> { GlStateManager.tryBlendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SourceFactor.ZERO, GlStateManager.DestFactor.ZERO); }
+        }
+
         GlStateManager.glLineWidth(thickness * (float)(new ScaledResolution(Minecraft.getMinecraft())).getScaleFactor());
         GlStateManager.color(r, g, b, a);
 
@@ -506,6 +546,10 @@ public final class RenderUtils
         }
     }
 
+    public static void renderTextureSliced2D(float x, float y, float width, float height, float minU, float maxU, float minV, float maxV, int textureId)
+    {
+        renderTextureSliced2D(x, y, width, height, minU, maxU, minV, maxV, textureId, -1);
+    }
     public static void renderTextureSliced2D(float x, float y, float width, float height, float minU, float maxU, float minV, float maxV, int textureId, int color)
     {
         float a = (float)(color >> 24 & 255) / 255.0F;
@@ -598,7 +642,6 @@ public final class RenderUtils
             width4 = ninePatchBorder.bottomLeft.width;
             height4 = ninePatchBorder.bottomLeft.height;
         }
-        renderTexture2D(x, y + height - height4, width4, height4, 1f, 1f, ninePatchBorder.bottomLeft.tex.getGlTextureID(), color);
 
         float width5, height5;
         if (ninePatchBorder.bottomRight.sizeDeductionByPixels)
@@ -610,26 +653,6 @@ public final class RenderUtils
         {
             width5 = ninePatchBorder.bottomRight.width;
             height5 = ninePatchBorder.bottomRight.height;
-        }
-        renderTexture2D(x + width - width5, y + height - height5, width5, height5, 1f, 1f, ninePatchBorder.bottomRight.tex.getGlTextureID(), color);
-
-        if (width - width4 - width5 > 0)
-        {
-            float width6, height6;
-            if (ninePatchBorder.bottomCenter.sizeDeductionByPixels)
-            {
-                width6 = ninePatchBorder.bottomCenter.tex.getWidth() / ppu;
-                height6 = ninePatchBorder.bottomCenter.tex.getHeight() / ppu;
-            }
-            else
-            {
-                width6 = ninePatchBorder.bottomCenter.width;
-                height6 = ninePatchBorder.bottomCenter.height;
-            }
-            if (ninePatchBorder.bottomCenter.tiling)
-                renderTexture2D(x + width4, y + height - height6, width - width4 - width5, height6, (width - width4 - width5) / width6, 1f, ninePatchBorder.bottomCenter.tex.getGlTextureID(), color);
-            else
-                renderTexture2D(x + width4, y + height - height6, width - width4 - width5, height6, 1f, 1f, ninePatchBorder.bottomCenter.tex.getGlTextureID(), color);
         }
 
         if (height - height1 - height4 > 0)
@@ -687,6 +710,28 @@ public final class RenderUtils
                 renderTexture2D(x + width1, y + height1, width - width1 - width2, height - height1 - height4, (width - width1 - width2) / width9, (height - height1 - height4) / height9, ninePatchBorder.center.tex.getGlTextureID(), color);
             else
                 renderTexture2D(x + width1, y + height1, width - width1 - width2, height - height1 - height4, 1f, 1f, ninePatchBorder.center.tex.getGlTextureID(), color);
+        }
+
+        renderTexture2D(x, y + height - height4, width4, height4, 1f, 1f, ninePatchBorder.bottomLeft.tex.getGlTextureID(), color);
+        renderTexture2D(x + width - width5, y + height - height5, width5, height5, 1f, 1f, ninePatchBorder.bottomRight.tex.getGlTextureID(), color);
+
+        if (width - width4 - width5 > 0)
+        {
+            float width6, height6;
+            if (ninePatchBorder.bottomCenter.sizeDeductionByPixels)
+            {
+                width6 = ninePatchBorder.bottomCenter.tex.getWidth() / ppu;
+                height6 = ninePatchBorder.bottomCenter.tex.getHeight() / ppu;
+            }
+            else
+            {
+                width6 = ninePatchBorder.bottomCenter.width;
+                height6 = ninePatchBorder.bottomCenter.height;
+            }
+            if (ninePatchBorder.bottomCenter.tiling)
+                renderTexture2D(x + width4, y + height - height6, width - width4 - width5, height6, (width - width4 - width5) / width6, 1f, ninePatchBorder.bottomCenter.tex.getGlTextureID(), color);
+            else
+                renderTexture2D(x + width4, y + height - height6, width - width4 - width5, height6, 1f, 1f, ninePatchBorder.bottomCenter.tex.getGlTextureID(), color);
         }
     }
 

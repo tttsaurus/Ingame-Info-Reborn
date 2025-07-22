@@ -9,6 +9,7 @@ import com.tttsaurus.ingameinfo.common.core.gui.property.style.*;
 import com.tttsaurus.ingameinfo.common.core.serialization.IDeserializer;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import java.lang.reflect.Constructor;
 import java.util.*;
 
 @SuppressWarnings("all")
@@ -81,7 +82,9 @@ public final class ElementRegistry
         if (!annotation.constructable()) return null;
         try
         {
-            return clazz.newInstance();
+            Constructor<? extends Element> constructor = clazz.getDeclaredConstructor();
+            constructor.setAccessible(true);
+            return constructor.newInstance();
         }
         catch (Exception e) { return null; }
     }
