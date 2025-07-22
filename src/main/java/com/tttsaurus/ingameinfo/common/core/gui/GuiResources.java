@@ -1,10 +1,7 @@
 package com.tttsaurus.ingameinfo.common.core.gui;
 
 import com.tttsaurus.ingameinfo.common.core.render.*;
-import com.tttsaurus.ingameinfo.common.core.render.texture.ImagePrefab;
-import com.tttsaurus.ingameinfo.common.core.render.texture.NinePatchBorder;
-import com.tttsaurus.ingameinfo.common.core.render.texture.Texture2D;
-import com.tttsaurus.ingameinfo.common.core.render.texture.TextureHelper;
+import com.tttsaurus.ingameinfo.common.core.render.texture.*;
 import com.tttsaurus.ingameinfo.common.core.render.texture.param.FilterMode;
 import com.tttsaurus.ingameinfo.common.core.render.texture.param.WrapMode;
 import net.minecraft.util.ResourceLocation;
@@ -21,11 +18,37 @@ public final class GuiResources
         imagePrefabs.put(name, imagePrefab);
     }
 
+    public static void tryRegisterTexture(ResourceLocation rl)
+    {
+        ITexture2D tex = TextureHelper.loadTextureFromRl(rl);
+        if (tex == null) return;
+        ImagePrefab imagePrefab = TextureHelper.tryWrapToImagePrefab(tex);
+        if (imagePrefab == null) return;
+        register(rl.toString(), imagePrefab);
+    }
+    public static void tryRegisterTexture(ResourceLocation rl, FilterMode filterModeMin, FilterMode filterModeMag, WrapMode wrapModeS, WrapMode wrapModeT)
+    {
+        ITexture2D tex = TextureHelper.loadTextureFromRl(rl);
+        if (tex == null) return;
+        ImagePrefab imagePrefab = TextureHelper.tryWrapToImagePrefab(tex);
+        if (imagePrefab == null) return;
+        TextureHelper.setTextureParams(tex, filterModeMin, filterModeMag, wrapModeS, wrapModeT);
+        register(rl.toString(), imagePrefab);
+    }
+
+    public static boolean exists(ResourceLocation rl)
+    {
+        return exists(rl.toString());
+    }
     public static boolean exists(String name)
     {
         return imagePrefabs.containsKey(name);
     }
 
+    public static ImagePrefab get(ResourceLocation rl)
+    {
+        return get(rl.toString());
+    }
     public static ImagePrefab get(String name)
     {
         ImagePrefab imagePrefab = imagePrefabs.get(name);

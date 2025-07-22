@@ -1,5 +1,7 @@
 package com.tttsaurus.ingameinfo.common.core.render.texture;
 
+import javax.annotation.Nonnull;
+
 public class ImagePrefab
 {
     public enum InternalType
@@ -14,7 +16,7 @@ public class ImagePrefab
     public final TextureSliced2D textureSliced2D;
     public final NinePatchBorder ninePatchBorder;
 
-    public ImagePrefab(Texture2D texture2D)
+    public ImagePrefab(@Nonnull Texture2D texture2D)
     {
         type = InternalType.TEXTURE_2D;
         this.texture2D = texture2D;
@@ -22,7 +24,7 @@ public class ImagePrefab
         ninePatchBorder = null;
     }
 
-    public ImagePrefab(TextureSliced2D textureSliced2D)
+    public ImagePrefab(@Nonnull TextureSliced2D textureSliced2D)
     {
         type = InternalType.TEXTURE_SLICED_2D;
         texture2D = null;
@@ -30,7 +32,7 @@ public class ImagePrefab
         ninePatchBorder = null;
     }
 
-    public ImagePrefab(NinePatchBorder ninePatchBorder)
+    public ImagePrefab(@Nonnull NinePatchBorder ninePatchBorder)
     {
         type = InternalType.NINE_PATCH_BORDER;
         texture2D = null;
