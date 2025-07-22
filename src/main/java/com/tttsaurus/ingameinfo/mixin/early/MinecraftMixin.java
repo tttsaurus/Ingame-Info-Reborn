@@ -13,8 +13,8 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Mixin(Minecraft.class)
 public class MinecraftMixin
 {
-    @Inject(method = "shutdown", at = @At("HEAD"))
-    public void beforeShutdown(CallbackInfo ci)
+    @Inject(method = "shutdownMinecraftApplet", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/audio/SoundHandler;unloadSounds()V", shift = At.Shift.AFTER))
+    public void shutdown(CallbackInfo ci)
     {
         for (IAction action: ShutdownHooks.hooks)
             action.invoke();
