@@ -28,9 +28,6 @@ jobs:
         java-version: '17'
         distribution: 'zulu'
 
-    - name: Show Gradle toolchains
-      run: ./gradlew -q javaToolchains
-
     # Configure Gradle for optimal use in GitHub Actions, including caching of downloaded dependencies.
     # See: https://github.com/gradle/actions/blob/main/setup-gradle/README.md
     - name: Setup Gradle
@@ -38,6 +35,9 @@ jobs:
 
     - name: Grant execute permission for Gradle wrapper
       run: chmod +x ./gradlew
+
+    - name: Show Gradle toolchains
+      run: ./gradlew -q javaToolchains
       
     - name: Build with Gradle Wrapper
       run: ./gradlew build
