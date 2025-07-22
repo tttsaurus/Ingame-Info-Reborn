@@ -24,6 +24,8 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.ByteBuffer;
 
+import static com.tttsaurus.ingameinfo.common.core.render.CommonBuffers.INT_BUFFER_16;
+
 public final class RenderUtils
 {
     public static FontRenderer fontRenderer = Minecraft.getMinecraft().fontRenderer;
@@ -798,7 +800,26 @@ public final class RenderUtils
         }
         buffer.flip();
 
-        return new Texture2D(width, height, buffer);
+        GL11.glGetInteger(GL11.GL_TEXTURE_BINDING_2D, INT_BUFFER_16);
+        int textureID = INT_BUFFER_16.get(0);
+
+        int glTextureID = GL11.glGenTextures();
+
+        GL11.glBindTexture(GL11.GL_TEXTURE_2D, glTextureID);
+
+        GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MIN_FILTER, RenderHints.getHint_Texture2D$FilterModeMin().glValue);
+        GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MAG_FILTER, RenderHints.getHint_Texture2D$FilterModeMag().glValue);
+        GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_WRAP_S, RenderHints.getHint_Texture2D$WrapModeS().glValue);
+        GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_WRAP_T, RenderHints.getHint_Texture2D$WrapModeT().glValue);
+
+        GL11.glTexImage2D(GL11.GL_TEXTURE_2D, 0, GL11.GL_RGBA8, width, height, 0, GL11.GL_RGBA, GL11.GL_UNSIGNED_BYTE, buffer);
+
+        GlStateManager.bindTexture(textureID);
+
+        Texture2D texture2D = new Texture2D(width, height, glTextureID);
+        GlResourceManager.addDisposable(texture2D);
+
+        return texture2D;
     }
     //</editor-fold>
 
