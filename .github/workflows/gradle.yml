@@ -22,10 +22,17 @@ jobs:
 
     steps:
     - uses: actions/checkout@v4
-    - name: Set up JDK 8
+
+    - name: Set up JDK 17
       uses: actions/setup-java@v4
       with:
         java-version: '17'
+        distribution: 'zulu'
+
+    - name: Set up JDK 8
+      uses: actions/setup-java@v4
+      with:
+        java-version: '8'
         distribution: 'zulu'
 
     # Configure Gradle for optimal use in GitHub Actions, including caching of downloaded dependencies.
@@ -67,10 +74,17 @@ jobs:
 
     steps:
     - uses: actions/checkout@v4
-    - name: Set up JDK 8
+
+    - name: Set up JDK 17
       uses: actions/setup-java@v4
       with:
         java-version: '17'
+        distribution: 'zulu'
+
+    - name: Set up JDK 8
+      uses: actions/setup-java@v4
+      with:
+        java-version: '8'
         distribution: 'zulu'
 
     # Generates and submits a dependency graph, enabling Dependabot Alerts for all project dependencies.
