@@ -2,6 +2,9 @@ package com.tttsaurus.ingameinfo.common.core.render;
 
 import com.tttsaurus.ingameinfo.common.core.InternalMethods;
 import com.tttsaurus.ingameinfo.common.core.render.text.FormattedText;
+import com.tttsaurus.ingameinfo.common.core.render.texture.ImagePrefab;
+import com.tttsaurus.ingameinfo.common.core.render.texture.NinePatchBorder;
+import com.tttsaurus.ingameinfo.common.core.render.texture.Texture2D;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.ScaledResolution;
@@ -487,6 +490,7 @@ public final class RenderUtils
         switch (imagePrefab.type)
         {
             case TEXTURE_2D -> renderTexture2D(x, y, width, height, imagePrefab.texture2D.getGlTextureID(), -1);
+            case TEXTURE_SLICED_2D -> renderTextureSliced2D(x, y, width, height, imagePrefab.textureSliced2D.getMinU(), imagePrefab.textureSliced2D.getMaxU(), imagePrefab.textureSliced2D.getMinV(), imagePrefab.textureSliced2D.getMaxV(), imagePrefab.textureSliced2D.getGlTextureID(), -1);
             case NINE_PATCH_BORDER -> renderNinePatchBorder(x, y, width, height, imagePrefab.ninePatchBorder, -1);
         }
     }
@@ -495,8 +499,37 @@ public final class RenderUtils
         switch (imagePrefab.type)
         {
             case TEXTURE_2D -> renderTexture2D(x, y, width, height, imagePrefab.texture2D.getGlTextureID(), color);
+            case TEXTURE_SLICED_2D -> renderTextureSliced2D(x, y, width, height, imagePrefab.textureSliced2D.getMinU(), imagePrefab.textureSliced2D.getMaxU(), imagePrefab.textureSliced2D.getMinV(), imagePrefab.textureSliced2D.getMaxV(), imagePrefab.textureSliced2D.getGlTextureID(), color);
             case NINE_PATCH_BORDER -> renderNinePatchBorder(x, y, width, height, imagePrefab.ninePatchBorder, color);
         }
+    }
+
+    public static void renderTextureSliced2D(float x, float y, float width, float height, float minU, float maxU, float minV, float maxV, int textureId, int color)
+    {
+        float a = (float)(color >> 24 & 255) / 255.0F;
+        float r = (float)(color >> 16 & 255) / 255.0F;
+        float g = (float)(color >> 8 & 255) / 255.0F;
+        float b = (float)(color & 255) / 255.0F;
+
+        GlStateManager.enableTexture2D();
+        GlStateManager.disableLighting();
+        GlStateManager.enableBlend();
+        GlStateManager.enableAlpha();
+        GlStateManager.alphaFunc(GL11.GL_GREATER, 0.0f);
+        GlStateManager.disableDepth();
+        GlStateManager.tryBlendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ONE);
+        GlStateManager.color(r, g, b, a);
+
+        GlStateManager.bindTexture(textureId);
+
+        Tessellator tessellator = Tessellator.getInstance();
+        BufferBuilder bufferbuilder = tessellator.getBuffer();
+        bufferbuilder.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX);
+        bufferbuilder.pos(x, y + height, zLevel).tex(minU, maxV).endVertex();
+        bufferbuilder.pos(x + width, y + height, zLevel).tex(maxU, maxV).endVertex();
+        bufferbuilder.pos(x + width, y, zLevel).tex(maxU, minV).endVertex();
+        bufferbuilder.pos(x, y, zLevel).tex(minU, minV).endVertex();
+        tessellator.draw();
     }
 
     public static void renderNinePatchBorder(float x, float y, float width, float height, NinePatchBorder ninePatchBorder)
@@ -654,6 +687,7 @@ public final class RenderUtils
                 renderTexture2D(x + width1, y + height1, width - width1 - width2, height - height1 - height4, 1f, 1f, ninePatchBorder.center.tex.getGlTextureID(), color);
         }
     }
+
     public static void renderTexture2D(float x, float y, float width, float height, int textureId)
     {
         renderTexture2D(x, y, width, height, 1f, 1f, textureId);
@@ -693,6 +727,7 @@ public final class RenderUtils
         bufferbuilder.pos(x, y, zLevel).tex(0, 0).endVertex();
         tessellator.draw();
     }
+
     public static void renderTexture2DFullScreen(int textureId)
     {
         renderTexture2DFullScreen(textureId, 1f, 1f);

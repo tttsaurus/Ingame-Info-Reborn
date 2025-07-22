@@ -1,48 +1,37 @@
-package com.tttsaurus.ingameinfo.common.core.render;
+package com.tttsaurus.ingameinfo.common.core.render.texture;
 
+import com.tttsaurus.ingameinfo.common.core.render.GlResourceManager;
+import com.tttsaurus.ingameinfo.common.core.render.IGlDisposable;
+import com.tttsaurus.ingameinfo.common.core.render.RenderHints;
 import net.minecraft.client.renderer.GlStateManager;
 import org.lwjgl.opengl.*;
 import java.nio.ByteBuffer;
 
 import static com.tttsaurus.ingameinfo.common.core.render.CommonBuffers.INT_BUFFER_16;
 
-public final class Texture2D implements IGlDisposable
+public final class Texture2D implements ITexture2D, IGlDisposable
 {
-    public enum FilterMode
-    {
-        LINEAR(GL11.GL_LINEAR),
-        NEAREST(GL11.GL_NEAREST);
-
-        public final int glValue;
-        FilterMode(int glValue)
-        {
-            this.glValue = glValue;
-        }
-    }
-    public enum WrapMode
-    {
-        REPEAT(GL11.GL_REPEAT),
-        CLAMP(GL11.GL_CLAMP),
-        CLAMP_TO_EDGE(GL12.GL_CLAMP_TO_EDGE),
-        CLAMP_TO_BORDER(GL13.GL_CLAMP_TO_BORDER),
-        MIRRORED_REPEAT(GL14.GL_MIRRORED_REPEAT);
-
-        public final int glValue;
-        WrapMode(int glValue)
-        {
-            this.glValue = glValue;
-        }
-    }
-
-    private int glTextureID = 0;
+    private int glTextureID;
     private final int width;
     private final int height;
     private boolean isGlRegistered;
 
+    @Override
     public int getGlTextureID() { return glTextureID; }
+    @Override
     public int getWidth() { return width; }
+    @Override
     public int getHeight() { return height; }
+    @Override
     public boolean isGlRegistered() { return isGlRegistered; }
+
+    public Texture2D(int width, int height, int glTextureID)
+    {
+        this.width = width;
+        this.height = height;
+        this.glTextureID = glTextureID;
+        isGlRegistered = true;
+    }
 
     public Texture2D(int width, int height, ByteBuffer byteBuffer)
     {
@@ -69,9 +58,12 @@ public final class Texture2D implements IGlDisposable
         GlResourceManager.addDisposable(this);
     }
 
+    @Override
     public void dispose()
     {
-        if (glTextureID != 0) GL11.glDeleteTextures(glTextureID);
+        if (glTextureID != 0)
+            if (GL11.glIsTexture(glTextureID))
+                GL11.glDeleteTextures(glTextureID);
         glTextureID = 0;
         isGlRegistered = false;
         GlResourceManager.removeDisposable(this);

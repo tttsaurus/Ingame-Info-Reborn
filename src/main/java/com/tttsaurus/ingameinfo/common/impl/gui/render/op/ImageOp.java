@@ -5,7 +5,7 @@ import com.tttsaurus.ingameinfo.common.core.gui.render.op.IRenderOp;
 import com.tttsaurus.ingameinfo.common.core.gui.render.RenderContext;
 import com.tttsaurus.ingameinfo.common.core.render.RenderMask;
 import com.tttsaurus.ingameinfo.common.core.render.RenderUtils;
-import com.tttsaurus.ingameinfo.common.core.render.Texture2D;
+import com.tttsaurus.ingameinfo.common.core.render.texture.Texture2D;
 
 public class ImageOp implements IRenderOp
 {

@@ -1,13 +1,14 @@
 package com.tttsaurus.ingameinfo.common.core.gui;
 
 import com.tttsaurus.ingameinfo.common.core.render.*;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.resources.IResource;
+import com.tttsaurus.ingameinfo.common.core.render.texture.ImagePrefab;
+import com.tttsaurus.ingameinfo.common.core.render.texture.NinePatchBorder;
+import com.tttsaurus.ingameinfo.common.core.render.texture.Texture2D;
+import com.tttsaurus.ingameinfo.common.core.render.texture.TextureHelper;
+import com.tttsaurus.ingameinfo.common.core.render.texture.param.FilterMode;
+import com.tttsaurus.ingameinfo.common.core.render.texture.param.WrapMode;
 import net.minecraft.util.ResourceLocation;
-import javax.annotation.Nullable;
-import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
-import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -36,29 +37,16 @@ public final class GuiResources
 
     private static ImagePrefab missingTexture;
 
-    @Nullable
-    private static BufferedImage getBufferedImageFromRl(ResourceLocation rl)
-    {
-        try
-        {
-            IResource resource = Minecraft.getMinecraft().getResourceManager().getResource(rl);
-            InputStream inputStream = resource.getInputStream();
-            return ImageIO.read(inputStream);
-        }
-        catch (Exception ignored) { }
-        return null;
-    }
-
     private static boolean init = false;
     public static void init()
     {
         if (init) return;
         init = true;
 
-        Texture2D.FilterMode filterModeMin = RenderHints.getHint_Texture2D$FilterModeMin();
-        Texture2D.FilterMode filterModeMag = RenderHints.getHint_Texture2D$FilterModeMag();
-        Texture2D.WrapMode wrapModeS = RenderHints.getHint_Texture2D$WrapModeS();
-        Texture2D.WrapMode wrapModeT = RenderHints.getHint_Texture2D$WrapModeT();
+        FilterMode filterModeMin = RenderHints.getHint_Texture2D$FilterModeMin();
+        FilterMode filterModeMag = RenderHints.getHint_Texture2D$FilterModeMag();
+        WrapMode wrapModeS = RenderHints.getHint_Texture2D$WrapModeS();
+        WrapMode wrapModeT = RenderHints.getHint_Texture2D$WrapModeT();
 
         RenderHints.texture2dNearestFilterMin();
         RenderHints.texture2dNearestFilterMag();
@@ -75,39 +63,39 @@ public final class GuiResources
         Texture2D mcVanillaBgBottomCenter = null;
         Texture2D mcVanillaBgBottomRight = null;
 
-        BufferedImage image = getBufferedImageFromRl(new ResourceLocation("ingameinfo:gui/background/vanilla/top_left.png"));
+        BufferedImage image = TextureHelper.getBufferedImageFromRl(new ResourceLocation("ingameinfo:gui/background/vanilla/top_left.png"));
         if (image != null)
             mcVanillaBgTopLeft = RenderUtils.createTexture2D(image);
 
-        image = getBufferedImageFromRl(new ResourceLocation("ingameinfo:gui/background/vanilla/top_center.png"));
+        image = TextureHelper.getBufferedImageFromRl(new ResourceLocation("ingameinfo:gui/background/vanilla/top_center.png"));
         if (image != null)
             mcVanillaBgTopCenter = RenderUtils.createTexture2D(image);
 
-        image = getBufferedImageFromRl(new ResourceLocation("ingameinfo:gui/background/vanilla/top_right.png"));
+        image = TextureHelper.getBufferedImageFromRl(new ResourceLocation("ingameinfo:gui/background/vanilla/top_right.png"));
         if (image != null)
             mcVanillaBgTopRight = RenderUtils.createTexture2D(image);
 
-        image = getBufferedImageFromRl(new ResourceLocation("ingameinfo:gui/background/vanilla/center_left.png"));
+        image = TextureHelper.getBufferedImageFromRl(new ResourceLocation("ingameinfo:gui/background/vanilla/center_left.png"));
         if (image != null)
             mcVanillaBgCenterLeft = RenderUtils.createTexture2D(image);
 
-        image = getBufferedImageFromRl(new ResourceLocation("ingameinfo:gui/background/vanilla/center.png"));
+        image = TextureHelper.getBufferedImageFromRl(new ResourceLocation("ingameinfo:gui/background/vanilla/center.png"));
         if (image != null)
             mcVanillaBgCenter = RenderUtils.createTexture2D(image);
 
-        image = getBufferedImageFromRl(new ResourceLocation("ingameinfo:gui/background/vanilla/center_right.png"));
+        image = TextureHelper.getBufferedImageFromRl(new ResourceLocation("ingameinfo:gui/background/vanilla/center_right.png"));
         if (image != null)
             mcVanillaBgCenterRight = RenderUtils.createTexture2D(image);
 
-        image = getBufferedImageFromRl(new ResourceLocation("ingameinfo:gui/background/vanilla/bottom_left.png"));
+        image = TextureHelper.getBufferedImageFromRl(new ResourceLocation("ingameinfo:gui/background/vanilla/bottom_left.png"));
         if (image != null)
             mcVanillaBgBottomLeft = RenderUtils.createTexture2D(image);
 
-        image = getBufferedImageFromRl(new ResourceLocation("ingameinfo:gui/background/vanilla/bottom_center.png"));
+        image = TextureHelper.getBufferedImageFromRl(new ResourceLocation("ingameinfo:gui/background/vanilla/bottom_center.png"));
         if (image != null)
             mcVanillaBgBottomCenter = RenderUtils.createTexture2D(image);
 
-        image = getBufferedImageFromRl(new ResourceLocation("ingameinfo:gui/background/vanilla/bottom_right.png"));
+        image = TextureHelper.getBufferedImageFromRl(new ResourceLocation("ingameinfo:gui/background/vanilla/bottom_right.png"));
         if (image != null)
             mcVanillaBgBottomRight = RenderUtils.createTexture2D(image);
 
@@ -132,39 +120,39 @@ public final class GuiResources
         Texture2D mcVanillaButtonBottomCenter = null;
         Texture2D mcVanillaButtonBottomRight = null;
 
-        image = getBufferedImageFromRl(new ResourceLocation("ingameinfo:gui/button/vanilla/top_left.png"));
+        image = TextureHelper.getBufferedImageFromRl(new ResourceLocation("ingameinfo:gui/button/vanilla/top_left.png"));
         if (image != null)
             mcVanillaButtonTopLeft = RenderUtils.createTexture2D(image);
 
-        image = getBufferedImageFromRl(new ResourceLocation("ingameinfo:gui/button/vanilla/top_center.png"));
+        image = TextureHelper.getBufferedImageFromRl(new ResourceLocation("ingameinfo:gui/button/vanilla/top_center.png"));
         if (image != null)
             mcVanillaButtonTopCenter = RenderUtils.createTexture2D(image);
 
-        image = getBufferedImageFromRl(new ResourceLocation("ingameinfo:gui/button/vanilla/top_right.png"));
+        image = TextureHelper.getBufferedImageFromRl(new ResourceLocation("ingameinfo:gui/button/vanilla/top_right.png"));
         if (image != null)
             mcVanillaButtonTopRight = RenderUtils.createTexture2D(image);
 
-        image = getBufferedImageFromRl(new ResourceLocation("ingameinfo:gui/button/vanilla/center_left.png"));
+        image = TextureHelper.getBufferedImageFromRl(new ResourceLocation("ingameinfo:gui/button/vanilla/center_left.png"));
         if (image != null)
             mcVanillaButtonCenterLeft = RenderUtils.createTexture2D(image);
 
-        image = getBufferedImageFromRl(new ResourceLocation("ingameinfo:gui/button/vanilla/center.png"));
+        image = TextureHelper.getBufferedImageFromRl(new ResourceLocation("ingameinfo:gui/button/vanilla/center.png"));
         if (image != null)
             mcVanillaButtonCenter = RenderUtils.createTexture2D(image);
 
-        image = getBufferedImageFromRl(new ResourceLocation("ingameinfo:gui/button/vanilla/center_right.png"));
+        image = TextureHelper.getBufferedImageFromRl(new ResourceLocation("ingameinfo:gui/button/vanilla/center_right.png"));
         if (image != null)
             mcVanillaButtonCenterRight = RenderUtils.createTexture2D(image);
 
-        image = getBufferedImageFromRl(new ResourceLocation("ingameinfo:gui/button/vanilla/bottom_left.png"));
+        image = TextureHelper.getBufferedImageFromRl(new ResourceLocation("ingameinfo:gui/button/vanilla/bottom_left.png"));
         if (image != null)
             mcVanillaButtonBottomLeft = RenderUtils.createTexture2D(image);
 
-        image = getBufferedImageFromRl(new ResourceLocation("ingameinfo:gui/button/vanilla/bottom_center.png"));
+        image = TextureHelper.getBufferedImageFromRl(new ResourceLocation("ingameinfo:gui/button/vanilla/bottom_center.png"));
         if (image != null)
             mcVanillaButtonBottomCenter = RenderUtils.createTexture2D(image);
 
-        image = getBufferedImageFromRl(new ResourceLocation("ingameinfo:gui/button/vanilla/bottom_right.png"));
+        image = TextureHelper.getBufferedImageFromRl(new ResourceLocation("ingameinfo:gui/button/vanilla/bottom_right.png"));
         if (image != null)
             mcVanillaButtonBottomRight = RenderUtils.createTexture2D(image);
 
@@ -181,7 +169,7 @@ public final class GuiResources
         mcVanillaButton.ninePatchBorder.center.tiling = true;
 
         Texture2D missingTexture = null;
-        image = getBufferedImageFromRl(new ResourceLocation("ingameinfo:gui/missing_texture.png"));
+        image = TextureHelper.getBufferedImageFromRl(new ResourceLocation("ingameinfo:gui/missing_texture.png"));
         if (image != null)
             missingTexture = RenderUtils.createTexture2D(image);
         GuiResources.missingTexture = new ImagePrefab(new NinePatchBorder(

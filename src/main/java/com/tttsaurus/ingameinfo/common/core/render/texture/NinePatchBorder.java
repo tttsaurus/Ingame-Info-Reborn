@@ -1,4 +1,4 @@
-package com.tttsaurus.ingameinfo.common.core.render;
+package com.tttsaurus.ingameinfo.common.core.render.texture;
 
 public class NinePatchBorder
 {

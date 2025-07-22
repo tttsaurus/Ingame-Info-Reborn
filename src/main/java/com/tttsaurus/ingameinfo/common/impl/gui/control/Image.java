@@ -7,7 +7,7 @@ import com.tttsaurus.ingameinfo.common.core.gui.property.style.StyleProperty;
 import com.tttsaurus.ingameinfo.common.core.gui.property.style.StylePropertyCallback;
 import com.tttsaurus.ingameinfo.common.core.gui.render.RenderOpQueue;
 import com.tttsaurus.ingameinfo.common.core.render.RenderUtils;
-import com.tttsaurus.ingameinfo.common.core.render.Texture2D;
+import com.tttsaurus.ingameinfo.common.core.render.texture.Texture2D;
 import com.tttsaurus.ingameinfo.common.impl.gui.render.op.ImageOp;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.IResource;

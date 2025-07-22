@@ -1,6 +1,6 @@
 package com.tttsaurus.ingameinfo.common.core.gui.render.decorator.visual.command;
 
-import com.tttsaurus.ingameinfo.common.core.render.ImagePrefab;
+import com.tttsaurus.ingameinfo.common.core.render.texture.ImagePrefab;
 import com.tttsaurus.ingameinfo.common.core.render.RenderUtils;
 
 public class VC_RenderImagePrefab extends VisualCommand
