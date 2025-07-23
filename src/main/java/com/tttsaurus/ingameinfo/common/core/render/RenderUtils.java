@@ -58,7 +58,7 @@ public final class RenderUtils
         GlStateManager.enableTexture2D();
         GlStateManager.enableCull();
         GlStateManager.pushMatrix();
-        GlStateManager.translate(x, y, zLevel);
+        GlStateManager.translate(Math.round(x), Math.round(y), zLevel);
         GlStateManager.scale(scaleX, scaleY, 1f);
         RenderHelper.enableGUIStandardItemLighting();
         Minecraft.getMinecraft().getRenderItem().renderItemAndEffectIntoGUI(item, 0, 0);

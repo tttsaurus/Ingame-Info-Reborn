@@ -1,6 +1,7 @@
 package com.tttsaurus.ingameinfo.common.core.gui.layout;
 
 import javax.annotation.Nullable;
+import java.util.Objects;
 
 public class Rect
 {
@@ -51,5 +52,19 @@ public class Rect
             return new Rect(x1, y1, width, height);
         else
             return null;
+    }
+
+    @Override
+    public boolean equals(Object o)
+    {
+        if (this == o) return true;
+        if (!(o instanceof Rect rect)) return false;
+        return Float.compare(x, rect.x) == 0 && Float.compare(y, rect.y) == 0 && Float.compare(width, rect.width) == 0 && Float.compare(height, rect.height) == 0;
+    }
+
+    @Override
+    public int hashCode()
+    {
+        return Objects.hash(x, y, width, height);
     }
 }
