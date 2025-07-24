@@ -124,6 +124,8 @@ public final class IgiRuntime
         public LivePhaseEntry openGui(String mvvmRegistryName)
         {
             lifecycleHolder.openGui(mvvmRegistryName, mvvmRegistry);
+            // force update to refresh
+            lifecycleHolder.update();
             return this;
         }
 
@@ -131,6 +133,8 @@ public final class IgiRuntime
         public LivePhaseEntry closeGui(String mvvmRegistryName)
         {
             lifecycleHolder.closeGui(mvvmRegistryName);
+            // force update to refresh
+            lifecycleHolder.update();
             return this;
         }
 

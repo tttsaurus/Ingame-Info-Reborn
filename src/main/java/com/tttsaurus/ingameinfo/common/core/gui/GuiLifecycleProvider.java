@@ -136,8 +136,7 @@ public abstract class GuiLifecycleProvider
         isUsingDummyScreen = MC.currentScreen instanceof IgiDummyScreen;
         boolean isScreenOn = MC.currentScreen != null;
         boolean isOtherScreenOn = MC.currentScreen != null && !(MC.currentScreen instanceof IgiDummyScreen);
-        // skip first update
-        if (finishFirstUpdate && !underFocusedEnvironment)
+        if (!underFocusedEnvironment)
         {
             AtomicBoolean focus = new AtomicBoolean(false);
             openedGuiMap.forEach((mvvm, guiContainer) -> focus.set(focus.get() || (guiContainer.getFocused() && guiContainer.getActive())));

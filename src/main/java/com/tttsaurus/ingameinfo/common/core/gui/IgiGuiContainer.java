@@ -14,7 +14,6 @@ import com.tttsaurus.ingameinfo.common.core.mvvm.viewmodel.ViewModel;
 import com.tttsaurus.ingameinfo.common.core.gui.layout.MainGroup;
 import com.tttsaurus.ingameinfo.common.core.render.RenderUtils;
 import com.tttsaurus.ingameinfo.common.core.gui.theme.registry.ThemeRegistry;
-import net.minecraft.client.renderer.GlStateManager;
 import org.lwjgl.input.Keyboard;
 import java.util.ArrayList;
 import java.util.List;
@@ -142,10 +141,7 @@ public class IgiGuiContainer
         if (!isActive) return new RenderOpQueue();
 
         if (isFocused && hasFocusBackground)
-        {
-            GlStateManager.tryBlendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ONE);
             RenderUtils.renderRectFullScreen(backgroundColor);
-        }
 
         RenderOpQueue queue = new RenderOpQueue();
         mainGroup.onRenderUpdate(queue, focused);

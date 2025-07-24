@@ -1,10 +1,8 @@
 package com.tttsaurus.ingameinfo.mixin.early;
 
-import com.llamalad7.mixinextras.injector.wrapmethod.WrapMethod;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import com.tttsaurus.ingameinfo.common.core.IgiRuntimeLocator;
-import com.tttsaurus.ingameinfo.common.core.gui.screen.IGuiScreenDrawScreen;
 import com.tttsaurus.ingameinfo.common.core.gui.screen.IGuiScreenKeyTyped;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiScreen;
@@ -49,18 +47,5 @@ public class GuiScreenMixin
         }
 
         original.call(instance);
-    }
-
-    @WrapMethod(method = "drawScreen")
-    public void drawScreen(int mouseX, int mouseY, float partialTicks, Operation<Void> original)
-    {
-        if (IgiRuntimeLocator.get().livePhase.isOccupyingScreen())
-        {
-            for (IGuiScreenDrawScreen delegate: IgiRuntimeLocator.get().livePhase.collectDrawScreenDelegatesIfScreenOccupied())
-                delegate.draw();
-            return;
-        }
-
-        original.call(mouseX, mouseY, partialTicks);
     }
 }
