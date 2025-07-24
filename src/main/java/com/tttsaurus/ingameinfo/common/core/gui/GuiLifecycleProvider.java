@@ -87,10 +87,8 @@ public abstract class GuiLifecycleProvider
     private boolean finishFirstUpdate = false;
 
     private boolean isUsingDummyScreen = false;
-    protected final boolean isUsingDummyScreen() { return isUsingDummyScreen; }
-
     private boolean isUsingOtherScreen = false;
-    protected final boolean isUsingOtherScreen() { return isUsingOtherScreen; }
+    public final boolean isUsingOtherScreen() { return isUsingOtherScreen; }
 
     public final void update(InputState inputState)
     {

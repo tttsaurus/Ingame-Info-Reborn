@@ -2,6 +2,8 @@ package com.tttsaurus.ingameinfo.common.core;
 
 import com.tttsaurus.ingameinfo.common.core.forgeevent.IgiGuiLifecycleInitEvent;
 import com.tttsaurus.ingameinfo.common.core.gui.GuiLifecycleHolder;
+import com.tttsaurus.ingameinfo.common.core.gui.screen.IGuiScreenDrawScreen;
+import com.tttsaurus.ingameinfo.common.core.gui.screen.IGuiScreenKeyTyped;
 import com.tttsaurus.ingameinfo.common.core.mvvm.registry.MvvmRegistry;
 import com.tttsaurus.ingameinfo.common.core.mvvm.viewmodel.ViewModel;
 import com.tttsaurus.ingameinfo.common.impl.gui.DefaultLifecycleHolder;
@@ -32,11 +34,17 @@ public final class IgiRuntime
     public static class InitPhaseEntry
     {
         private final MvvmRegistry mvvmRegistry;
-        private final List<String> guisToOpenWhenLifecycleInit = new ArrayList<>();
+        private final DefaultLifecycleHolder lifecycleHolder;
+        private final List<String> guisToOpenWhenLifecycleInit0 = new ArrayList<>();
 
-        private InitPhaseEntry(MvvmRegistry mvvmRegistry)
+        private final List<GuiLifecycleHolder> externaLifecycleHolders;
+        private final Map<GuiLifecycleHolder, List<String>> guisToOpenWhenLifecycleInit1 = new HashMap<>();
+
+        private InitPhaseEntry(MvvmRegistry mvvmRegistry, DefaultLifecycleHolder lifecycleHolder, List<GuiLifecycleHolder> externaLifecycleHolders)
         {
             this.mvvmRegistry = mvvmRegistry;
+            this.lifecycleHolder = lifecycleHolder;
+            this.externaLifecycleHolders = externaLifecycleHolders;
         }
 
         public InitPhaseEntry registerMvvm(String mvvmRegistryName, Class<? extends ViewModel<?>> viewModelClass)
@@ -48,52 +56,9 @@ public final class IgiRuntime
         @ZenMethod
         public InitPhaseEntry openGuiOnStartup(String mvvmRegistryName)
         {
-            if (!guisToOpenWhenLifecycleInit.contains(mvvmRegistryName))
-                guisToOpenWhenLifecycleInit.add(mvvmRegistryName);
+            if (!guisToOpenWhenLifecycleInit0.contains(mvvmRegistryName))
+                guisToOpenWhenLifecycleInit0.add(mvvmRegistryName);
             return this;
-        }
-    }
-
-    @ZenRegister
-    @ZenClass("mods.ingameinfo.runtime.LivePhaseEntry")
-    public static class LivePhaseEntry
-    {
-        private final MvvmRegistry mvvmRegistry;
-        private final DefaultLifecycleHolder lifecycleHolder;
-
-        private LivePhaseEntry(MvvmRegistry mvvmRegistry, DefaultLifecycleHolder lifecycleHolder)
-        {
-            this.mvvmRegistry = mvvmRegistry;
-            this.lifecycleHolder = lifecycleHolder;
-        }
-
-        @ZenMethod
-        public LivePhaseEntry openGui(String mvvmRegistryName)
-        {
-            lifecycleHolder.openGui(mvvmRegistryName, mvvmRegistry);
-            return this;
-        }
-
-        @ZenMethod
-        public LivePhaseEntry closeGui(String mvvmRegistryName)
-        {
-            lifecycleHolder.closeGui(mvvmRegistryName);
-            return this;
-        }
-    }
-
-    public static class GlobalEntry
-    {
-        public final MvvmRegistry mvvmRegistry;
-        public final DefaultLifecycleHolder lifecycleHolder;
-        private final List<GuiLifecycleHolder> externaLifecycleHolders;
-        private final Map<GuiLifecycleHolder, List<String>> guisToOpenWhenLifecycleInit = new HashMap<>();
-
-        private GlobalEntry(MvvmRegistry mvvmRegistry, DefaultLifecycleHolder lifecycleHolder, List<GuiLifecycleHolder> externaLifecycleHolders)
-        {
-            this.mvvmRegistry = mvvmRegistry;
-            this.lifecycleHolder = lifecycleHolder;
-            this.externaLifecycleHolders = externaLifecycleHolders;
         }
 
         public GuiLifecycleHolder registerLifecycleHolder(Class<? extends GuiLifecycleHolder> holderClass)
@@ -119,7 +84,7 @@ public final class IgiRuntime
             return null;
         }
 
-        public GlobalEntry openGuiOnStartup(String holderName, String mvvmRegistryName)
+        public InitPhaseEntry openGuiOnStartup(String holderName, String mvvmRegistryName)
         {
             GuiLifecycleHolder holder = null;
             if (holderName.equals(DefaultLifecycleHolder.HOLDER_NAME))
@@ -133,10 +98,84 @@ public final class IgiRuntime
 
             if (holder == null) return this;
 
-            List<String> list = guisToOpenWhenLifecycleInit.computeIfAbsent(holder, k -> new ArrayList<>());
+            List<String> list = guisToOpenWhenLifecycleInit1.computeIfAbsent(holder, k -> new ArrayList<>());
             if (!list.contains(mvvmRegistryName))
                 list.add(mvvmRegistryName);
             return this;
+        }
+    }
+
+    @ZenRegister
+    @ZenClass("mods.ingameinfo.runtime.LivePhaseEntry")
+    public static class LivePhaseEntry
+    {
+        private final MvvmRegistry mvvmRegistry;
+        private final DefaultLifecycleHolder lifecycleHolder;
+        private final List<GuiLifecycleHolder> externaLifecycleHolders;
+
+        private LivePhaseEntry(MvvmRegistry mvvmRegistry, DefaultLifecycleHolder lifecycleHolder, List<GuiLifecycleHolder> externaLifecycleHolders)
+        {
+            this.mvvmRegistry = mvvmRegistry;
+            this.lifecycleHolder = lifecycleHolder;
+            this.externaLifecycleHolders = externaLifecycleHolders;
+        }
+
+        @ZenMethod
+        public LivePhaseEntry openGui(String mvvmRegistryName)
+        {
+            lifecycleHolder.openGui(mvvmRegistryName, mvvmRegistry);
+            return this;
+        }
+
+        @ZenMethod
+        public LivePhaseEntry closeGui(String mvvmRegistryName)
+        {
+            lifecycleHolder.closeGui(mvvmRegistryName);
+            return this;
+        }
+
+        public boolean isOccupyingScreen()
+        {
+            if (lifecycleHolder.getLifecycleProvider().isUsingOtherScreen())
+                return true;
+            for (GuiLifecycleHolder holder: externaLifecycleHolders)
+                if (holder.getLifecycleProvider().isUsingOtherScreen())
+                    return true;
+            return false;
+        }
+
+        public List<IGuiScreenDrawScreen> collectDrawScreenDelegatesIfScreenOccupied()
+        {
+            List<IGuiScreenDrawScreen> res = new ArrayList<>();
+            if (lifecycleHolder.getLifecycleProvider().isUsingOtherScreen())
+                res.add(lifecycleHolder.getLifecycleProvider().GUI_SCREEN_DRAW_SCREEN);
+            for (GuiLifecycleHolder holder: externaLifecycleHolders)
+                if (holder.getLifecycleProvider().isUsingOtherScreen())
+                    res.add(holder.getLifecycleProvider().GUI_SCREEN_DRAW_SCREEN);
+            return res;
+        }
+
+        public List<IGuiScreenKeyTyped> collectKeyTypedDelegatesIfScreenOccupied()
+        {
+            List<IGuiScreenKeyTyped> res = new ArrayList<>();
+            if (lifecycleHolder.getLifecycleProvider().isUsingOtherScreen())
+                res.add(lifecycleHolder.getLifecycleProvider().GUI_SCREEN_KEY_TYPED);
+            for (GuiLifecycleHolder holder: externaLifecycleHolders)
+                if (holder.getLifecycleProvider().isUsingOtherScreen())
+                    res.add(holder.getLifecycleProvider().GUI_SCREEN_KEY_TYPED);
+            return res;
+        }
+    }
+
+    public static class GlobalEntry
+    {
+        public final MvvmRegistry mvvmRegistry;
+        public final DefaultLifecycleHolder lifecycleHolder;
+
+        private GlobalEntry(MvvmRegistry mvvmRegistry, DefaultLifecycleHolder lifecycleHolder)
+        {
+            this.mvvmRegistry = mvvmRegistry;
+            this.lifecycleHolder = lifecycleHolder;
         }
     }
 
@@ -155,9 +194,9 @@ public final class IgiRuntime
         lifecycleHolder.setLifecycleProvider(IgiCommonConfig.GUI_LIFECYCLE_PROVIDER);
         externaLifecycleHolders = new ArrayList<>();
 
-        initPhase = new InitPhaseEntry(mvvmRegistry);
-        livePhase = new LivePhaseEntry(mvvmRegistry, lifecycleHolder);
-        global = new GlobalEntry(mvvmRegistry, lifecycleHolder, externaLifecycleHolders);
+        initPhase = new InitPhaseEntry(mvvmRegistry, lifecycleHolder, externaLifecycleHolders);
+        livePhase = new LivePhaseEntry(mvvmRegistry, lifecycleHolder, externaLifecycleHolders);
+        global = new GlobalEntry(mvvmRegistry, lifecycleHolder);
 
         MinecraftForge.EVENT_BUS.register(this);
     }
@@ -174,18 +213,18 @@ public final class IgiRuntime
     {
         if (event.lifecycleOwner.equals(DefaultLifecycleHolder.HOLDER_NAME))
         {
-            for (String mvvmRegistryName: initPhase.guisToOpenWhenLifecycleInit)
+            for (String mvvmRegistryName: initPhase.guisToOpenWhenLifecycleInit0)
                 lifecycleHolder.openGui(mvvmRegistryName, mvvmRegistry);
-            initPhase.guisToOpenWhenLifecycleInit.clear();
+            initPhase.guisToOpenWhenLifecycleInit0.clear();
         }
 
-        for (Map.Entry<GuiLifecycleHolder, List<String>> entry: new ArrayList<>(global.guisToOpenWhenLifecycleInit.entrySet()))
+        for (Map.Entry<GuiLifecycleHolder, List<String>> entry: new ArrayList<>(initPhase.guisToOpenWhenLifecycleInit1.entrySet()))
         {
             if (event.lifecycleOwner.equals(entry.getKey().getHolderName()))
             {
                 for (String mvvmRegistryName: entry.getValue())
                     entry.getKey().openGui(mvvmRegistryName, mvvmRegistry);
-                global.guisToOpenWhenLifecycleInit.remove(entry.getKey());
+                initPhase.guisToOpenWhenLifecycleInit1.remove(entry.getKey());
             }
         }
     }
