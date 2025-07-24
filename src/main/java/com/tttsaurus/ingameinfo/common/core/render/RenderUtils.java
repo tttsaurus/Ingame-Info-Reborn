@@ -58,7 +58,7 @@ public final class RenderUtils
         GlStateManager.enableTexture2D();
         GlStateManager.enableCull();
         GlStateManager.pushMatrix();
-        GlStateManager.translate(Math.round(x), Math.round(y), zLevel);
+        GlStateManager.translate(x, Math.round(y), zLevel);
         GlStateManager.scale(scaleX, scaleY, 1f);
         RenderHelper.enableGUIStandardItemLighting();
         Minecraft.getMinecraft().getRenderItem().renderItemAndEffectIntoGUI(item, 0, 0);
@@ -99,7 +99,7 @@ public final class RenderUtils
                 }
 
                 GlStateManager.pushMatrix();
-                GlStateManager.translate(Math.round(x + component.x * scale), Math.round(y + component.y * scale), zLevel);
+                GlStateManager.translate(x + component.x * scale, Math.round(y + component.y * scale), zLevel);
                 GlStateManager.scale(scale, scale, 0);
                 fontRenderer.drawString(component.text, 0, 0, color, shadow);
                 GlStateManager.popMatrix();
@@ -138,7 +138,7 @@ public final class RenderUtils
         }
 
         GlStateManager.pushMatrix();
-        GlStateManager.translate(Math.round(x), Math.round(y), zLevel);
+        GlStateManager.translate(x, Math.round(y), zLevel);
         GlStateManager.scale(scale, scale, 0);
         fontRenderer.drawString(text, 0, 0, color, shadow);
         GlStateManager.popMatrix();
