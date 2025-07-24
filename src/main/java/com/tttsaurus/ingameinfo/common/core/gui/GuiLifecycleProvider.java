@@ -4,9 +4,9 @@ import com.tttsaurus.ingameinfo.common.core.InternalMethods;
 import com.tttsaurus.ingameinfo.common.core.forgeevent.IgiGuiLifecycleInitEvent;
 import com.tttsaurus.ingameinfo.common.core.forgeevent.IgiGuiLifecycleRegainScreenFocusEvent;
 import com.tttsaurus.ingameinfo.common.core.function.IFunc;
-import com.tttsaurus.ingameinfo.common.core.gui.dummygui.IDummyDrawScreen;
-import com.tttsaurus.ingameinfo.common.core.gui.dummygui.IDummyKeyTyped;
-import com.tttsaurus.ingameinfo.common.core.gui.dummygui.DummyMcGui;
+import com.tttsaurus.ingameinfo.common.core.gui.screen.IGuiScreenDrawScreen;
+import com.tttsaurus.ingameinfo.common.core.gui.screen.IGuiScreenKeyTyped;
+import com.tttsaurus.ingameinfo.common.core.gui.screen.IgiDummyScreen;
 import com.tttsaurus.ingameinfo.common.core.gui.render.decorator.RenderDecorator;
 import com.tttsaurus.ingameinfo.common.core.gui.render.decorator.RenderOpPhase;
 import com.tttsaurus.ingameinfo.common.core.gui.render.decorator.visual.IVisualModifier;
@@ -50,10 +50,11 @@ import com.tttsaurus.ingameinfo.common.impl.gui.DefaultLifecycleProvider;
  *
  * <p>Subclasses <b>must</b> implement:</p>
  * <ul>
- *     <li>{@link #updateInternal()} for frame-based logic</li>
+ *     <li>{@link #timing()} for frame-based logic</li>
+ *     <li>{@link #fixedUpdate()} that wraps {@link #definedFixedUpdate(double)}</li>
+ *     <li>{@link #renderUpdate()} that wraps {@link #definedRenderUpdate()}</li>
  *     <li>{@link #getRenderLerpAlpha()} to supply interpolation alpha for rendering</li>
  *     <li>{@link #isUsingFramebuffer()} and {@link #isUsingMultisampleFramebuffer()} to guide render behavior</li>
- *     <li>{@link #getDummyGuiDrawScreen()} to provide dummy GUI draw behavior</li>
  * </ul>
  *
  * <p>Thread safety is not guaranteed; usage must occur on the Minecraft client thread.</p>
@@ -62,7 +63,8 @@ import com.tttsaurus.ingameinfo.common.impl.gui.DefaultLifecycleProvider;
  */
 public abstract class GuiLifecycleProvider
 {
-    private String lifecycleHolderName;
+    @SuppressWarnings("all")
+    private String lifecycleHolderName = "";
     public String getLifecycleHolderName() { return lifecycleHolderName; }
 
     protected static final Minecraft MC = Minecraft.getMinecraft();
@@ -80,16 +82,24 @@ public abstract class GuiLifecycleProvider
         openedGuiMap.remove(mvvmRegistryName);
     }
 
-    protected abstract void updateInternal();
-
     private boolean listenRegainScreenFocus = false;
     private boolean initFlag = true;
     private boolean finishFirstUpdate = false;
 
-    private boolean isDummyGuiOn = false;
-    protected boolean isDummyGuiOn() { return isDummyGuiOn; }
+    private boolean isUsingDummyScreen = false;
+    protected final boolean isUsingDummyScreen() { return isUsingDummyScreen; }
+
+    private boolean isUsingOtherScreen = false;
+    protected final boolean isUsingOtherScreen() { return isUsingOtherScreen; }
 
     public final void update(InputState inputState)
+    {
+        // in-game: underFocusedEnvironment -> false
+        // otherwise: underFocusedEnvironment -> true
+        // GuiScreen doesnt count
+        update(inputState, false);
+    }
+    public final void update(InputState inputState, boolean underFocusedEnvironment)
     {
         if (!FMLCommonHandler.instance().getSide().isClient()) return;
 
@@ -124,45 +134,40 @@ public abstract class GuiLifecycleProvider
         }
         //</editor-fold>
 
-        //<editor-fold desc="dummy gui">
+        //<editor-fold desc="dummy screen">
+        isUsingDummyScreen = MC.currentScreen instanceof IgiDummyScreen;
+        boolean isScreenOn = MC.currentScreen != null;
+        boolean isOtherScreenOn = MC.currentScreen != null && !(MC.currentScreen instanceof IgiDummyScreen);
         // skip first update
-        if (finishFirstUpdate)
+        if (finishFirstUpdate && !underFocusedEnvironment)
         {
-            isDummyGuiOn = MC.currentScreen instanceof DummyMcGui;
+            AtomicBoolean focus = new AtomicBoolean(false);
+            openedGuiMap.forEach((mvvm, guiContainer) -> focus.set(focus.get() || (guiContainer.getFocused() && guiContainer.getActive())));
+            boolean requireFocus = focus.get();
 
-            // close dummy
-            if (isDummyGuiOn)
+            // close dummy screen
+            if (isUsingDummyScreen && !requireFocus)
             {
-                if (openedGuiMap.isEmpty())
-                {
-                    isDummyGuiOn = false;
-                    MC.displayGuiScreen(null);
-                }
-                else
-                {
-                    AtomicBoolean focus = new AtomicBoolean(false);
-                    openedGuiMap.forEach((uuid, guiContainer) -> focus.set(focus.get() || (guiContainer.getFocused() && guiContainer.getActive())));
-
-                    if (!focus.get())
-                    {
-                        isDummyGuiOn = false;
-                        MC.displayGuiScreen(null);
-                    }
-                }
+                isUsingDummyScreen = false;
+                MC.displayGuiScreen(null);
             }
 
             // open dummy
-            if (!openedGuiMap.isEmpty() && MC.currentScreen == null)
+            if (!isScreenOn && requireFocus)
             {
-                AtomicBoolean focus = new AtomicBoolean(false);
-                openedGuiMap.forEach((uuid, guiContainer) -> focus.set(focus.get() || (guiContainer.getFocused() && guiContainer.getActive())));
-
-                if (focus.get())
-                {
-                    MC.displayGuiScreen(newDummyGui());
-                    isDummyGuiOn = true;
-                }
+                isUsingDummyScreen = true;
+                MC.displayGuiScreen(newDummyScreen());
             }
+
+            // stop using other screen
+            if (isUsingOtherScreen && !requireFocus)
+                isUsingOtherScreen = false;
+            if (isUsingOtherScreen && !isOtherScreenOn)
+                isUsingOtherScreen = false;
+
+            // use other screen as dummy
+            if (isOtherScreenOn && requireFocus)
+                isUsingOtherScreen = true;
         }
         //</editor-fold>
 
@@ -173,10 +178,26 @@ public abstract class GuiLifecycleProvider
                 container.onPropagateInput(inputState);
         //</editor-fold>
 
-        updateInternal();
+        timing();
+
+        if (doFixedUpdate)
+        {
+            doFixedUpdate = false;
+            fixedUpdate();
+        }
+
+        if (!isUsingDummyScreen && !isUsingOtherScreen)
+            renderUpdate();
 
         if (!finishFirstUpdate) finishFirstUpdate = true;
     }
+
+    protected boolean doFixedUpdate = false;
+    protected final void reserveFixedUpdate() { doFixedUpdate = true; }
+
+    protected abstract void timing();
+    protected abstract void fixedUpdate();
+    protected abstract void renderUpdate();
 
     //<editor-fold desc="fixed update">
     // units are all in second
@@ -311,44 +332,71 @@ public abstract class GuiLifecycleProvider
     }
     //</editor-fold>
 
+    //<editor-fold desc="delegates">
+    private static class DelegateDrawScreen implements IGuiScreenDrawScreen
+    {
+        private final GuiLifecycleProvider lifecycleProvider;
+        private DelegateDrawScreen(GuiLifecycleProvider lifecycleProvider)
+        {
+            this.lifecycleProvider = lifecycleProvider;
+        }
+
+        @Override
+        public void draw()
+        {
+            lifecycleProvider.renderUpdate();
+        }
+    }
+
+    private static class DelegateKeyTyped implements IGuiScreenKeyTyped
+    {
+        private final GuiLifecycleProvider lifecycleProvider;
+        private DelegateKeyTyped(GuiLifecycleProvider lifecycleProvider)
+        {
+            this.lifecycleProvider = lifecycleProvider;
+        }
+
+        @Override
+        public void type(int keycode)
+        {
+            List<Map.Entry<String, IgiGuiContainer>> entryList = new ArrayList<>(lifecycleProvider.openedGuiMap.entrySet());
+            String key = "";
+            IFunc<Boolean> exitCallback = null;
+            for (int i = entryList.size() - 1; i >= 0; i--)
+            {
+                Map.Entry<String, IgiGuiContainer> entry = entryList.get(i);
+                IgiGuiContainer container = entry.getValue();
+                if (container.getFocused() && container.getActive())
+                {
+                    if (keycode == container.getExitKeyForFocusedGui())
+                    {
+                        key = entry.getKey();
+                        exitCallback = container.getExitCallback();
+                    }
+                    break;
+                }
+            }
+            if (!key.isEmpty())
+            {
+                if (exitCallback.invoke())
+                    lifecycleProvider.openedGuiMap.remove(key);
+            }
+        }
+    }
+    //</editor-fold>
+
+    public final IGuiScreenDrawScreen GUI_SCREEN_DRAW_SCREEN = new DelegateDrawScreen(this);
+    public final IGuiScreenKeyTyped GUI_SCREEN_KEY_TYPED = new DelegateKeyTyped(this);
+
+    public abstract float getRenderLerpAlpha();
     protected abstract boolean isUsingFramebuffer();
     protected abstract boolean isUsingMultisampleFramebuffer();
 
-    protected abstract IDummyDrawScreen getDummyGuiDrawScreen();
-
-    private DummyMcGui newDummyGui()
+    private IgiDummyScreen newDummyScreen()
     {
-        DummyMcGui dummyGui = new DummyMcGui();
-        dummyGui.setDrawAction(getDummyGuiDrawScreen());
-        dummyGui.setTypeAction(new IDummyKeyTyped()
-        {
-            @Override
-            public void type(int keycode)
-            {
-                List<Map.Entry<String, IgiGuiContainer>> entryList = new ArrayList<>(openedGuiMap.entrySet());
-                String key = "";
-                IFunc<Boolean> exitCallback = null;
-                for (int i = entryList.size() - 1; i >= 0; i--)
-                {
-                    Map.Entry<String, IgiGuiContainer> entry = entryList.get(i);
-                    IgiGuiContainer container = entry.getValue();
-                    if (container.getFocused())
-                        if (keycode == container.getExitKeyForFocusedGui())
-                        {
-                            key = entry.getKey();
-                            exitCallback = container.getExitCallback();
-                            break;
-                        }
-                }
-                if (!key.isEmpty())
-                {
-                    if (exitCallback.invoke())
-                        openedGuiMap.remove(key);
-                }
-            }
-        });
+        IgiDummyScreen dummyGui = new IgiDummyScreen();
+        dummyGui.setDrawAction(GUI_SCREEN_DRAW_SCREEN);
+        dummyGui.setTypeAction(GUI_SCREEN_KEY_TYPED);
         return dummyGui;
     }
-
-    public abstract float getRenderLerpAlpha();
 }

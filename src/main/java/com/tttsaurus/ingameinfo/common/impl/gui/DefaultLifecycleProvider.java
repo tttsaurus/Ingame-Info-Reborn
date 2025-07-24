@@ -2,7 +2,6 @@ package com.tttsaurus.ingameinfo.common.impl.gui;
 
 import com.tttsaurus.ingameinfo.InGameInfoReborn;
 import com.tttsaurus.ingameinfo.common.core.gui.GuiLifecycleProvider;
-import com.tttsaurus.ingameinfo.common.core.gui.dummygui.IDummyDrawScreen;
 import com.tttsaurus.ingameinfo.common.core.commonutils.RlReaderUtils;
 import com.tttsaurus.ingameinfo.common.core.render.GlResourceManager;
 import com.tttsaurus.ingameinfo.common.core.render.IGlDisposable;
@@ -135,7 +134,8 @@ public final class DefaultLifecycleProvider extends GuiLifecycleProvider
     //<editor-fold desc="fixed & render updates">
     private double timer = 0.5f;
 
-    private void fixedUpdate()
+    @Override
+    protected void fixedUpdate()
     {
         definedFixedUpdate(deltaTime_FixedUpdate);
 
@@ -145,13 +145,26 @@ public final class DefaultLifecycleProvider extends GuiLifecycleProvider
             timer -= 0.5d;
             triggerIgiEvents();
         }
+        if (timer >= 0.5f)
+            timer %= 0.5f;
     }
 
-    private void renderUpdate()
+    @Override
+    protected void renderUpdate()
+    {
+        storeCommonGlStates();
+        if (renderTimeDebug)
+            renderUpdateInternalDebug();
+        else
+            renderUpdateInternal();
+        restoreCommonGlStates();
+    }
+
+    private void renderUpdateInternal()
     {
         if (enableFbo)
         {
-            compileShaders();
+            if (enableShader) compileShaders();
             if (!refreshFbo)
             {
                 if (enableShader)
@@ -198,7 +211,7 @@ public final class DefaultLifecycleProvider extends GuiLifecycleProvider
         }
     }
 
-    private void renderUpdateDebug()
+    private void renderUpdateInternalDebug()
     {
         if (renderTimeDebugFile == null)
         {
@@ -217,7 +230,7 @@ public final class DefaultLifecycleProvider extends GuiLifecycleProvider
         cpuTimeStopwatch.reset();
         cpuTimeStopwatch.start();
 
-        renderUpdate();
+        renderUpdateInternal();
 
         cpuTimeStopwatch.stop();
         GL15.glEndQuery(GL33.GL_TIME_ELAPSED);
@@ -260,16 +273,6 @@ public final class DefaultLifecycleProvider extends GuiLifecycleProvider
             gpuTimeNanoFor50Frames[timeNanoArrayIndex] = gpuTimeNano;
             timeNanoArrayIndex++;
         }
-    }
-
-    private void renderUpdateWrapped()
-    {
-        storeCommonGlStates();
-        if (renderTimeDebug)
-            renderUpdateDebug();
-        else
-            renderUpdate();
-        restoreCommonGlStates();
     }
     //</editor-fold>
 
@@ -550,26 +553,13 @@ public final class DefaultLifecycleProvider extends GuiLifecycleProvider
     }
 
     @Override
-    protected IDummyDrawScreen getDummyGuiDrawScreen()
-    {
-        return new IDummyDrawScreen()
-        {
-            @Override
-            public void draw()
-            {
-                renderUpdateWrapped();
-            }
-        };
-    }
-
-    @Override
     public float getRenderLerpAlpha()
     {
         return renderUpdateAlpha;
     }
 
     @Override
-    protected void updateInternal()
+    protected void timing()
     {
         //<editor-fold desc="fixed update timing">
         if (!stopwatch_FixedUpdate.isStarted())
@@ -586,7 +576,7 @@ public final class DefaultLifecycleProvider extends GuiLifecycleProvider
             deltaTime_FixedUpdate = currentTime;
             estimatedFps_FixedUpdate = ((int)(1d / (currentTime + excessTime_FixedUpdate)) + estimatedFps_FixedUpdate) / 2;
 
-            fixedUpdate();
+            reserveFixedUpdate();
 
             excessTime_FixedUpdate = currentTime + excessTime_FixedUpdate - timePerFrame_FixedUpdate;
         }
@@ -641,8 +631,5 @@ public final class DefaultLifecycleProvider extends GuiLifecycleProvider
                 renderUpdateAlpha = (float)((fixedUpdateTime + excessTime_FixedUpdate) / timePerFrame_FixedUpdate);
         }
         //</editor-fold>
-
-        if (!isDummyGuiOn())
-            renderUpdateWrapped();
     }
 }

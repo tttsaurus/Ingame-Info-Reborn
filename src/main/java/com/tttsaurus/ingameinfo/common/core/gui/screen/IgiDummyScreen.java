@@ -1,16 +1,16 @@
-package com.tttsaurus.ingameinfo.common.core.gui.dummygui;
+package com.tttsaurus.ingameinfo.common.core.gui.screen;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiScreen;
 import java.io.IOException;
 
-public final class DummyMcGui extends GuiScreen
+public final class IgiDummyScreen extends GuiScreen
 {
-    private IDummyDrawScreen drawAction = null;
-    private IDummyKeyTyped typeAction = null;
+    private IGuiScreenDrawScreen drawAction = null;
+    private IGuiScreenKeyTyped typeAction = null;
 
-    public void setDrawAction(IDummyDrawScreen drawAction) { this.drawAction = drawAction; }
-    public void setTypeAction(IDummyKeyTyped typeAction) { this.typeAction = typeAction; }
+    public void setDrawAction(IGuiScreenDrawScreen drawAction) { this.drawAction = drawAction; }
+    public void setTypeAction(IGuiScreenKeyTyped typeAction) { this.typeAction = typeAction; }
 
     @Override
     protected void keyTyped(char typedChar, int keyCode) throws IOException
