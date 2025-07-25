@@ -382,7 +382,10 @@ public abstract class GuiLifecycleProvider
             if (!key.isEmpty())
             {
                 if (exitCallback.invoke())
+                {
+                    lifecycleProvider.openedGuiMap.get(key).onGuiClose();
                     lifecycleProvider.openedGuiMap.remove(key);
+                }
             }
         }
     }

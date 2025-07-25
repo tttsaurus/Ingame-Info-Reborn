@@ -138,6 +138,69 @@ public final class IgiRuntime
             return this;
         }
 
+        @ZenMethod
+        public boolean isGuiOpen(String mvvmRegistryName)
+        {
+            return InternalMethods.instance.GuiLifecycleProvider$openedGuiMap$getter.invoke(lifecycleHolder.getLifecycleProvider()).containsKey(mvvmRegistryName);
+        }
+
+        public LivePhaseEntry openGui(String holderName, String mvvmRegistryName)
+        {
+            GuiLifecycleHolder holder = null;
+            if (holderName.equals(DefaultLifecycleHolder.HOLDER_NAME))
+                holder = lifecycleHolder;
+            else for (GuiLifecycleHolder otherHolder: externaLifecycleHolders)
+                if (holderName.equals(otherHolder.getHolderName()))
+                {
+                    holder = otherHolder;
+                    break;
+                }
+
+            if (holder == null) return this;
+
+            holder.openGui(mvvmRegistryName, mvvmRegistry);
+            // force update to refresh
+            holder.update();
+            return this;
+        }
+
+        public LivePhaseEntry closeGui(String holderName, String mvvmRegistryName)
+        {
+            GuiLifecycleHolder holder = null;
+            if (holderName.equals(DefaultLifecycleHolder.HOLDER_NAME))
+                holder = lifecycleHolder;
+            else for (GuiLifecycleHolder otherHolder: externaLifecycleHolders)
+                if (holderName.equals(otherHolder.getHolderName()))
+                {
+                    holder = otherHolder;
+                    break;
+                }
+
+            if (holder == null) return this;
+
+            holder.closeGui(mvvmRegistryName, mvvmRegistry);
+            // force update to refresh
+            holder.update();
+            return this;
+        }
+
+        public boolean isGuiOpen(String holderName, String mvvmRegistryName)
+        {
+            GuiLifecycleHolder holder = null;
+            if (holderName.equals(DefaultLifecycleHolder.HOLDER_NAME))
+                holder = lifecycleHolder;
+            else for (GuiLifecycleHolder otherHolder: externaLifecycleHolders)
+                if (holderName.equals(otherHolder.getHolderName()))
+                {
+                    holder = otherHolder;
+                    break;
+                }
+
+            if (holder == null) return false;
+
+            return InternalMethods.instance.GuiLifecycleProvider$openedGuiMap$getter.invoke(holder.getLifecycleProvider()).containsKey(mvvmRegistryName);
+        }
+
         public boolean isOccupyingScreen()
         {
             if (lifecycleHolder.getLifecycleProvider().isUsingOtherScreen())
