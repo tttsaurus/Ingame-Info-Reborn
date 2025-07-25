@@ -38,6 +38,7 @@ public class IgiGuiContainer
 
     private ThemeConfig themeConfig;
 
+    private boolean prepareGuiOpen = false;
     private boolean initFlag = false;
     private boolean isActive = true;
     private IFunc<Boolean> exitCallback = () -> true;
@@ -57,6 +58,7 @@ public class IgiGuiContainer
     }
 
     //<editor-fold desc="getters">
+    public boolean getPrepareGuiOpen() { return prepareGuiOpen; }
     public boolean getActive() { return isActive; }
     public IFunc<Boolean> getExitCallback() { return exitCallback; }
     public int getExitKeyForFocusedGui() { return exitKeyForFocusedGui; }
@@ -156,6 +158,22 @@ public class IgiGuiContainer
         if (!isActive) return;
 
         mainGroup.onPropagateInput(inputState);
+    }
+
+    public void prepareGuiOpen()
+    {
+        prepareGuiOpen = true;
+    }
+
+    public void onGuiOpen()
+    {
+        prepareGuiOpen = false;
+        viewModel.onGuiOpen();
+    }
+
+    public void onGuiClose()
+    {
+        viewModel.onGuiClose();
     }
 
     // viewModel.start() may not work properly due to the lack of `undo` function

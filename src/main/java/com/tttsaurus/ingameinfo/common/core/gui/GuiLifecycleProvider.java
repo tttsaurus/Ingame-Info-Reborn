@@ -120,6 +120,12 @@ public abstract class GuiLifecycleProvider
             container.onInit();
         //</editor-fold>
 
+        //<editor-fold desc="gui container open">
+        for (IgiGuiContainer container : openedGuiMap.values())
+            if (container.getPrepareGuiOpen())
+                container.onGuiOpen();
+        //</editor-fold>
+
         //<editor-fold desc="gui container resize">
         ScaledResolution newResolution = new ScaledResolution(MC);
         if (resolution.getScaleFactor() != newResolution.getScaleFactor() ||

@@ -132,7 +132,7 @@ public final class IgiRuntime
         @ZenMethod
         public LivePhaseEntry closeGui(String mvvmRegistryName)
         {
-            lifecycleHolder.closeGui(mvvmRegistryName);
+            lifecycleHolder.closeGui(mvvmRegistryName, mvvmRegistry);
             // force update to refresh
             lifecycleHolder.update();
             return this;

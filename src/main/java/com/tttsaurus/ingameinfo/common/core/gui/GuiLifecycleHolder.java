@@ -29,16 +29,20 @@ public abstract class GuiLifecycleHolder
     public final void openGui(String mvvmRegistryName, MvvmRegistry mvvmRegistry)
     {
         if (lifecycleProvider == null) return;
-        IgiGuiContainer igiGuiContainer = mvvmRegistry.getIgiGuiContainer(mvvmRegistryName);
-        if (igiGuiContainer == null) return;
+        IgiGuiContainer container = mvvmRegistry.getIgiGuiContainer(mvvmRegistryName);
+        if (container == null) return;
 
-        lifecycleProvider.openIgiGui(mvvmRegistryName, igiGuiContainer);
+        container.prepareGuiOpen();
+        lifecycleProvider.openIgiGui(mvvmRegistryName, container);
     }
 
-    public final void closeGui(String mvvmRegistryName)
+    public final void closeGui(String mvvmRegistryName, MvvmRegistry mvvmRegistry)
     {
         if (lifecycleProvider == null) return;
+        IgiGuiContainer container = mvvmRegistry.getIgiGuiContainer(mvvmRegistryName);
+        if (container == null) return;
 
+        container.onGuiClose();
         lifecycleProvider.closeIgiGui(mvvmRegistryName);
     }
 

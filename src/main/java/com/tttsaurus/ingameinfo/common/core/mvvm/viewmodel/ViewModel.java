@@ -140,4 +140,6 @@ public abstract class ViewModel<T extends View>
 
     public abstract void onStart();
     public abstract void onFixedUpdate(double deltaTime);
+    public void onGuiOpen() { }
+    public void onGuiClose() { }
 }
