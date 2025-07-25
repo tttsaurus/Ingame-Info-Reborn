@@ -1,12 +1,15 @@
 package com.tttsaurus.ingameinfo.common.core.gui.render.decorator.visual.command;
 
+import com.tttsaurus.ingameinfo.common.core.render.AlphaBlendMode;
 import com.tttsaurus.ingameinfo.common.core.render.RenderUtils;
 
 public class VC_RenderRect extends VisualCommand
 {
     protected VC_RenderRect()
     {
-        super(params(float.class, float.class, float.class, float.class, int.class));
+        super(
+                params(float.class, float.class, float.class, float.class, int.class),
+                params(float.class, float.class, float.class, float.class, int.class, AlphaBlendMode.class));
     }
 
     @Override
@@ -19,6 +22,10 @@ public class VC_RenderRect extends VisualCommand
             case 0 ->
             {
                 RenderUtils.renderRect((float)args[0], (float)args[1], (float)args[2], (float)args[3], (int)args[4]);
+            }
+            case 1 ->
+            {
+                RenderUtils.renderRect((float)args[0], (float)args[1], (float)args[2], (float)args[3], (int)args[4], (AlphaBlendMode)args[5]);
             }
         }
     }

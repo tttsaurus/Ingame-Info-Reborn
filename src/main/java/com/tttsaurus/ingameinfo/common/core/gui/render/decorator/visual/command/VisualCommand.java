@@ -98,7 +98,7 @@ public abstract class VisualCommand
         return false;
     }
 
-    protected int matchParams(Object... args)
+    protected final int matchParams(Object... args)
     {
         Class<?>[] params = new Class<?>[args.length];
         for (int i = 0; i < params.length; i++)

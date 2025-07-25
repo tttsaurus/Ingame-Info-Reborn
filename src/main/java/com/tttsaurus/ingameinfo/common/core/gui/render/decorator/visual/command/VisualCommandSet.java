@@ -2,6 +2,7 @@ package com.tttsaurus.ingameinfo.common.core.gui.render.decorator.visual.command
 
 public final class VisualCommandSet
 {
+    public static final VC_RenderFormattedText RENDER_FORMATTED_TEXT = new VC_RenderFormattedText();
     public static final VC_RenderGradientRect RENDER_GRADIENT_RECT = new VC_RenderGradientRect();
     public static final VC_RenderImagePrefab RENDER_IMAGE_PREFAB = new VC_RenderImagePrefab();
     public static final VC_RenderItem RENDER_ITEM = new VC_RenderItem();
