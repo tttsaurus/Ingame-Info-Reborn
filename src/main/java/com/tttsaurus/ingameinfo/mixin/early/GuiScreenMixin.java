@@ -21,6 +21,11 @@ public class GuiScreenMixin
             ))
     public void handleMouseInput(GuiScreen instance, Operation<Void> original)
     {
+        if (IgiRuntimeLocator.get() == null)
+        {
+            original.call(instance);
+            return;
+        }
         if (IgiRuntimeLocator.get().livePhase.isOccupyingScreen()) return;
 
         original.call(instance);
@@ -34,6 +39,11 @@ public class GuiScreenMixin
             ))
     public void handleKeyboardInput(GuiScreen instance, Operation<Void> original)
     {
+        if (IgiRuntimeLocator.get() == null)
+        {
+            original.call(instance);
+            return;
+        }
         if (IgiRuntimeLocator.get().livePhase.isOccupyingScreen())
         {
             char c0 = Keyboard.getEventCharacter();

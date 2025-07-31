@@ -24,6 +24,7 @@ public class ForgeHooksClientMixin
     {
         original.call(instance, j, i, mouseX);
 
+        if (IgiRuntimeLocator.get() == null) return;
         if (IgiRuntimeLocator.get().livePhase.isOccupyingScreen())
         {
             for (IGuiScreenDrawScreen delegate: IgiRuntimeLocator.get().livePhase.collectDrawScreenDelegatesIfScreenOccupied())
