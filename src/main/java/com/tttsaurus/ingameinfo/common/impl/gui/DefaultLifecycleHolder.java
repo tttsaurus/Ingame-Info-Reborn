@@ -24,7 +24,7 @@ public final class DefaultLifecycleHolder extends GuiLifecycleHolder
         if (getLifecycleProvider() == null) return;
 
         // fluxloading compat
-        if (InGameInfoReborn.fluxloadingLoaded)
+        if (InGameInfoReborn.fluxloadingLoaded && FluxLoadingAPI.isActive())
         {
             if (!init)
             {
