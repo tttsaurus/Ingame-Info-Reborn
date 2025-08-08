@@ -9,6 +9,7 @@
 [![Downloads](https://img.shields.io/curseforge/dt/1171541?logo=curseforge&label=Downloads)](https://www.curseforge.com/minecraft/mc-mods/ingame-info-reborn)
 [![Downloads](https://img.shields.io/modrinth/dt/ingame-info-reborn?logo=modrinth&label=Downloads)](https://modrinth.com/mod/ingame-info-reborn)
 [![CodeFactor](https://www.codefactor.io/repository/github/tttsaurus/ingame-info-reborn/badge)](https://www.codefactor.io/repository/github/tttsaurus/ingame-info-reborn)
+[![Codacy Badge](https://app.codacy.com/project/badge/Grade/6f3ca5da261d410c8eb9479de9457372)](https://app.codacy.com/gh/tttsaurus/Ingame-Info-Reborn/dashboard?utm_source=gh&utm_medium=referral&utm_content=&utm_campaign=Badge_grade)
 
 This is a _Work-In-Progress_ spiritual successor of [InGame-Info-XML](https://github.com/Lunatrius/InGame-Info-XML), **not a fork**.
 If you like this project, don't forget to give it a star⭐!
