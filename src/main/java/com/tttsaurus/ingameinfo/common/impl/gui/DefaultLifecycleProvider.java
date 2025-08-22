@@ -234,6 +234,7 @@ public final class DefaultLifecycleProvider extends GuiLifecycleProvider
 
         cpuTimeStopwatch.stop();
         GL15.glEndQuery(GL33.GL_TIME_ELAPSED);
+        INT_BUFFER_16.clear();
         GL15.glGetQueryObject(gpuTimeQueryID, GL15.GL_QUERY_RESULT, INT_BUFFER_16);
         long gpuTimeNano = INT_BUFFER_16.get(0);
         long cpuTimeNano = cpuTimeStopwatch.getNanoTime();
@@ -420,9 +421,11 @@ public final class DefaultLifecycleProvider extends GuiLifecycleProvider
     {
         shaderProgram.use();
 
+        INT_BUFFER_16.clear();
         GL11.glGetInteger(GL13.GL_ACTIVE_TEXTURE, INT_BUFFER_16);
         int texUnit = INT_BUFFER_16.get(0);
 
+        INT_BUFFER_16.clear();
         GlStateManager.setActiveTexture(GL13.GL_TEXTURE1);
         GL11.glGetInteger(GL11.GL_TEXTURE_BINDING_2D, INT_BUFFER_16);
         texUnit1TextureID = INT_BUFFER_16.get(0);
@@ -445,6 +448,7 @@ public final class DefaultLifecycleProvider extends GuiLifecycleProvider
     }
     private void deactivateShaders()
     {
+        INT_BUFFER_16.clear();
         GL11.glGetInteger(GL13.GL_ACTIVE_TEXTURE, INT_BUFFER_16);
         int texUnit = INT_BUFFER_16.get(0);
 
@@ -478,8 +482,10 @@ public final class DefaultLifecycleProvider extends GuiLifecycleProvider
     //<editor-fold desc="gl state management">
     private void storeCommonGlStates()
     {
+        INT_BUFFER_16.clear();
         GL11.glGetInteger(GL11.GL_TEXTURE_BINDING_2D, INT_BUFFER_16);
         textureID = INT_BUFFER_16.get(0);
+        FLOAT_BUFFER_16.clear();
         GL11.glGetFloat(GL11.GL_CURRENT_COLOR, FLOAT_BUFFER_16);
         r = FLOAT_BUFFER_16.get(0);
         g = FLOAT_BUFFER_16.get(1);
@@ -489,20 +495,27 @@ public final class DefaultLifecycleProvider extends GuiLifecycleProvider
         lighting = GL11.glIsEnabled(GL11.GL_LIGHTING);
         texture2D = GL11.glIsEnabled(GL11.GL_TEXTURE_2D);
         alphaTest = GL11.glIsEnabled(GL11.GL_ALPHA_TEST);
+        INT_BUFFER_16.clear();
         GL11.glGetInteger(GL11.GL_SHADE_MODEL, INT_BUFFER_16);
         shadeModel = INT_BUFFER_16.get(0);
         depthTest = GL11.glIsEnabled(GL11.GL_DEPTH_TEST);
         cullFace = GL11.glIsEnabled(GL11.GL_CULL_FACE);
+        INT_BUFFER_16.clear();
         GL11.glGetInteger(GL14.GL_BLEND_SRC_RGB, INT_BUFFER_16);
         blendSrcRgb = INT_BUFFER_16.get(0);
+        INT_BUFFER_16.clear();
         GL11.glGetInteger(GL14.GL_BLEND_DST_RGB, INT_BUFFER_16);
         blendDstRgb = INT_BUFFER_16.get(0);
+        INT_BUFFER_16.clear();
         GL11.glGetInteger(GL14.GL_BLEND_SRC_ALPHA, INT_BUFFER_16);
         blendSrcAlpha = INT_BUFFER_16.get(0);
+        INT_BUFFER_16.clear();
         GL11.glGetInteger(GL14.GL_BLEND_DST_ALPHA, INT_BUFFER_16);
         blendDstAlpha = INT_BUFFER_16.get(0);
+        INT_BUFFER_16.clear();
         GL11.glGetInteger(GL11.GL_ALPHA_TEST_FUNC, INT_BUFFER_16);
         alphaFunc = INT_BUFFER_16.get(0);
+        FLOAT_BUFFER_16.clear();
         GL11.glGetFloat(GL11.GL_ALPHA_TEST_REF, FLOAT_BUFFER_16);
         alphaRef = FLOAT_BUFFER_16.get(0);
     }
