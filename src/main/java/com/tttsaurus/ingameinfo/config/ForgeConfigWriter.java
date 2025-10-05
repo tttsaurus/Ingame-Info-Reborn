@@ -1,7 +1,6 @@
 package com.tttsaurus.ingameinfo.config;
 
-import java.io.File;
-import java.io.RandomAccessFile;
+import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
@@ -15,44 +14,22 @@ public class ForgeConfigWriter
         this.file = file;
     }
 
-    private void replace(RandomAccessFile file, long start, long end, String str)
-    {
-        try
-        {
-            file.seek(end);
-            byte[] remainingContent = new byte[(int)(file.length() - end)];
-            file.readFully(remainingContent);
-
-            byte[] addition = (str + "\n").getBytes(StandardCharsets.UTF_8);
-            byte[] newContent = new byte[remainingContent.length + addition.length];
-            System.arraycopy(addition, 0, newContent, 0, addition.length);
-            System.arraycopy(remainingContent, 0, newContent, addition.length, remainingContent.length);
-
-            file.setLength(start);
-            file.seek(start);
-            file.write(newContent);
-        }
-        catch (Exception ignored) { }
-    }
-
     private void replaceOneLineValue(String category, String key, String value)
     {
         try
         {
-            RandomAccessFile file = new RandomAccessFile(this.file, "rw");
-
-            long start = -1;
-            long end = -1;
+            List<String> lines = new ArrayList<>();
+            try (BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(file), StandardCharsets.UTF_8)))
+            {
+                String line;
+                while ((line = reader.readLine()) != null)
+                    lines.add(line);
+            }
 
             List<String> categories = new ArrayList<>();
-
-            // pos1 is the start of this line
-            // pos2 is the end of this line
-            long pos1 = file.getFilePointer();
-            String line = file.readLine();
-            while (line != null)
+            for (int i = 0; i < lines.size(); i++)
             {
-                long pos2 = file.getFilePointer();
+                String line = lines.get(i);
 
                 // skip comments
                 if (!line.trim().startsWith("#"))
@@ -66,32 +43,32 @@ public class ForgeConfigWriter
                     }
 
                     if (line.contains("}"))
-                        categories.remove(categories.size() - 1);
+                        if (!categories.isEmpty())
+                            categories.remove(categories.size() - 1);
 
                     // locate value
                     index = line.indexOf(key);
                     if (index >= 0 && String.join(".", categories).equals(category))
                     {
-                        index += key.length();
-                        char c = line.charAt(index);
-                        while (c == '"' || c == '=')
-                            c = line.charAt(++index);
+                        int valueStart = index + key.length();
+                        while (valueStart < line.length() && (line.charAt(valueStart) == '"' || line.charAt(valueStart) == '=' || line.charAt(valueStart) == ' '))
+                            valueStart++;
 
-                        start = pos1 + index;
-                        end = pos2;
-
+                        String newLine = line.substring(0, valueStart) + value;
+                        lines.set(i, newLine);
                         break;
                     }
                 }
-
-                pos1 = pos2;
-                line = file.readLine();
             }
 
-            if (start != -1 && end != -1)
-                replace(file, start, end, value);
-
-            file.close();
+            try (BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(file), StandardCharsets.UTF_8)))
+            {
+                for (String line : lines)
+                {
+                    writer.write(line);
+                    writer.write(System.lineSeparator());
+                }
+            }
         }
         catch (Exception ignored) { }
     }
@@ -100,14 +77,17 @@ public class ForgeConfigWriter
     {
         replaceOneLineValue(category, key, String.valueOf(value));
     }
+
     public void replaceFloat(String category, String key, float value)
     {
         replaceOneLineValue(category, key, String.valueOf(value));
     }
+
     public void replaceBoolean(String category, String key, boolean value)
     {
         replaceOneLineValue(category, key, value ? "true" : "false");
     }
+
     public void replaceString(String category, String key, String value)
     {
         replaceOneLineValue(category, key, value);
