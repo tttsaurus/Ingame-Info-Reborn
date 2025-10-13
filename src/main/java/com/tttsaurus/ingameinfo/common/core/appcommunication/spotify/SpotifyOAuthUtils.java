@@ -1,15 +1,13 @@
 package com.tttsaurus.ingameinfo.common.core.appcommunication.spotify;
 
-import com.sun.net.httpserver.HttpServer;
-import com.sun.net.httpserver.HttpHandler;
-import com.sun.net.httpserver.HttpExchange;
+import com.sun.net.httpserver.*;
 import com.tttsaurus.ingameinfo.common.core.commonutils.FileUtils;
 import com.tttsaurus.ingameinfo.common.core.serialization.json.RawJsonUtils;
 import java.io.*;
 import java.net.*;
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
-import javax.net.ssl.HttpsURLConnection;
+import javax.net.ssl.*;
 
 @SuppressWarnings("all")
 public final class SpotifyOAuthUtils
@@ -28,7 +26,7 @@ public final class SpotifyOAuthUtils
         }
     }
 
-    static class OAuthCodeHandler implements HttpHandler
+    private static class OAuthCodeHandler implements HttpHandler
     {
         @Override
         public void handle(HttpExchange exchange) throws IOException
@@ -96,7 +94,7 @@ public final class SpotifyOAuthUtils
     public static String CLIENT_SECRET = "";
 
     // make sure this matches the redirect uri registered in your Spotify app
-    private static final String REDIRECT_URI = "https://127.0.0.1:8888";
+    private static final String REDIRECT_URI = "http://127.0.0.1:8888";
     private static final String AUTHORIZATION_URL = "https://accounts.spotify.com/authorize";
     private static final String TOKEN_URL = "https://accounts.spotify.com/api/token";
 
