@@ -24,7 +24,7 @@ public final class IgiSpotifyIntegrationConfig
         try
         {
             ENABLE_SPOTIFY_INTEGRATION = CONFIG.getBoolean("Enable Spotify Integration", "default", false, "Whether to enable the whole integration module");
-            SPOTIFY_CLIENT_ID = CONFIG.getString("Spotify Client Id", "default", "", "Input client id of your spotify app \nDeclaration: this mod doesn't record or share your client id \nand it's not recommended for you to share your client id \nGuide: you have to create a spotify app to get client id & secrete \nhttps://developer.spotify.com/documentation/web-api/concepts/apps \nRedirect URI should be set to http://localhost:8888 for this mod to listen");
+            SPOTIFY_CLIENT_ID = CONFIG.getString("Spotify Client Id", "default", "", "Input client id of your spotify app \nDeclaration: this mod doesn't record or share your client id \nand it's not recommended for you to share your client id \nGuide: you have to create a spotify app to get client id & secrete \nhttps://developer.spotify.com/documentation/web-api/concepts/apps \nRedirect URI must be set to https://127.0.0.1:8888 for this mod to listen");
             SPOTIFY_CLIENT_SECRET = CONFIG.getString("Spotify Client Secret", "default", "", "Input client secret of your spotify app \nDeclaration: this mod doesn't record or share your client secret \nand it's not recommended for you to share your client secret");
             SPOTIFY_AUTO_DISPLAY = CONFIG.getBoolean("Try Auto Display Overlay", "default", true, "Whether to try displaying the overlay when the game starts \nMay fail due to token/auth issues");
             SPOTIFY_EXTENDED_LAYOUT = CONFIG.getBoolean("Use Extended Overlay Layout", "default", false, "Whether to display more info on the overlay");

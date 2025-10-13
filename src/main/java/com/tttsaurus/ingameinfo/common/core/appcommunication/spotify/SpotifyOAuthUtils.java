@@ -96,7 +96,7 @@ public final class SpotifyOAuthUtils
     public static String CLIENT_SECRET = "";
 
     // make sure this matches the redirect uri registered in your Spotify app
-    private static final String REDIRECT_URI = "http://localhost:8888";
+    private static final String REDIRECT_URI = "https://127.0.0.1:8888";
     private static final String AUTHORIZATION_URL = "https://accounts.spotify.com/authorize";
     private static final String TOKEN_URL = "https://accounts.spotify.com/api/token";
 
