@@ -1,6 +1,7 @@
 package com.tttsaurus.ingameinfo.common.impl.gui;
 
 import com.tttsaurus.fluxloading.core.FluxLoadingAPI;
+import com.tttsaurus.fluxloading.core.fsm.FluxLoadingPhase;
 import com.tttsaurus.ingameinfo.InGameInfoReborn;
 import com.tttsaurus.ingameinfo.common.core.gui.GuiLifecycleHolder;
 import com.tttsaurus.ingameinfo.common.core.input.IgiKeyboard;
@@ -31,7 +32,7 @@ public final class DefaultLifecycleHolder extends GuiLifecycleHolder
                 init = true;
                 getLifecycleProvider().update(inputGen.generate());
             }
-            if (!FluxLoadingAPI.isDuringFadingOutPhase() && !FluxLoadingAPI.isFinishLoading()) return;
+            if (FluxLoadingAPI.getPhase() != FluxLoadingPhase.FADING_OUT && FluxLoadingAPI.getPhase() != FluxLoadingPhase.FINISHED) return;
         }
 
         getLifecycleProvider().update(inputGen.generate());
