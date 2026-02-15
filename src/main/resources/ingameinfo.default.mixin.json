@@ -1,17 +1,18 @@
 {
+  "required": true,
   "package": "com.tttsaurus.ingameinfo.mixin.early",
-  "refmap": "mixins.ingameinfo.refmap.json",
-  "target": "@env(DEFAULT)",
-  "minVersion": "0.8",
   "compatibilityLevel": "JAVA_8",
-  "mixins": [
-    "ForgeHooksClientMixin"
-  ],
+  "target": "@env(DEFAULT)",
   "client": [
     "FramebufferMixin",
     "GlStateManagerMixin",
     "GuiScreenMixin",
     "MinecraftMixin"
   ],
-  "server": []
+  "mixins": [
+    "ForgeHooksClientMixin"
+  ],
+  "server": [],
+  "setSourceFile": true,
+  "minVersion": "0.8.7"
 }

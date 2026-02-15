@@ -10,11 +10,11 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import com.tttsaurus.ingameinfo.proxy.CommonProxy;
 
-@Mod(modid = Tags.MODID,
-     name = Tags.MODNAME,
-     version = Tags.VERSION,
+@Mod(modid = Reference.MOD_ID,
+     name = Reference.MOD_NAME,
+     version = Reference.VERSION,
      acceptedMinecraftVersions = "[1.12.2]",
-     dependencies = "required-after:mixinbooter@[10.0,)")
+     dependencies = "")
 public final class InGameInfoReborn
 {
     @SidedProxy(
@@ -32,7 +32,7 @@ public final class InGameInfoReborn
     public static boolean simpledifficultyLoaded;
     public static boolean fluxloadingLoaded;
 
-    public static final Logger LOGGER = LogManager.getLogger(Tags.MODNAME);
+    public static final Logger LOGGER = LogManager.getLogger(Reference.MOD_NAME);
 
     public static ASMDataTable asmDataTable;
     private static Boolean isCleanroom = null;

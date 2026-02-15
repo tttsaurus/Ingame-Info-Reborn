@@ -1,6 +1,6 @@
 {
   "pack": {
-    "pack_format": 3,
-    "description": "In-Game Info Reborn Resource Pack"
+    "description": "${mod_name} Resources",
+    "pack_format": 3
   }
 }

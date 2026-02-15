@@ -1,6 +1,6 @@
 package com.tttsaurus.ingameinfo.common.impl.network;
 
-import com.tttsaurus.ingameinfo.Tags;
+import com.tttsaurus.ingameinfo.Reference;
 import com.tttsaurus.ingameinfo.common.core.function.IAction_1Param;
 import com.tttsaurus.ingameinfo.common.core.function.IAction_2Param;
 import com.tttsaurus.ingameinfo.common.impl.network.common.RespondNbtPacket;
@@ -22,7 +22,7 @@ public class IgiNetwork
     private static final Map<String, NBTTagCompound> cachedNbtResponses = new HashMap<>();
     private static final Map<String, IAction_1Param<NBTTagCompound>> nbtResponseConsumers = new HashMap<>();
 
-    public static final SimpleNetworkWrapper NETWORK = NetworkRegistry.INSTANCE.newSimpleChannel(Tags.MODID);
+    public static final SimpleNetworkWrapper NETWORK = NetworkRegistry.INSTANCE.newSimpleChannel(Reference.MOD_ID);
 
     public static void pushNbtResponse(String responseKey, NBTTagCompound nbt)
     {

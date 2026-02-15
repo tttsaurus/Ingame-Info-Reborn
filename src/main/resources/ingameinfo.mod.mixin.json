@@ -1,0 +1,14 @@
+{
+  "required": true,
+  "package": "com.tttsaurus.ingameinfo.mixin.mod",
+  "plugin": "com.tttsaurus.ingameinfo.InGameInfoRebornMixinConfigPlugin",
+  "compatibilityLevel": "JAVA_8",
+  "target": "@env(MOD)",
+  "client": [
+    "hei.JustEnoughItemsMixin"
+  ],
+  "mixins": [],
+  "server": [],
+  "setSourceFile": true,
+  "minVersion": "0.8.7"
+}
