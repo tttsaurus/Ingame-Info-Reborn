@@ -210,9 +210,24 @@ jar {
 shadowJar {
     configurations = [project.configurations.shadow]
     archiveClassifier = "shadow"
+
+    relocate 'org.spongepowered.configurate', "${root_package}.${mod_id}.shadow.configurate"
+    relocate 'net.kyori.option', "${root_package}.${mod_id}.shadow.option"
+    relocate 'io.leangen.geantyref', "${root_package}.${mod_id}.shadow.geantyref"
 }
 
-remapJar {
+//remapJar {
+//    doFirst {
+//        logging.captureStandardOutput LogLevel.INFO
+//    }
+//    doLast {
+//        logging.captureStandardOutput LogLevel.QUIET
+//    }
+//}
+
+def remapTaskName = propertyBool('enable_shadow') ? "remapShadowJar" : "remapJar"
+
+tasks.named(remapTaskName).configure {
     doFirst {
         logging.captureStandardOutput LogLevel.INFO
     }

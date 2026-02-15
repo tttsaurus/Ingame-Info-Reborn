@@ -36,7 +36,7 @@ public class CommonProxy
         }
         catch (Exception e)
         {
-            throw new RuntimeException("GUI Lifecycle Provider is invalid. See config/ingameinfo/common.cfg");
+            throw new RuntimeException("GUI Lifecycle Provider is invalid. See config/ingameinfo/common.cfg", e);
         }
 
         IgiDefaultLifecycleProviderConfig.CONFIG = new Configuration(FileUtils.makeFile("default_lifecycle_provider.cfg"));

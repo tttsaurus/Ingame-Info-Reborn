@@ -54,7 +54,7 @@ dependencies {
     // }
 
     // configurate
-    contain 'org.spongepowered:configurate-hocon:4.2.0'
+    shadow 'org.spongepowered:configurate-hocon:4.2.0'
 
     // hei
     modImplementation 'curse.maven:hei-557549:6187146'
