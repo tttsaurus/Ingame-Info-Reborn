@@ -70,7 +70,7 @@ public final class RenderUtils
     //<editor-fold desc="text">
     public static FormattedText bakeFormattedText(String text)
     {
-        return InternalMethods.instance.FormattedText$constructor.invoke(text);
+        return InternalMethods.FormattedText$constructor(text);
     }
 
     public static void renderFormattedText(FormattedText text, float x, float y, float scale, int color, boolean shadow)

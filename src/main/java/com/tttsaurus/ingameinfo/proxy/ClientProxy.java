@@ -237,8 +237,8 @@ public class ClientProxy extends CommonProxy
         //</editor-fold>
 
         //<editor-fold desc="igi runtime">
-        InternalMethods.instance.IgiRuntime$init.invoke();
-        IgiRuntime runtime = InternalMethods.instance.IgiRuntime$instance$getter.invoke();
+        InternalMethods.IgiRuntime$init();
+        IgiRuntime runtime = InternalMethods.IgiRuntime$instance$getter();
         MinecraftForge.EVENT_BUS.post(new IgiRuntimeEntryPointEvent(runtime));
         //</editor-fold>
     }

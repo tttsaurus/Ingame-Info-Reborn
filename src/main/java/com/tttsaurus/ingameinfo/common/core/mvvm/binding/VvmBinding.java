@@ -38,13 +38,13 @@ public class VvmBinding<TView extends View>
         if (CrtView.class.isAssignableFrom(viewClass))
             ((CrtView)view).runtimeMvvm = mvvmRegistryName;
 
-        GuiLayout guiLayout = InternalMethods.instance.View$init.invoke(view, null);
-        MainGroup mainGroup = InternalMethods.instance.GuiLayout$mainGroup$getter.invoke(guiLayout);
-        InternalMethods.instance.View$mainGroup$setter.invoke(view, mainGroup);
+        GuiLayout guiLayout = InternalMethods.View$init(view, null);
+        MainGroup mainGroup = InternalMethods.GuiLayout$mainGroup$getter(guiLayout);
+        InternalMethods.View$mainGroup$setter(view, mainGroup);
 
         RenderDecorator renderDecorator = new RenderDecorator();
         view.initRenderDecorator(renderDecorator);
-        InternalMethods.instance.View$renderDecorator$setter.invoke(view, renderDecorator);
+        InternalMethods.View$renderDecorator$setter(view, renderDecorator);
 
         return guiLayout;
     }
@@ -90,7 +90,7 @@ public class VvmBinding<TView extends View>
             // view to viewmodel sync
             if (reactive.passiveSync())
             {
-                Map<String, IStylePropertySyncTo> syncToMap = InternalMethods.instance.Element$syncToMap$getter.invoke(element);
+                Map<String, IStylePropertySyncTo> syncToMap = InternalMethods.Element$syncToMap$getter(element);
                 IStylePropertyGetter getter = ElementRegistry.getStylePropertyGetter(stylePropertySetter);
                 if (getter != null)
                 {

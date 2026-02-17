@@ -22,8 +22,8 @@ public class CommonProxy
     public void preInit(FMLPreInitializationEvent event, Logger logger)
     {
         //<editor-fold desc="reflection">
-        InternalMethods.instance = new InternalMethods();
-        logger.info("Reflection setup of IGI framework finished.");
+//        InternalMethods.instance = new InternalMethods();
+//        logger.info("Reflection setup of IGI framework finished.");
         //</editor-fold>
 
         //<editor-fold desc="config setup">

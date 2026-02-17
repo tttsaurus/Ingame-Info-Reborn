@@ -68,7 +68,7 @@ public class IgiGuiContainer
     public List<GhostableItem> getHeldItemWhitelist() { return heldItemWhitelist; }
     public List<GhostableItem> getHeldItemBlacklist() { return heldItemBlacklist; }
     public ThemeConfig getThemeConfig() { return themeConfig; }
-    public RenderDecorator getRenderDecorator() { return InternalMethods.instance.ViewModel$getRenderDecorator.invoke(viewModel); }
+    public RenderDecorator getRenderDecorator() { return InternalMethods.ViewModel$getRenderDecorator(viewModel); }
     //</editor-fold>
 
     protected IgiGuiContainer() { }
@@ -81,14 +81,14 @@ public class IgiGuiContainer
         themeConfig = ThemeRegistry.getTheme(themeName);
         mainGroup.applyLogicTheme(themeConfig);
 
-        InternalMethods.instance.ViewModel$isActiveGetter$setter.invoke(viewModel, () -> isActive);
-        InternalMethods.instance.ViewModel$isActiveSetter$setter.invoke(viewModel, (flag) -> isActive = flag);
-        InternalMethods.instance.ViewModel$exitCallbackSetter$setter.invoke(viewModel, (callback) -> exitCallback = callback);
-        InternalMethods.instance.ViewModel$isFocusedGetter$setter.invoke(viewModel, () -> isFocused);
-        InternalMethods.instance.ViewModel$isFocusedSetter$setter.invoke(viewModel, (focused) -> isFocused = focused);
+        InternalMethods.ViewModel$isActiveGetter$setter(viewModel, () -> isActive);
+        InternalMethods.ViewModel$isActiveSetter$setter(viewModel, (flag) -> isActive = flag);
+        InternalMethods.ViewModel$exitCallbackSetter$setter(viewModel, (callback) -> exitCallback = callback);
+        InternalMethods.ViewModel$isFocusedGetter$setter(viewModel, () -> isFocused);
+        InternalMethods.ViewModel$isFocusedSetter$setter(viewModel, (focused) -> isFocused = focused);
         viewModel.onStart();
 
-        List<SlotAccessor> slotAccessors = InternalMethods.instance.ViewModel$slotAccessors$getter.invoke(viewModel);
+        List<SlotAccessor> slotAccessors = InternalMethods.ViewModel$slotAccessors$getter(viewModel);
         for (SlotAccessor slotAccessor: slotAccessors)
         {
             ComposeBlock composeBlock = slotAccessor.getComposeBlock();
@@ -96,7 +96,7 @@ public class IgiGuiContainer
             {
                 composeBlock.updateTheme(themeConfig);
                 // first compose update is to add elements and applyLogicTheme
-                composeBlock.update(0d, InternalMethods.instance.ViewModel$sharedContext$getter.invoke(viewModel));
+                composeBlock.update(0d, InternalMethods.ViewModel$sharedContext$getter(viewModel));
             }
         }
 
@@ -119,10 +119,10 @@ public class IgiGuiContainer
     {
         if (!isActive) return;
 
-        List<SlotAccessor> slotAccessors = InternalMethods.instance.ViewModel$slotAccessors$getter.invoke(viewModel);
+        List<SlotAccessor> slotAccessors = InternalMethods.ViewModel$slotAccessors$getter(viewModel);
         for (SlotAccessor slotAccessor: slotAccessors)
             if (slotAccessor.getComposeBlock() != null)
-                slotAccessor.getComposeBlock().update(deltaTime, InternalMethods.instance.ViewModel$sharedContext$getter.invoke(viewModel));
+                slotAccessor.getComposeBlock().update(deltaTime, InternalMethods.ViewModel$sharedContext$getter(viewModel));
 
         viewModel.onFixedUpdate(deltaTime);
         mainGroup.onFixedUpdate(deltaTime);
@@ -188,7 +188,7 @@ public class IgiGuiContainer
 
         viewModel.onStart();
 
-        List<SlotAccessor> slotAccessors = InternalMethods.instance.ViewModel$slotAccessors$getter.invoke(viewModel);
+        List<SlotAccessor> slotAccessors = InternalMethods.ViewModel$slotAccessors$getter(viewModel);
         for (SlotAccessor slotAccessor: slotAccessors)
         {
             ComposeBlock composeBlock = slotAccessor.getComposeBlock();
@@ -197,7 +197,7 @@ public class IgiGuiContainer
                 composeBlock.clear();
                 composeBlock.updateTheme(themeConfig);
                 // first compose update is to add elements and applyLogicTheme
-                composeBlock.update(0d, InternalMethods.instance.ViewModel$sharedContext$getter.invoke(viewModel));
+                composeBlock.update(0d, InternalMethods.ViewModel$sharedContext$getter(viewModel));
             }
         }
 

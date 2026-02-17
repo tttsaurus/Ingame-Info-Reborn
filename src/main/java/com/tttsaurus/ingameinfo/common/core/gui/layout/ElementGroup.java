@@ -17,12 +17,12 @@ public abstract class ElementGroup extends Element
 
     public void add(Element element)
     {
-        InternalMethods.instance.Element$parent$setter.invoke(element, this);
+        InternalMethods.Element$parent$setter(element, this);
         elements.add(element);
     }
     public void add(int index, Element element)
     {
-        InternalMethods.instance.Element$parent$setter.invoke(element, this);
+        InternalMethods.Element$parent$setter(element, this);
         elements.add(index, element);
     }
 

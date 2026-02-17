@@ -6,6 +6,6 @@ public final class IgiRuntimeLocator
 
     public static IgiRuntime get()
     {
-        return InternalMethods.instance.IgiRuntime$instance$getter.invoke();
+        return InternalMethods.IgiRuntime$instance$getter();
     }
 }

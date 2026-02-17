@@ -61,7 +61,7 @@ public abstract class View
         if (mainGroup == null) return;
 
         GuiLayout guiLayout = init(container);
-        MainGroup mainGroup = InternalMethods.instance.GuiLayout$mainGroup$getter.invoke(guiLayout);
+        MainGroup mainGroup = InternalMethods.GuiLayout$mainGroup$getter(guiLayout);
 
         // doesnt break the alias relationship between IgiGuiContainer.mainGroup and View.mainGroup
         this.mainGroup.elements.clear();
@@ -104,6 +104,6 @@ public abstract class View
 
             return (new GuiLayoutDeserializer(container)).deserialize(RawIxmlUtils.deleteComments(builder.toString()));
         }
-        catch (Exception ignored) { return InternalMethods.instance.GuiLayout$constructor.invoke(); }
+        catch (Exception ignored) { return InternalMethods.GuiLayout$constructor(); }
     }
 }

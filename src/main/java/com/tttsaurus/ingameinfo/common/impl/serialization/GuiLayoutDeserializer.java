@@ -28,9 +28,9 @@ public class GuiLayoutDeserializer implements IDeserializer<GuiLayout>
     @Override
     public GuiLayout deserialize(String raw)
     {
-        GuiLayout guiLayout = InternalMethods.instance.GuiLayout$constructor.invoke();
+        GuiLayout guiLayout = InternalMethods.GuiLayout$constructor();
         if (container != null)
-            InternalMethods.instance.GuiLayout$igiGuiContainer$setter.invoke(guiLayout, container);
+            InternalMethods.GuiLayout$igiGuiContainer$setter(guiLayout, container);
 
         if (raw.isEmpty()) return guiLayout;
 

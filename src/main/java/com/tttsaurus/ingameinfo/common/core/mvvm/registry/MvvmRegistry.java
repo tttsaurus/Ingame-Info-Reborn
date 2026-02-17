@@ -28,9 +28,9 @@ public final class MvvmRegistry
     }
     public void cacheIgiGuiContainer(String mvvmRegistryName, @Nonnull ViewModel<?> viewModel)
     {
-        GuiLayout guiLayout = InternalMethods.instance.ViewModel$init.invoke(viewModel, mvvmRegistryName, this);
-        IgiGuiContainer igiGuiContainer = InternalMethods.instance.GuiLayout$igiGuiContainer$getter.invoke(guiLayout);
-        InternalMethods.instance.IgiGuiContainer$viewModel$setter.invoke(igiGuiContainer, viewModel);
+        GuiLayout guiLayout = InternalMethods.ViewModel$init(viewModel, mvvmRegistryName, this);
+        IgiGuiContainer igiGuiContainer = InternalMethods.GuiLayout$igiGuiContainer$getter(guiLayout);
+        InternalMethods.IgiGuiContainer$viewModel$setter(igiGuiContainer, viewModel);
         igiGuiContainerCache.put(mvvmRegistryName, igiGuiContainer);
 
         InGameInfoReborn.LOGGER.info("Generated and cached IgiGuiContainer for '" + mvvmRegistryName + "'.");

@@ -9,18 +9,26 @@ import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import com.tttsaurus.ingameinfo.proxy.CommonProxy;
+import org.jspecify.annotations.NonNull;
+
+import java.util.Optional;
 
 @Mod(modid = Reference.MOD_ID,
      name = Reference.MOD_NAME,
      version = Reference.VERSION,
      acceptedMinecraftVersions = "[1.12.2]",
-     dependencies = "")
+     dependencies = "required:cleanroom@[0.4.3-alpha,)")
 public final class InGameInfoReborn
 {
+    /**
+     * Will be injected by Forge.
+     */
     @SidedProxy(
             clientSide = "com.tttsaurus.ingameinfo.proxy.ClientProxy",
             serverSide = "com.tttsaurus.ingameinfo.proxy.ServerProxy")
     private static CommonProxy proxy;
+
+    public static final Logger LOGGER = LogManager.getLogger(Reference.MOD_NAME);
 
     public static boolean crafttweakerLoaded;
     public static boolean bloodmagicLoaded;
@@ -32,29 +40,18 @@ public final class InGameInfoReborn
     public static boolean simpledifficultyLoaded;
     public static boolean fluxloadingLoaded;
 
-    public static final Logger LOGGER = LogManager.getLogger(Reference.MOD_NAME);
+    /**
+     * Will be initialized at Forge's <code>preInit</code>.
+     */
+    private static ASMDataTable asmDataTable = null;
 
-    public static ASMDataTable asmDataTable;
-    private static Boolean isCleanroom = null;
-
-    public static boolean isCleanroom()
+    /**
+     * @see #asmDataTable
+     */
+    @NonNull
+    public static Optional<ASMDataTable> getAsmDataTable()
     {
-        if (isCleanroom == null)
-        {
-            try
-            {
-                Class.forName("com.cleanroommc.boot.Main");
-                isCleanroom = true;
-                return true;
-            }
-            catch (ClassNotFoundException e)
-            {
-                isCleanroom = false;
-                return false;
-            }
-        }
-        else
-            return isCleanroom;
+        return Optional.ofNullable(asmDataTable);
     }
 
     @EventHandler
@@ -68,6 +65,5 @@ public final class InGameInfoReborn
     public void init(FMLInitializationEvent event)
     {
         proxy.init(event, LOGGER);
-        LOGGER.info("In-Game Info Reborn initialized.");
     }
 }

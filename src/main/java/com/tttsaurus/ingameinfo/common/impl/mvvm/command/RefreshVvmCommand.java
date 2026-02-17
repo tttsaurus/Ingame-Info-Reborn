@@ -35,7 +35,7 @@ public class RefreshVvmCommand extends CommandBase
         if (args.length == 1)
         {
             IgiRuntime.GlobalEntry global = IgiRuntimeLocator.get().global;
-            Map<String, IgiGuiContainer> map = InternalMethods.instance.GuiLifecycleProvider$openedGuiMap$getter.invoke(global.lifecycleHolder.getLifecycleProvider());
+            Map<String, IgiGuiContainer> map = InternalMethods.GuiLifecycleProvider$openedGuiMap$getter(global.lifecycleHolder.getLifecycleProvider());
             if (map.containsKey(args[0]))
             {
                 map.get(args[0]).refreshVvm(global.mvvmRegistry);

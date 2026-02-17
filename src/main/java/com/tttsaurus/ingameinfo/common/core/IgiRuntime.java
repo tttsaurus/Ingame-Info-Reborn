@@ -141,7 +141,7 @@ public final class IgiRuntime
         @ZenMethod
         public boolean isGuiOpen(String mvvmRegistryName)
         {
-            return InternalMethods.instance.GuiLifecycleProvider$openedGuiMap$getter.invoke(lifecycleHolder.getLifecycleProvider()).containsKey(mvvmRegistryName);
+            return InternalMethods.GuiLifecycleProvider$openedGuiMap$getter(lifecycleHolder.getLifecycleProvider()).containsKey(mvvmRegistryName);
         }
 
         public LivePhaseEntry openGui(String holderName, String mvvmRegistryName)
@@ -198,7 +198,7 @@ public final class IgiRuntime
 
             if (holder == null) return false;
 
-            return InternalMethods.instance.GuiLifecycleProvider$openedGuiMap$getter.invoke(holder.getLifecycleProvider()).containsKey(mvvmRegistryName);
+            return InternalMethods.GuiLifecycleProvider$openedGuiMap$getter(holder.getLifecycleProvider()).containsKey(mvvmRegistryName);
         }
 
         public boolean isOccupyingScreen()

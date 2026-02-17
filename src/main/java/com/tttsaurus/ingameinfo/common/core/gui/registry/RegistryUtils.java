@@ -12,6 +12,8 @@ import com.tttsaurus.ingameinfo.common.core.reflection.TypeUtils;
 import com.tttsaurus.ingameinfo.common.core.serialization.Deserializer;
 import com.tttsaurus.ingameinfo.common.core.serialization.IDeserializer;
 import com.tttsaurus.ingameinfo.common.impl.serialization.BuiltinTypesDeserializer;
+import net.minecraftforge.fml.common.discovery.ASMDataTable;
+
 import java.lang.invoke.MethodHandle;
 import java.lang.invoke.MethodHandles;
 import java.lang.reflect.Field;
@@ -28,7 +30,8 @@ public final class RegistryUtils
     public static Map<String, Class<? extends Element>> handleRegisteredElements(Map<Class<? extends Element>, RegisterElement> elementAnnotations)
     {
         Map<String, Class<? extends Element>> annotatedClasses = new HashMap<>();
-        InGameInfoReborn.asmDataTable.getAll(RegisterElement.class.getCanonicalName()).forEach(data ->
+        ASMDataTable asmDataTable = InGameInfoReborn.getAsmDataTable().orElseThrow();
+        asmDataTable.getAll(RegisterElement.class.getCanonicalName()).forEach(data ->
         {
             String className = data.getClassName();
             try

@@ -114,8 +114,8 @@ public abstract class ViewModel<T extends View>
         for (Map.Entry<Reactive, IReactiveObjectGetter> entry: reactiveObjects.entrySet())
         {
             ReactiveObject<?> reactiveObject = entry.getValue().get(this);
-            InternalMethods.instance.ReactiveObject$initiativeCallbacks$getter.invoke(reactiveObject).clear();
-            InternalMethods.instance.ReactiveObject$passiveCallbacks$getter.invoke(reactiveObject).clear();
+            InternalMethods.ReactiveObject$initiativeCallbacks$getter(reactiveObject).clear();
+            InternalMethods.ReactiveObject$passiveCallbacks$getter(reactiveObject).clear();
             binding.bindReactiveObject(entry.getKey(), reactiveObject);
         }
 
@@ -123,7 +123,7 @@ public abstract class ViewModel<T extends View>
         for (Map.Entry<Reactive, IReactiveCollectionGetter> entry: reactiveCollections.entrySet())
         {
             ReactiveCollection reactiveCollection = entry.getValue().get(this);
-            InternalMethods.instance.ReactiveCollection$group$setter.invoke(reactiveCollection, null);
+            InternalMethods.ReactiveCollection$group$setter(reactiveCollection, null);
             binding.bindReactiveCollection(entry.getKey(), reactiveCollection);
         }
 
@@ -133,7 +133,7 @@ public abstract class ViewModel<T extends View>
         {
             SlotAccessor slotAccessor = entry.getValue().get(this);
             this.slotAccessors.add(slotAccessor);
-            InternalMethods.instance.SlotAccessor$group$setter.invoke(slotAccessor, null);
+            InternalMethods.SlotAccessor$group$setter(slotAccessor, null);
             binding.bindSlotAccessor(entry.getKey(), slotAccessor);
         }
     }

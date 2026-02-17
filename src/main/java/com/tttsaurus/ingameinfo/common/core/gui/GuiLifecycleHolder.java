@@ -14,7 +14,7 @@ public abstract class GuiLifecycleHolder
     public final void setLifecycleProvider(GuiLifecycleProvider provider)
     {
         lifecycleProvider = provider;
-        InternalMethods.instance.GuiLifecycleProvider$lifecycleHolderName$setter.invoke(provider, holderName);
+        InternalMethods.GuiLifecycleProvider$lifecycleHolderName$setter(provider, holderName);
     }
     public final GuiLifecycleProvider getLifecycleProvider() { return lifecycleProvider; }
 

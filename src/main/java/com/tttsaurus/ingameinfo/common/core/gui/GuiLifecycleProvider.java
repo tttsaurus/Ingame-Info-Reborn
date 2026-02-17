@@ -229,7 +229,7 @@ public abstract class GuiLifecycleProvider
         timePerFrame_RenderUpdate = 1d / maxFps_RenderUpdate;
     }
 
-    private final VisualBuilderAccessor visualBuilderAccessor = InternalMethods.instance.VisualBuilderAccessor$constructor.invoke();
+    private final VisualBuilderAccessor visualBuilderAccessor = InternalMethods.VisualBuilderAccessor$constructor();
 
     protected final void definedRenderUpdate()
     {
