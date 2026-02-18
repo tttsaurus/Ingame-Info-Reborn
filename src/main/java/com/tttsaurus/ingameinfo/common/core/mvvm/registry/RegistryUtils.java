@@ -15,9 +15,9 @@ public final class RegistryUtils
     private static final MethodHandles.Lookup lookup = MethodHandles.lookup();
     private static final Class<Reactive> annotation = Reactive.class;
 
-    public static Map<Reactive, IReactiveObjectGetter> findReactiveObjects(String mvvmRegistryName, Class<? extends ViewModel<?>> clazz)
+    public static Map<Reactive, ReactiveObjectGetter> findReactiveObjects(String mvvmRegistryName, Class<? extends ViewModel<?>> clazz)
     {
-        Map<Reactive, IReactiveObjectGetter> reactiveObjects = new HashMap<>();
+        Map<Reactive, ReactiveObjectGetter> reactiveObjects = new HashMap<>();
 
         // crt support
         if (CrtViewModel.class.isAssignableFrom(clazz))
@@ -40,7 +40,7 @@ public final class RegistryUtils
                     if (ReactiveObject.class.equals(fieldClass))
                     {
                         MethodHandle getter = lookup.findGetter(clazz, fieldName, fieldClass);
-                        IReactiveObjectGetter wrappedGetter = (target) ->
+                        ReactiveObjectGetter wrappedGetter = (target) ->
                         {
                             try
                             {
@@ -57,9 +57,9 @@ public final class RegistryUtils
         return reactiveObjects;
     }
 
-    public static Map<Reactive, IReactiveCollectionGetter> findReactiveCollections(String mvvmRegistryName, Class<? extends ViewModel<?>> clazz)
+    public static Map<Reactive, ReactiveCollectionGetter> findReactiveCollections(String mvvmRegistryName, Class<? extends ViewModel<?>> clazz)
     {
-        Map<Reactive, IReactiveCollectionGetter> reactiveCollections = new HashMap<>();
+        Map<Reactive, ReactiveCollectionGetter> reactiveCollections = new HashMap<>();
 
         // crt support
         if (CrtViewModel.class.isAssignableFrom(clazz))
@@ -82,7 +82,7 @@ public final class RegistryUtils
                     if (ReactiveCollection.class.equals(fieldClass))
                     {
                         MethodHandle getter = lookup.findGetter(clazz, fieldName, fieldClass);
-                        IReactiveCollectionGetter wrappedGetter = (target) ->
+                        ReactiveCollectionGetter wrappedGetter = (target) ->
                         {
                             try
                             {
@@ -99,9 +99,9 @@ public final class RegistryUtils
         return reactiveCollections;
     }
 
-    public static Map<Reactive, ISlotAccessorGetter> findSlotAccessors(String mvvmRegistryName, Class<? extends ViewModel<?>> clazz)
+    public static Map<Reactive, SlotAccessorGetter> findSlotAccessors(String mvvmRegistryName, Class<? extends ViewModel<?>> clazz)
     {
-        Map<Reactive, ISlotAccessorGetter> slotAccessors = new HashMap<>();
+        Map<Reactive, SlotAccessorGetter> slotAccessors = new HashMap<>();
 
         for (Field field: clazz.getDeclaredFields())
             if (field.isAnnotationPresent(annotation))
@@ -114,7 +114,7 @@ public final class RegistryUtils
                     if (SlotAccessor.class.equals(fieldClass))
                     {
                         MethodHandle getter = lookup.findGetter(clazz, fieldName, fieldClass);
-                        ISlotAccessorGetter wrappedGetter = (target) ->
+                        SlotAccessorGetter wrappedGetter = (target) ->
                         {
                             try
                             {

@@ -2,12 +2,12 @@ package com.tttsaurus.ingameinfo.common.impl.gui.render.op;
 
 import com.tttsaurus.ingameinfo.common.core.animation.text.CharInfo;
 import com.tttsaurus.ingameinfo.common.core.gui.property.lerp.LerpableProperty;
-import com.tttsaurus.ingameinfo.common.core.gui.render.op.IRenderOp;
+import com.tttsaurus.ingameinfo.common.core.gui.render.op.RenderOp;
 import com.tttsaurus.ingameinfo.common.core.gui.render.RenderContext;
 import com.tttsaurus.ingameinfo.common.core.gui.theme.ThemeConfig;
 import com.tttsaurus.ingameinfo.common.core.render.RenderUtils;
 
-public class AnimTextOp implements IRenderOp
+public class AnimTextOp implements RenderOp
 {
     public String text;
     public float x, y;

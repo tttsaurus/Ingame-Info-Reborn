@@ -2,8 +2,8 @@ package com.tttsaurus.ingameinfo.common.core;
 
 import com.tttsaurus.ingameinfo.common.core.forgeevent.IgiGuiLifecycleInitEvent;
 import com.tttsaurus.ingameinfo.common.core.gui.GuiLifecycleHolder;
-import com.tttsaurus.ingameinfo.common.core.gui.screen.IGuiScreenDrawScreen;
-import com.tttsaurus.ingameinfo.common.core.gui.screen.IGuiScreenKeyTyped;
+import com.tttsaurus.ingameinfo.common.core.gui.screen.GuiScreenDrawScreen;
+import com.tttsaurus.ingameinfo.common.core.gui.screen.GuiScreenKeyTyped;
 import com.tttsaurus.ingameinfo.common.core.mvvm.registry.MvvmRegistry;
 import com.tttsaurus.ingameinfo.common.core.mvvm.viewmodel.ViewModel;
 import com.tttsaurus.ingameinfo.common.impl.gui.DefaultLifecycleHolder;
@@ -211,9 +211,9 @@ public final class IgiRuntime
             return false;
         }
 
-        public List<IGuiScreenDrawScreen> collectDrawScreenDelegatesIfScreenOccupied()
+        public List<GuiScreenDrawScreen> collectDrawScreenDelegatesIfScreenOccupied()
         {
-            List<IGuiScreenDrawScreen> res = new ArrayList<>();
+            List<GuiScreenDrawScreen> res = new ArrayList<>();
             if (lifecycleHolder.getLifecycleProvider().isUsingOtherScreen())
                 res.add(lifecycleHolder.getLifecycleProvider().GUI_SCREEN_DRAW_SCREEN);
             for (GuiLifecycleHolder holder: externaLifecycleHolders)
@@ -222,9 +222,9 @@ public final class IgiRuntime
             return res;
         }
 
-        public List<IGuiScreenKeyTyped> collectKeyTypedDelegatesIfScreenOccupied()
+        public List<GuiScreenKeyTyped> collectKeyTypedDelegatesIfScreenOccupied()
         {
-            List<IGuiScreenKeyTyped> res = new ArrayList<>();
+            List<GuiScreenKeyTyped> res = new ArrayList<>();
             if (lifecycleHolder.getLifecycleProvider().isUsingOtherScreen())
                 res.add(lifecycleHolder.getLifecycleProvider().GUI_SCREEN_KEY_TYPED);
             for (GuiLifecycleHolder holder: externaLifecycleHolders)

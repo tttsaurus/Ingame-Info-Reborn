@@ -1,6 +1,6 @@
 package com.tttsaurus.ingameinfo.common.core.render;
 
-import com.tttsaurus.ingameinfo.common.core.function.IAction;
+import com.tttsaurus.ingameinfo.common.core.function.Action;
 import org.lwjgl.opengl.GL11;
 import java.util.*;
 
@@ -42,7 +42,7 @@ public final class RenderMask
     private float width;
     private float height;
     private float radius;
-    private IAction drawMask;
+    private Action drawMask;
 
     public RenderMask(MaskShape maskShape)
     {
@@ -70,7 +70,7 @@ public final class RenderMask
         this.height = height;
         this.radius = radius;
     }
-    public void setCustomMask(IAction drawMask)
+    public void setCustomMask(Action drawMask)
     {
         init.put(MaskShape.CUSTOM, true);
         this.drawMask = drawMask;

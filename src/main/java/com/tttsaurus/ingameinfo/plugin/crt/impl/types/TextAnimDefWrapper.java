@@ -1,7 +1,7 @@
 package com.tttsaurus.ingameinfo.plugin.crt.impl.types;
 
 import com.tttsaurus.ingameinfo.common.core.animation.text.CharInfo;
-import com.tttsaurus.ingameinfo.common.core.animation.text.ITextAnimDef;
+import com.tttsaurus.ingameinfo.common.core.animation.text.TextAnimDef;
 import com.tttsaurus.ingameinfo.common.core.gui.property.style.wrapped.DoubleProperty;
 import crafttweaker.annotations.ZenRegister;
 import stanhebben.zenscript.annotations.ZenClass;
@@ -13,10 +13,11 @@ public final class TextAnimDefWrapper
 {
     @ZenRegister
     @ZenClass("mods.ingameinfo.animation.text.ITextAnimDef")
-    public interface ITextAnimDefWrapper
+    public interface TextAnimDefInterfaceWrapper
     {
         void calcAnim(CharInfosWrapper charInfos, TimerWrapper timer, double deltaTime);
     }
+
     @ZenRegister
     @ZenClass("mods.ingameinfo.animation.text.CharInfos")
     public static class CharInfosWrapper
@@ -94,25 +95,25 @@ public final class TextAnimDefWrapper
         }
     }
 
-    private ITextAnimDefWrapper iTextAnimDefWrapper;
+    private TextAnimDefInterfaceWrapper textAnimDefInterfaceWrapper;
 
-    public final ITextAnimDef iTextAnimDef;
-    public TextAnimDefWrapper(ITextAnimDef iTextAnimDef)
+    public final TextAnimDef textAnimDef;
+    public TextAnimDefWrapper(TextAnimDef textAnimDef)
     {
-        this.iTextAnimDef = iTextAnimDef;
+        this.textAnimDef = textAnimDef;
     }
-    public TextAnimDefWrapper(ITextAnimDefWrapper iTextAnimDefWrapper)
+    public TextAnimDefWrapper(TextAnimDefInterfaceWrapper textAnimDefInterfaceWrapper)
     {
-        this.iTextAnimDefWrapper = iTextAnimDefWrapper;
-        this.iTextAnimDef = (charInfos, timer, deltaTime) ->
+        this.textAnimDefInterfaceWrapper = textAnimDefInterfaceWrapper;
+        this.textAnimDef = (charInfos, timer, deltaTime) ->
         {
-            this.iTextAnimDefWrapper.calcAnim(new CharInfosWrapper(charInfos), new TimerWrapper(timer), deltaTime);
+            this.textAnimDefInterfaceWrapper.calcAnim(new CharInfosWrapper(charInfos), new TimerWrapper(timer), deltaTime);
         };
     }
 
     @ZenMethod("new")
-    public static TextAnimDefWrapper newTextAnimDef(ITextAnimDefWrapper iTextAnimDefWrapper)
+    public static TextAnimDefWrapper newTextAnimDef(TextAnimDefInterfaceWrapper textAnimDefInterfaceWrapper)
     {
-        return new TextAnimDefWrapper(iTextAnimDefWrapper);
+        return new TextAnimDefWrapper(textAnimDefInterfaceWrapper);
     }
 }

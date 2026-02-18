@@ -9,17 +9,17 @@ public final class LerpTargetCopyUtils
     {
         Class<?> component = in.getClass().getComponentType();
         if (component == null)
-            return copy((ICopyableLerpTarget)in, in.getClass().asSubclass(ICopyableLerpTarget.class));
+            return copy((CopyableLerpTarget)in, in.getClass().asSubclass(CopyableLerpTarget.class));
         else
-            return copy((ICopyableLerpTarget[])in, component.asSubclass(ICopyableLerpTarget.class));
+            return copy((CopyableLerpTarget[])in, component.asSubclass(CopyableLerpTarget.class));
     }
 
-    private static <T extends ICopyableLerpTarget> T copy(ICopyableLerpTarget in, Class<T> clazz)
+    private static <T extends CopyableLerpTarget> T copy(CopyableLerpTarget in, Class<T> clazz)
     {
         return (T)in.copy();
     }
 
-    private static <T extends ICopyableLerpTarget> T[] copy(ICopyableLerpTarget[] in, Class<T> component)
+    private static <T extends CopyableLerpTarget> T[] copy(CopyableLerpTarget[] in, Class<T> component)
     {
         T[] out = (T[])Array.newInstance(component, in.length);
         for (int i = 0; i < out.length; i++)

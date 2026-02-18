@@ -12,11 +12,11 @@ public class ImagePrefab
     }
 
     public final InternalType type;
-    public final Texture2D texture2D;
-    public final TextureSliced2D textureSliced2D;
+    public final Texture2DImpl texture2D;
+    public final TextureSliced2DImpl textureSliced2D;
     public final NinePatchBorder ninePatchBorder;
 
-    public ImagePrefab(@Nonnull Texture2D texture2D)
+    public ImagePrefab(@Nonnull Texture2DImpl texture2D)
     {
         type = InternalType.TEXTURE_2D;
         this.texture2D = texture2D;
@@ -24,7 +24,7 @@ public class ImagePrefab
         ninePatchBorder = null;
     }
 
-    public ImagePrefab(@Nonnull TextureSliced2D textureSliced2D)
+    public ImagePrefab(@Nonnull TextureSliced2DImpl textureSliced2D)
     {
         type = InternalType.TEXTURE_SLICED_2D;
         texture2D = null;

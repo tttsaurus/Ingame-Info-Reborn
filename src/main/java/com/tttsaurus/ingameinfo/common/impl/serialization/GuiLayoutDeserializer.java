@@ -8,7 +8,7 @@ import com.tttsaurus.ingameinfo.common.core.gui.layout.ElementGroup;
 import com.tttsaurus.ingameinfo.common.core.gui.layout.Slot;
 import com.tttsaurus.ingameinfo.common.core.InternalMethods;
 import com.tttsaurus.ingameinfo.common.core.commonutils.GhostableItem;
-import com.tttsaurus.ingameinfo.common.core.serialization.IDeserializer;
+import com.tttsaurus.ingameinfo.common.core.serialization.Deserializer;
 import com.tttsaurus.ingameinfo.common.core.serialization.ixml.RawIxmlUtils;
 import com.tttsaurus.ingameinfo.common.core.serialization.json.RawJsonUtils;
 import com.tttsaurus.ingameinfo.common.core.gui.registry.ElementRegistry;
@@ -16,7 +16,7 @@ import net.minecraft.util.Tuple;
 import javax.annotation.Nullable;
 import java.util.List;
 
-public class GuiLayoutDeserializer implements IDeserializer<GuiLayout>
+public class GuiLayoutDeserializer implements Deserializer<GuiLayout>
 {
     private final IgiGuiContainer container;
 

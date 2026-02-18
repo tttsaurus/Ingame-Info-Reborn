@@ -3,11 +3,11 @@ package com.tttsaurus.ingameinfo.common.core.mvvm.binding;
 import com.tttsaurus.ingameinfo.common.core.gui.Element;
 import com.tttsaurus.ingameinfo.common.core.gui.GuiLayout;
 import com.tttsaurus.ingameinfo.common.core.gui.layout.ElementGroup;
-import com.tttsaurus.ingameinfo.common.core.function.IAction_1Param;
+import com.tttsaurus.ingameinfo.common.core.function.Action1Param;
 import com.tttsaurus.ingameinfo.common.core.gui.layout.Slot;
-import com.tttsaurus.ingameinfo.common.core.gui.property.style.IStylePropertyGetter;
-import com.tttsaurus.ingameinfo.common.core.gui.property.style.IStylePropertySetter;
-import com.tttsaurus.ingameinfo.common.core.gui.property.style.IStylePropertySyncTo;
+import com.tttsaurus.ingameinfo.common.core.gui.property.style.StylePropertyGetter;
+import com.tttsaurus.ingameinfo.common.core.gui.property.style.StylePropertySetter;
+import com.tttsaurus.ingameinfo.common.core.gui.property.style.StylePropertySyncTo;
 import com.tttsaurus.ingameinfo.common.core.InternalMethods;
 import com.tttsaurus.ingameinfo.common.core.gui.render.decorator.RenderDecorator;
 import com.tttsaurus.ingameinfo.common.core.mvvm.view.View;
@@ -70,7 +70,7 @@ public class VvmBinding<TView extends View>
         {
             if (reactive.ordinal() != -1 && reactive.ordinal() != index++) continue;
 
-            IStylePropertySetter stylePropertySetter = ElementRegistry.getStylePropertySetter(element.getClass(), reactive.property());
+            StylePropertySetter stylePropertySetter = ElementRegistry.getStylePropertySetter(element.getClass(), reactive.property());
             Class<?> stylePropertyClass = ElementRegistry.getStylePropertyClass(stylePropertySetter);
 
             // whether style property exists
@@ -81,7 +81,7 @@ public class VvmBinding<TView extends View>
             // viewmodel to view sync
             if (reactive.initiativeSync())
             {
-                IAction_1Param<Object> action = ElementRegistry.getStylePropertySetterFullCallback(element, reactive.property());
+                Action1Param<Object> action = ElementRegistry.getStylePropertySetterFullCallback(element, reactive.property());
                 reactiveObject.initiativeCallbacks.add((value) ->
                 {
                     action.invoke(value);
@@ -90,8 +90,8 @@ public class VvmBinding<TView extends View>
             // view to viewmodel sync
             if (reactive.passiveSync())
             {
-                Map<String, IStylePropertySyncTo> syncToMap = InternalMethods.Element$syncToMap$getter(element);
-                IStylePropertyGetter getter = ElementRegistry.getStylePropertyGetter(stylePropertySetter);
+                Map<String, StylePropertySyncTo> syncToMap = InternalMethods.Element$syncToMap$getter(element);
+                StylePropertyGetter getter = ElementRegistry.getStylePropertyGetter(stylePropertySetter);
                 if (getter != null)
                 {
                     syncToMap.put(reactive.property(), () ->

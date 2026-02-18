@@ -1,10 +1,9 @@
 package com.tttsaurus.ingameinfo.common.core.input;
 
-import org.lwjgl.input.Keyboard;
 import java.util.HashSet;
 import java.util.Set;
 
-public class IgiKeyboard implements IKeyboard
+public class IgiKeyboard implements Keyboard
 {
     private final Set<Integer> heldKeys = new HashSet<>();
     private final Set<Integer> pressedKeys = new HashSet<>();
@@ -27,7 +26,7 @@ public class IgiKeyboard implements IKeyboard
         leftKeys.clear();
         for (int key = 1; key <= 223; key++)
         {
-            boolean down = Keyboard.isKeyDown(key);
+            boolean down = org.lwjgl.input.Keyboard.isKeyDown(key);
             if (down)
                 heldKeys.add(key);
             if (!copy.contains(key) && down)

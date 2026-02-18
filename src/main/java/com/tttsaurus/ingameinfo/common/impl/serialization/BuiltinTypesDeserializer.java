@@ -1,11 +1,11 @@
 package com.tttsaurus.ingameinfo.common.impl.serialization;
 
 import com.tttsaurus.ingameinfo.common.core.reflection.TypeUtils;
-import com.tttsaurus.ingameinfo.common.core.serialization.IDeserializer;
+import com.tttsaurus.ingameinfo.common.core.serialization.Deserializer;
 import java.awt.*;
 
 @SuppressWarnings("all")
-public class BuiltinTypesDeserializer<T> implements IDeserializer<T>
+public class BuiltinTypesDeserializer<T> implements Deserializer<T>
 {
     private final Class<T> clazz;
     public BuiltinTypesDeserializer(Class<T> clazz) { this.clazz = clazz; }

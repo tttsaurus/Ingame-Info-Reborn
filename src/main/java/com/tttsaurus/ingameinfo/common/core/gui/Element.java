@@ -1,7 +1,7 @@
 package com.tttsaurus.ingameinfo.common.core.gui;
 
-import com.tttsaurus.ingameinfo.common.core.function.IAction_1Param;
-import com.tttsaurus.ingameinfo.common.core.gui.event.IUIEventListener;
+import com.tttsaurus.ingameinfo.common.core.function.Action1Param;
+import com.tttsaurus.ingameinfo.common.core.gui.event.UIEventListener;
 import com.tttsaurus.ingameinfo.common.core.gui.event.UIEvent;
 import com.tttsaurus.ingameinfo.common.core.gui.event.UIEventListenerType;
 import com.tttsaurus.ingameinfo.common.core.input.InputState;
@@ -9,7 +9,7 @@ import com.tttsaurus.ingameinfo.common.core.gui.layout.*;
 import com.tttsaurus.ingameinfo.common.core.gui.property.lerp.*;
 import com.tttsaurus.ingameinfo.common.core.gui.registry.RegisterElement;
 import com.tttsaurus.ingameinfo.common.core.gui.property.style.CallbackInfo;
-import com.tttsaurus.ingameinfo.common.core.gui.property.style.IStylePropertySyncTo;
+import com.tttsaurus.ingameinfo.common.core.gui.property.style.StylePropertySyncTo;
 import com.tttsaurus.ingameinfo.common.core.gui.property.style.StylePropertyCallback;
 import com.tttsaurus.ingameinfo.common.core.gui.property.style.StyleProperty;
 import com.tttsaurus.ingameinfo.common.core.gui.render.op.BackgroundOp;
@@ -20,7 +20,7 @@ import com.tttsaurus.ingameinfo.common.core.gui.registry.ElementRegistry;
 import com.tttsaurus.ingameinfo.common.core.mvvm.binding.Reactive;
 import com.tttsaurus.ingameinfo.common.core.mvvm.binding.ReactiveObject;
 import com.tttsaurus.ingameinfo.common.core.mvvm.binding.VvmBinding;
-import com.tttsaurus.ingameinfo.common.core.gui.render.op.IRenderOp;
+import com.tttsaurus.ingameinfo.common.core.gui.render.op.RenderOp;
 import com.tttsaurus.ingameinfo.common.core.reflection.FieldUtils;
 import java.lang.invoke.MethodHandle;
 import java.lang.invoke.MethodHandles;
@@ -85,7 +85,7 @@ public abstract class Element
      * @see Element#setStyleProperty(String, Object)
      */
     @SuppressWarnings("all")
-    private final Map<String, IStylePropertySyncTo> syncToMap = new HashMap<>();
+    private final Map<String, StylePropertySyncTo> syncToMap = new HashMap<>();
 
     /**
      * <code>lerpTargetGetters</code> stores the getters of {@link LerpableProperty}'s target.
@@ -93,17 +93,17 @@ public abstract class Element
      *
      * @see Element#onCollectLerpInfo()
      */
-    private Map<LerpableProperty<?>, ITargetingLerpTarget> lerpTargetGetters = null;
+    private Map<LerpableProperty<?>, TargetingLerpTarget> lerpTargetGetters = null;
 
     /**
      * <code>uiEventListeners</code> stores event listeners.
      * They will be fired by {@link Element#fireEvent(UIEvent)}.
-     * They will be added by {@link Element#addEventListener(Class, IUIEventListener)}.
+     * They will be added by {@link Element#addEventListener(Class, UIEventListener)}.
      *
      * @see Element#fireEvent(UIEvent)
-     * @see Element#addEventListener(Class, IUIEventListener)
+     * @see Element#addEventListener(Class, UIEventListener)
      */
-    private final Map<Class<? extends UIEvent>, List<IUIEventListener<?>>> uiEventListeners = new HashMap<>();
+    private final Map<Class<? extends UIEvent>, List<UIEventListener<?>>> uiEventListeners = new HashMap<>();
 
     /**
      * The parent node. Will be injected by {@link ElementGroup#add(Element)}.
@@ -201,7 +201,7 @@ public abstract class Element
 
     //<editor-fold desc="final method: ui event listener">
     /**
-     * Execute {@link IUIEventListener} of the corresponding event.
+     * Execute {@link UIEventListener} of the corresponding event.
      * <ul>
      *     <li>Local listeners will be executed immediately first</li>
      *     <li>Then capturing process happens</li>
@@ -219,13 +219,13 @@ public abstract class Element
     @SuppressWarnings("unchecked")
     protected final <T extends UIEvent> void fireEvent(T event)
     {
-        List<IUIEventListener<?>> list = uiEventListeners.get(event.getClass());
+        List<UIEventListener<?>> list = uiEventListeners.get(event.getClass());
 
         // local
         if (list != null)
-            for (IUIEventListener<?> listener: list)
+            for (UIEventListener<?> listener: list)
                 if (listener.type() == UIEventListenerType.LOCAL)
-                    ((IUIEventListener<T>)listener).handle(event);
+                    ((UIEventListener<T>)listener).handle(event);
 
         if (event.isConsumed()) return;
 
@@ -242,20 +242,20 @@ public abstract class Element
         while (!stack.isEmpty())
         {
             Element element = stack.pop();
-            List<IUIEventListener<?>> list2 = element.uiEventListeners.get(event.getClass());
+            List<UIEventListener<?>> list2 = element.uiEventListeners.get(event.getClass());
             if (list2 != null)
-                for (IUIEventListener<?> listener: list2)
+                for (UIEventListener<?> listener: list2)
                     if (listener.type() == UIEventListenerType.CAPTURE)
-                        ((IUIEventListener<T>)listener).handle(event);
+                        ((UIEventListener<T>)listener).handle(event);
         }
 
         if (event.isConsumed()) return;
 
         // target
         if (list != null)
-            for (IUIEventListener<?> listener: list)
+            for (UIEventListener<?> listener: list)
                 if (listener.type() == UIEventListenerType.TARGET)
-                    ((IUIEventListener<T>)listener).handle(event);
+                    ((UIEventListener<T>)listener).handle(event);
 
         if (event.isConsumed()) return;
 
@@ -263,11 +263,11 @@ public abstract class Element
         parent = this;
         while (parent.parent != null)
         {
-            List<IUIEventListener<?>> list2 = parent.uiEventListeners.get(event.getClass());
+            List<UIEventListener<?>> list2 = parent.uiEventListeners.get(event.getClass());
             if (list2 != null)
-                for (IUIEventListener<?> listener: list2)
+                for (UIEventListener<?> listener: list2)
                     if (listener.type() == UIEventListenerType.BUBBLE)
-                        ((IUIEventListener<T>)listener).handle(event);
+                        ((UIEventListener<T>)listener).handle(event);
             parent = parent.parent;
         }
     }
@@ -281,7 +281,7 @@ public abstract class Element
      *
      * @see Element#uiEventListeners
      */
-    public final <T extends UIEvent> void addEventListener(Class<T> type, IUIEventListener<T> listener)
+    public final <T extends UIEvent> void addEventListener(Class<T> type, UIEventListener<T> listener)
     {
         uiEventListeners.computeIfAbsent(type, k -> new ArrayList<>()).add(listener);
     }
@@ -297,11 +297,11 @@ public abstract class Element
      */
     public final void setStyleProperty(String propertyName, Object value)
     {
-        IAction_1Param<Object> action = ElementRegistry.getStylePropertySetterFullCallback(this, propertyName);
+        Action1Param<Object> action = ElementRegistry.getStylePropertySetterFullCallback(this, propertyName);
         if (action != null)
         {
             action.invoke(value);
-            IStylePropertySyncTo sync = syncToMap.get(propertyName);
+            StylePropertySyncTo sync = syncToMap.get(propertyName);
             if (sync != null) sync.sync();
         }
     }
@@ -320,21 +320,21 @@ public abstract class Element
         {
             lerpTargetGetters = new HashMap<>();
             MethodHandles.Lookup lookup = MethodHandles.lookup();
-            List<ILerpablePropertyGetter> getters = ElementRegistry.getLerpablePropertyGetters(getClass());
-            for (ILerpablePropertyGetter getter: getters)
+            List<LerpablePropertyGetter> getters = ElementRegistry.getLerpablePropertyGetters(getClass());
+            for (LerpablePropertyGetter getter: getters)
             {
                 LerpTarget lerpTarget = ElementRegistry.getLerpTarget(getClass(), getter);
                 if (lerpTarget == null) continue;
 
                 LerpableProperty<?> property = getter.get(this);
-                ITargetingLerpTarget targetGetter = null;
+                TargetingLerpTarget targetGetter = null;
 
                 try
                 {
                     Field field = FieldUtils.getFieldByNameIncludingSuperclasses(getClass(), lerpTarget.value());
                     MethodHandle handle = lookup.unreflectGetter(field);
-                    boolean copy = lerpTarget.copyIfPossible() && ICopyableLerpTarget.class.isAssignableFrom(field.getType());
-                    boolean copyArray = lerpTarget.copyIfPossible() && field.getType().getComponentType() != null && ICopyableLerpTarget.class.isAssignableFrom(field.getType().getComponentType());
+                    boolean copy = lerpTarget.copyIfPossible() && CopyableLerpTarget.class.isAssignableFrom(field.getType());
+                    boolean copyArray = lerpTarget.copyIfPossible() && field.getType().getComponentType() != null && CopyableLerpTarget.class.isAssignableFrom(field.getType().getComponentType());
                     if (lerpTarget.inner0().isEmpty())
                     {
                         targetGetter = () ->
@@ -352,8 +352,8 @@ public abstract class Element
                     {
                         Field fieldInner0 = FieldUtils.getFieldByNameIncludingSuperclasses(field.getType(), lerpTarget.inner0());
                         MethodHandle handleInner0 = lookup.unreflectGetter(fieldInner0);
-                        boolean copyInner0 = lerpTarget.copyIfPossible() && ICopyableLerpTarget.class.isAssignableFrom(fieldInner0.getType());
-                        boolean copyArrayInner0 = lerpTarget.copyIfPossible() && fieldInner0.getType().getComponentType() != null && ICopyableLerpTarget.class.isAssignableFrom(fieldInner0.getType().getComponentType());
+                        boolean copyInner0 = lerpTarget.copyIfPossible() && CopyableLerpTarget.class.isAssignableFrom(fieldInner0.getType());
+                        boolean copyArrayInner0 = lerpTarget.copyIfPossible() && fieldInner0.getType().getComponentType() != null && CopyableLerpTarget.class.isAssignableFrom(fieldInner0.getType().getComponentType());
                         if (lerpTarget.inner1().isEmpty())
                         {
                             targetGetter = () ->
@@ -371,8 +371,8 @@ public abstract class Element
                         {
                             Field fieldInner1 = FieldUtils.getFieldByNameIncludingSuperclasses(fieldInner0.getType(), lerpTarget.inner1());
                             MethodHandle handleInner1 = lookup.unreflectGetter(fieldInner1);
-                            boolean copyInner1 = lerpTarget.copyIfPossible() && ICopyableLerpTarget.class.isAssignableFrom(fieldInner1.getType());
-                            boolean copyArrayInner1 = lerpTarget.copyIfPossible() && fieldInner1.getType().getComponentType() != null && ICopyableLerpTarget.class.isAssignableFrom(fieldInner1.getType().getComponentType());
+                            boolean copyInner1 = lerpTarget.copyIfPossible() && CopyableLerpTarget.class.isAssignableFrom(fieldInner1.getType());
+                            boolean copyArrayInner1 = lerpTarget.copyIfPossible() && fieldInner1.getType().getComponentType() != null && CopyableLerpTarget.class.isAssignableFrom(fieldInner1.getType().getComponentType());
                             targetGetter = () ->
                             {
                                 try
@@ -397,10 +397,10 @@ public abstract class Element
                 }
             }
         }
-        for (Map.Entry<LerpableProperty<?>, ITargetingLerpTarget> entry: lerpTargetGetters.entrySet())
+        for (Map.Entry<LerpableProperty<?>, TargetingLerpTarget> entry: lerpTargetGetters.entrySet())
         {
             LerpableProperty<?> property = entry.getKey();
-            ITargetingLerpTarget getter = entry.getValue();
+            TargetingLerpTarget getter = entry.getValue();
 
             Object target = getter.getTarget();
             if (property.getCurrValue() == null)
@@ -463,11 +463,11 @@ public abstract class Element
     }
 
     /**
-     * Override to enqueue {@link IRenderOp} to {@link RenderOpQueue}.
-     * All rendering logic are handled in {@link IRenderOp}.
+     * Override to enqueue {@link RenderOp} to {@link RenderOpQueue}.
+     * All rendering logic are handled in {@link RenderOp}.
      * Must not render stuff explicitly in this method.
      *
-     * @see IRenderOp
+     * @see RenderOp
      * @see IgiGuiContainer#onRenderUpdate(boolean)
      * @param queue The queue that stores all the render commands of this {@link IgiGuiContainer}.
      * @param focused Whether this {@link IgiGuiContainer} is focused and stack at the top.
@@ -502,7 +502,7 @@ public abstract class Element
 
     /**
      * {@link ThemeConfig} should be split into Logic Theme and Visual Theme
-     * where Visual Theme is handled during {@link Element#onRenderUpdate(RenderOpQueue, boolean)} inside {@link IRenderOp}.
+     * where Visual Theme is handled during {@link Element#onRenderUpdate(RenderOpQueue, boolean)} inside {@link RenderOp}.
      * Logic Theme affects how the layout is being calculated and should be applied at an early stage which is this method.
      * Only override this method to apply Logic Theme (probably using {@link Element#setStyleProperty(String, Object)}.)
      *

@@ -6,11 +6,11 @@ import java.io.IOException;
 
 public final class IgiDummyScreen extends GuiScreen
 {
-    private IGuiScreenDrawScreen drawAction = null;
-    private IGuiScreenKeyTyped typeAction = null;
+    private GuiScreenDrawScreen drawAction = null;
+    private GuiScreenKeyTyped typeAction = null;
 
-    public void setDrawAction(IGuiScreenDrawScreen drawAction) { this.drawAction = drawAction; }
-    public void setTypeAction(IGuiScreenKeyTyped typeAction) { this.typeAction = typeAction; }
+    public void setDrawAction(GuiScreenDrawScreen drawAction) { this.drawAction = drawAction; }
+    public void setTypeAction(GuiScreenKeyTyped typeAction) { this.typeAction = typeAction; }
 
     @Override
     protected void keyTyped(char typedChar, int keyCode) throws IOException

@@ -1,7 +1,7 @@
 package com.tttsaurus.ingameinfo.common.impl.gui.control;
 
 import com.tttsaurus.ingameinfo.common.core.animation.text.CharInfo;
-import com.tttsaurus.ingameinfo.common.core.animation.text.ITextAnimDef;
+import com.tttsaurus.ingameinfo.common.core.animation.text.TextAnimDef;
 import com.tttsaurus.ingameinfo.common.core.gui.Element;
 import com.tttsaurus.ingameinfo.common.core.gui.property.lerp.LerpCenter;
 import com.tttsaurus.ingameinfo.common.core.gui.property.lerp.LerpTarget;
@@ -44,12 +44,12 @@ public class AnimText extends Element
     private final DoubleProperty timer = new DoubleProperty();
 
     @StylePropertyCallback
-    public void textAnimDefValidation(ITextAnimDef value, CallbackInfo callbackInfo)
+    public void textAnimDefValidation(TextAnimDef value, CallbackInfo callbackInfo)
     {
         if (value == null) callbackInfo.cancel = true;
     }
     @StyleProperty(setterCallbackPre = "textAnimDefValidation")
-    public ITextAnimDef animDef;
+    public TextAnimDef animDef;
 
     @StylePropertyCallback
     public void textValidation(String value, CallbackInfo callbackInfo)

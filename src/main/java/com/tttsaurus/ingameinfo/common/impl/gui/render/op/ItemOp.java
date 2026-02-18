@@ -1,11 +1,11 @@
 package com.tttsaurus.ingameinfo.common.impl.gui.render.op;
 
-import com.tttsaurus.ingameinfo.common.core.gui.render.op.IRenderOp;
+import com.tttsaurus.ingameinfo.common.core.gui.render.op.RenderOp;
 import com.tttsaurus.ingameinfo.common.core.gui.render.RenderContext;
 import com.tttsaurus.ingameinfo.common.core.commonutils.GhostableItem;
 import com.tttsaurus.ingameinfo.common.core.render.RenderUtils;
 
-public class ItemOp implements IRenderOp
+public class ItemOp implements RenderOp
 {
     public GhostableItem item;
     public float x, y, scaleX, scaleY;

@@ -1,8 +1,8 @@
 package com.tttsaurus.ingameinfo.common.impl.network;
 
 import com.tttsaurus.ingameinfo.Reference;
-import com.tttsaurus.ingameinfo.common.core.function.IAction_1Param;
-import com.tttsaurus.ingameinfo.common.core.function.IAction_2Param;
+import com.tttsaurus.ingameinfo.common.core.function.Action1Param;
+import com.tttsaurus.ingameinfo.common.core.function.Action2Param;
 import com.tttsaurus.ingameinfo.common.impl.network.common.RespondNbtPacket;
 import com.tttsaurus.ingameinfo.common.impl.network.modcompat.bloodmagic.RequestBloodMagicNbtPacket;
 import com.tttsaurus.ingameinfo.common.impl.network.modcompat.thaumcraft.RequestThaumcraftNbtPacket;
@@ -20,14 +20,14 @@ public class IgiNetwork
 {
     // key: response key
     private static final Map<String, NBTTagCompound> cachedNbtResponses = new HashMap<>();
-    private static final Map<String, IAction_1Param<NBTTagCompound>> nbtResponseConsumers = new HashMap<>();
+    private static final Map<String, Action1Param<NBTTagCompound>> nbtResponseConsumers = new HashMap<>();
 
     public static final SimpleNetworkWrapper NETWORK = NetworkRegistry.INSTANCE.newSimpleChannel(Reference.MOD_ID);
 
     public static void pushNbtResponse(String responseKey, NBTTagCompound nbt)
     {
         cachedNbtResponses.put(responseKey, nbt);
-        IAction_1Param<NBTTagCompound> consumer = nbtResponseConsumers.get(responseKey);
+        Action1Param<NBTTagCompound> consumer = nbtResponseConsumers.get(responseKey);
         if (consumer != null) consumer.invoke(nbt);
     }
     @Nullable
@@ -38,22 +38,22 @@ public class IgiNetwork
         cachedNbtResponses.remove(responseKey);
         return nbt;
     }
-    protected static void addNbtResponseConsumer(String responseKey, IAction_1Param<NBTTagCompound> consumer)
+    protected static void addNbtResponseConsumer(String responseKey, Action1Param<NBTTagCompound> consumer)
     {
         nbtResponseConsumers.put(responseKey, consumer);
     }
 
-    public static void requestTpsMspt(IAction_2Param<Integer, Double> callback)
+    public static void requestTpsMspt(Action2Param<Integer, Double> callback)
     {
         RespondTpsMsptPacket.callback = callback;
         NETWORK.sendToServer(new RequestTpsMsptPacket());
     }
-    public static void requestBloodMagicNbt(IAction_1Param<NBTTagCompound> callback)
+    public static void requestBloodMagicNbt(Action1Param<NBTTagCompound> callback)
     {
         addNbtResponseConsumer(RequestBloodMagicNbtPacket.RESPONSE_KEY, callback);
         NETWORK.sendToServer(new RequestBloodMagicNbtPacket());
     }
-    public static void requestThaumcraftNbt(IAction_1Param<NBTTagCompound> callback)
+    public static void requestThaumcraftNbt(Action1Param<NBTTagCompound> callback)
     {
         addNbtResponseConsumer(RequestThaumcraftNbtPacket.RESPONSE_KEY, callback);
         NETWORK.sendToServer(new RequestThaumcraftNbtPacket());

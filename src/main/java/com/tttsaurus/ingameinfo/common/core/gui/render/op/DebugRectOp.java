@@ -5,7 +5,7 @@ import com.tttsaurus.ingameinfo.common.core.gui.render.RenderContext;
 import com.tttsaurus.ingameinfo.common.core.render.RenderUtils;
 import java.awt.*;
 
-public class DebugRectOp implements IRenderOp
+public class DebugRectOp implements RenderOp
 {
     public boolean isGroup;
     public Rect rect;

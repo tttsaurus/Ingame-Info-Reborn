@@ -2,7 +2,7 @@ package com.tttsaurus.ingameinfo.common.core.render.shader;
 
 import com.tttsaurus.ingameinfo.common.core.reflection.TypeUtils;
 import com.tttsaurus.ingameinfo.common.core.render.GlResourceManager;
-import com.tttsaurus.ingameinfo.common.core.render.IGlDisposable;
+import com.tttsaurus.ingameinfo.common.core.render.GlDisposable;
 import com.tttsaurus.ingameinfo.common.core.render.CommonBuffers;
 import com.tttsaurus.ingameinfo.common.core.render.shader.uniform.UniformField;
 import com.tttsaurus.ingameinfo.common.core.render.shader.uniform.UniformType;
@@ -16,7 +16,7 @@ import java.nio.FloatBuffer;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
-public class ShaderProgram implements Comparable<ShaderProgram>, IGlDisposable
+public class ShaderProgram implements Comparable<ShaderProgram>, GlDisposable
 {
     private boolean setup;
     private double cpuTimeMs;

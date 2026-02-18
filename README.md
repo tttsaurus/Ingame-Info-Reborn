@@ -83,4 +83,4 @@ In case you want to use the latest action build
 ## Credits
 - Created using [CleanroomModTemplate](https://github.com/CleanroomMC/CleanroomModTemplate)
 - Inspired by [InGame-Info-XML](https://github.com/Lunatrius/InGame-Info-XML)
-- Bundled [Configurate](https://github.com/SpongePowered/Configurate) licensed under Apache-2.0
+- Shaded [Configurate](https://github.com/SpongePowered/Configurate) licensed under Apache-2.0

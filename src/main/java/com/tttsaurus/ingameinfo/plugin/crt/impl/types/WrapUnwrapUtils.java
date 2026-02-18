@@ -1,6 +1,6 @@
 package com.tttsaurus.ingameinfo.plugin.crt.impl.types;
 
-import com.tttsaurus.ingameinfo.common.core.animation.text.ITextAnimDef;
+import com.tttsaurus.ingameinfo.common.core.animation.text.TextAnimDef;
 import com.tttsaurus.ingameinfo.common.core.gui.layout.Alignment;
 import com.tttsaurus.ingameinfo.common.core.gui.layout.Padding;
 import com.tttsaurus.ingameinfo.common.core.gui.layout.Pivot;
@@ -29,8 +29,8 @@ public final class WrapUnwrapUtils
             return new SkewnessWrapper(skewness);
         if (value instanceof GhostableItem ghostableItem)
             return new GhostableItemWrapper(ghostableItem);
-        if (value instanceof ITextAnimDef iTextAnimDef)
-            return new TextAnimDefWrapper(iTextAnimDef);
+        if (value instanceof TextAnimDef textAnimDef)
+            return new TextAnimDefWrapper(textAnimDef);
 
         return null;
     }
@@ -55,7 +55,7 @@ public final class WrapUnwrapUtils
         if (value instanceof GhostableItemWrapper ghostableItemWrapper)
             return ghostableItemWrapper.ghostableItem;
         if (value instanceof TextAnimDefWrapper textAnimDefWrapper)
-            return textAnimDefWrapper.iTextAnimDef;
+            return textAnimDefWrapper.textAnimDef;
 
         return null;
     }

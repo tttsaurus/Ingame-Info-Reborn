@@ -1,15 +1,15 @@
 package com.tttsaurus.ingameinfo.common.impl.igievent.modcompat;
 
-import com.tttsaurus.ingameinfo.common.core.function.IAction_1Param;
+import com.tttsaurus.ingameinfo.common.core.function.Action1Param;
 import com.tttsaurus.ingameinfo.common.core.igievent.EventBase;
 import crafttweaker.annotations.ZenRegister;
 import stanhebben.zenscript.annotations.ZenClass;
 import stanhebben.zenscript.annotations.ZenMethod;
 
-public final class ThaumcraftEvent extends EventBase<IAction_1Param<ThaumcraftEvent.ThaumcraftData>>
+public final class ThaumcraftEvent extends EventBase<Action1Param<ThaumcraftEvent.ThaumcraftData>>
 {
     @Override
-    public void addListener(IAction_1Param<ThaumcraftData> listener)
+    public void addListener(Action1Param<ThaumcraftData> listener)
     {
         addListenerInternal(listener);
     }

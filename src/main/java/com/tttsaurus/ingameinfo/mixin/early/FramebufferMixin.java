@@ -2,7 +2,7 @@ package com.tttsaurus.ingameinfo.mixin.early;
 
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
-import com.tttsaurus.ingameinfo.common.core.render.IGlDisposable;
+import com.tttsaurus.ingameinfo.common.core.render.GlDisposable;
 import com.tttsaurus.ingameinfo.common.core.render.RenderHints;
 import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.shader.Framebuffer;
@@ -12,7 +12,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import java.nio.IntBuffer;
 
 @Mixin(Framebuffer.class)
-public class FramebufferMixin implements IGlDisposable
+public class FramebufferMixin implements GlDisposable
 {
     @SuppressWarnings("all")
     @Override

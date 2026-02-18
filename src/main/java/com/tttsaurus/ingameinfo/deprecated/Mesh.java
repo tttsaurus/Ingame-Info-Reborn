@@ -1,7 +1,7 @@
 package com.tttsaurus.ingameinfo.deprecated;
 
 import com.tttsaurus.ingameinfo.common.core.render.GlResourceManager;
-import com.tttsaurus.ingameinfo.common.core.render.IGlDisposable;
+import com.tttsaurus.ingameinfo.common.core.render.GlDisposable;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL15;
 import org.lwjgl.opengl.GL20;
@@ -11,7 +11,7 @@ import java.nio.ByteOrder;
 import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
 
-public class Mesh implements IGlDisposable
+public class Mesh implements GlDisposable
 {
     private float[] vertices;
     private int[] indices;

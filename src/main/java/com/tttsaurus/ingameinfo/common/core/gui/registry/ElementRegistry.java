@@ -2,11 +2,11 @@ package com.tttsaurus.ingameinfo.common.core.gui.registry;
 
 import com.google.common.collect.ImmutableMap;
 import com.tttsaurus.ingameinfo.common.core.gui.Element;
-import com.tttsaurus.ingameinfo.common.core.function.IAction_1Param;
-import com.tttsaurus.ingameinfo.common.core.gui.property.lerp.ILerpablePropertyGetter;
+import com.tttsaurus.ingameinfo.common.core.function.Action1Param;
+import com.tttsaurus.ingameinfo.common.core.gui.property.lerp.LerpablePropertyGetter;
 import com.tttsaurus.ingameinfo.common.core.gui.property.lerp.LerpTarget;
 import com.tttsaurus.ingameinfo.common.core.gui.property.style.*;
-import com.tttsaurus.ingameinfo.common.core.serialization.IDeserializer;
+import com.tttsaurus.ingameinfo.common.core.serialization.Deserializer;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.lang.reflect.Constructor;
@@ -16,25 +16,25 @@ import java.util.*;
 public final class ElementRegistry
 {
     // key: element class name (not the simple name)
-    private static final Map<String, Map<String, IStylePropertySetter>> stylePropertySetters = new HashMap<>();
+    private static final Map<String, Map<String, StylePropertySetter>> stylePropertySetters = new HashMap<>();
 
     // IStylePropertySetter is the primary key here
-    private static final Map<IStylePropertySetter, IDeserializer<?>> stylePropertyDeserializers = new HashMap<>();
-    private static final Map<IStylePropertySetter, IStylePropertyCallbackPre> stylePropertySetterCallbacksPre = new HashMap<>();
-    private static final Map<IStylePropertySetter, IStylePropertyCallbackPost> stylePropertySetterCallbacksPost = new HashMap<>();
-    private static final Map<IStylePropertySetter, Class<?>> stylePropertyClasses = new HashMap<>();
-    private static final Map<IStylePropertySetter, IStylePropertyGetter> stylePropertyGetters = new HashMap<>();
+    private static final Map<StylePropertySetter, Deserializer<?>> stylePropertyDeserializers = new HashMap<>();
+    private static final Map<StylePropertySetter, StylePropertyCallbackPre> stylePropertySetterCallbacksPre = new HashMap<>();
+    private static final Map<StylePropertySetter, StylePropertyCallbackPost> stylePropertySetterCallbacksPost = new HashMap<>();
+    private static final Map<StylePropertySetter, Class<?>> stylePropertyClasses = new HashMap<>();
+    private static final Map<StylePropertySetter, StylePropertyGetter> stylePropertyGetters = new HashMap<>();
 
     // key: element class simple name
     private static final Map<String, Class<? extends Element>> registeredElements = new HashMap<>();
     private static final Map<Class<? extends Element>, RegisterElement> elementAnnotations = new HashMap<>();
 
     @Nullable
-    public static IStylePropertySetter getStylePropertySetter(Class<? extends Element> clazz, String name)
+    public static StylePropertySetter getStylePropertySetter(Class<? extends Element> clazz, String name)
     {
         if (stylePropertySetters.containsKey(clazz.getName()))
         {
-            Map<String, IStylePropertySetter> map = stylePropertySetters.get(clazz.getName());
+            Map<String, StylePropertySetter> map = stylePropertySetters.get(clazz.getName());
             if (map.containsKey(name)) return map.get(name);
         }
         if (Element.class.isAssignableFrom(clazz.getSuperclass()))
@@ -46,27 +46,27 @@ public final class ElementRegistry
     // not frequently used
     //<editor-fold desc="style property getters">
     @Nullable
-    public static IDeserializer<?> getStylePropertyDeserializer(IStylePropertySetter setter)
+    public static Deserializer<?> getStylePropertyDeserializer(StylePropertySetter setter)
     {
         return stylePropertyDeserializers.get(setter);
     }
     @Nullable
-    public static IStylePropertyCallbackPre getStylePropertySetterCallbackPre(IStylePropertySetter setter)
+    public static StylePropertyCallbackPre getStylePropertySetterCallbackPre(StylePropertySetter setter)
     {
         return stylePropertySetterCallbacksPre.get(setter);
     }
     @Nullable
-    public static IStylePropertyCallbackPost getStylePropertySetterCallbackPost(IStylePropertySetter setter)
+    public static StylePropertyCallbackPost getStylePropertySetterCallbackPost(StylePropertySetter setter)
     {
         return stylePropertySetterCallbacksPost.get(setter);
     }
     @Nullable
-    public static Class<?> getStylePropertyClass(IStylePropertySetter setter)
+    public static Class<?> getStylePropertyClass(StylePropertySetter setter)
     {
         return stylePropertyClasses.get(setter);
     }
     @Nullable
-    public static IStylePropertyGetter getStylePropertyGetter(IStylePropertySetter setter)
+    public static StylePropertyGetter getStylePropertyGetter(StylePropertySetter setter)
     {
         return stylePropertyGetters.get(setter);
     }
@@ -90,9 +90,9 @@ public final class ElementRegistry
     }
 
     @Nullable
-    public static IAction_1Param<Object> getStylePropertySetterFullCallback(@Nonnull Element element, String propertyName)
+    public static Action1Param<Object> getStylePropertySetterFullCallback(@Nonnull Element element, String propertyName)
     {
-        IStylePropertySetter setter = ElementRegistry.getStylePropertySetter(element.getClass(), propertyName);
+        StylePropertySetter setter = ElementRegistry.getStylePropertySetter(element.getClass(), propertyName);
         if (setter == null)
             return null;
         else
@@ -102,11 +102,11 @@ public final class ElementRegistry
                     ElementRegistry.getStylePropertySetterCallbackPre(setter),
                     ElementRegistry.getStylePropertySetterCallbackPost(setter));
     }
-    private static IAction_1Param<Object> getStylePropertySetterWithCallbacksHandled(
-            @Nonnull IStylePropertySetter setter,
+    private static Action1Param<Object> getStylePropertySetterWithCallbacksHandled(
+            @Nonnull StylePropertySetter setter,
             @Nonnull Element element,
-            IStylePropertyCallbackPre setterCallbackPre,
-            IStylePropertyCallbackPost setterCallbackPost)
+            StylePropertyCallbackPre setterCallbackPre,
+            StylePropertyCallbackPost setterCallbackPost)
     {
         return (value) ->
         {
@@ -121,11 +121,11 @@ public final class ElementRegistry
     }
 
     //<editor-fold desc="style property map getters">
-    public static ImmutableMap<String, Map<String, IStylePropertySetter>> getStylePropertySetters() { return ImmutableMap.copyOf(stylePropertySetters); }
-    public static ImmutableMap<IStylePropertySetter, IDeserializer<?>> getStylePropertyDeserializers() { return ImmutableMap.copyOf(stylePropertyDeserializers); }
-    public static ImmutableMap<IStylePropertySetter, IStylePropertyCallbackPre> getStylePropertySetterCallbacksPre() { return ImmutableMap.copyOf(stylePropertySetterCallbacksPre); }
-    public static ImmutableMap<IStylePropertySetter, IStylePropertyCallbackPost> getStylePropertySetterCallbacksPost() { return ImmutableMap.copyOf(stylePropertySetterCallbacksPost); }
-    public static ImmutableMap<IStylePropertySetter, Class<?>> getStylePropertyClasses() { return ImmutableMap.copyOf(stylePropertyClasses); }
+    public static ImmutableMap<String, Map<String, StylePropertySetter>> getStylePropertySetters() { return ImmutableMap.copyOf(stylePropertySetters); }
+    public static ImmutableMap<StylePropertySetter, Deserializer<?>> getStylePropertyDeserializers() { return ImmutableMap.copyOf(stylePropertyDeserializers); }
+    public static ImmutableMap<StylePropertySetter, StylePropertyCallbackPre> getStylePropertySetterCallbacksPre() { return ImmutableMap.copyOf(stylePropertySetterCallbacksPre); }
+    public static ImmutableMap<StylePropertySetter, StylePropertyCallbackPost> getStylePropertySetterCallbacksPost() { return ImmutableMap.copyOf(stylePropertySetterCallbacksPost); }
+    public static ImmutableMap<StylePropertySetter, Class<?>> getStylePropertyClasses() { return ImmutableMap.copyOf(stylePropertyClasses); }
     //</editor-fold>
 
     public static List<Class<? extends Element>> getRegisteredElements()
@@ -150,18 +150,18 @@ public final class ElementRegistry
     }
 
     // key: element class name (not the simple name)
-    private static final Map<String, Map<ILerpablePropertyGetter, LerpTarget>> lerpablePropertyGetters = new HashMap<>();
+    private static final Map<String, Map<LerpablePropertyGetter, LerpTarget>> lerpablePropertyGetters = new HashMap<>();
 
-    public static ImmutableMap<String, Map<ILerpablePropertyGetter, LerpTarget>> getLerpablePropertyGetters() { return ImmutableMap.copyOf(lerpablePropertyGetters); }
+    public static ImmutableMap<String, Map<LerpablePropertyGetter, LerpTarget>> getLerpablePropertyGetters() { return ImmutableMap.copyOf(lerpablePropertyGetters); }
 
-    public static List<ILerpablePropertyGetter> getLerpablePropertyGetters(Class<? extends Element> clazz)
+    public static List<LerpablePropertyGetter> getLerpablePropertyGetters(Class<? extends Element> clazz)
     {
-        Map<ILerpablePropertyGetter, LerpTarget> map = lerpablePropertyGetters.get(clazz.getName());
+        Map<LerpablePropertyGetter, LerpTarget> map = lerpablePropertyGetters.get(clazz.getName());
         if (map == null) return new ArrayList<>();
 
         if (Element.class.isAssignableFrom(clazz.getSuperclass()))
         {
-            List<ILerpablePropertyGetter> list = getLerpablePropertyGetters((Class<? extends Element>)clazz.getSuperclass());
+            List<LerpablePropertyGetter> list = getLerpablePropertyGetters((Class<? extends Element>)clazz.getSuperclass());
             list.addAll(new ArrayList<>(map.keySet()));
             return list;
         }
@@ -170,11 +170,11 @@ public final class ElementRegistry
     }
 
     @Nullable
-    public static LerpTarget getLerpTarget(Class<? extends Element> clazz, ILerpablePropertyGetter getter)
+    public static LerpTarget getLerpTarget(Class<? extends Element> clazz, LerpablePropertyGetter getter)
     {
         if (lerpablePropertyGetters.containsKey(clazz.getName()))
         {
-            Map<ILerpablePropertyGetter, LerpTarget> map = lerpablePropertyGetters.get(clazz.getName());
+            Map<LerpablePropertyGetter, LerpTarget> map = lerpablePropertyGetters.get(clazz.getName());
             if (map.containsKey(getter)) return map.get(getter);
         }
         if (Element.class.isAssignableFrom(clazz.getSuperclass()))

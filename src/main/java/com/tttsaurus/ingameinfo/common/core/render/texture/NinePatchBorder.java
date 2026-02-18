@@ -4,13 +4,13 @@ public class NinePatchBorder
 {
     public static class Patch
     {
-        public Texture2D tex;
+        public Texture2DImpl tex;
         public float width;
         public float height;
         public boolean tiling;
         public boolean sizeDeductionByPixels;
 
-        public Patch(Texture2D tex, float width, float height, boolean tiling, boolean sizeDeductionByPixels)
+        public Patch(Texture2DImpl tex, float width, float height, boolean tiling, boolean sizeDeductionByPixels)
         {
             this.tex = tex;
             this.width = width;
@@ -18,7 +18,7 @@ public class NinePatchBorder
             this.tiling = tiling;
             this.sizeDeductionByPixels = sizeDeductionByPixels;
         }
-        public Patch(Texture2D tex)
+        public Patch(Texture2DImpl tex)
         {
             this.tex = tex;
             width = 0f;
@@ -40,15 +40,15 @@ public class NinePatchBorder
     public Patch bottomCenter;
     public Patch bottomRight;
 
-    public NinePatchBorder(Texture2D topLeft,
-                           Texture2D topCenter,
-                           Texture2D topRight,
-                           Texture2D centerLeft,
-                           Texture2D center,
-                           Texture2D centerRight,
-                           Texture2D bottomLeft,
-                           Texture2D bottomCenter,
-                           Texture2D bottomRight)
+    public NinePatchBorder(Texture2DImpl topLeft,
+                           Texture2DImpl topCenter,
+                           Texture2DImpl topRight,
+                           Texture2DImpl centerLeft,
+                           Texture2DImpl center,
+                           Texture2DImpl centerRight,
+                           Texture2DImpl bottomLeft,
+                           Texture2DImpl bottomCenter,
+                           Texture2DImpl bottomRight)
     {
         this.topLeft = new Patch(topLeft);
         this.topCenter = new Patch(topCenter);

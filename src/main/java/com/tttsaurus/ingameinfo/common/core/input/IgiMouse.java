@@ -2,7 +2,7 @@ package com.tttsaurus.ingameinfo.common.core.input;
 
 import com.tttsaurus.ingameinfo.common.core.commonutils.MouseUtils;
 
-public class IgiMouse implements IMouse
+public class IgiMouse implements Mouse
 {
     private boolean leftDown;
     private boolean leftPress;

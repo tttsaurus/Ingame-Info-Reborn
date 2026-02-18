@@ -1,7 +1,7 @@
 package com.tttsaurus.ingameinfo.common.impl.gui.control;
 
 import com.tttsaurus.ingameinfo.common.core.gui.control.Interactable;
-import com.tttsaurus.ingameinfo.common.core.gui.event.IUIEventListener;
+import com.tttsaurus.ingameinfo.common.core.gui.event.UIEventListener;
 import com.tttsaurus.ingameinfo.common.core.gui.event.UIEvent;
 import com.tttsaurus.ingameinfo.common.core.gui.event.UIEventListenerType;
 import com.tttsaurus.ingameinfo.common.core.gui.registry.RegisterElement;
@@ -59,7 +59,7 @@ public class Button extends Interactable
 
     public Button()
     {
-        addEventListener(UIEvent.MouseEnter.class, new IUIEventListener<>()
+        addEventListener(UIEvent.MouseEnter.class, new UIEventListener<>()
         {
             @Override
             public void handle(UIEvent.MouseEnter event)
@@ -74,7 +74,7 @@ public class Button extends Interactable
                 return UIEventListenerType.LOCAL;
             }
         });
-        addEventListener(UIEvent.MousePress.class, new IUIEventListener<>()
+        addEventListener(UIEvent.MousePress.class, new UIEventListener<>()
         {
             @Override
             public void handle(UIEvent.MousePress event)
@@ -89,7 +89,7 @@ public class Button extends Interactable
                 return UIEventListenerType.LOCAL;
             }
         });
-        addEventListener(UIEvent.MouseLeave.class, new IUIEventListener<>()
+        addEventListener(UIEvent.MouseLeave.class, new UIEventListener<>()
         {
             @Override
             public void handle(UIEvent.MouseLeave event)
@@ -104,7 +104,7 @@ public class Button extends Interactable
                 return UIEventListenerType.LOCAL;
             }
         });
-        addEventListener(UIEvent.MouseRelease.class, new IUIEventListener<>()
+        addEventListener(UIEvent.MouseRelease.class, new UIEventListener<>()
         {
             @Override
             public void handle(UIEvent.MouseRelease event)

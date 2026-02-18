@@ -7,7 +7,7 @@ import com.tttsaurus.ingameinfo.common.core.gui.property.style.StyleProperty;
 import com.tttsaurus.ingameinfo.common.core.gui.property.style.StylePropertyCallback;
 import com.tttsaurus.ingameinfo.common.core.gui.render.RenderOpQueue;
 import com.tttsaurus.ingameinfo.common.core.render.RenderUtils;
-import com.tttsaurus.ingameinfo.common.core.render.texture.Texture2D;
+import com.tttsaurus.ingameinfo.common.core.render.texture.Texture2DImpl;
 import com.tttsaurus.ingameinfo.common.impl.gui.render.op.UrlImageOp;
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
@@ -19,7 +19,7 @@ import java.util.concurrent.CompletableFuture;
 public class UrlImage extends Sized
 {
     private BufferedImage asyncImage = null;
-    private Texture2D texture = null;
+    private Texture2DImpl texture = null;
 
     @StyleProperty
     public boolean rounded;

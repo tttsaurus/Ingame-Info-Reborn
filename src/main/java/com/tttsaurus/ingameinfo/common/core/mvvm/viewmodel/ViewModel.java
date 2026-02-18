@@ -1,11 +1,11 @@
 package com.tttsaurus.ingameinfo.common.core.mvvm.viewmodel;
 
 import com.tttsaurus.ingameinfo.common.core.gui.GuiLayout;
-import com.tttsaurus.ingameinfo.common.core.function.IAction_1Param;
-import com.tttsaurus.ingameinfo.common.core.function.IFunc;
+import com.tttsaurus.ingameinfo.common.core.function.Action1Param;
+import com.tttsaurus.ingameinfo.common.core.function.Func;
 import com.tttsaurus.ingameinfo.common.core.gui.IgiGuiContainer;
 import com.tttsaurus.ingameinfo.common.core.InternalMethods;
-import com.tttsaurus.ingameinfo.common.core.gui.event.IUIEventListener;
+import com.tttsaurus.ingameinfo.common.core.gui.event.UIEventListener;
 import com.tttsaurus.ingameinfo.common.core.gui.event.UIEvent;
 import com.tttsaurus.ingameinfo.common.core.gui.render.decorator.RenderDecorator;
 import com.tttsaurus.ingameinfo.common.core.mvvm.binding.*;
@@ -34,11 +34,11 @@ public abstract class ViewModel<T extends View>
     private final List<SlotAccessor> slotAccessors = new ArrayList<>();
     private final EventListenerBinder eventListenerBinder = new EventListenerBinder();
 
-    public final <T extends UIEvent> void bindEventListener(String uid, Class<T> type, IUIEventListener<T> listener)
+    public final <T extends UIEvent> void bindEventListener(String uid, Class<T> type, UIEventListener<T> listener)
     {
         eventListenerBinder.bind(binding.view, uid, type, listener, -1);
     }
-    public final <T extends UIEvent> void bindEventListener(String uid, Class<T> type, IUIEventListener<T> listener, int ordinal)
+    public final <T extends UIEvent> void bindEventListener(String uid, Class<T> type, UIEventListener<T> listener, int ordinal)
     {
         eventListenerBinder.bind(binding.view, uid, type, listener, ordinal);
     }
@@ -47,11 +47,11 @@ public abstract class ViewModel<T extends View>
 
     // getters & setters for communication with IgiGuiContainer
     // will be injected by IgiGuiContainer before start()
-    private IAction_1Param<Boolean> isActiveSetter = null;
-    private IFunc<Boolean> isActiveGetter = null;
-    private IAction_1Param<IFunc<Boolean>> exitCallbackSetter = null;
-    private IAction_1Param<Boolean> isFocusedSetter = null;
-    private IFunc<Boolean> isFocusedGetter = null;
+    private Action1Param<Boolean> isActiveSetter = null;
+    private Func<Boolean> isActiveGetter = null;
+    private Action1Param<Func<Boolean>> exitCallbackSetter = null;
+    private Action1Param<Boolean> isFocusedSetter = null;
+    private Func<Boolean> isFocusedGetter = null;
 
     public void setActive(boolean flag)
     {
@@ -63,7 +63,7 @@ public abstract class ViewModel<T extends View>
         if (isActiveGetter == null) return false;
         return isActiveGetter.invoke();
     }
-    public void setExitCallback(IFunc<Boolean> callback)
+    public void setExitCallback(Func<Boolean> callback)
     {
         if (exitCallbackSetter == null) return;
         exitCallbackSetter.invoke(callback);
@@ -85,17 +85,17 @@ public abstract class ViewModel<T extends View>
         this.mvvmRegistryName = mvvmRegistryName;
         GuiLayout guiLayout = binding.init(this, mvvmRegistryName);
 
-        Map<Reactive, IReactiveObjectGetter> reactiveObjects = mvvmRegistry.getRegisteredReactiveObjects(mvvmRegistryName);
-        for (Map.Entry<Reactive, IReactiveObjectGetter> entry: reactiveObjects.entrySet())
+        Map<Reactive, ReactiveObjectGetter> reactiveObjects = mvvmRegistry.getRegisteredReactiveObjects(mvvmRegistryName);
+        for (Map.Entry<Reactive, ReactiveObjectGetter> entry: reactiveObjects.entrySet())
             binding.bindReactiveObject(entry.getKey(), entry.getValue().get(this));
 
-        Map<Reactive, IReactiveCollectionGetter> reactiveCollections = mvvmRegistry.getRegisteredReactiveCollections(mvvmRegistryName);
-        for (Map.Entry<Reactive, IReactiveCollectionGetter> entry: reactiveCollections.entrySet())
+        Map<Reactive, ReactiveCollectionGetter> reactiveCollections = mvvmRegistry.getRegisteredReactiveCollections(mvvmRegistryName);
+        for (Map.Entry<Reactive, ReactiveCollectionGetter> entry: reactiveCollections.entrySet())
             binding.bindReactiveCollection(entry.getKey(), entry.getValue().get(this));
 
         this.slotAccessors.clear();
-        Map<Reactive, ISlotAccessorGetter> slotAccessors = mvvmRegistry.getRegisteredSlotAccessors(mvvmRegistryName);
-        for (Map.Entry<Reactive, ISlotAccessorGetter> entry: slotAccessors.entrySet())
+        Map<Reactive, SlotAccessorGetter> slotAccessors = mvvmRegistry.getRegisteredSlotAccessors(mvvmRegistryName);
+        for (Map.Entry<Reactive, SlotAccessorGetter> entry: slotAccessors.entrySet())
         {
             SlotAccessor slotAccessor = entry.getValue().get(this);
             this.slotAccessors.add(slotAccessor);
@@ -110,8 +110,8 @@ public abstract class ViewModel<T extends View>
         if (binding.view == null) return;
         binding.view.refresh(container);
 
-        Map<Reactive, IReactiveObjectGetter> reactiveObjects = mvvmRegistry.getRegisteredReactiveObjects(mvvmRegistryName);
-        for (Map.Entry<Reactive, IReactiveObjectGetter> entry: reactiveObjects.entrySet())
+        Map<Reactive, ReactiveObjectGetter> reactiveObjects = mvvmRegistry.getRegisteredReactiveObjects(mvvmRegistryName);
+        for (Map.Entry<Reactive, ReactiveObjectGetter> entry: reactiveObjects.entrySet())
         {
             ReactiveObject<?> reactiveObject = entry.getValue().get(this);
             InternalMethods.ReactiveObject$initiativeCallbacks$getter(reactiveObject).clear();
@@ -119,8 +119,8 @@ public abstract class ViewModel<T extends View>
             binding.bindReactiveObject(entry.getKey(), reactiveObject);
         }
 
-        Map<Reactive, IReactiveCollectionGetter> reactiveCollections = mvvmRegistry.getRegisteredReactiveCollections(mvvmRegistryName);
-        for (Map.Entry<Reactive, IReactiveCollectionGetter> entry: reactiveCollections.entrySet())
+        Map<Reactive, ReactiveCollectionGetter> reactiveCollections = mvvmRegistry.getRegisteredReactiveCollections(mvvmRegistryName);
+        for (Map.Entry<Reactive, ReactiveCollectionGetter> entry: reactiveCollections.entrySet())
         {
             ReactiveCollection reactiveCollection = entry.getValue().get(this);
             InternalMethods.ReactiveCollection$group$setter(reactiveCollection, null);
@@ -128,8 +128,8 @@ public abstract class ViewModel<T extends View>
         }
 
         this.slotAccessors.clear();
-        Map<Reactive, ISlotAccessorGetter> slotAccessors = mvvmRegistry.getRegisteredSlotAccessors(mvvmRegistryName);
-        for (Map.Entry<Reactive, ISlotAccessorGetter> entry: slotAccessors.entrySet())
+        Map<Reactive, SlotAccessorGetter> slotAccessors = mvvmRegistry.getRegisteredSlotAccessors(mvvmRegistryName);
+        for (Map.Entry<Reactive, SlotAccessorGetter> entry: slotAccessors.entrySet())
         {
             SlotAccessor slotAccessor = entry.getValue().get(this);
             this.slotAccessors.add(slotAccessor);

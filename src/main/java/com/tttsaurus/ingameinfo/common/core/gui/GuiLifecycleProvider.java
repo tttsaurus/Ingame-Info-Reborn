@@ -3,18 +3,18 @@ package com.tttsaurus.ingameinfo.common.core.gui;
 import com.tttsaurus.ingameinfo.common.core.InternalMethods;
 import com.tttsaurus.ingameinfo.common.core.forgeevent.IgiGuiLifecycleInitEvent;
 import com.tttsaurus.ingameinfo.common.core.forgeevent.IgiGuiLifecycleRegainScreenFocusEvent;
-import com.tttsaurus.ingameinfo.common.core.function.IFunc;
-import com.tttsaurus.ingameinfo.common.core.gui.screen.IGuiScreenDrawScreen;
-import com.tttsaurus.ingameinfo.common.core.gui.screen.IGuiScreenKeyTyped;
+import com.tttsaurus.ingameinfo.common.core.function.Func;
+import com.tttsaurus.ingameinfo.common.core.gui.screen.GuiScreenDrawScreen;
+import com.tttsaurus.ingameinfo.common.core.gui.screen.GuiScreenKeyTyped;
 import com.tttsaurus.ingameinfo.common.core.gui.screen.IgiDummyScreen;
 import com.tttsaurus.ingameinfo.common.core.gui.render.decorator.RenderDecorator;
 import com.tttsaurus.ingameinfo.common.core.gui.render.decorator.RenderOpPhase;
-import com.tttsaurus.ingameinfo.common.core.gui.render.decorator.visual.IVisualModifier;
+import com.tttsaurus.ingameinfo.common.core.gui.render.decorator.visual.VisualModifier;
 import com.tttsaurus.ingameinfo.common.core.gui.render.decorator.visual.VisualBuilder;
 import com.tttsaurus.ingameinfo.common.core.gui.render.decorator.visual.VisualBuilderAccessor;
-import com.tttsaurus.ingameinfo.common.core.gui.render.decorator.visual.command.IArgsGenerator;
+import com.tttsaurus.ingameinfo.common.core.gui.render.decorator.visual.command.ArgsGenerator;
 import com.tttsaurus.ingameinfo.common.core.gui.render.decorator.visual.command.VisualCommand;
-import com.tttsaurus.ingameinfo.common.core.gui.render.op.IRenderOp;
+import com.tttsaurus.ingameinfo.common.core.gui.render.op.RenderOp;
 import com.tttsaurus.ingameinfo.common.core.gui.render.RenderContext;
 import com.tttsaurus.ingameinfo.common.core.gui.render.RenderOpQueue;
 import com.tttsaurus.ingameinfo.common.core.input.InputState;
@@ -290,25 +290,25 @@ public abstract class GuiLifecycleProvider
                 RenderDecorator decorator = container.getRenderDecorator();
 
                 RenderOpQueue queue = container.onRenderUpdate(entry.getKey().equals(firstFocused));
-                IRenderOp op;
+                RenderOp op;
                 while ((op = queue.dequeue()) != null)
                 {
                     op.readTheme(context.theme);
                     if (!decorator.isEmpty() && decorator.isModifying(op.getClass()))
                     {
                         boolean abort = false;
-                        List<IVisualModifier> modBefore = decorator.getModifiers(op.getClass(), RenderOpPhase.BEFORE_EXE);
-                        List<IVisualModifier> modAfter = decorator.getModifiers(op.getClass(), RenderOpPhase.AFTER_EXE);
+                        List<VisualModifier> modBefore = decorator.getModifiers(op.getClass(), RenderOpPhase.BEFORE_EXE);
+                        List<VisualModifier> modAfter = decorator.getModifiers(op.getClass(), RenderOpPhase.AFTER_EXE);
 
                         if (!modBefore.isEmpty())
                         {
                             VisualBuilder builder = new VisualBuilder();
-                            for (IVisualModifier mod: modBefore)
+                            for (VisualModifier mod: modBefore)
                                 mod.apply(builder);
 
                             visualBuilderAccessor.setVisualBuilder(builder);
                             abort = visualBuilderAccessor.getAbortRenderOp();
-                            for (Tuple<VisualCommand, IArgsGenerator> command: visualBuilderAccessor.getCommands())
+                            for (Tuple<VisualCommand, ArgsGenerator> command: visualBuilderAccessor.getCommands())
                                 command.getFirst().execute(command.getSecond().genCommandArgs(context, op));
                         }
 
@@ -317,11 +317,11 @@ public abstract class GuiLifecycleProvider
                         if (!modAfter.isEmpty())
                         {
                             VisualBuilder builder = new VisualBuilder();
-                            for (IVisualModifier mod: modAfter)
+                            for (VisualModifier mod: modAfter)
                                 mod.apply(builder);
 
                             visualBuilderAccessor.setVisualBuilder(builder);
-                            for (Tuple<VisualCommand, IArgsGenerator> command: visualBuilderAccessor.getCommands())
+                            for (Tuple<VisualCommand, ArgsGenerator> command: visualBuilderAccessor.getCommands())
                                 command.getFirst().execute(command.getSecond().genCommandArgs(context, op));
                         }
                     }
@@ -336,7 +336,7 @@ public abstract class GuiLifecycleProvider
     //</editor-fold>
 
     //<editor-fold desc="delegates">
-    private static class DelegateDrawScreen implements IGuiScreenDrawScreen
+    private static class DelegateDrawScreen implements GuiScreenDrawScreen
     {
         private final GuiLifecycleProvider lifecycleProvider;
         private DelegateDrawScreen(GuiLifecycleProvider lifecycleProvider)
@@ -351,7 +351,7 @@ public abstract class GuiLifecycleProvider
         }
     }
 
-    private static class DelegateKeyTyped implements IGuiScreenKeyTyped
+    private static class DelegateKeyTyped implements GuiScreenKeyTyped
     {
         private final GuiLifecycleProvider lifecycleProvider;
         private DelegateKeyTyped(GuiLifecycleProvider lifecycleProvider)
@@ -364,7 +364,7 @@ public abstract class GuiLifecycleProvider
         {
             List<Map.Entry<String, IgiGuiContainer>> entryList = new ArrayList<>(lifecycleProvider.openedGuiMap.entrySet());
             String key = "";
-            IFunc<Boolean> exitCallback = null;
+            Func<Boolean> exitCallback = null;
             for (int i = entryList.size() - 1; i >= 0; i--)
             {
                 Map.Entry<String, IgiGuiContainer> entry = entryList.get(i);
@@ -391,8 +391,8 @@ public abstract class GuiLifecycleProvider
     }
     //</editor-fold>
 
-    public final IGuiScreenDrawScreen GUI_SCREEN_DRAW_SCREEN = new DelegateDrawScreen(this);
-    public final IGuiScreenKeyTyped GUI_SCREEN_KEY_TYPED = new DelegateKeyTyped(this);
+    public final GuiScreenDrawScreen GUI_SCREEN_DRAW_SCREEN = new DelegateDrawScreen(this);
+    public final GuiScreenKeyTyped GUI_SCREEN_KEY_TYPED = new DelegateKeyTyped(this);
 
     public abstract float getRenderLerpAlpha();
     protected abstract boolean isUsingFramebuffer();

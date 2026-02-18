@@ -4,7 +4,7 @@ import com.tttsaurus.ingameinfo.common.core.gui.layout.Rect;
 import com.tttsaurus.ingameinfo.common.core.gui.render.RenderContext;
 import com.tttsaurus.ingameinfo.common.core.render.RenderMask;
 
-public class MaskStartOp implements IRenderOp
+public class MaskStartOp implements RenderOp
 {
     public boolean rounded;
     public Rect rect;

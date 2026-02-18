@@ -1,13 +1,13 @@
 package com.tttsaurus.ingameinfo.common.impl.gui.render.op;
 
 import com.tttsaurus.ingameinfo.common.core.gui.layout.Rect;
-import com.tttsaurus.ingameinfo.common.core.gui.render.op.IRenderOp;
+import com.tttsaurus.ingameinfo.common.core.gui.render.op.RenderOp;
 import com.tttsaurus.ingameinfo.common.core.gui.render.RenderContext;
 import com.tttsaurus.ingameinfo.common.core.gui.theme.ThemeConfig;
 import com.tttsaurus.ingameinfo.common.core.render.RenderMask;
 import com.tttsaurus.ingameinfo.common.core.render.RenderUtils;
 
-public class ProgressBarOp implements IRenderOp
+public class ProgressBarOp implements RenderOp
 {
     public Rect rect;
     public float percentage;

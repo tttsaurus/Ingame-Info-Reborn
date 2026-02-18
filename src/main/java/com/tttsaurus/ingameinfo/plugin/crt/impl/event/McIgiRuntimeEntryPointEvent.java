@@ -1,14 +1,13 @@
 package com.tttsaurus.ingameinfo.plugin.crt.impl.event;
 
 import com.tttsaurus.ingameinfo.common.core.IgiRuntime;
-import com.tttsaurus.ingameinfo.common.core.forgeevent.IgiRuntimeEntryPointEvent;
-import com.tttsaurus.ingameinfo.plugin.crt.api.event.IIgiRuntimeEntryPointEvent;
+import com.tttsaurus.ingameinfo.plugin.crt.api.event.IgiRuntimeEntryPointEvent;
 
-public class McIgiRuntimeEntryPointEvent implements IIgiRuntimeEntryPointEvent
+public class McIgiRuntimeEntryPointEvent implements IgiRuntimeEntryPointEvent
 {
-    private final IgiRuntimeEntryPointEvent event;
+    private final com.tttsaurus.ingameinfo.common.core.forgeevent.IgiRuntimeEntryPointEvent event;
 
-    public McIgiRuntimeEntryPointEvent(IgiRuntimeEntryPointEvent event)
+    public McIgiRuntimeEntryPointEvent(com.tttsaurus.ingameinfo.common.core.forgeevent.IgiRuntimeEntryPointEvent event)
     {
         this.event = event;
     }

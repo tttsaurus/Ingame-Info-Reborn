@@ -1,7 +1,7 @@
 package com.tttsaurus.ingameinfo.common.core.gui.render.decorator;
 
-import com.tttsaurus.ingameinfo.common.core.gui.render.decorator.visual.IVisualModifier;
-import com.tttsaurus.ingameinfo.common.core.gui.render.op.IRenderOp;
+import com.tttsaurus.ingameinfo.common.core.gui.render.decorator.visual.VisualModifier;
+import com.tttsaurus.ingameinfo.common.core.gui.render.op.RenderOp;
 import java.util.*;
 
 public class RenderDecorator
@@ -9,28 +9,28 @@ public class RenderDecorator
     private boolean empty = true;
     public boolean isEmpty() { return empty; }
 
-    private final Map<Class<? extends IRenderOp>, Map<RenderOpPhase, List<IVisualModifier>>> visualModifiers = new HashMap<>();
+    private final Map<Class<? extends RenderOp>, Map<RenderOpPhase, List<VisualModifier>>> visualModifiers = new HashMap<>();
 
-    private Class<? extends IRenderOp> currKey = null;
-    private Map<RenderOpPhase, List<IVisualModifier>> currValue = null;
+    private Class<? extends RenderOp> currKey = null;
+    private Map<RenderOpPhase, List<VisualModifier>> currValue = null;
 
-    public boolean isModifying(Class<? extends IRenderOp> targetOpType)
+    public boolean isModifying(Class<? extends RenderOp> targetOpType)
     {
         currKey = targetOpType;
         currValue = visualModifiers.get(targetOpType);
         return currValue != null;
     }
 
-    public List<IVisualModifier> getModifiers(Class<? extends IRenderOp> targetOpType, RenderOpPhase phase)
+    public List<VisualModifier> getModifiers(Class<? extends RenderOp> targetOpType, RenderOpPhase phase)
     {
-        List<IVisualModifier> list;
+        List<VisualModifier> list;
 
         if (Objects.equals(currKey, targetOpType))
         {
             if (currValue == null)
                 return new ArrayList<>();
 
-            List<IVisualModifier> value = currValue.get(phase);
+            List<VisualModifier> value = currValue.get(phase);
             if (value == null)
                 return new ArrayList<>();
 
@@ -38,12 +38,12 @@ public class RenderDecorator
         }
         else
         {
-            Map<RenderOpPhase, List<IVisualModifier>> map = visualModifiers.get(targetOpType);
+            Map<RenderOpPhase, List<VisualModifier>> map = visualModifiers.get(targetOpType);
 
             if (map == null)
                 return new ArrayList<>();
 
-            List<IVisualModifier> value = map.get(phase);
+            List<VisualModifier> value = map.get(phase);
             if (value == null)
                 return new ArrayList<>();
 
@@ -53,10 +53,10 @@ public class RenderDecorator
         return list;
     }
 
-    public void register(Class<? extends IRenderOp> targetOpType, RenderOpPhase phase, IVisualModifier visualModifier)
+    public void register(Class<? extends RenderOp> targetOpType, RenderOpPhase phase, VisualModifier visualModifier)
     {
-        Map<RenderOpPhase, List<IVisualModifier>> map = visualModifiers.computeIfAbsent(targetOpType, k -> new HashMap<>());
-        List<IVisualModifier> list = map.computeIfAbsent(phase, k -> new ArrayList<>());
+        Map<RenderOpPhase, List<VisualModifier>> map = visualModifiers.computeIfAbsent(targetOpType, k -> new HashMap<>());
+        List<VisualModifier> list = map.computeIfAbsent(phase, k -> new ArrayList<>());
 
         list.add(visualModifier);
 

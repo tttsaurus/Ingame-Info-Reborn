@@ -5,7 +5,7 @@ import com.tttsaurus.ingameinfo.common.core.appcommunication.spotify.SpotifyAcce
 import com.tttsaurus.ingameinfo.common.core.appcommunication.spotify.SpotifyOAuthUtils;
 import com.tttsaurus.ingameinfo.common.core.appcommunication.spotify.SpotifyUserInfo;
 import com.tttsaurus.ingameinfo.common.core.appcommunication.spotify.TrackPlaying;
-import com.tttsaurus.ingameinfo.common.core.gui.event.IUIEventListener;
+import com.tttsaurus.ingameinfo.common.core.gui.event.UIEventListener;
 import com.tttsaurus.ingameinfo.common.core.gui.event.UIEvent;
 import com.tttsaurus.ingameinfo.common.core.gui.event.UIEventListenerType;
 import com.tttsaurus.ingameinfo.common.core.gui.layout.Padding;
@@ -227,7 +227,7 @@ public class SpotifyViewModel extends ViewModel<SpotifyView>
 
         switchLayout();
 
-        bindEventListener("editButton", UIEvent.MouseRelease.class, new IUIEventListener<>()
+        bindEventListener("editButton", UIEvent.MouseRelease.class, new UIEventListener<>()
         {
             @Override
             public void handle(UIEvent.MouseRelease event)

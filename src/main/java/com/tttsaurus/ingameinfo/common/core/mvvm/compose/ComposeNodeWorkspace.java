@@ -1,6 +1,6 @@
 package com.tttsaurus.ingameinfo.common.core.mvvm.compose;
 
-import com.tttsaurus.ingameinfo.common.core.function.IAction;
+import com.tttsaurus.ingameinfo.common.core.function.Action;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -44,7 +44,7 @@ public class ComposeNodeWorkspace
         return this;
     }
 
-    public void wrap(IAction action)
+    public void wrap(Action action)
     {
         if (!validator.group(node.uiElementName))
         {

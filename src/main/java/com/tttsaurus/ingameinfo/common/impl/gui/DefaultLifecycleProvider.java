@@ -4,7 +4,7 @@ import com.tttsaurus.ingameinfo.InGameInfoReborn;
 import com.tttsaurus.ingameinfo.common.core.gui.GuiLifecycleProvider;
 import com.tttsaurus.ingameinfo.common.core.commonutils.RlReaderUtils;
 import com.tttsaurus.ingameinfo.common.core.render.GlResourceManager;
-import com.tttsaurus.ingameinfo.common.core.render.IGlDisposable;
+import com.tttsaurus.ingameinfo.common.core.render.GlDisposable;
 import com.tttsaurus.ingameinfo.common.core.render.RenderHints;
 import com.tttsaurus.ingameinfo.common.core.render.RenderUtils;
 import com.tttsaurus.ingameinfo.common.core.render.shader.Shader;
@@ -290,7 +290,7 @@ public final class DefaultLifecycleProvider extends GuiLifecycleProvider
             resolvedFbo.framebufferColor[3] = 0f;
             resolvedFbo.enableStencil();
             resolvedFbo.unbindFramebuffer();
-            GlResourceManager.addDisposable((IGlDisposable)resolvedFbo);
+            GlResourceManager.addDisposable((GlDisposable)resolvedFbo);
         }
 
         if (resolvedFbo.framebufferWidth != MC.displayWidth || resolvedFbo.framebufferHeight != MC.displayHeight)
@@ -316,7 +316,7 @@ public final class DefaultLifecycleProvider extends GuiLifecycleProvider
             shaderFbo.framebufferColor[3] = 0f;
             shaderFbo.enableStencil();
             shaderFbo.bindFramebuffer(true);
-            GlResourceManager.addDisposable((IGlDisposable)shaderFbo);
+            GlResourceManager.addDisposable((GlDisposable)shaderFbo);
         }
 
         if (shaderFbo.framebufferWidth != MC.displayWidth || shaderFbo.framebufferHeight != MC.displayHeight)
@@ -353,7 +353,7 @@ public final class DefaultLifecycleProvider extends GuiLifecycleProvider
                 RenderHints.defaultFbo();
             }
             fbo.bindFramebuffer(true);
-            GlResourceManager.addDisposable((IGlDisposable)fbo);
+            GlResourceManager.addDisposable((GlDisposable)fbo);
         }
 
         if (fbo.framebufferWidth != MC.displayWidth || fbo.framebufferHeight != MC.displayHeight)

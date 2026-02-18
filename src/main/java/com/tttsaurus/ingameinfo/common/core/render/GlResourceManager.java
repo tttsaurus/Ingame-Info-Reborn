@@ -7,20 +7,20 @@ import java.util.concurrent.CopyOnWriteArrayList;
 
 public final class GlResourceManager
 {
-    private static final List<IGlDisposable> disposables = new CopyOnWriteArrayList<>();
+    private static final List<GlDisposable> disposables = new CopyOnWriteArrayList<>();
 
-    public static void addDisposable(IGlDisposable disposable)
+    public static void addDisposable(GlDisposable disposable)
     {
         disposables.add(disposable);
     }
-    public static void removeDisposable(IGlDisposable disposable)
+    public static void removeDisposable(GlDisposable disposable)
     {
         disposables.remove(disposable);
     }
 
     public static void disposeAll(Logger logger)
     {
-        for (IGlDisposable disposable: disposables)
+        for (GlDisposable disposable: disposables)
         {
             logger.info("Disposing " + disposable.getClass().getSimpleName());
             disposable.dispose();

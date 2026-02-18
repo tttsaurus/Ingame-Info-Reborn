@@ -1,8 +1,8 @@
 package com.tttsaurus.ingameinfo.common.core.gui;
 
 import com.tttsaurus.ingameinfo.common.core.gui.layout.ElementGroup;
-import com.tttsaurus.ingameinfo.common.core.gui.property.style.IStylePropertyGetter;
-import com.tttsaurus.ingameinfo.common.core.gui.property.style.IStylePropertySetter;
+import com.tttsaurus.ingameinfo.common.core.gui.property.style.StylePropertyGetter;
+import com.tttsaurus.ingameinfo.common.core.gui.property.style.StylePropertySetter;
 import com.tttsaurus.ingameinfo.common.core.gui.registry.ElementRegistry;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -67,9 +67,9 @@ public final class ElementAccessor
 
     public Object get(String propertyName)
     {
-        IStylePropertySetter setter = ElementRegistry.getStylePropertySetter(element.getClass(), propertyName);
+        StylePropertySetter setter = ElementRegistry.getStylePropertySetter(element.getClass(), propertyName);
         if (setter == null) return null;
-        IStylePropertyGetter getter = ElementRegistry.getStylePropertyGetter(setter);
+        StylePropertyGetter getter = ElementRegistry.getStylePropertyGetter(setter);
         if (getter == null) return null;
         return getter.get(element);
     }
@@ -88,9 +88,9 @@ public final class ElementAccessor
         {
             if (ordinal != -1 && ordinal != index++) continue;
 
-            IStylePropertySetter setter = ElementRegistry.getStylePropertySetter(item.getClass(), propertyName);
+            StylePropertySetter setter = ElementRegistry.getStylePropertySetter(item.getClass(), propertyName);
             if (setter == null) continue;
-            IStylePropertyGetter getter = ElementRegistry.getStylePropertyGetter(setter);
+            StylePropertyGetter getter = ElementRegistry.getStylePropertyGetter(setter);
             if (getter == null) continue;
             res = getter.get(item);
         }

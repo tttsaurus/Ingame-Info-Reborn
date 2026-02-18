@@ -1,19 +1,19 @@
 package com.tttsaurus.ingameinfo.common.impl.gui.render.op;
 
 import com.tttsaurus.ingameinfo.common.core.gui.layout.Rect;
-import com.tttsaurus.ingameinfo.common.core.gui.render.op.IRenderOp;
+import com.tttsaurus.ingameinfo.common.core.gui.render.op.RenderOp;
 import com.tttsaurus.ingameinfo.common.core.gui.render.RenderContext;
 import com.tttsaurus.ingameinfo.common.core.render.RenderMask;
 import com.tttsaurus.ingameinfo.common.core.render.RenderUtils;
-import com.tttsaurus.ingameinfo.common.core.render.texture.Texture2D;
+import com.tttsaurus.ingameinfo.common.core.render.texture.Texture2DImpl;
 
-public class UrlImageOp implements IRenderOp
+public class UrlImageOp implements RenderOp
 {
     public Rect rect;
-    public Texture2D texture;
+    public Texture2DImpl texture;
     public boolean rounded;
 
-    public UrlImageOp(Rect rect, Texture2D texture, boolean rounded)
+    public UrlImageOp(Rect rect, Texture2DImpl texture, boolean rounded)
     {
         this.rect = rect;
         this.texture = texture;

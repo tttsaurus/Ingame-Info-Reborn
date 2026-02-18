@@ -4,7 +4,7 @@ import com.tttsaurus.ingameinfo.common.core.InternalMethods;
 import com.tttsaurus.ingameinfo.common.core.render.text.FormattedText;
 import com.tttsaurus.ingameinfo.common.core.render.texture.ImagePrefab;
 import com.tttsaurus.ingameinfo.common.core.render.texture.NinePatchBorder;
-import com.tttsaurus.ingameinfo.common.core.render.texture.Texture2D;
+import com.tttsaurus.ingameinfo.common.core.render.texture.Texture2DImpl;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.ScaledResolution;
@@ -820,7 +820,7 @@ public final class RenderUtils
     }
 
     @Nullable
-    public static Texture2D createTexture2D(BufferedImage bufferedImage)
+    public static Texture2DImpl createTexture2D(BufferedImage bufferedImage)
     {
         int width = bufferedImage.getWidth();
         int height = bufferedImage.getHeight();
@@ -861,7 +861,7 @@ public final class RenderUtils
 
         GlStateManager.bindTexture(textureID);
 
-        Texture2D texture2D = new Texture2D(width, height, glTextureID);
+        Texture2DImpl texture2D = new Texture2DImpl(width, height, glTextureID);
         GlResourceManager.addDisposable(texture2D);
 
         return texture2D;
@@ -936,7 +936,7 @@ public final class RenderUtils
         catch (IOException ignored) { }
     }
     @Nullable
-    public static Texture2D readPng(File png)
+    public static Texture2DImpl readPng(File png)
     {
         if (!png.exists()) return null;
         try

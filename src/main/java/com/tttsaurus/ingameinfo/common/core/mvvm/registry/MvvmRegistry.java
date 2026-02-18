@@ -4,9 +4,9 @@ import com.tttsaurus.ingameinfo.InGameInfoReborn;
 import com.tttsaurus.ingameinfo.common.core.gui.GuiLayout;
 import com.tttsaurus.ingameinfo.common.core.gui.IgiGuiContainer;
 import com.tttsaurus.ingameinfo.common.core.InternalMethods;
-import com.tttsaurus.ingameinfo.common.core.mvvm.binding.IReactiveCollectionGetter;
-import com.tttsaurus.ingameinfo.common.core.mvvm.binding.IReactiveObjectGetter;
-import com.tttsaurus.ingameinfo.common.core.mvvm.binding.ISlotAccessorGetter;
+import com.tttsaurus.ingameinfo.common.core.mvvm.binding.ReactiveCollectionGetter;
+import com.tttsaurus.ingameinfo.common.core.mvvm.binding.ReactiveObjectGetter;
+import com.tttsaurus.ingameinfo.common.core.mvvm.binding.SlotAccessorGetter;
 import com.tttsaurus.ingameinfo.common.core.mvvm.binding.Reactive;
 import com.tttsaurus.ingameinfo.common.core.mvvm.viewmodel.ViewModel;
 import javax.annotation.Nonnull;
@@ -37,26 +37,26 @@ public final class MvvmRegistry
     }
 
     // key: mvvm registry name
-    private final Map<String, Map<Reactive, IReactiveObjectGetter>> registeredReactiveObjects = new HashMap<>();
-    private final Map<String, Map<Reactive, IReactiveCollectionGetter>> registeredReactiveCollections = new HashMap<>();
-    private final Map<String, Map<Reactive, ISlotAccessorGetter>> registeredSlotAccessors = new HashMap<>();
+    private final Map<String, Map<Reactive, ReactiveObjectGetter>> registeredReactiveObjects = new HashMap<>();
+    private final Map<String, Map<Reactive, ReactiveCollectionGetter>> registeredReactiveCollections = new HashMap<>();
+    private final Map<String, Map<Reactive, SlotAccessorGetter>> registeredSlotAccessors = new HashMap<>();
 
     //<editor-fold desc="getters">
-    public Map<Reactive, IReactiveObjectGetter> getRegisteredReactiveObjects(String mvvmRegistryName)
+    public Map<Reactive, ReactiveObjectGetter> getRegisteredReactiveObjects(String mvvmRegistryName)
     {
-        Map<Reactive, IReactiveObjectGetter> map = registeredReactiveObjects.get(mvvmRegistryName);
+        Map<Reactive, ReactiveObjectGetter> map = registeredReactiveObjects.get(mvvmRegistryName);
         if (map == null) return new HashMap<>();
         return map;
     }
-    public Map<Reactive, IReactiveCollectionGetter> getRegisteredReactiveCollections(String mvvmRegistryName)
+    public Map<Reactive, ReactiveCollectionGetter> getRegisteredReactiveCollections(String mvvmRegistryName)
     {
-        Map<Reactive, IReactiveCollectionGetter> map = registeredReactiveCollections.get(mvvmRegistryName);
+        Map<Reactive, ReactiveCollectionGetter> map = registeredReactiveCollections.get(mvvmRegistryName);
         if (map == null) return new HashMap<>();
         return map;
     }
-    public Map<Reactive, ISlotAccessorGetter> getRegisteredSlotAccessors(String mvvmRegistryName)
+    public Map<Reactive, SlotAccessorGetter> getRegisteredSlotAccessors(String mvvmRegistryName)
     {
-        Map<Reactive, ISlotAccessorGetter> map = registeredSlotAccessors.get(mvvmRegistryName);
+        Map<Reactive, SlotAccessorGetter> map = registeredSlotAccessors.get(mvvmRegistryName);
         if (map == null) return new HashMap<>();
         return map;
     }

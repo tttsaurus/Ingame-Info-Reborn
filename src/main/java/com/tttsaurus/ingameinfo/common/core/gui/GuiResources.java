@@ -20,7 +20,7 @@ public final class GuiResources
 
     public static ImagePrefab tryRegisterTexture(ResourceLocation rl)
     {
-        ITexture2D tex = TextureHelper.loadTextureFromRl(rl);
+        Texture2D tex = TextureHelper.loadTextureFromRl(rl);
         if (tex == null) return missingTexture;
         ImagePrefab imagePrefab = TextureHelper.tryWrapToImagePrefab(tex);
         if (imagePrefab == null) return missingTexture;
@@ -29,7 +29,7 @@ public final class GuiResources
     }
     public static ImagePrefab tryRegisterTexture(ResourceLocation rl, FilterMode filterModeMin, FilterMode filterModeMag, WrapMode wrapModeS, WrapMode wrapModeT)
     {
-        ITexture2D tex = TextureHelper.loadTextureFromRl(rl);
+        Texture2D tex = TextureHelper.loadTextureFromRl(rl);
         if (tex == null) return missingTexture;
         ImagePrefab imagePrefab = TextureHelper.tryWrapToImagePrefab(tex);
         if (imagePrefab == null) return missingTexture;
@@ -78,15 +78,15 @@ public final class GuiResources
         RenderHints.texture2dClampToEdgeWrapS();
         RenderHints.texture2dClampToEdgeWrapT();
 
-        Texture2D mcVanillaBgTopLeft = null;
-        Texture2D mcVanillaBgTopCenter = null;
-        Texture2D mcVanillaBgTopRight = null;
-        Texture2D mcVanillaBgCenterLeft = null;
-        Texture2D mcVanillaBgCenter = null;
-        Texture2D mcVanillaBgCenterRight = null;
-        Texture2D mcVanillaBgBottomLeft = null;
-        Texture2D mcVanillaBgBottomCenter = null;
-        Texture2D mcVanillaBgBottomRight = null;
+        Texture2DImpl mcVanillaBgTopLeft = null;
+        Texture2DImpl mcVanillaBgTopCenter = null;
+        Texture2DImpl mcVanillaBgTopRight = null;
+        Texture2DImpl mcVanillaBgCenterLeft = null;
+        Texture2DImpl mcVanillaBgCenter = null;
+        Texture2DImpl mcVanillaBgCenterRight = null;
+        Texture2DImpl mcVanillaBgBottomLeft = null;
+        Texture2DImpl mcVanillaBgBottomCenter = null;
+        Texture2DImpl mcVanillaBgBottomRight = null;
 
         BufferedImage image = TextureHelper.getBufferedImageFromRl(new ResourceLocation("ingameinfo:gui/background/vanilla/top_left.png"));
         if (image != null)
@@ -141,15 +141,15 @@ public final class GuiResources
                 mcVanillaBgBottomCenter,
                 mcVanillaBgBottomRight));
 
-        Texture2D mcVanillaButtonTopLeft = null;
-        Texture2D mcVanillaButtonTopCenter = null;
-        Texture2D mcVanillaButtonTopRight = null;
-        Texture2D mcVanillaButtonCenterLeft = null;
-        Texture2D mcVanillaButtonCenter = null;
-        Texture2D mcVanillaButtonCenterRight = null;
-        Texture2D mcVanillaButtonBottomLeft = null;
-        Texture2D mcVanillaButtonBottomCenter = null;
-        Texture2D mcVanillaButtonBottomRight = null;
+        Texture2DImpl mcVanillaButtonTopLeft = null;
+        Texture2DImpl mcVanillaButtonTopCenter = null;
+        Texture2DImpl mcVanillaButtonTopRight = null;
+        Texture2DImpl mcVanillaButtonCenterLeft = null;
+        Texture2DImpl mcVanillaButtonCenter = null;
+        Texture2DImpl mcVanillaButtonCenterRight = null;
+        Texture2DImpl mcVanillaButtonBottomLeft = null;
+        Texture2DImpl mcVanillaButtonBottomCenter = null;
+        Texture2DImpl mcVanillaButtonBottomRight = null;
 
         image = TextureHelper.getBufferedImageFromRl(new ResourceLocation("ingameinfo:gui/button/vanilla/top_left.png"));
         if (image != null)
@@ -205,7 +205,7 @@ public final class GuiResources
                 mcVanillaButtonBottomRight));
         mcVanillaButton.ninePatchBorder.center.tiling = true;
 
-        Texture2D missingTexture = null;
+        Texture2DImpl missingTexture = null;
         image = TextureHelper.getBufferedImageFromRl(new ResourceLocation("ingameinfo:gui/missing_texture.png"));
         if (image != null)
             missingTexture = RenderUtils.createTexture2D(image);

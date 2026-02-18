@@ -1,6 +1,6 @@
 package com.tttsaurus.ingameinfo.common.impl.network.tps;
 
-import com.tttsaurus.ingameinfo.common.core.function.IAction_2Param;
+import com.tttsaurus.ingameinfo.common.core.function.Action2Param;
 import io.netty.buffer.ByteBuf;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
@@ -8,7 +8,7 @@ import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 
 public class RespondTpsMsptPacket implements IMessage
 {
-    public static IAction_2Param<Integer, Double> callback;
+    public static Action2Param<Integer, Double> callback;
 
     private int tps;
     private double mspt;

@@ -6,9 +6,9 @@ import com.tttsaurus.ingameinfo.common.core.mvvm.binding.ReactiveObject;
 import com.tttsaurus.ingameinfo.common.core.mvvm.viewmodel.ViewModel;
 import com.tttsaurus.ingameinfo.common.core.reflection.AnnotationUtils;
 import com.tttsaurus.ingameinfo.plugin.crt.api.TypesWrapper;
-import com.tttsaurus.ingameinfo.plugin.crt.api.viewmodel.IGuiExit;
-import com.tttsaurus.ingameinfo.plugin.crt.api.viewmodel.IViewModelFixedUpdate;
-import com.tttsaurus.ingameinfo.plugin.crt.api.viewmodel.IViewModelStart;
+import com.tttsaurus.ingameinfo.plugin.crt.api.viewmodel.GuiExit;
+import com.tttsaurus.ingameinfo.plugin.crt.api.viewmodel.ViewModelFixedUpdate;
+import com.tttsaurus.ingameinfo.plugin.crt.api.viewmodel.ViewModelStart;
 import crafttweaker.annotations.ZenRegister;
 import net.minecraft.util.Tuple;
 import stanhebben.zenscript.annotations.Optional;
@@ -26,16 +26,16 @@ public final class CrtViewModel extends ViewModel<CrtView>
     //<editor-fold desc="static methods">
 
     // key: mvvm registry name
-    private static final Map<String, IViewModelFixedUpdate> fixedUpdates = new HashMap<>();
+    private static final Map<String, ViewModelFixedUpdate> fixedUpdates = new HashMap<>();
 
     @ZenMethod
-    public static void setFixedUpdate(IViewModelFixedUpdate update) { fixedUpdates.put(CrtMvvm.currentMvvm, update); }
+    public static void setFixedUpdate(ViewModelFixedUpdate update) { fixedUpdates.put(CrtMvvm.currentMvvm, update); }
 
     // key: mvvm registry name
-    private static final Map<String, IViewModelStart> startActions = new HashMap<>();
+    private static final Map<String, ViewModelStart> startActions = new HashMap<>();
 
     @ZenMethod
-    public static void setStartAction(IViewModelStart action) { startActions.put(CrtMvvm.currentMvvm, action); }
+    public static void setStartAction(ViewModelStart action) { startActions.put(CrtMvvm.currentMvvm, action); }
 
     // key: mvvm registry name
     public static final Map<String, Map<String, Tuple<Reactive, ReactiveObject<?>>>> reactiveObjectDefs = new HashMap<>();
@@ -111,7 +111,7 @@ public final class CrtViewModel extends ViewModel<CrtView>
     @ZenMethod
     public boolean getActive() { return super.getActive(); }
     @ZenMethod
-    public void setExitCallback(IGuiExit callback) { super.setExitCallback(callback::invoke); }
+    public void setExitCallback(GuiExit callback) { super.setExitCallback(callback::invoke); }
     @ZenMethod
     public void setFocused(boolean flag) { super.setFocused(flag);}
     @ZenMethod
@@ -120,14 +120,14 @@ public final class CrtViewModel extends ViewModel<CrtView>
     @Override
     public void onStart()
     {
-        IViewModelStart action = startActions.get(runtimeMvvm);
+        ViewModelStart action = startActions.get(runtimeMvvm);
         if (action != null) action.start(this);
     }
 
     @Override
     public void onFixedUpdate(double deltaTime)
     {
-        IViewModelFixedUpdate fixedUpdate = fixedUpdates.get(runtimeMvvm);
+        ViewModelFixedUpdate fixedUpdate = fixedUpdates.get(runtimeMvvm);
         if (fixedUpdate != null) fixedUpdate.update(this, deltaTime);
     }
 }

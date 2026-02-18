@@ -1,9 +1,9 @@
 package com.tttsaurus.ingameinfo.common.core.gui.layout;
 
-import com.tttsaurus.ingameinfo.common.core.serialization.Deserializer;
+import com.tttsaurus.ingameinfo.common.core.serialization.DeserializerSignature;
 import com.tttsaurus.ingameinfo.common.impl.serialization.SkewnessDeserializer;
 
-@Deserializer(SkewnessDeserializer.class)
+@DeserializerSignature(SkewnessDeserializer.class)
 public enum Skewness
 {
     NULL,

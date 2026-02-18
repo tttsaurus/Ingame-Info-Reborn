@@ -1,9 +1,9 @@
 package com.tttsaurus.ingameinfo.common.impl.serialization;
 
 import com.tttsaurus.ingameinfo.common.core.commonutils.GhostableItem;
-import com.tttsaurus.ingameinfo.common.core.serialization.IDeserializer;
+import com.tttsaurus.ingameinfo.common.core.serialization.Deserializer;
 
-public class ItemDeserializer implements IDeserializer<GhostableItem>
+public class ItemDeserializer implements Deserializer<GhostableItem>
 {
     @Override
     public GhostableItem deserialize(String raw)

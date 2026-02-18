@@ -1,12 +1,12 @@
 package com.tttsaurus.ingameinfo.common.impl.gui.render.op;
 
-import com.tttsaurus.ingameinfo.common.core.gui.render.op.IRenderOp;
+import com.tttsaurus.ingameinfo.common.core.gui.render.op.RenderOp;
 import com.tttsaurus.ingameinfo.common.core.gui.render.RenderContext;
 import com.tttsaurus.ingameinfo.common.core.gui.theme.ThemeConfig;
 import com.tttsaurus.ingameinfo.common.core.render.RenderUtils;
 import com.tttsaurus.ingameinfo.common.core.render.text.FormattedText;
 
-public class TextOp implements IRenderOp
+public class TextOp implements RenderOp
 {
     public FormattedText text;
     public float x, y, scale;

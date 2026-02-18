@@ -6,9 +6,9 @@ import java.io.IOException;
 
 public class McTextureWrapper extends AbstractTexture
 {
-    private final ITexture2D internal;
+    private final Texture2D internal;
 
-    public McTextureWrapper(ITexture2D internal)
+    public McTextureWrapper(Texture2D internal)
     {
         this.internal = internal;
         if (internal.isGlRegistered()) glTextureId = internal.getGlTextureID();

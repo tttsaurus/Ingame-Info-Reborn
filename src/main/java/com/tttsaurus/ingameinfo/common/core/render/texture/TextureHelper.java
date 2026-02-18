@@ -32,7 +32,7 @@ public final class TextureHelper
         return null;
     }
 
-    public static void setTextureParams(ITexture2D tex, FilterMode filterModeMin, FilterMode filterModeMag, WrapMode wrapModeS, WrapMode wrapModeT)
+    public static void setTextureParams(Texture2D tex, FilterMode filterModeMin, FilterMode filterModeMag, WrapMode wrapModeS, WrapMode wrapModeT)
     {
         GL11.glGetInteger(GL11.GL_TEXTURE_BINDING_2D, INT_BUFFER_16);
         int textureID = INT_BUFFER_16.get(0);
@@ -48,22 +48,22 @@ public final class TextureHelper
     }
 
     @Nullable
-    public static ImagePrefab tryWrapToImagePrefab(ITexture2D tex)
+    public static ImagePrefab tryWrapToImagePrefab(Texture2D tex)
     {
         ImagePrefab imagePrefab = null;
-        if (tex instanceof Texture2D texture2D)
+        if (tex instanceof Texture2DImpl texture2D)
             imagePrefab = new ImagePrefab(texture2D);
-        else if (tex instanceof TextureSliced2D textureSliced2D)
+        else if (tex instanceof TextureSliced2DImpl textureSliced2D)
             imagePrefab = new ImagePrefab(textureSliced2D);
         return imagePrefab;
     }
 
     @Nullable
-    public static ITexture2D loadTextureFromRl(ResourceLocation rl)
+    public static Texture2D loadTextureFromRl(ResourceLocation rl)
     {
         TextureAtlasSprite mcSprite = Minecraft.getMinecraft().getTextureMapBlocks().getTextureExtry(rl.toString());
         if (mcSprite != null)
-            return new TextureSliced2D(
+            return new TextureSliced2DImpl(
                     mcSprite.getOriginX(),
                     mcSprite.getOriginY(),
                     mcSprite.getIconWidth(),
@@ -79,12 +79,12 @@ public final class TextureHelper
 
         ITextureObject mcTex = Minecraft.getMinecraft().getTextureManager().getTexture(rl);
         if (mcTex != null)
-            return new Texture2D(
+            return new Texture2DImpl(
                     image.getWidth(),
                     image.getHeight(),
                     mcTex.getGlTextureId());
 
-        Texture2D texture2D = RenderUtils.createTexture2D(image);
+        Texture2DImpl texture2D = RenderUtils.createTexture2D(image);
 
         Minecraft.getMinecraft().getTextureManager().loadTexture(rl, new McTextureWrapper(texture2D));
 

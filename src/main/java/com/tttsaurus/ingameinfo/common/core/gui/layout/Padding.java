@@ -1,10 +1,10 @@
 package com.tttsaurus.ingameinfo.common.core.gui.layout;
 
-import com.tttsaurus.ingameinfo.common.core.serialization.Deserializer;
+import com.tttsaurus.ingameinfo.common.core.serialization.DeserializerSignature;
 import com.tttsaurus.ingameinfo.common.impl.serialization.PaddingDeserializer;
 import java.util.Objects;
 
-@Deserializer(PaddingDeserializer.class)
+@DeserializerSignature(PaddingDeserializer.class)
 public class Padding
 {
     public float top;

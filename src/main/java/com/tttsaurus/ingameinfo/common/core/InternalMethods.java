@@ -3,8 +3,8 @@ package com.tttsaurus.ingameinfo.common.core;
 import com.cleanroommc.kirino.utils.ReflectionUtils;
 import com.google.common.base.Preconditions;
 import com.tttsaurus.ingameinfo.InGameInfoReborn;
-import com.tttsaurus.ingameinfo.common.core.gui.property.style.IStylePropertySyncTo;
-import com.tttsaurus.ingameinfo.common.core.mvvm.binding.IReactiveCallback;
+import com.tttsaurus.ingameinfo.common.core.gui.property.style.StylePropertySyncTo;
+import com.tttsaurus.ingameinfo.common.core.mvvm.binding.ReactiveCallback;
 import com.tttsaurus.ingameinfo.common.core.render.text.FormattedText;
 import com.tttsaurus.ingameinfo.common.core.function.*;
 import com.tttsaurus.ingameinfo.common.core.gui.Element;
@@ -68,11 +68,11 @@ public final class InternalMethods
         SETTER_DELEGATE = new SetterDelegate(
                 ReflectionUtils.getFieldSetter(IgiGuiContainer.class, "viewModel", ViewModel.class),
                 ReflectionUtils.getFieldSetter(View.class, "mainGroup", MainGroup.class),
-                ReflectionUtils.getFieldSetter(ViewModel.class, "isActiveSetter", IAction_1Param.class),
-                ReflectionUtils.getFieldSetter(ViewModel.class, "isActiveGetter", IFunc.class),
-                ReflectionUtils.getFieldSetter(ViewModel.class, "exitCallbackSetter", IAction_1Param.class),
-                ReflectionUtils.getFieldSetter(ViewModel.class, "isFocusedSetter", IAction_1Param.class),
-                ReflectionUtils.getFieldSetter(ViewModel.class, "isFocusedGetter", IFunc.class),
+                ReflectionUtils.getFieldSetter(ViewModel.class, "isActiveSetter", Action1Param.class),
+                ReflectionUtils.getFieldSetter(ViewModel.class, "isActiveGetter", Func.class),
+                ReflectionUtils.getFieldSetter(ViewModel.class, "exitCallbackSetter", Action1Param.class),
+                ReflectionUtils.getFieldSetter(ViewModel.class, "isFocusedSetter", Action1Param.class),
+                ReflectionUtils.getFieldSetter(ViewModel.class, "isFocusedGetter", Func.class),
                 ReflectionUtils.getFieldSetter(ReactiveCollection.class, "group", ElementGroup.class),
                 ReflectionUtils.getFieldSetter(SlotAccessor.class, "group", ElementGroup.class),
                 ReflectionUtils.getFieldSetter(GuiLayout.class, "igiGuiContainer", IgiGuiContainer.class),
@@ -209,11 +209,11 @@ public final class InternalMethods
     }
 
     @SuppressWarnings("unchecked")
-    public static Map<String, IStylePropertySyncTo> Element$syncToMap$getter(Element arg0)
+    public static Map<String, StylePropertySyncTo> Element$syncToMap$getter(Element arg0)
     {
         try
         {
-            return (Map<String, IStylePropertySyncTo>) GETTER_DELEGATE.Element$syncToMap$getter.invokeExact(arg0);
+            return (Map<String, StylePropertySyncTo>) GETTER_DELEGATE.Element$syncToMap$getter.invokeExact(arg0);
         }
         catch (Throwable e)
         {
@@ -222,11 +222,11 @@ public final class InternalMethods
     }
 
     @SuppressWarnings("unchecked")
-    public static List<IReactiveCallback> ReactiveObject$initiativeCallbacks$getter(ReactiveObject arg0)
+    public static List<ReactiveCallback> ReactiveObject$initiativeCallbacks$getter(ReactiveObject arg0)
     {
         try
         {
-            return (List<IReactiveCallback>) GETTER_DELEGATE.ReactiveObject$initiativeCallbacks$getter.invokeExact(arg0);
+            return (List<ReactiveCallback>) GETTER_DELEGATE.ReactiveObject$initiativeCallbacks$getter.invokeExact(arg0);
         }
         catch (Throwable e)
         {
@@ -235,11 +235,11 @@ public final class InternalMethods
     }
 
     @SuppressWarnings("unchecked")
-    public static List<IReactiveCallback> ReactiveObject$passiveCallbacks$getter(ReactiveObject arg0)
+    public static List<ReactiveCallback> ReactiveObject$passiveCallbacks$getter(ReactiveObject arg0)
     {
         try
         {
-            return (List<IReactiveCallback>) GETTER_DELEGATE.ReactiveObject$passiveCallbacks$getter.invokeExact(arg0);
+            return (List<ReactiveCallback>) GETTER_DELEGATE.ReactiveObject$passiveCallbacks$getter.invokeExact(arg0);
         }
         catch (Throwable e)
         {
@@ -323,7 +323,7 @@ public final class InternalMethods
         }
     }
 
-    public static void ViewModel$isActiveSetter$setter(ViewModel arg0, IAction_1Param<Boolean> arg1)
+    public static void ViewModel$isActiveSetter$setter(ViewModel arg0, Action1Param<Boolean> arg1)
     {
         try
         {
@@ -335,7 +335,7 @@ public final class InternalMethods
         }
     }
 
-    public static void ViewModel$isActiveGetter$setter(ViewModel arg0, IFunc<Boolean> arg1)
+    public static void ViewModel$isActiveGetter$setter(ViewModel arg0, Func<Boolean> arg1)
     {
         try
         {
@@ -347,7 +347,7 @@ public final class InternalMethods
         }
     }
 
-    public static void ViewModel$exitCallbackSetter$setter(ViewModel arg0, IAction_1Param<IFunc<Boolean>> arg1)
+    public static void ViewModel$exitCallbackSetter$setter(ViewModel arg0, Action1Param<Func<Boolean>> arg1)
     {
         try
         {
@@ -359,7 +359,7 @@ public final class InternalMethods
         }
     }
 
-    public static void ViewModel$isFocusedSetter$setter(ViewModel arg0, IAction_1Param<Boolean> arg1)
+    public static void ViewModel$isFocusedSetter$setter(ViewModel arg0, Action1Param<Boolean> arg1)
     {
         try
         {
@@ -371,7 +371,7 @@ public final class InternalMethods
         }
     }
 
-    public static void ViewModel$isFocusedGetter$setter(ViewModel arg0, IFunc<Boolean> arg1)
+    public static void ViewModel$isFocusedGetter$setter(ViewModel arg0, Func<Boolean> arg1)
     {
         try
         {

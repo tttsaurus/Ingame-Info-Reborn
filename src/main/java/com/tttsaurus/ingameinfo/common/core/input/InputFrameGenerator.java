@@ -2,10 +2,10 @@ package com.tttsaurus.ingameinfo.common.core.input;
 
 public class InputFrameGenerator
 {
-    private final IKeyboard keyboard;
-    private final IMouse mouse;
+    private final Keyboard keyboard;
+    private final Mouse mouse;
 
-    public InputFrameGenerator(IKeyboard keyboard, IMouse mouse)
+    public InputFrameGenerator(Keyboard keyboard, Mouse mouse)
     {
         this.keyboard = keyboard;
         this.mouse = mouse;

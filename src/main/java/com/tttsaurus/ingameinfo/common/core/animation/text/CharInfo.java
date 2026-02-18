@@ -1,8 +1,8 @@
 package com.tttsaurus.ingameinfo.common.core.animation.text;
 
-import com.tttsaurus.ingameinfo.common.core.gui.property.lerp.ICopyableLerpTarget;
+import com.tttsaurus.ingameinfo.common.core.gui.property.lerp.CopyableLerpTarget;
 
-public class CharInfo implements ICopyableLerpTarget
+public class CharInfo implements CopyableLerpTarget
 {
     public float x;
     public float y;

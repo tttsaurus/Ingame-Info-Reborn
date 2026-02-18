@@ -1,6 +1,6 @@
 package com.tttsaurus.ingameinfo.common.core.commonutils;
 
-import com.tttsaurus.ingameinfo.common.core.serialization.Deserializer;
+import com.tttsaurus.ingameinfo.common.core.serialization.DeserializerSignature;
 import com.tttsaurus.ingameinfo.common.impl.serialization.ItemDeserializer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -9,7 +9,7 @@ import net.minecraftforge.fml.common.registry.ForgeRegistries;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-@Deserializer(ItemDeserializer.class)
+@DeserializerSignature(ItemDeserializer.class)
 public final class GhostableItem
 {
     private final String raw;

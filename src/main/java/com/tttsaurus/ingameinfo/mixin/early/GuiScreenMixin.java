@@ -3,7 +3,7 @@ package com.tttsaurus.ingameinfo.mixin.early;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import com.tttsaurus.ingameinfo.common.core.IgiRuntimeLocator;
-import com.tttsaurus.ingameinfo.common.core.gui.screen.IGuiScreenKeyTyped;
+import com.tttsaurus.ingameinfo.common.core.gui.screen.GuiScreenKeyTyped;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiScreen;
 import org.lwjgl.input.Keyboard;
@@ -49,7 +49,7 @@ public class GuiScreenMixin
             char c0 = Keyboard.getEventCharacter();
 
             if (Keyboard.getEventKey() == 0 && c0 >= ' ' || Keyboard.getEventKeyState())
-                for (IGuiScreenKeyTyped delegate: IgiRuntimeLocator.get().livePhase.collectKeyTypedDelegatesIfScreenOccupied())
+                for (GuiScreenKeyTyped delegate: IgiRuntimeLocator.get().livePhase.collectKeyTypedDelegatesIfScreenOccupied())
                     delegate.type(Keyboard.getEventKey());
 
             Minecraft.getMinecraft().dispatchKeypresses();

@@ -1,6 +1,6 @@
 package com.tttsaurus.ingameinfo.common.core.render;
 
-import com.tttsaurus.ingameinfo.common.core.function.IFunc;
+import com.tttsaurus.ingameinfo.common.core.function.Func;
 import com.tttsaurus.ingameinfo.common.core.render.texture.param.FilterMode;
 import com.tttsaurus.ingameinfo.common.core.render.texture.param.WrapMode;
 import net.minecraft.client.Minecraft;
@@ -251,8 +251,8 @@ public final class RenderHints
     //<editor-fold desc="active render info">
     // inspired by <https://github.com/Laike-Endaril/Fantastic-Lib/blob/669c3306bbebca9de1c3959e6dd4203b5b7215d4/src/main/java/com/fantasticsource/mctools/Render.java>
     private static boolean isActiveRenderInfoGettersInit = false;
-    private static IFunc<FloatBuffer> modelViewMatrixGetter;
-    private static IFunc<FloatBuffer> projectionMatrixGetter;
+    private static Func<FloatBuffer> modelViewMatrixGetter;
+    private static Func<FloatBuffer> projectionMatrixGetter;
 
     public static FloatBuffer getModelViewMatrix()
     {
@@ -326,7 +326,7 @@ public final class RenderHints
     //<editor-fold desc="partial ticks">
     // inspired by <https://github.com/Laike-Endaril/Fantastic-Lib/blob/669c3306bbebca9de1c3959e6dd4203b5b7215d4/src/main/java/com/fantasticsource/mctools/Render.java>
     private static boolean isPartialTickGetterInit = false;
-    private static IFunc<Double> partialTickGetter;
+    private static Func<Double> partialTickGetter;
 
     public static double getPartialTick()
     {

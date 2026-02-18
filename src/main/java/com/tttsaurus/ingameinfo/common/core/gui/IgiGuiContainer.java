@@ -1,6 +1,6 @@
 package com.tttsaurus.ingameinfo.common.core.gui;
 
-import com.tttsaurus.ingameinfo.common.core.function.IFunc;
+import com.tttsaurus.ingameinfo.common.core.function.Func;
 import com.tttsaurus.ingameinfo.common.core.gui.render.decorator.RenderDecorator;
 import com.tttsaurus.ingameinfo.common.core.input.InputState;
 import com.tttsaurus.ingameinfo.common.core.gui.render.RenderOpQueue;
@@ -41,7 +41,7 @@ public class IgiGuiContainer
     private boolean prepareGuiOpen = false;
     private boolean initFlag = false;
     private boolean isActive = true;
-    private IFunc<Boolean> exitCallback = () -> true;
+    private Func<Boolean> exitCallback = () -> true;
 
     private void resetDef()
     {
@@ -60,7 +60,7 @@ public class IgiGuiContainer
     //<editor-fold desc="getters">
     public boolean getPrepareGuiOpen() { return prepareGuiOpen; }
     public boolean getActive() { return isActive; }
-    public IFunc<Boolean> getExitCallback() { return exitCallback; }
+    public Func<Boolean> getExitCallback() { return exitCallback; }
     public int getExitKeyForFocusedGui() { return exitKeyForFocusedGui; }
     public boolean getFocused() { return isFocused; }
     public boolean getUseHeldItemWhitelist() { return useHeldItemWhitelist; }

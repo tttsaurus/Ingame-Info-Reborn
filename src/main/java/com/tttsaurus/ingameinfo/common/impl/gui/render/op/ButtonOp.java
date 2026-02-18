@@ -2,12 +2,12 @@ package com.tttsaurus.ingameinfo.common.impl.gui.render.op;
 
 import com.tttsaurus.ingameinfo.common.core.gui.GuiResources;
 import com.tttsaurus.ingameinfo.common.core.gui.layout.Rect;
-import com.tttsaurus.ingameinfo.common.core.gui.render.op.IRenderOp;
+import com.tttsaurus.ingameinfo.common.core.gui.render.op.RenderOp;
 import com.tttsaurus.ingameinfo.common.core.gui.render.RenderContext;
 import com.tttsaurus.ingameinfo.common.core.render.RenderUtils;
 import java.awt.*;
 
-public class ButtonOp implements IRenderOp
+public class ButtonOp implements RenderOp
 {
     public Rect rect;
     public int buttonColor;

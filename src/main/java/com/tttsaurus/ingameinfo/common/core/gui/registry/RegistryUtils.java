@@ -2,15 +2,15 @@ package com.tttsaurus.ingameinfo.common.core.gui.registry;
 
 import com.tttsaurus.ingameinfo.InGameInfoReborn;
 import com.tttsaurus.ingameinfo.common.core.gui.Element;
-import com.tttsaurus.ingameinfo.common.core.gui.property.lerp.ILerpablePropertyGetter;
+import com.tttsaurus.ingameinfo.common.core.gui.property.lerp.LerpablePropertyGetter;
 import com.tttsaurus.ingameinfo.common.core.gui.property.lerp.LerpTarget;
 import com.tttsaurus.ingameinfo.common.core.gui.property.lerp.LerpableProperty;
 import com.tttsaurus.ingameinfo.common.core.gui.property.style.*;
 import com.tttsaurus.ingameinfo.common.core.gui.property.style.wrapped.WrappedStyleProperty;
 import com.tttsaurus.ingameinfo.common.core.reflection.FieldUtils;
 import com.tttsaurus.ingameinfo.common.core.reflection.TypeUtils;
+import com.tttsaurus.ingameinfo.common.core.serialization.DeserializerSignature;
 import com.tttsaurus.ingameinfo.common.core.serialization.Deserializer;
-import com.tttsaurus.ingameinfo.common.core.serialization.IDeserializer;
 import com.tttsaurus.ingameinfo.common.impl.serialization.BuiltinTypesDeserializer;
 import net.minecraftforge.fml.common.discovery.ASMDataTable;
 
@@ -52,15 +52,15 @@ public final class RegistryUtils
         return annotatedClasses;
     }
 
-    public static Map<String, IStylePropertySetter> handleStyleProperties(
+    public static Map<String, StylePropertySetter> handleStyleProperties(
             Class<? extends Element> clazz,
-            Map<IStylePropertySetter, IDeserializer<?>> stylePropertyDeserializers,
-            Map<IStylePropertySetter, IStylePropertyCallbackPre> stylePropertySetterCallbacksPre,
-            Map<IStylePropertySetter, IStylePropertyCallbackPost> stylePropertySetterCallbacksPost,
-            Map<IStylePropertySetter, Class<?>> stylePropertyClasses,
-            Map<IStylePropertySetter, IStylePropertyGetter> stylePropertyGetters)
+            Map<StylePropertySetter, Deserializer<?>> stylePropertyDeserializers,
+            Map<StylePropertySetter, StylePropertyCallbackPre> stylePropertySetterCallbacksPre,
+            Map<StylePropertySetter, StylePropertyCallbackPost> stylePropertySetterCallbacksPost,
+            Map<StylePropertySetter, Class<?>> stylePropertyClasses,
+            Map<StylePropertySetter, StylePropertyGetter> stylePropertyGetters)
     {
-        Map<String, IStylePropertySetter> setters = new HashMap<>();
+        Map<String, StylePropertySetter> setters = new HashMap<>();
 
         for (Field field : clazz.getDeclaredFields())
             if (field.isAnnotationPresent(StyleProperty.class))
@@ -70,7 +70,7 @@ public final class RegistryUtils
                 Class<?> fieldClass = field.getType();
                 String fieldName = field.getName();
                 // setter is the primary key
-                IStylePropertySetter wrappedSetter = null;
+                StylePropertySetter wrappedSetter = null;
 
                 //<editor-fold desc="setter">
                 try
@@ -109,7 +109,7 @@ public final class RegistryUtils
                 try
                 {
                     MethodHandle getter = lookup.findGetter(clazz, fieldName, fieldClass);
-                    IStylePropertyGetter wrappedGetter;
+                    StylePropertyGetter wrappedGetter;
                     if (WrappedStyleProperty.class.isAssignableFrom(fieldClass))
                     {
                         wrappedGetter = (target) ->
@@ -159,23 +159,23 @@ public final class RegistryUtils
                 //<editor-fold desc="deserializer">
                 if (hasWrappedClass && isWrappedClassPrimitive)
                     stylePropertyDeserializers.put(wrappedSetter, new BuiltinTypesDeserializer<>(wrappedClass));
-                else if (hasWrappedClass && wrappedClass.isAnnotationPresent(Deserializer.class))
+                else if (hasWrappedClass && wrappedClass.isAnnotationPresent(DeserializerSignature.class))
                 {
-                    Deserializer deserializer = wrappedClass.getAnnotation(Deserializer.class);
+                    DeserializerSignature deserializerSignature = wrappedClass.getAnnotation(DeserializerSignature.class);
                     try
                     {
-                        stylePropertyDeserializers.put(wrappedSetter, deserializer.value().newInstance());
+                        stylePropertyDeserializers.put(wrappedSetter, deserializerSignature.value().newInstance());
                     }
                     catch (Exception ignored) { }
                 }
                 else if (TypeUtils.isPrimitiveOrWrappedPrimitive(fieldClass) || fieldClass.equals(String.class))
                     stylePropertyDeserializers.put(wrappedSetter, new BuiltinTypesDeserializer<>(fieldClass));
-                else if (fieldClass.isAnnotationPresent(Deserializer.class))
+                else if (fieldClass.isAnnotationPresent(DeserializerSignature.class))
                 {
-                    Deserializer deserializer = fieldClass.getAnnotation(Deserializer.class);
+                    DeserializerSignature deserializerSignature = fieldClass.getAnnotation(DeserializerSignature.class);
                     try
                     {
-                        stylePropertyDeserializers.put(wrappedSetter, deserializer.value().newInstance());
+                        stylePropertyDeserializers.put(wrappedSetter, deserializerSignature.value().newInstance());
                     }
                     catch (Exception ignored) { }
                 }
@@ -213,7 +213,7 @@ public final class RegistryUtils
                             try
                             {
                                 MethodHandle handle = lookup.unreflect(finalSetterCallbackPre);
-                                stylePropertySetterCallbacksPre.put(wrappedSetter, new IStylePropertyCallbackPre()
+                                stylePropertySetterCallbacksPre.put(wrappedSetter, new StylePropertyCallbackPre()
                                 {
                                     @Override
                                     public void invoke(Element target, Object value, CallbackInfo callbackInfo)
@@ -270,7 +270,7 @@ public final class RegistryUtils
                             try
                             {
                                 MethodHandle handle = lookup.unreflect(finalSetterCallbackPost);
-                                stylePropertySetterCallbacksPost.put(wrappedSetter, new IStylePropertyCallbackPost()
+                                stylePropertySetterCallbacksPost.put(wrappedSetter, new StylePropertyCallbackPost()
                                 {
                                     @Override
                                     public void invoke(Element target, Object value)
@@ -303,9 +303,9 @@ public final class RegistryUtils
         return setters;
     }
 
-    public static Map<ILerpablePropertyGetter, LerpTarget> handleLerpableProperties(Class<? extends Element> clazz)
+    public static Map<LerpablePropertyGetter, LerpTarget> handleLerpableProperties(Class<? extends Element> clazz)
     {
-        Map<ILerpablePropertyGetter, LerpTarget> getters = new HashMap<>();
+        Map<LerpablePropertyGetter, LerpTarget> getters = new HashMap<>();
 
         for (Field field : clazz.getDeclaredFields())
             if (field.isAnnotationPresent(LerpTarget.class) && LerpableProperty.class.isAssignableFrom(field.getType()))
@@ -355,7 +355,7 @@ public final class RegistryUtils
                 {
                     field.setAccessible(true);
                     MethodHandle getter = lookup.unreflectGetter(field);
-                    ILerpablePropertyGetter wrappedGetter = (target) ->
+                    LerpablePropertyGetter wrappedGetter = (target) ->
                     {
                         try
                         {

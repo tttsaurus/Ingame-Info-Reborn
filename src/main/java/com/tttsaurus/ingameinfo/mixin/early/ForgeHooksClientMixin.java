@@ -3,7 +3,7 @@ package com.tttsaurus.ingameinfo.mixin.early;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import com.tttsaurus.ingameinfo.common.core.IgiRuntimeLocator;
-import com.tttsaurus.ingameinfo.common.core.gui.screen.IGuiScreenDrawScreen;
+import com.tttsaurus.ingameinfo.common.core.gui.screen.GuiScreenDrawScreen;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraftforge.client.ForgeHooksClient;
 import org.spongepowered.asm.mixin.Mixin;
@@ -27,7 +27,7 @@ public class ForgeHooksClientMixin
         if (IgiRuntimeLocator.get() == null) return;
         if (IgiRuntimeLocator.get().livePhase.isOccupyingScreen())
         {
-            for (IGuiScreenDrawScreen delegate: IgiRuntimeLocator.get().livePhase.collectDrawScreenDelegatesIfScreenOccupied())
+            for (GuiScreenDrawScreen delegate: IgiRuntimeLocator.get().livePhase.collectDrawScreenDelegatesIfScreenOccupied())
                 delegate.draw();
         }
     }

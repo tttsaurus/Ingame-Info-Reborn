@@ -7,15 +7,15 @@ import com.tttsaurus.ingameinfo.common.core.appcommunication.spotify.SpotifyOAut
 import com.tttsaurus.ingameinfo.common.core.commonutils.FileUtils;
 import com.tttsaurus.ingameinfo.common.core.forgeevent.IgiRuntimeEntryPointEvent;
 import com.tttsaurus.ingameinfo.common.core.gui.Element;
-import com.tttsaurus.ingameinfo.common.core.gui.property.lerp.ILerpablePropertyGetter;
+import com.tttsaurus.ingameinfo.common.core.gui.property.lerp.LerpablePropertyGetter;
 import com.tttsaurus.ingameinfo.common.core.gui.property.lerp.LerpTarget;
-import com.tttsaurus.ingameinfo.common.core.gui.property.style.IStylePropertyCallbackPost;
-import com.tttsaurus.ingameinfo.common.core.gui.property.style.IStylePropertyCallbackPre;
-import com.tttsaurus.ingameinfo.common.core.gui.property.style.IStylePropertySetter;
+import com.tttsaurus.ingameinfo.common.core.gui.property.style.StylePropertyCallbackPost;
+import com.tttsaurus.ingameinfo.common.core.gui.property.style.StylePropertyCallbackPre;
+import com.tttsaurus.ingameinfo.common.core.gui.property.style.StylePropertySetter;
 import com.tttsaurus.ingameinfo.common.core.reflection.TypeUtils;
 import com.tttsaurus.ingameinfo.common.core.render.GlResourceManager;
 import com.tttsaurus.ingameinfo.common.core.render.RenderHints;
-import com.tttsaurus.ingameinfo.common.core.serialization.IDeserializer;
+import com.tttsaurus.ingameinfo.common.core.serialization.Deserializer;
 import com.tttsaurus.ingameinfo.common.core.shutdown.ShutdownHooks;
 import com.tttsaurus.ingameinfo.common.impl.IgiRuntimeEntryPoint;
 import com.tttsaurus.ingameinfo.common.impl.appcommunication.spotify.SpotifyCommandHandler;
@@ -157,12 +157,12 @@ public class ClientProxy extends CommonProxy
         }
         builder.append("\n").append("## Details:\n\n");
 
-        ImmutableMap<String, Map<String, IStylePropertySetter>> setters = ElementRegistry.getStylePropertySetters();
-        ImmutableMap<IStylePropertySetter, IDeserializer<?>> deserializers = ElementRegistry.getStylePropertyDeserializers();
-        ImmutableMap<IStylePropertySetter, IStylePropertyCallbackPre> setterCallbacksPre = ElementRegistry.getStylePropertySetterCallbacksPre();
-        ImmutableMap<IStylePropertySetter, IStylePropertyCallbackPost> setterCallbacksPost = ElementRegistry.getStylePropertySetterCallbacksPost();
-        ImmutableMap<IStylePropertySetter, Class<?>> classes = ElementRegistry.getStylePropertyClasses();
-        ImmutableMap<String, Map<ILerpablePropertyGetter, LerpTarget>> getters = ElementRegistry.getLerpablePropertyGetters();
+        ImmutableMap<String, Map<String, StylePropertySetter>> setters = ElementRegistry.getStylePropertySetters();
+        ImmutableMap<StylePropertySetter, Deserializer<?>> deserializers = ElementRegistry.getStylePropertyDeserializers();
+        ImmutableMap<StylePropertySetter, StylePropertyCallbackPre> setterCallbacksPre = ElementRegistry.getStylePropertySetterCallbacksPre();
+        ImmutableMap<StylePropertySetter, StylePropertyCallbackPost> setterCallbacksPost = ElementRegistry.getStylePropertySetterCallbacksPost();
+        ImmutableMap<StylePropertySetter, Class<?>> classes = ElementRegistry.getStylePropertyClasses();
+        ImmutableMap<String, Map<LerpablePropertyGetter, LerpTarget>> getters = ElementRegistry.getLerpablePropertyGetters();
 
         int count = elementClasses.size();
         int index = 0;
@@ -181,13 +181,13 @@ public class ClientProxy extends CommonProxy
                     .append("`")
                     .append(parentMsg).append("\n");
 
-            Map<String, IStylePropertySetter> map1 = setters.get(clazz.getName());
+            Map<String, StylePropertySetter> map1 = setters.get(clazz.getName());
             if (!map1.isEmpty())
             {
                 builder.append("- With Style Properties:\n");
-                for (Map.Entry<String, IStylePropertySetter> entry: map1.entrySet())
+                for (Map.Entry<String, StylePropertySetter> entry: map1.entrySet())
                 {
-                    IStylePropertySetter primaryKey = entry.getValue();
+                    StylePropertySetter primaryKey = entry.getValue();
 
                     String suffix = "";
                     if (deserializers.containsKey(primaryKey))
@@ -204,7 +204,7 @@ public class ClientProxy extends CommonProxy
                 }
             }
 
-            Map<ILerpablePropertyGetter, LerpTarget> map2 = getters.get(clazz.getName());
+            Map<LerpablePropertyGetter, LerpTarget> map2 = getters.get(clazz.getName());
             if (!map2.isEmpty())
             {
                 builder.append("- With Lerpable Properties:\n");

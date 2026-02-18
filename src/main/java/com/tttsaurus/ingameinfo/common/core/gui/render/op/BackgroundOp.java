@@ -5,7 +5,7 @@ import com.tttsaurus.ingameinfo.common.core.gui.layout.Rect;
 import com.tttsaurus.ingameinfo.common.core.gui.render.RenderContext;
 import com.tttsaurus.ingameinfo.common.core.render.RenderUtils;
 
-public class BackgroundOp implements IRenderOp
+public class BackgroundOp implements RenderOp
 {
     public String backgroundStyle;
     public Rect rect;

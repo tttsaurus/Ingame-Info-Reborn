@@ -1,7 +1,7 @@
 package com.tttsaurus.ingameinfo.mixin.early;
 
 import com.tttsaurus.ingameinfo.InGameInfoReborn;
-import com.tttsaurus.ingameinfo.common.core.function.IAction;
+import com.tttsaurus.ingameinfo.common.core.function.Action;
 import com.tttsaurus.ingameinfo.common.core.render.RenderHints;
 import com.tttsaurus.ingameinfo.common.core.shutdown.ShutdownHooks;
 import net.minecraft.client.Minecraft;
@@ -16,7 +16,7 @@ public class MinecraftMixin
     @Inject(method = "shutdownMinecraftApplet", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/audio/SoundHandler;unloadSounds()V", shift = At.Shift.AFTER))
     public void shutdown(CallbackInfo ci)
     {
-        for (IAction action: ShutdownHooks.hooks)
+        for (Action action: ShutdownHooks.hooks)
             action.invoke();
     }
 
