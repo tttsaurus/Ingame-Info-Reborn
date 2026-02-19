@@ -78,7 +78,17 @@ public final class InternalMethods
                 ReflectionUtils.getFieldSetter(GuiLayout.class, "igiGuiContainer", IgiGuiContainer.class),
                 ReflectionUtils.getFieldSetter(Element.class, "parent", ElementGroup.class),
                 ReflectionUtils.getFieldSetter(View.class, "renderDecorator", RenderDecorator.class),
-                ReflectionUtils.getFieldSetter(GuiLifecycleProvider.class, "lifecycleHolderName", String.class));
+                ReflectionUtils.getFieldSetter(GuiLifecycleProvider.class, "lifecycleHolderName", String.class),
+                ReflectionUtils.getFieldSetter(InGameInfoReborn.class, "crafttweakerLoaded", Boolean.class),
+                ReflectionUtils.getFieldSetter(InGameInfoReborn.class, "bloodmagicLoaded", Boolean.class),
+                ReflectionUtils.getFieldSetter(InGameInfoReborn.class, "sereneseasonsLoaded", Boolean.class),
+                ReflectionUtils.getFieldSetter(InGameInfoReborn.class, "thaumcraftLoaded", Boolean.class),
+                ReflectionUtils.getFieldSetter(InGameInfoReborn.class, "rftoolsdimLoaded", Boolean.class),
+                ReflectionUtils.getFieldSetter(InGameInfoReborn.class, "deepresonanceLoaded", Boolean.class),
+                ReflectionUtils.getFieldSetter(InGameInfoReborn.class, "toughasnailsLoaded", Boolean.class),
+                ReflectionUtils.getFieldSetter(InGameInfoReborn.class, "simpledifficultyLoaded", Boolean.class),
+                ReflectionUtils.getFieldSetter(InGameInfoReborn.class, "fluxloadingLoaded", Boolean.class),
+                ReflectionUtils.getFieldSetter(InGameInfoReborn.class, "jeiLoaded", Boolean.class));
 
         Preconditions.checkNotNull(SETTER_DELEGATE.IgiGuiContainer$viewModel$setter);
         Preconditions.checkNotNull(SETTER_DELEGATE.View$mainGroup$setter);
@@ -93,6 +103,16 @@ public final class InternalMethods
         Preconditions.checkNotNull(SETTER_DELEGATE.Element$parent$setter);
         Preconditions.checkNotNull(SETTER_DELEGATE.View$renderDecorator$setter);
         Preconditions.checkNotNull(SETTER_DELEGATE.GuiLifecycleProvider$lifecycleHolderName$setter);
+        Preconditions.checkNotNull(SETTER_DELEGATE.InGameInfoReborn$crafttweakerLoaded$setter);
+        Preconditions.checkNotNull(SETTER_DELEGATE.InGameInfoReborn$bloodmagicLoaded$setter);
+        Preconditions.checkNotNull(SETTER_DELEGATE.InGameInfoReborn$sereneseasonsLoaded$setter);
+        Preconditions.checkNotNull(SETTER_DELEGATE.InGameInfoReborn$thaumcraftLoaded$setter);
+        Preconditions.checkNotNull(SETTER_DELEGATE.InGameInfoReborn$rftoolsdimLoaded$setter);
+        Preconditions.checkNotNull(SETTER_DELEGATE.InGameInfoReborn$deepresonanceLoaded$setter);
+        Preconditions.checkNotNull(SETTER_DELEGATE.InGameInfoReborn$toughasnailsLoaded$setter);
+        Preconditions.checkNotNull(SETTER_DELEGATE.InGameInfoReborn$simpledifficultyLoaded$setter);
+        Preconditions.checkNotNull(SETTER_DELEGATE.InGameInfoReborn$fluxloadingLoaded$setter);
+        Preconditions.checkNotNull(SETTER_DELEGATE.InGameInfoReborn$jeiLoaded$setter);
 
         METHOD_DELEGATE = new MethodDelegate(
                 ReflectionUtils.getMethod(ViewModel.class, "init", GuiLayout.class, String.class, MvvmRegistry.class),
@@ -137,7 +157,17 @@ public final class InternalMethods
             MethodHandle GuiLayout$igiGuiContainer$setter,
             MethodHandle Element$parent$setter,
             MethodHandle View$renderDecorator$setter,
-            MethodHandle GuiLifecycleProvider$lifecycleHolderName$setter) { }
+            MethodHandle GuiLifecycleProvider$lifecycleHolderName$setter,
+            MethodHandle InGameInfoReborn$crafttweakerLoaded$setter,
+            MethodHandle InGameInfoReborn$bloodmagicLoaded$setter,
+            MethodHandle InGameInfoReborn$sereneseasonsLoaded$setter,
+            MethodHandle InGameInfoReborn$thaumcraftLoaded$setter,
+            MethodHandle InGameInfoReborn$rftoolsdimLoaded$setter,
+            MethodHandle InGameInfoReborn$deepresonanceLoaded$setter,
+            MethodHandle InGameInfoReborn$toughasnailsLoaded$setter,
+            MethodHandle InGameInfoReborn$simpledifficultyLoaded$setter,
+            MethodHandle InGameInfoReborn$fluxloadingLoaded$setter,
+            MethodHandle InGameInfoReborn$jeiLoaded$setter) { }
 
     record MethodDelegate(
             MethodHandle ViewModel$init,
@@ -221,7 +251,7 @@ public final class InternalMethods
         }
     }
 
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings({"unchecked", "rawtypes"})
     public static List<ReactiveCallback> ReactiveObject$initiativeCallbacks$getter(ReactiveObject arg0)
     {
         try
@@ -234,7 +264,7 @@ public final class InternalMethods
         }
     }
 
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings({"unchecked", "rawtypes"})
     public static List<ReactiveCallback> ReactiveObject$passiveCallbacks$getter(ReactiveObject arg0)
     {
         try
@@ -260,7 +290,7 @@ public final class InternalMethods
         }
     }
 
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings({"unchecked", "rawtypes"})
     public static List<SlotAccessor> ViewModel$slotAccessors$getter(ViewModel arg0)
     {
         try
@@ -273,6 +303,7 @@ public final class InternalMethods
         }
     }
 
+    @SuppressWarnings("rawtypes")
     public static SharedContext ViewModel$sharedContext$getter(ViewModel arg0)
     {
         try
@@ -299,7 +330,7 @@ public final class InternalMethods
     //</editor-fold>
 
     //<editor-fold desc="setters">
-    public static void IgiGuiContainer$viewModel$setter(IgiGuiContainer arg0, ViewModel arg1)
+    public static void IgiGuiContainer$viewModel$setter(IgiGuiContainer arg0, ViewModel<?> arg1)
     {
         try
         {
@@ -323,6 +354,7 @@ public final class InternalMethods
         }
     }
 
+    @SuppressWarnings("rawtypes")
     public static void ViewModel$isActiveSetter$setter(ViewModel arg0, Action1Param<Boolean> arg1)
     {
         try
@@ -335,6 +367,7 @@ public final class InternalMethods
         }
     }
 
+    @SuppressWarnings("rawtypes")
     public static void ViewModel$isActiveGetter$setter(ViewModel arg0, Func<Boolean> arg1)
     {
         try
@@ -347,6 +380,7 @@ public final class InternalMethods
         }
     }
 
+    @SuppressWarnings("rawtypes")
     public static void ViewModel$exitCallbackSetter$setter(ViewModel arg0, Action1Param<Func<Boolean>> arg1)
     {
         try
@@ -359,6 +393,7 @@ public final class InternalMethods
         }
     }
 
+    @SuppressWarnings("rawtypes")
     public static void ViewModel$isFocusedSetter$setter(ViewModel arg0, Action1Param<Boolean> arg1)
     {
         try
@@ -371,6 +406,7 @@ public final class InternalMethods
         }
     }
 
+    @SuppressWarnings("rawtypes")
     public static void ViewModel$isFocusedGetter$setter(ViewModel arg0, Func<Boolean> arg1)
     {
         try
@@ -454,9 +490,130 @@ public final class InternalMethods
             throw new RuntimeException(e);
         }
     }
+
+    public static void InGameInfoReborn$crafttweakerLoaded$setter(Boolean arg0)
+    {
+        try
+        {
+            SETTER_DELEGATE.InGameInfoReborn$crafttweakerLoaded$setter.invokeExact(arg0);
+        }
+        catch (Throwable e)
+        {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public static void InGameInfoReborn$bloodmagicLoaded$setter(Boolean arg0)
+    {
+        try
+        {
+            SETTER_DELEGATE.InGameInfoReborn$bloodmagicLoaded$setter.invokeExact(arg0);
+        }
+        catch (Throwable e)
+        {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public static void InGameInfoReborn$sereneseasonsLoaded$setter(Boolean arg0)
+    {
+        try
+        {
+            SETTER_DELEGATE.InGameInfoReborn$sereneseasonsLoaded$setter.invokeExact(arg0);
+        }
+        catch (Throwable e)
+        {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public static void InGameInfoReborn$thaumcraftLoaded$setter(Boolean arg0)
+    {
+        try
+        {
+            SETTER_DELEGATE.InGameInfoReborn$thaumcraftLoaded$setter.invokeExact(arg0);
+        }
+        catch (Throwable e)
+        {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public static void InGameInfoReborn$rftoolsdimLoaded$setter(Boolean arg0)
+    {
+        try
+        {
+            SETTER_DELEGATE.InGameInfoReborn$rftoolsdimLoaded$setter.invokeExact(arg0);
+        }
+        catch (Throwable e)
+        {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public static void InGameInfoReborn$deepresonanceLoaded$setter(Boolean arg0)
+    {
+        try
+        {
+            SETTER_DELEGATE.InGameInfoReborn$deepresonanceLoaded$setter.invokeExact(arg0);
+        }
+        catch (Throwable e)
+        {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public static void InGameInfoReborn$toughasnailsLoaded$setter(Boolean arg0)
+    {
+        try
+        {
+            SETTER_DELEGATE.InGameInfoReborn$toughasnailsLoaded$setter.invokeExact(arg0);
+        }
+        catch (Throwable e)
+        {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public static void InGameInfoReborn$simpledifficultyLoaded$setter(Boolean arg0)
+    {
+        try
+        {
+            SETTER_DELEGATE.InGameInfoReborn$simpledifficultyLoaded$setter.invokeExact(arg0);
+        }
+        catch (Throwable e)
+        {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public static void InGameInfoReborn$fluxloadingLoaded$setter(Boolean arg0)
+    {
+        try
+        {
+            SETTER_DELEGATE.InGameInfoReborn$fluxloadingLoaded$setter.invokeExact(arg0);
+        }
+        catch (Throwable e)
+        {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public static void InGameInfoReborn$jeiLoaded$setter(Boolean arg0)
+    {
+        try
+        {
+            SETTER_DELEGATE.InGameInfoReborn$jeiLoaded$setter.invokeExact(arg0);
+        }
+        catch (Throwable e)
+        {
+            throw new RuntimeException(e);
+        }
+    }
     //</editor-fold>
 
     //<editor-fold desc="methods">
+    @SuppressWarnings("rawtypes")
     public static GuiLayout ViewModel$init(ViewModel arg0, String arg1, MvvmRegistry arg2)
     {
         try
@@ -481,6 +638,7 @@ public final class InternalMethods
         }
     }
 
+    @SuppressWarnings("rawtypes")
     public static RenderDecorator ViewModel$getRenderDecorator(ViewModel arg0)
     {
         try

@@ -60,20 +60,8 @@ public class CommonProxy
         logger.info("Network setup finished.");
         //</editor-fold>
 
-        //<editor-fold desc="dependencies">
-        InGameInfoReborn.crafttweakerLoaded = Loader.isModLoaded("crafttweaker");
-        InGameInfoReborn.bloodmagicLoaded = Loader.isModLoaded("bloodmagic");
-        InGameInfoReborn.sereneseasonsLoaded = Loader.isModLoaded("sereneseasons");
-        InGameInfoReborn.thaumcraftLoaded = Loader.isModLoaded("thaumcraft");
-        InGameInfoReborn.rftoolsdimLoaded = Loader.isModLoaded("rftoolsdim");
-        InGameInfoReborn.deepresonanceLoaded = Loader.isModLoaded("deepresonance");
-        InGameInfoReborn.toughasnailsLoaded = Loader.isModLoaded("toughasnails");
-        InGameInfoReborn.simpledifficultyLoaded = Loader.isModLoaded("simpledifficulty");
-        InGameInfoReborn.fluxloadingLoaded = Loader.isModLoaded("fluxloading");
-        //</editor-fold>
-
         //<editor-fold desc="crafttweaker support">
-        if (InGameInfoReborn.crafttweakerLoaded)
+        if (InGameInfoReborn.isCraftTweakerLoaded().orElseThrow())
             MinecraftForge.EVENT_BUS.register(CrtEventManager.Handler.class);
         //</editor-fold>
     }

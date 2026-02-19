@@ -22,7 +22,7 @@ public final class Helper
 {
     private static void bloodmagicCompat()
     {
-        if (InGameInfoReborn.bloodmagicLoaded)
+        if (InGameInfoReborn.isBloodMagicLoaded().orElseThrow())
         {
             IgiNetwork.requestBloodMagicNbt((nbt) ->
             {
@@ -39,7 +39,7 @@ public final class Helper
         if (sereneseasonsCounter++ < 5) return;
         sereneseasonsCounter = 0;
 
-        if (InGameInfoReborn.sereneseasonsLoaded)
+        if (InGameInfoReborn.isSereneSeasonsLoaded().orElseThrow())
         {
             ISeasonState state = SeasonHelper.dataProvider.getClientSeasonState();
             int dayDuration = state.getDayDuration();
@@ -75,7 +75,7 @@ public final class Helper
 
     private static void thaumcraftCompat()
     {
-        if (InGameInfoReborn.thaumcraftLoaded)
+        if (InGameInfoReborn.isThaumcraftLoaded().orElseThrow())
         {
             IgiNetwork.requestThaumcraftNbt((nbt) ->
             {
@@ -116,7 +116,7 @@ public final class Helper
         if (rftoolsdimCounter++ < 5) return;
         rftoolsdimCounter = 0;
 
-        if (InGameInfoReborn.rftoolsdimLoaded)
+        if (InGameInfoReborn.isRfToolsDimLoaded().orElseThrow())
         {
             boolean isRfToolsDim = false;
             long dimPower = 0;
@@ -153,7 +153,7 @@ public final class Helper
 
     private static void deepresonanceCompat()
     {
-        if (InGameInfoReborn.deepresonanceLoaded)
+        if (InGameInfoReborn.isDeepResonanceLoaded().orElseThrow())
         {
             float radiation = 0;
 
@@ -170,7 +170,7 @@ public final class Helper
 
     private static void toughasnailsCompat()
     {
-        if (InGameInfoReborn.toughasnailsLoaded)
+        if (InGameInfoReborn.isToughAsNailsLoaded().orElseThrow())
         {
             int currentTemp = 0;
             int targetTemp = 0;
@@ -192,7 +192,7 @@ public final class Helper
 
     private static void simpledifficultyCompat()
     {
-        if (InGameInfoReborn.simpledifficultyLoaded)
+        if (InGameInfoReborn.isSimpleDifficultyLoaded().orElseThrow())
         {
             int temp = 0;
 
